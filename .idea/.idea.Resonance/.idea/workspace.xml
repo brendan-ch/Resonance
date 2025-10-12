@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ab354f86-6b88-42df-8f93-2e8adb1d51b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CharacterController/Scripts/Overdrive/OverdriveTrailEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CharacterController/Scripts/Overdrive/OverdriveTrailEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CharacterController/Scripts/Overdrive/OverdriveVisualEffects.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CharacterController/Scripts/Overdrive/OverdriveVisualEffects.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/TB_Locomotion.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TB_Locomotion.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -123,7 +126,7 @@
       <workItem from="1759897841241" duration="3981000" />
       <workItem from="1759961003319" duration="1756000" />
       <workItem from="1760155189939" duration="78000" />
-      <workItem from="1760155287210" duration="8054000" />
+      <workItem from="1760155287210" duration="10174000" />
     </task>
     <servers />
   </component>

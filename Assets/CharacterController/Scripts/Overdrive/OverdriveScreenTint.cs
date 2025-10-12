@@ -4,7 +4,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace Resonance.PlayerController
 {
-    public class OverdriveVisualEffects : MonoBehaviour
+    public class OverdriveScreenTint : MonoBehaviour
     {
         #region Class Variables
         [Header("Post Processing")]
