@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{01239DD2-AB02-4A8C-9980-EB0CF2E2F946}" SchemaVersion="123">
 	<Effects>
-		<WorkUnit Name="Default Work Unit" ID="{01239DD2-AB02-4A8C-9980-EB0CF2E2F946}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{01239DD2-AB02-4A8C-9980-EB0CF2E2F946}" PersistMode="Standalone">
+			<ChildrenList>
+				<Effect Name="Environment_Meter" ID="{9D9F8594-353A-45C2-B1E5-CF9FB1CBBC51}" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3"/>
+				<Effect Name="Foley_Meter" ID="{D57C1167-BA4F-49BD-89AF-973B117FBBEB}" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3"/>
+				<Effect Name="SFX_Meter" ID="{14659603-DBED-404B-B1B2-1761CB98D4D0}" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3"/>
+			</ChildrenList>
+		</WorkUnit>
 	</Effects>
 </WwiseDocument>

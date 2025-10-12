@@ -1,0 +1,91 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Mac",
+  "BasePlatform": "Mac",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "154",
+  "SoundBanks": [
+   {
+    "Id": "2228651116",
+    "Type": "User",
+    "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
+    "Language": "SFX",
+    "Hash": "{31C995AC-0983-A65E-A30F-13F3B9E10B20}",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
+    "ShortName": "Main_Soundbank",
+    "Path": "Main_Soundbank.bnk",
+    "Media": [
+     {
+      "Id": "299690214",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "gunshot_sound_effect_single_shot.wav",
+      "CachePath": "A5/{A5BBFDAD-27E1-6ABC-D3FF-4B7B6751120E}.wem"
+     },
+     {
+      "Id": "473436292",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "footsteps-on-wood-397989.wav",
+      "CachePath": "97/{975424FB-3AF0-18BB-1A91-8CFB42228D47}.wem"
+     },
+     {
+      "Id": "550207480",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "room-tone-empty-train-station-quiet-59827.wav",
+      "CachePath": "2E/{2E287F16-9D68-04DE-EAD5-AB4037217F3B}.wem"
+     }
+    ],
+    "Events": [
+     {
+      "Id": "2122887414",
+      "Name": "Play_ENV_Test",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_ENV_Test",
+      "GUID": "{4E4621DD-DCF8-4A6D-9EA1-D6A230F23ACA}",
+      "DurationType": "OneShot",
+      "DurationMin": "145.704",
+      "DurationMax": "145.704",
+      "MediaRefs": [
+       {
+        "Id": "550207480"
+       }
+      ]
+     },
+     {
+      "Id": "2715176510",
+      "Name": "Play_FOLEY_Test",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_FOLEY_Test",
+      "GUID": "{D682571A-693F-4168-8D7F-3BFCD09116C5}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.5510533",
+      "DurationMax": "0.5510533",
+      "MediaRefs": [
+       {
+        "Id": "473436292"
+       }
+      ]
+     },
+     {
+      "Id": "1072569702",
+      "Name": "Play_SFX_Test",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_SFX_Test",
+      "GUID": "{88409035-023B-43B8-B78D-25DB0BA3EA09}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.57512134",
+      "DurationMax": "0.57512134",
+      "MediaRefs": [
+       {
+        "Id": "299690214"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{CE010558-C1C6-C55B-1628-34E97077ED7D}"
+ }
+}

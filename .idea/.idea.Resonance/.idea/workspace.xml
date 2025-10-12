@@ -6,8 +6,22 @@
   <component name="ChangeListManager">
     <list default="true" id="ab354f86-6b88-42df-8f93-2e8adb1d51b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CharacterController/Scripts/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CharacterController/Scripts/PlayerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CharacterController/Prefabs/ThirdPersonController.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CharacterController/Prefabs/ThirdPersonController.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CharacterController/Prefabs/ThirdPersonController.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CharacterController/Prefabs/ThirdPersonController.prefab.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/TB_Locomotion.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TB_Locomotion.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/Wwise_IDs.h" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/Wwise_IDs.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Wwise/Editor/ProjectData/AkWwiseProjectData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Wwise/Editor/ProjectData/AkWwiseProjectData.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/Actor-Mixer Hierarchy/Default Work Unit.wwu" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/Actor-Mixer Hierarchy/Default Work Unit.wwu" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/Effects/Default Work Unit.wwu" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/Effects/Default Work Unit.wwu" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/Events/Default Work Unit.wwu" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/Events/Default Work Unit.wwu" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Init.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Init.bnk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Init.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Init.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Init.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Init.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.bnk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/PluginInfo.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/PluginInfo.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/Master-Mixer Hierarchy/Default Work Unit.wwu" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/Master-Mixer Hierarchy/Default Work Unit.wwu" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +138,7 @@
       <workItem from="1759897841241" duration="3981000" />
       <workItem from="1759961003319" duration="1756000" />
       <workItem from="1760155189939" duration="78000" />
-      <workItem from="1760155287210" duration="11421000" />
+      <workItem from="1760155287210" duration="13267000" />
     </task>
     <servers />
   </component>

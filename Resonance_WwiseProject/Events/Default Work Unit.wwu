@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{248B0F1E-BC76-4EE6-BF50-C70B54392B94}" SchemaVersion="123">
 	<Events>
-		<WorkUnit Name="Default Work Unit" ID="{248B0F1E-BC76-4EE6-BF50-C70B54392B94}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{248B0F1E-BC76-4EE6-BF50-C70B54392B94}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Play_FOLEY_Test" ID="{D682571A-693F-4168-8D7F-3BFCD09116C5}">
+					<ChildrenList>
+						<Action Name="" ID="{3B1FD3E3-01E7-45F6-B11C-8E59B14D0693}" ShortID="31320748">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Test_FOLEY_Sound" ID="{F6DA14E9-0137-42A6-AC9F-DE0AAB0D5B2F}" WorkUnitID="{A0953ED0-0717-4C8C-B006-DE01ACC1580F}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_SFX_Test" ID="{88409035-023B-43B8-B78D-25DB0BA3EA09}">
+					<ChildrenList>
+						<Action Name="" ID="{A1E2AF18-185B-47CF-BB60-A1D7E2F608E2}" ShortID="34661802">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Test_SFX_Sound" ID="{59A1FECF-6B91-4B81-99B3-ADE9ED2EDFC1}" WorkUnitID="{A0953ED0-0717-4C8C-B006-DE01ACC1580F}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_ENV_Test" ID="{4E4621DD-DCF8-4A6D-9EA1-D6A230F23ACA}">
+					<ChildrenList>
+						<Action Name="" ID="{853DD119-E048-4987-9DE8-5D1690CDFB25}" ShortID="2691830">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Test_ENV_Sound" ID="{A9064D02-B221-4DDF-A814-CD44C0C1D8C5}" WorkUnitID="{A0953ED0-0717-4C8C-B006-DE01ACC1580F}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
 	</Events>
 </WwiseDocument>

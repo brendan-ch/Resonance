@@ -9,6 +9,91 @@
 							<ObjectRef Name="System" ID="{C2FF7F5A-18CD-4BC3-ABFC-73CFAD3B3F13}" WorkUnitID="{C1B57225-EE62-4737-AA74-D6BCBC41E600}"/>
 						</Reference>
 					</ReferenceList>
+					<ChildrenList>
+						<Bus Name="Music" ID="{26A4A81B-B389-46FE-B5B6-6B67F3D37ED1}">
+							<PropertyList>
+								<Property Name="BusVolume" Type="Real64">
+									<ValueList>
+										<Value>-6</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+						</Bus>
+						<Bus Name="Environment" ID="{5E127F26-65C7-464D-BF68-DFF4DEEDEE02}">
+							<PropertyList>
+								<Property Name="BusVolume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ObjectLists>
+								<ObjectList Name="Effects">
+									<Reference>
+										<Local>
+											<EffectSlot Name="" ID="{EB66218B-342C-4C86-9ADB-EEEBDD722442}" ShortID="223814595">
+												<ReferenceList>
+													<Reference Name="Effect" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3">
+														<ObjectRef Name="Environment_Meter" ID="{9D9F8594-353A-45C2-B1E5-CF9FB1CBBC51}" WorkUnitID="{01239DD2-AB02-4A8C-9980-EB0CF2E2F946}"/>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+										</Local>
+									</Reference>
+								</ObjectList>
+							</ObjectLists>
+						</Bus>
+						<Bus Name="SFX" ID="{C22677A5-D637-423D-8AED-F11F0D85B4DE}">
+							<ObjectLists>
+								<ObjectList Name="Effects">
+									<Reference>
+										<Local>
+											<EffectSlot Name="" ID="{7C2A6A79-4637-456C-8D33-936E69E471D0}" ShortID="206158913">
+												<ReferenceList>
+													<Reference Name="Effect" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3">
+														<ObjectRef Name="SFX_Meter" ID="{14659603-DBED-404B-B1B2-1761CB98D4D0}" WorkUnitID="{01239DD2-AB02-4A8C-9980-EB0CF2E2F946}"/>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+										</Local>
+									</Reference>
+								</ObjectList>
+							</ObjectLists>
+						</Bus>
+						<Bus Name="Foley" ID="{24ADE9C4-BC2E-4743-98CF-EE06AF5D5543}">
+							<PropertyList>
+								<Property Name="BusVolume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ObjectLists>
+								<ObjectList Name="Effects">
+									<Reference>
+										<Local>
+											<EffectSlot Name="" ID="{6E29A114-9D2D-4E6A-872F-B2F38BD60CBB}" ShortID="164246851">
+												<ReferenceList>
+													<Reference Name="Effect" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3">
+														<ObjectRef Name="Foley_Meter" ID="{D57C1167-BA4F-49BD-89AF-973B117FBBEB}" WorkUnitID="{01239DD2-AB02-4A8C-9980-EB0CF2E2F946}"/>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+										</Local>
+									</Reference>
+								</ObjectList>
+							</ObjectLists>
+						</Bus>
+						<Bus Name="UI" ID="{0C9C6BEC-3135-422B-BDB8-AD709CF8F3FB}">
+							<PropertyList>
+								<Property Name="BusVolume" Type="Real64">
+									<ValueList>
+										<Value>-6</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+						</Bus>
+					</ChildrenList>
 				</Bus>
 			</ChildrenList>
 		</WorkUnit>
