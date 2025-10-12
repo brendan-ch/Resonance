@@ -109,7 +109,7 @@ namespace Resonance.PlayerController
             bool isMovingLaterally = IsMovingLaterally();
             bool isGrounded = IsGrounded();
             bool isCrouchToggled = _playerLocomotionInput.CrouchToggledOn;
-			bool isSprinting = _playerLocomotionInput.SprintToggledOn && isMovingLaterally && !isCrouchToggled;
+			bool isSprinting = _playerLocomotionInput.SprintToggledOn && isMovingLaterally && !isCrouchToggled && canRun;
             
             // Check for slide initiation
             bool crouchJustPressed = isCrouchToggled && !_wasCrouchPressedLastFrame;
