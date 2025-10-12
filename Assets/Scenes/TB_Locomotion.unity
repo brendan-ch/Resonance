@@ -2599,6 +2599,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2075370078}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!137 &5015270102420843658 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8458104923356349947, guid: ad7ca0f7ce587e042a2d5a7f807e452c, type: 3}
+  m_PrefabInstance: {fileID: 8775314643649368728}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6600633501396096624 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2221754680374149237, guid: ad7ca0f7ce587e042a2d5a7f807e452c, type: 3}
@@ -2635,6 +2640,61 @@ MonoBehaviour:
   overdriveTintColor: {r: 0, g: 1, b: 0.5, a: 1}
   tintIntensity: 0.3
   tintTransitionSpeed: 5
+--- !u!114 &7002149870454374267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6600633501396096624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88a2f7b50c8598b40b30e939fae75a15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.OverdriveTrailEffect
+  _meshesToCopy:
+  - {fileID: 5015270102420843658}
+  - {fileID: 8356348721172966922}
+  _overdriveTrailMaterial: {fileID: 2100000, guid: 37d9cfc044673f944947aaf8c2f56d0f, type: 2}
+  spawnInterval: 0.1
+  ghostLifetime: 1
+  maxGhosts: 10
+  colorGradient:
+    serializedVersion: 2
+    key0: {r: 0.3160377, g: 1, b: 0.7887946, a: 1}
+    key1: {r: 1, g: 0.6273585, b: 0.8022293, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  useGradientOverLifetime: 1
+--- !u!137 &8356348721172966922 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4680035781286807967, guid: ad7ca0f7ce587e042a2d5a7f807e452c, type: 3}
+  m_PrefabInstance: {fileID: 8775314643649368728}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8775314643649368728
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2687,6 +2747,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9120222176535822064, guid: ad7ca0f7ce587e042a2d5a7f807e452c, type: 3}
+      propertyPath: sprintFOV
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 9120222176535822064, guid: ad7ca0f7ce587e042a2d5a7f807e452c, type: 3}
+      propertyPath: overdriveFOV
+      value: 95
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2697,6 +2765,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2221754680374149237, guid: ad7ca0f7ce587e042a2d5a7f807e452c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7002149870454374266}
+    - targetCorrespondingSourceObject: {fileID: 2221754680374149237, guid: ad7ca0f7ce587e042a2d5a7f807e452c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7002149870454374267}
   m_SourcePrefab: {fileID: 100100000, guid: ad7ca0f7ce587e042a2d5a7f807e452c, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
