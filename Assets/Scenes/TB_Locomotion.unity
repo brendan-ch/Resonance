@@ -2714,6 +2714,10 @@ PrefabInstance:
       propertyPath: _postProcessVolume
       value: 
       objectReference: {fileID: 1558437498}
+    - target: {fileID: 2776645499150728781, guid: a2df79a2323d49041b994590c4765051, type: 3}
+      propertyPath: holdToSprint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6660601802095474628, guid: a2df79a2323d49041b994590c4765051, type: 3}
       propertyPath: m_Name
       value: ThirdPersonController
@@ -2774,6 +2778,6 @@ SceneRoots:
   - {fileID: 2007493603}
   - {fileID: 872638920}
   - {fileID: 770051478}
+  - {fileID: 413086368}
   - {fileID: 1525116693}
   - {fileID: 1243948345}
-  - {fileID: 413086368}

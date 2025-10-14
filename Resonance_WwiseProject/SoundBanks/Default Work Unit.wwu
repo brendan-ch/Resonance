@@ -4,7 +4,11 @@
 		<WorkUnit Name="Default Work Unit" ID="{23322CC5-91B4-442A-A611-4F8EB6753508}" PersistMode="Standalone">
 			<ChildrenList>
 				<SoundBank Name="Main_Soundbank" ID="{95F38882-910E-47AF-A1A2-7B0E207EEBA0}">
-					<ObjectInclusionList/>
+					<ObjectInclusionList>
+						<ObjectRef Name="Play_FOLEY_Test" ID="{D682571A-693F-4168-8D7F-3BFCD09116C5}" WorkUnitID="{248B0F1E-BC76-4EE6-BF50-C70B54392B94}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Play_SFX_Test" ID="{88409035-023B-43B8-B78D-25DB0BA3EA09}" WorkUnitID="{248B0F1E-BC76-4EE6-BF50-C70B54392B94}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Play_ENV_Test" ID="{4E4621DD-DCF8-4A6D-9EA1-D6A230F23ACA}" WorkUnitID="{248B0F1E-BC76-4EE6-BF50-C70B54392B94}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>
