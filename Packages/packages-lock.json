@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.realgames.dear-imgui": {
+      "version": "https://github.com/realgamessoftware/dear-imgui-unity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.collections": "0.5.0-preview.9"
+      },
+      "hash": "561339c07f940a0238c43d6cc77c1836373f7fa9"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.9",
       "depth": 0,
@@ -38,7 +47,7 @@
     },
     "com.unity.collections": {
       "version": "2.5.7",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.burst": "1.8.19",
@@ -99,7 +108,7 @@
     },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.5",
-      "depth": 3,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -193,7 +202,7 @@
     },
     "com.unity.test-framework.performance": {
       "version": "3.2.0",
-      "depth": 3,
+      "depth": 2,
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework": "1.1.33",
