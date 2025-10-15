@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ab354f86-6b88-42df-8f93-2e8adb1d51b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TB_Locomotion.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TB_Locomotion.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/DefaultVolumeProfile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/DefaultVolumeProfile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/PC_Renderer.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/PC_Renderer.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/DebugMenuManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/DebugMenuManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,8 +20,8 @@
     <setting file="file://$PROJECT_DIR$/Assets/CharacterController/Scripts/CharacterControllerUtils.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/CharacterController/Scripts/Input/PlayerInputManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/CharacterController/Scripts/Overdrive/OverdriveTrailEffect.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/CharacterController/Scripts/Overdrive/OverdriveVisualEffects.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/CharacterController/Scripts/PlayerController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Debug/PerformanceDebugPanel.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -131,6 +126,7 @@
       <workItem from="1760155287210" duration="13499000" />
       <workItem from="1760319808655" duration="22000" />
       <workItem from="1760518127150" duration="1247000" />
+      <workItem from="1760519907374" duration="776000" />
     </task>
     <servers />
   </component>

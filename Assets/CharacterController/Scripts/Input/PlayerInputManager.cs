@@ -24,13 +24,19 @@ namespace Resonance.PlayerController
 
         private void OnEnable()
         {
-            PlayerControls = new PlayerControls();
+            if (PlayerControls == null)
+            {
+                PlayerControls = new PlayerControls();
+            }
             PlayerControls.Enable();
         }
 
         private void OnDisable()
         {
-            PlayerControls.Disable();
+            if (PlayerControls != null)
+            {
+                PlayerControls.Disable();
+            }
         }
     }
 }

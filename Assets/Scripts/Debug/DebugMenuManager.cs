@@ -15,6 +15,8 @@ namespace Resonance.DebugTools
         
         private bool _showMenu = false;
         private Keyboard _keyboard;
+        
+        private PerformanceDebugPanel _performancePanel;
         #endregion
 
         #region Startup
@@ -31,6 +33,9 @@ namespace Resonance.DebugTools
             
             _keyboard = Keyboard.current;
             _showMenu = showOnStart;
+            
+            // Add panels
+            _performancePanel = gameObject.AddComponent<PerformanceDebugPanel>();
         }
         #endregion
 
@@ -60,17 +65,20 @@ namespace Resonance.DebugTools
         {
             if (!_showMenu) return;
             
-            GUI.Window(0, new Rect(50, 50, 400, 200), DrawDebugWindow, "Resonance Debug Menu");
+            GUI.Window(0, new Rect(50, 50, 450, 600), DrawDebugWindow, "Resonance Debug Menu");
         }
 
         private void DrawDebugWindow(int windowID)
         {
-            GUILayout.Label("Hello Resonance!");
-            GUILayout.Space(10);
             GUILayout.Label("Press F1 to toggle this menu");
-            GUILayout.Space(20);
+            GUILayout.Space(10);
             
-            if (GUILayout.Button("Close Menu"))
+            // Draw performance panel
+            _performancePanel.DrawPanel();
+            
+            GUILayout.FlexibleSpace();
+            
+            if (GUILayout.Button("Close Menu", GUILayout.Height(30)))
             {
                 _showMenu = false;
             }
