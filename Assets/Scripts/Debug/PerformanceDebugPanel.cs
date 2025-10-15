@@ -60,44 +60,25 @@ namespace Resonance.DebugTools
         public void DrawPanel()
         {
             GUILayout.BeginVertical("box");
+            GUILayout.Label("=== PERFORMANCE STATS ===");
+            GUILayout.Space(10);
             
-            // Performance Stats
-            GUILayout.Label("=== Performance ===");
-            GUILayout.Space(5);
-            
+            // Stats
             GUILayout.Label($"FPS: {_currentFPS:F0}");
             GUILayout.Label($"Frame Time: {_currentMs:F1} ms");
             GUILayout.Label($"Worst: {_worstMs:F1} ms");
             GUILayout.Label($"Best: {_bestMs:F1} ms");
             GUILayout.Label($"Memory: {_memoryMB:F1} MB");
             
+            GUILayout.Space(15);
+            
+            GUILayout.Label("=== TIME CONTROLS ===");
             GUILayout.Space(10);
             
-            // Time Controls
-            GUILayout.Label("=== Time Controls ===");
-            GUILayout.Space(5);
-            
-            if (GUILayout.Button(_isPaused ? "Resume" : "Pause", GUILayout.Height(30)))
+            if (GUILayout.Button(_isPaused ? "Resume" : "Pause", GUILayout.Height(35)))
             {
                 _isPaused = !_isPaused;
                 Time.timeScale = _isPaused ? 0f : 1f;
-            }
-            
-            GUILayout.Space(10);
-            
-            // Scene Actions
-            GUILayout.Label("=== Quick Actions ===");
-            GUILayout.Space(5);
-            
-            if (GUILayout.Button("Reload Scene", GUILayout.Height(30)))
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(
-                    UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-            }
-            
-            if (GUILayout.Button("Quit Application", GUILayout.Height(30)))
-            {
-                Application.Quit();
             }
             
             GUILayout.EndVertical();

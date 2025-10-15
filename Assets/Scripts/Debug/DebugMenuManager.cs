@@ -13,10 +13,18 @@ namespace Resonance.DebugTools
         [Header("Settings")]
         [SerializeField] private bool showOnStart = false;
         
-        private bool _showMenu = false;
+        public bool _showMenu = false;
         private Keyboard _keyboard;
         
+        // Panels
         private PerformanceDebugPanel _performancePanel;
+        private PlayerDebugPanel _playerPanel;
+        private SceneDebugPanel _scenePanel;
+        private AudioDebugPanel _audioPanel;
+        
+        // Tab system
+        private int _selectedTab = 0;
+        private readonly string[] _tabNames = { "Scene", "Performance", "Player", "Audio" };
         #endregion
 
         #region Startup
@@ -35,7 +43,10 @@ namespace Resonance.DebugTools
             _showMenu = showOnStart;
             
             // Add panels
+            _scenePanel = gameObject.AddComponent<SceneDebugPanel>();
             _performancePanel = gameObject.AddComponent<PerformanceDebugPanel>();
+            _playerPanel = gameObject.AddComponent<PlayerDebugPanel>();
+            _audioPanel = gameObject.AddComponent<AudioDebugPanel>();
         }
         #endregion
 
@@ -70,11 +81,31 @@ namespace Resonance.DebugTools
 
         private void DrawDebugWindow(int windowID)
         {
-            GUILayout.Label("Press F1 to toggle this menu");
+            GUILayout.BeginVertical();
+            
+            GUILayout.Label("Press F1 to toggle menu");
             GUILayout.Space(10);
             
-            // Draw performance panel
-            _performancePanel.DrawPanel();
+            // Tab selection
+            _selectedTab = GUILayout.Toolbar(_selectedTab, _tabNames);
+            GUILayout.Space(10);
+            
+            // Draw active panel
+            switch (_selectedTab)
+            {
+                case 0: // Scene
+                    _scenePanel.DrawPanel();
+                    break;
+                case 1: // Performance
+                    _performancePanel.DrawPanel();
+                    break;
+                case 2: // Player
+                    _playerPanel.DrawPanel();
+                    break;
+                case 3: // Audio
+                    _audioPanel.DrawPanel();
+                    break;
+            }
             
             GUILayout.FlexibleSpace();
             
@@ -82,6 +113,8 @@ namespace Resonance.DebugTools
             {
                 _showMenu = false;
             }
+            
+            GUILayout.EndVertical();
             
             GUI.DragWindow();
         }
