@@ -1,10 +1,6 @@
 Event	ID	Name			Wwise Object Path	Notes
-	1072569702	Play_SFX_Test			\Default Work Unit\Play_SFX_Test	
-	2122887414	Play_ENV_Test			\Default Work Unit\Play_ENV_Test	
-	2715176510	Play_FOLEY_Test			\Default Work Unit\Play_FOLEY_Test	
+	3211564518	Play_Test_Sound			\Default Work Unit\Play_Test_Sound	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	299690214	Test_SFX_Sound	E:\GitHub\Resonance\Resonance_WwiseProject\.cache\A5\{A5BBFDAD-27E1-6ABC-D3FF-4B7B6751120E}.wem		\Actor-Mixer Hierarchy\Default Work Unit\Test_SFX_Sound		101548
-	473436292	Test_FOLEY_Sound	E:\GitHub\Resonance\Resonance_WwiseProject\.cache\97\{975424FB-3AF0-18BB-1A91-8CFB42228D47}.wem		\Actor-Mixer Hierarchy\Default Work Unit\Test_FOLEY_Sound		48698
-	550207480	Test_ENV_Sound	E:\GitHub\Resonance\Resonance_WwiseProject\.cache\2E\{2E287F16-9D68-04DE-EAD5-AB4037217F3B}.wem		\Actor-Mixer Hierarchy\Default Work Unit\Test_ENV_Sound		13987680
+	753680043	Test_Sound	E:\GitHub\Resonance\Resonance_WwiseProject\.cache\B0\{B05DA9CA-09BA-5C05-475A-C397042AA581}.wem		\Actor-Mixer Hierarchy\Default Work Unit\Test_Sound		78432
 

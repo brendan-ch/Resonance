@@ -95,6 +95,40 @@
 						<ActiveSource Name="footsteps-on-wood-397989" ID="{A5B417F7-CC59-462C-9E3C-CE134038D5F2}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
+				<Sound Name="Test_Sound" ID="{7C8E526F-9F3E-43E5-A9D5-C7C2818B5B6A}" ShortID="658394747">
+					<PropertyList>
+						<Property Name="OutputBusVolume" Type="Real64">
+							<ValueList>
+								<Value>-2</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="SFX" ID="{C22677A5-D637-423D-8AED-F11F0D85B4DE}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="short-beep-tone-47916" ID="{73538E6B-F199-4CA4-B144-E900DD207F9E}">
+							<PropertyList>
+								<Property Name="FadeInDuration" Type="Real64" Value="0.0450641321739505"/>
+								<Property Name="FadeOutDuration" Type="Real64" Value="0.15409025840125"/>
+								<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+							</PropertyList>
+							<Language>SFX</Language>
+							<AudioFile>short-beep-tone-47916.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="753680043"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="short-beep-tone-47916" ID="{73538E6B-F199-4CA4-B144-E900DD207F9E}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>

@@ -13,9 +13,7 @@ namespace AK
 {
     namespace EVENTS
     {
-        static const AkUniqueID PLAY_ENV_TEST = 2122887414U;
-        static const AkUniqueID PLAY_FOLEY_TEST = 2715176510U;
-        static const AkUniqueID PLAY_SFX_TEST = 1072569702U;
+        static const AkUniqueID PLAY_TEST_SOUND = 3211564518U;
     } // namespace EVENTS
 
     namespace BANKS

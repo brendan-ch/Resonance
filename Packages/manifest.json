@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.psydack.uimgui": "https://github.com/psydack/uimgui.git",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.cinemachine": "3.1.4",
     "com.unity.collab-proxy": "2.9.3",
