@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0.17790943, g: 0.11213955, b: 0.2264151, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.02
@@ -419,6 +419,7 @@ GameObject:
   m_Component:
   - component: {fileID: 131877404}
   - component: {fileID: 131877403}
+  - component: {fileID: 131877405}
   m_Layer: 0
   m_Name: WwiseGlobal
   m_TagString: Untagged
@@ -466,6 +467,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &131877405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131877402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1d9e994c303b3742a36c83cf90dc792, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoadBank
+  soundBank:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 584fcd24c2f0a554993d3eed12ee4122, type: 2}
 --- !u!1 &221945164
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,6 +1077,7 @@ GameObject:
   m_Component:
   - component: {fileID: 661005726}
   - component: {fileID: 661005725}
+  - component: {fileID: 661005727}
   m_Layer: 0
   m_Name: DebugMenuManager
   m_TagString: Untagged
@@ -1096,6 +1114,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &661005727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661005724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60259f01e0da6464796ff8ad561a879e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioBusMonitor
+  foleyRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 2c78a34387f7f3d4f8424a4c99c7bfa6, type: 2}
+  sfxRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: cf28aa9270f803d4aa9c81036fa03d99, type: 2}
+  environmentRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 366d413629cf5254785a853493ba40fe, type: 2}
+  smoothingSpeed: 10
 --- !u!1 &662602522
 GameObject:
   m_ObjectHideFlags: 0
@@ -2714,6 +2757,18 @@ PrefabInstance:
     - target: {fileID: 2776645499150728781, guid: a2df79a2323d49041b994590c4765051, type: 3}
       propertyPath: holdToSprint
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6136599071495827784, guid: a2df79a2323d49041b994590c4765051, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6136599071495827784, guid: a2df79a2323d49041b994590c4765051, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.30000007
+      objectReference: {fileID: 0}
+    - target: {fileID: 6136599071495827784, guid: a2df79a2323d49041b994590c4765051, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6660601802095474628, guid: a2df79a2323d49041b994590c4765051, type: 3}
       propertyPath: m_Name

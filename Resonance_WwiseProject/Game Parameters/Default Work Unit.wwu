@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{3149AB3E-0016-412A-853E-1F21A63C0A57}" SchemaVersion="123">
 	<GameParameters>
-		<WorkUnit Name="Default Work Unit" ID="{3149AB3E-0016-412A-853E-1F21A63C0A57}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{3149AB3E-0016-412A-853E-1F21A63C0A57}" PersistMode="Standalone">
+			<ChildrenList>
+				<GameParameter Name="Meter_SFX_Intensity" ID="{52BB91AD-DDC9-4B62-8832-46C14C04E59C}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="0"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="Meter_Foley_Intensity" ID="{DD8BD260-2D5B-4650-98EC-464F50A7CA9B}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="0"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="Meter_Environment_Intensity" ID="{D6008D2F-0282-4AFD-A98E-A873A0BF9AC4}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="0"/>
+					</PropertyList>
+				</GameParameter>
+			</ChildrenList>
+		</WorkUnit>
 	</GameParameters>
 </WwiseDocument>

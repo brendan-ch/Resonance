@@ -95,14 +95,7 @@
 						<ActiveSource Name="footsteps-on-wood-397989" ID="{A5B417F7-CC59-462C-9E3C-CE134038D5F2}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
-				<Sound Name="Test_Sound" ID="{7C8E526F-9F3E-43E5-A9D5-C7C2818B5B6A}" ShortID="658394747">
-					<PropertyList>
-						<Property Name="OutputBusVolume" Type="Real64">
-							<ValueList>
-								<Value>-2</Value>
-							</ValueList>
-						</Property>
-					</PropertyList>
+				<Sound Name="Test_Sound" ID="{E5578E04-26E1-43DB-9A34-F1B4B81BE03D}" ShortID="534919767">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -112,21 +105,12 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<AudioFileSource Name="short-beep-tone-47916" ID="{73538E6B-F199-4CA4-B144-E900DD207F9E}">
-							<PropertyList>
-								<Property Name="FadeInDuration" Type="Real64" Value="0.0450641321739505"/>
-								<Property Name="FadeOutDuration" Type="Real64" Value="0.15409025840125"/>
-								<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-							</PropertyList>
+						<SourcePlugin Name="Sine" ID="{CD3090AF-2AE9-427F-8059-38A6AEB7EB62}" ShortID="431755879" PluginName="Wwise Sine" CompanyID="0" PluginID="100">
 							<Language>SFX</Language>
-							<AudioFile>short-beep-tone-47916.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="753680043"/>
-							</MediaIDList>
-						</AudioFileSource>
+						</SourcePlugin>
 					</ChildrenList>
 					<ActiveSourceList>
-						<ActiveSource Name="short-beep-tone-47916" ID="{73538E6B-F199-4CA4-B144-E900DD207F9E}" Platform="Linked"/>
+						<ActiveSource Name="Sine" ID="{CD3090AF-2AE9-427F-8059-38A6AEB7EB62}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
 			</ChildrenList>

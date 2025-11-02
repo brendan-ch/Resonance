@@ -7,9 +7,9 @@ Audio Bus	ID	Name			Wwise Object Path	Notes
 	3991942870	Music			\Default Work Unit\Master Audio Bus\Music	
 
 Effect plug-ins	ID	Name	Type				Notes
-	2404745364	SFX_Meter	Wwise Meter			
-	3603682764	Foley_Meter	Wwise Meter			
-	3622190502	Environment_Meter	Wwise Meter			
+	258589154	Meter (Custom)	Wwise Meter			
+	538595301	Meter (Custom)	Wwise Meter			
+	551947351	Meter (Custom)	Wwise Meter			
 
 Audio Devices	ID	Name	Type				Notes
 	2317455096	No_Output	No Output			

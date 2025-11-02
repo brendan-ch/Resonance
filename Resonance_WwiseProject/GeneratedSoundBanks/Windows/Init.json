@@ -10,33 +10,33 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{99FF64EB-5038-9A09-2AE7-93733F8E5F6F}",
+    "Hash": "{2F923E51-49FF-2A8E-6CED-7086783AA4F5}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
     "Plugins": {
-     "ShareSets": [
+     "Custom": [
       {
-       "Id": "2404745364",
-       "Name": "SFX_Meter",
-       "ObjectPath": "\\Effects\\Default Work Unit\\SFX_Meter",
-       "GUID": "{14659603-DBED-404B-B1B2-1761CB98D4D0}",
+       "Id": "258589154",
+       "Name": "Meter (Custom)",
+       "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Foley\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
+       "GUID": "{A34A176F-5F08-403A-8349-001190F96737}",
        "LibName": "Wwise Meter",
        "LibId": "8454147"
       },
       {
-       "Id": "3603682764",
-       "Name": "Foley_Meter",
-       "ObjectPath": "\\Effects\\Default Work Unit\\Foley_Meter",
-       "GUID": "{D57C1167-BA4F-49BD-89AF-973B117FBBEB}",
+       "Id": "538595301",
+       "Name": "Meter (Custom)",
+       "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Environment\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
+       "GUID": "{EBD972E9-8EF2-4EAC-8691-2E4872EE3EC3}",
        "LibName": "Wwise Meter",
        "LibId": "8454147"
       },
       {
-       "Id": "3622190502",
-       "Name": "Environment_Meter",
-       "ObjectPath": "\\Effects\\Default Work Unit\\Environment_Meter",
-       "GUID": "{9D9F8594-353A-45C2-B1E5-CF9FB1CBBC51}",
+       "Id": "551947351",
+       "Name": "Meter (Custom)",
+       "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\SFX\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
+       "GUID": "{0FD00287-02C5-41CB-A92E-924261E4463D}",
        "LibName": "Wwise Meter",
        "LibId": "8454147"
       }
@@ -67,9 +67,9 @@
       "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Foley",
       "GUID": "{24ADE9C4-BC2E-4743-98CF-EE06AF5D5543}",
       "PluginRefs": {
-       "ShareSets": [
+       "Custom": [
         {
-         "Id": "3603682764"
+         "Id": "258589154"
         }
        ]
       }
@@ -80,9 +80,9 @@
       "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\SFX",
       "GUID": "{C22677A5-D637-423D-8AED-F11F0D85B4DE}",
       "PluginRefs": {
-       "ShareSets": [
+       "Custom": [
         {
-         "Id": "2404745364"
+         "Id": "551947351"
         }
        ]
       }
@@ -93,9 +93,9 @@
       "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Environment",
       "GUID": "{5E127F26-65C7-464D-BF68-DFF4DEEDEE02}",
       "PluginRefs": {
-       "ShareSets": [
+       "Custom": [
         {
-         "Id": "3622190502"
+         "Id": "538595301"
         }
        ]
       }
@@ -118,9 +118,29 @@
       "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Music",
       "GUID": "{26A4A81B-B389-46FE-B5B6-6B67F3D37ED1}"
      }
+    ],
+    "GameParameters": [
+     {
+      "Id": "1541695584",
+      "Name": "Meter_Environment_Intensity",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Meter_Environment_Intensity",
+      "GUID": "{D6008D2F-0282-4AFD-A98E-A873A0BF9AC4}"
+     },
+     {
+      "Id": "2553996342",
+      "Name": "Meter_SFX_Intensity",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Meter_SFX_Intensity",
+      "GUID": "{52BB91AD-DDC9-4B62-8832-46C14C04E59C}"
+     },
+     {
+      "Id": "4188395422",
+      "Name": "Meter_Foley_Intensity",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Meter_Foley_Intensity",
+      "GUID": "{DD8BD260-2D5B-4650-98EC-464F50A7CA9B}"
+     }
     ]
    }
   ],
-  "FileHash": "{5B8507D7-2CE5-D4BD-A1F9-81A350D15588}"
+  "FileHash": "{6C509154-21E3-7085-D51E-E5BCB3C794B3}"
  }
 }

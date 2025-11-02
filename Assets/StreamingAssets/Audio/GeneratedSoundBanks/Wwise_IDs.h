@@ -16,6 +16,13 @@ namespace AK
         static const AkUniqueID PLAY_TEST_SOUND = 3211564518U;
     } // namespace EVENTS
 
+    namespace GAME_PARAMETERS
+    {
+        static const AkUniqueID METER_ENVIRONMENT_INTENSITY = 1541695584U;
+        static const AkUniqueID METER_FOLEY_INTENSITY = 4188395422U;
+        static const AkUniqueID METER_SFX_INTENSITY = 2553996342U;
+    } // namespace GAME_PARAMETERS
+
     namespace BANKS
     {
         static const AkUniqueID INIT = 1355168291U;

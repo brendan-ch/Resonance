@@ -33,8 +33,13 @@
 										<Local>
 											<EffectSlot Name="" ID="{EB66218B-342C-4C86-9ADB-EEEBDD722442}" ShortID="223814595">
 												<ReferenceList>
-													<Reference Name="Effect" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3">
-														<ObjectRef Name="Environment_Meter" ID="{9D9F8594-353A-45C2-B1E5-CF9FB1CBBC51}" WorkUnitID="{01239DD2-AB02-4A8C-9980-EB0CF2E2F946}"/>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Meter (Custom)" ID="{EBD972E9-8EF2-4EAC-8691-2E4872EE3EC3}" ShortID="538595301" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3">																<PluginData>
+	<GameParameter Name="Meter_Environment_Intensity" ID="{D6008D2F-0282-4AFD-A98E-A873A0BF9AC4}"/>
+</PluginData>
+															</Effect>
+														</Custom>
 													</Reference>
 												</ReferenceList>
 											</EffectSlot>
@@ -50,8 +55,13 @@
 										<Local>
 											<EffectSlot Name="" ID="{7C2A6A79-4637-456C-8D33-936E69E471D0}" ShortID="206158913">
 												<ReferenceList>
-													<Reference Name="Effect" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3">
-														<ObjectRef Name="SFX_Meter" ID="{14659603-DBED-404B-B1B2-1761CB98D4D0}" WorkUnitID="{01239DD2-AB02-4A8C-9980-EB0CF2E2F946}"/>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Meter (Custom)" ID="{0FD00287-02C5-41CB-A92E-924261E4463D}" ShortID="551947351" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3">																<PluginData>
+	<GameParameter Name="Meter_SFX_Intensity" ID="{52BB91AD-DDC9-4B62-8832-46C14C04E59C}"/>
+</PluginData>
+															</Effect>
+														</Custom>
 													</Reference>
 												</ReferenceList>
 											</EffectSlot>
@@ -74,8 +84,13 @@
 										<Local>
 											<EffectSlot Name="" ID="{6E29A114-9D2D-4E6A-872F-B2F38BD60CBB}" ShortID="164246851">
 												<ReferenceList>
-													<Reference Name="Effect" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3">
-														<ObjectRef Name="Foley_Meter" ID="{D57C1167-BA4F-49BD-89AF-973B117FBBEB}" WorkUnitID="{01239DD2-AB02-4A8C-9980-EB0CF2E2F946}"/>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Meter (Custom)" ID="{A34A176F-5F08-403A-8349-001190F96737}" ShortID="258589154" PluginName="Wwise Meter" CompanyID="0" PluginID="129" PluginType="3">																<PluginData>
+	<GameParameter Name="Meter_Foley_Intensity" ID="{DD8BD260-2D5B-4650-98EC-464F50A7CA9B}"/>
+</PluginData>
+															</Effect>
+														</Custom>
 													</Reference>
 												</ReferenceList>
 											</EffectSlot>

@@ -10,20 +10,22 @@
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{08F8CCE3-D614-A52D-62AC-2AEE44871EE0}",
+    "Hash": "{55D60F9E-A0A8-8471-4183-E9EE6623BD8C}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
-    "Media": [
-     {
-      "Id": "753680043",
-      "Language": "SFX",
-      "Streaming": "false",
-      "Location": "Memory",
-      "ShortName": "short-beep-tone-47916.wav",
-      "CachePath": "B0/{B05DA9CA-09BA-5C05-475A-C397042AA581}.wem"
-     }
-    ],
+    "Plugins": {
+     "Custom": [
+      {
+       "Id": "431755879",
+       "Name": "Sine",
+       "ObjectPath": "\\Actor-Mixer Hierarchy\\Default Work Unit\\Test_Sound\\Sine",
+       "GUID": "{CD3090AF-2AE9-427F-8059-38A6AEB7EB62}",
+       "LibName": "Wwise Sine",
+       "LibId": "6553602"
+      }
+     ]
+    },
     "Events": [
      {
       "Id": "3211564518",
@@ -31,17 +33,19 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Play_Test_Sound",
       "GUID": "{DD204AD6-06A3-4E14-98F9-F6A1DC814F3D}",
       "DurationType": "OneShot",
-      "DurationMin": "0.816",
-      "DurationMax": "0.816",
-      "MediaRefs": [
-       {
-        "Id": "753680043"
-       }
-      ]
+      "DurationMin": "1",
+      "DurationMax": "1",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "431755879"
+        }
+       ]
+      }
      }
     ]
    }
   ],
-  "FileHash": "{5917C4FD-3747-4867-0EF4-6904DFA71682}"
+  "FileHash": "{DA224846-4C4A-6552-AF9B-88C5C2C619A5}"
  }
 }

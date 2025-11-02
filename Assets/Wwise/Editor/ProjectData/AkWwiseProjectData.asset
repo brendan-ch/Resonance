@@ -38,7 +38,7 @@ MonoBehaviour:
     ParentPath: Master-Mixer Hierarchy\Default Work Unit
     guid: 2c04928e3a46d04584f5c286f09fbba8
     GuidInternal: 
-    m_lastTime: -8584413521538532099
+    m_lastTime: -8584395674638364307
     List:
     - name: Environment
       guid: 267f125ec7654d46bf68dff4deedee02
@@ -151,7 +151,7 @@ MonoBehaviour:
     ParentPath: SoundBanks\Default Work Unit
     guid: c52c3223b4912a44a6114f8eb6753508
     GuidInternal: 
-    m_lastTime: -8584400561921007732
+    m_lastTime: -8584395699716930474
     List:
     - name: Main_Soundbank
       guid: 8288f3950e91af47a1a27b0e207eeba0
@@ -179,7 +179,7 @@ MonoBehaviour:
     ParentPath: Events\Default Work Unit
     guid: 1e0f8b2476bce64ebf50c70b54392b94
     GuidInternal: 
-    m_lastTime: -8584400566433026846
+    m_lastTime: -8584395703653980548
     List:
     - name: Play_Test_Sound
       guid: d64a20dda306144e98f9f6a1dc814f3d
@@ -196,8 +196,8 @@ MonoBehaviour:
         guid: d64a20dda306144e98f9f6a1dc814f3d
       Path: Events\Default Work Unit\Play_Test_Sound
       maxAttenuation: 0
-      maxDuration: 0.816
-      minDuration: 0.816
+      maxDuration: 1
+      minDuration: 1
   RtpcWwu:
   - PhysicalPath: Game Parameters\Default Work Unit.wwu
     PathAndIcons:
@@ -210,8 +210,50 @@ MonoBehaviour:
     ParentPath: Game Parameters\Default Work Unit
     guid: 3eab493116002a41853e1f21a63c0a57
     GuidInternal: 
-    m_lastTime: -8584435181059366290
-    List: []
+    m_lastTime: -8584395658857099729
+    List:
+    - name: Meter_Environment_Intensity
+      guid: 2f8d00d68202fd4aa98ea873a0bf9ac4
+      id: 1541695584
+      PathAndIcons:
+      - ElementName: Game Parameters
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 3eab493116002a41853e1f21a63c0a57
+      - ElementName: Meter_Environment_Intensity
+        ObjectType: 13
+        guid: 2f8d00d68202fd4aa98ea873a0bf9ac4
+      Path: Game Parameters\Default Work Unit\Meter_Environment_Intensity
+    - name: Meter_Foley_Intensity
+      guid: 60d28bdd5b2d504698ec464f50a7ca9b
+      id: 4188395422
+      PathAndIcons:
+      - ElementName: Game Parameters
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 3eab493116002a41853e1f21a63c0a57
+      - ElementName: Meter_Foley_Intensity
+        ObjectType: 13
+        guid: 60d28bdd5b2d504698ec464f50a7ca9b
+      Path: Game Parameters\Default Work Unit\Meter_Foley_Intensity
+    - name: Meter_SFX_Intensity
+      guid: ad91bb52c9dd624b883246c14c04e59c
+      id: 2553996342
+      PathAndIcons:
+      - ElementName: Game Parameters
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 3eab493116002a41853e1f21a63c0a57
+      - ElementName: Meter_SFX_Intensity
+        ObjectType: 13
+        guid: ad91bb52c9dd624b883246c14c04e59c
+      Path: Game Parameters\Default Work Unit\Meter_SFX_Intensity
   StateWwu:
   - PhysicalPath: States\Default Work Unit.wwu
     PathAndIcons:
@@ -255,7 +297,7 @@ MonoBehaviour:
     m_lastTime: -8584435181061361653
     List: []
   ExpandedFileSystemItemIds: 
-  ExpandedWaapiItemIds: 
+  ExpandedWaapiItemIds: 030000000400000006000000070000000a0000000b0000000c000000130000001400000015000000
   AutoSyncSelection: 0
   autoPopulateEnabled: 1
   currentDataSource: 0

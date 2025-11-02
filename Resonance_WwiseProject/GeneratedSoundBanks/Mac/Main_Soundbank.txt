@@ -1,6 +1,6 @@
 Event	ID	Name			Wwise Object Path	Notes
 	3211564518	Play_Test_Sound			\Default Work Unit\Play_Test_Sound	
 
-In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	753680043	Test_Sound	E:\GitHub\Resonance\Resonance_WwiseProject\.cache\B0\{B05DA9CA-09BA-5C05-475A-C397042AA581}.wem		\Actor-Mixer Hierarchy\Default Work Unit\Test_Sound		78432
+Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
+	431755879	Sine	Wwise Sine		\Actor-Mixer Hierarchy\Default Work Unit\Test_Sound\Sine	
 

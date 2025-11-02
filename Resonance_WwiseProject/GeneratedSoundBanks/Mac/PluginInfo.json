@@ -4,6 +4,13 @@
   "BasePlatform": "Mac",
   "PluginLibs": [
    {
+    "LibName": "Wwise Sine",
+    "LibId": "6553602",
+    "Type": "Source",
+    "DLL": "AkSineTone",
+    "StaticLib": "AkSineSource"
+   },
+   {
     "LibName": "Wwise Meter",
     "LibId": "8454147",
     "Type": "Effect",
@@ -21,6 +28,6 @@
     "Type": "AudioDevice"
    }
   ],
-  "FileHash": "{CAD4B8E3-57D6-D1C5-3F2A-100C400836EC}"
+  "FileHash": "{CD77AF2C-4D48-4C08-BCD2-E5ECD8C70D21}"
  }
 }

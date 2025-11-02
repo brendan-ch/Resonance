@@ -1,27 +1,37 @@
 using UnityEngine;
+using Resonance.Audio;
 
 namespace Resonance.DebugTools
 {
     public class AudioDebugPanel : MonoBehaviour
     {
-        #region Class Variables
+        #region Inspector Fields
         [Header("Test Sound Settings")]
-        [SerializeField] private string testEventName = "Play_Test_Sound";
-        [SerializeField] private GameObject soundEmitter;
-        
-        private string _customEventName = "";
+        [SerializeField] private string testEvent = "Play_Test_Sound";
+        [SerializeField] private GameObject emitter;
         #endregion
         
-        #region Startup
+        #region Private Fields
+        private string _customEvent = "";
+        #endregion
+        
+        #region Unity Lifecycle
         private void Start()
         {
-            // Find player as default sound emitter if not assigned
-            if (soundEmitter == null)
+            FindSoundEmitter();
+        }
+        #endregion
+        
+        #region Initialization
+        private void FindSoundEmitter()
+        {
+            if (emitter == null)
             {
-                soundEmitter = GameObject.FindGameObjectWithTag("Player");
-                if (soundEmitter == null)
+                emitter = GameObject.FindGameObjectWithTag("Player");
+                
+                if (emitter == null)
                 {
-                    Debug.LogWarning("AudioDebugPanel: No sound emitter assigned and no Player found!");
+                    Debug.LogWarning("[AudioDebugPanel] No emitter assigned and no Player found!");
                 }
             }
         }
@@ -34,90 +44,181 @@ namespace Resonance.DebugTools
             GUILayout.Label("=== AUDIO DEBUG ===");
             GUILayout.Space(10);
             
-            // Test Sound Trigger
-            GUILayout.Label("Test Sound Trigger:");
-            GUILayout.Space(5);
-            DrawTestSoundTrigger();
-            
+            DrawTestSoundSection();
             GUILayout.Space(15);
-            
-            // Future tools
-            GUILayout.Label("Coming Soon:");
-            GUILayout.Label("- Bus intensity monitors");
-            GUILayout.Label("- RTPC overrides");
-            GUILayout.Label("- Visualization controls");
+            DrawBusIntensitySection();
             
             GUILayout.EndVertical();
         }
+        #endregion
         
-        private void DrawTestSoundTrigger()
+        #region Test Sound Section
+        private void DrawTestSoundSection()
         {
+            GUILayout.Label("Test Sound Trigger:");
+            GUILayout.Space(5);
+            
             GUILayout.BeginVertical("box");
             
-            // Show current event name
-            GUILayout.Label($"Event: {testEventName}");
-            
-            if (soundEmitter != null)
-            {
-                GUILayout.Label($"Emitter: {soundEmitter.name}");
-            }
-            else
-            {
-                GUI.color = Color.yellow;
-                GUILayout.Label("Warning: No sound emitter!");
-                GUI.color = Color.white;
-            }
-            
+            GUILayout.Label($"Event: {testEvent}");
+            DrawEmitterStatus();
             GUILayout.Space(10);
             
-            // Trigger button
             if (GUILayout.Button("Trigger Test Sound", GUILayout.Height(40)))
             {
                 TriggerTestSound();
             }
             
             GUILayout.Space(10);
-            
-            // Custom event input
-            GUILayout.Label("Custom Event Name:");
-            _customEventName = GUILayout.TextField(_customEventName, GUILayout.Height(25));
-            
-            if (GUILayout.Button("Trigger Custom Event", GUILayout.Height(30)))
-            {
-                TriggerCustomSound(_customEventName);
-            }
+            DrawCustomEventInput();
             
             GUILayout.EndVertical();
         }
-        
-        private void TriggerTestSound()
+
+        private void DrawEmitterStatus()
         {
-            if (soundEmitter == null)
+            if (emitter != null)
             {
-                Debug.LogWarning("AudioDebugPanel: Cannot trigger sound - no emitter assigned!");
+                GUILayout.Label($"Emitter: {emitter.name}");
+            }
+            else
+            {
+                GUI.color = Color.yellow;
+                GUILayout.Label("Warning: No emitter!");
+                GUI.color = Color.white;
+            }
+        }
+
+        private void DrawCustomEventInput()
+        {
+            GUILayout.Label("Custom Event Name:");
+            _customEvent = GUILayout.TextField(_customEvent, GUILayout.Height(25));
+            
+            if (GUILayout.Button("Trigger Custom Event", GUILayout.Height(30)))
+            {
+                TriggerCustomSound(_customEvent);
+            }
+        }
+        #endregion
+        
+        #region Bus Intensity Section
+        private void DrawBusIntensitySection()
+        {
+            GUILayout.Label("Bus Intensity Monitor:");
+            GUILayout.Space(5);
+            
+            GUILayout.BeginVertical("box");
+            
+            if (!IsAudioBusMonitorAvailable())
+            {
+                DrawAudioBusMonitorWarning();
+                GUILayout.EndVertical();
                 return;
             }
             
-            Debug.Log($"AudioDebugPanel: Triggering test sound '{testEventName}' on {soundEmitter.name}");
-            AkUnitySoundEngine.PostEvent(testEventName, soundEmitter);
+            DrawBusIntensityBars();
+            GUILayout.Space(10);
+            DrawLoudestBusInfo();
+            
+            GUILayout.EndVertical();
+        }
+
+        private bool IsAudioBusMonitorAvailable()
+        {
+            return AudioBusMonitor.Instance != null;
+        }
+
+        private void DrawAudioBusMonitorWarning()
+        {
+            GUI.color = Color.yellow;
+            GUILayout.Label("AudioBusMonitor not found in scene!");
+            GUILayout.Label("Add AudioBusMonitor component to use bus monitoring.");
+            GUI.color = Color.white;
+        }
+
+        private void DrawBusIntensityBars()
+        {
+            foreach (BusType busType in System.Enum.GetValues(typeof(BusType)))
+            {
+                // Use RAW values for debug menu - want to see real-time response
+                float rawIntensity = AudioBusMonitor.Instance.GetBusIntensityRaw(busType);
+                
+                GUILayout.Label($"{busType}: {rawIntensity:F3}");
+                DrawIntensityBar(busType, rawIntensity);
+                GUILayout.Space(5);
+            }
+        }
+
+        private void DrawIntensityBar(BusType busType, float intensity)
+        {
+            Rect barRect = GUILayoutUtility.GetRect(380, 20);
+            GUI.Box(barRect, "");
+            
+            Rect fillRect = new Rect(
+                barRect.x + 2, 
+                barRect.y + 2, 
+                (barRect.width - 4) * intensity, 
+                barRect.height - 4
+            );
+            
+            GUI.color = BusTypeUtility.GetBusColor(busType);
+            GUI.DrawTexture(fillRect, Texture2D.whiteTexture);
+            GUI.color = Color.white;
+        }
+
+        private void DrawLoudestBusInfo()
+        {
+            // Find loudest bus based on raw values
+            BusType loudestBus = BusType.Foley;
+            float maxIntensity = 0f;
+            
+            foreach (BusType busType in System.Enum.GetValues(typeof(BusType)))
+            {
+                float intensity = AudioBusMonitor.Instance.GetBusIntensityRaw(busType);
+                if (intensity > maxIntensity)
+                {
+                    maxIntensity = intensity;
+                    loudestBus = busType;
+                }
+            }
+            
+            GUI.color = BusTypeUtility.GetBusColor(loudestBus);
+            GUILayout.Label($"Loudest Bus: {loudestBus} ({maxIntensity:F3})", GUILayout.Height(25));
+            GUI.color = Color.white;
+        }
+        #endregion
+        
+        #region Sound Triggering
+        private void TriggerTestSound()
+        {
+            if (!ValidateEmitter()) return;
+            
+            Debug.Log($"[AudioDebugPanel] Triggering '{testEvent}' on {emitter.name}");
+            AkUnitySoundEngine.PostEvent(testEvent, emitter);
         }
         
         private void TriggerCustomSound(string eventName)
         {
             if (string.IsNullOrEmpty(eventName))
             {
-                Debug.LogWarning("AudioDebugPanel: Cannot trigger sound - event name is empty!");
+                Debug.LogWarning("[AudioDebugPanel] Event name is empty!");
                 return;
             }
             
-            if (soundEmitter == null)
+            if (!ValidateEmitter()) return;
+            
+            Debug.Log($"[AudioDebugPanel] Triggering '{eventName}' on {emitter.name}");
+            AkUnitySoundEngine.PostEvent(eventName, emitter);
+        }
+
+        private bool ValidateEmitter()
+        {
+            if (emitter == null)
             {
-                Debug.LogWarning("AudioDebugPanel: Cannot trigger sound - no emitter assigned!");
-                return;
+                Debug.LogWarning("[AudioDebugPanel] No emitter assigned!");
+                return false;
             }
-            
-            Debug.Log($"AudioDebugPanel: Triggering custom sound '{eventName}' on {soundEmitter.name}");
-            AkUnitySoundEngine.PostEvent(eventName, soundEmitter);
+            return true;
         }
         #endregion
     }
