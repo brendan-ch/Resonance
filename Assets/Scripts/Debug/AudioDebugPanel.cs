@@ -9,6 +9,7 @@ namespace Resonance.DebugTools
         [Header("Test Sound Settings")]
         [SerializeField] private string testEvent = "Play_Test_Sound";
         [SerializeField] private GameObject emitter;
+        [SerializeField] private BusType testBusType = BusType.SFX;
         #endregion
         
         #region Private Fields
@@ -28,11 +29,6 @@ namespace Resonance.DebugTools
             if (emitter == null)
             {
                 emitter = GameObject.FindGameObjectWithTag("Player");
-                
-                if (emitter == null)
-                {
-                    Debug.LogWarning("[AudioDebugPanel] No emitter assigned and no Player found!");
-                }
             }
         }
         #endregion
@@ -45,8 +41,6 @@ namespace Resonance.DebugTools
             GUILayout.Space(10);
             
             DrawTestSoundSection();
-            GUILayout.Space(15);
-            DrawBusIntensitySection();
             
             GUILayout.EndVertical();
         }
@@ -55,28 +49,9 @@ namespace Resonance.DebugTools
         #region Test Sound Section
         private void DrawTestSoundSection()
         {
-            GUILayout.Label("Test Sound Trigger:");
-            GUILayout.Space(5);
-            
             GUILayout.BeginVertical("box");
             
-            GUILayout.Label($"Event: {testEvent}");
-            DrawEmitterStatus();
-            GUILayout.Space(10);
-            
-            if (GUILayout.Button("Trigger Test Sound", GUILayout.Height(40)))
-            {
-                TriggerTestSound();
-            }
-            
-            GUILayout.Space(10);
-            DrawCustomEventInput();
-            
-            GUILayout.EndVertical();
-        }
-
-        private void DrawEmitterStatus()
-        {
+            // Emitter status
             if (emitter != null)
             {
                 GUILayout.Label($"Emitter: {emitter.name}");
@@ -84,13 +59,22 @@ namespace Resonance.DebugTools
             else
             {
                 GUI.color = Color.yellow;
-                GUILayout.Label("Warning: No emitter!");
+                GUILayout.Label("Warning: No emitter assigned!");
                 GUI.color = Color.white;
             }
-        }
-
-        private void DrawCustomEventInput()
-        {
+            
+            GUILayout.Space(10);
+            
+            // Default test sound
+            GUILayout.Label($"Test Event: {testEvent}");
+            if (GUILayout.Button("Trigger Test Sound", GUILayout.Height(40)))
+            {
+                TriggerTestSound();
+            }
+            
+            GUILayout.Space(15);
+            
+            // Custom event
             GUILayout.Label("Custom Event Name:");
             _customEvent = GUILayout.TextField(_customEvent, GUILayout.Height(25));
             
@@ -98,103 +82,37 @@ namespace Resonance.DebugTools
             {
                 TriggerCustomSound(_customEvent);
             }
-        }
-        #endregion
-        
-        #region Bus Intensity Section
-        private void DrawBusIntensitySection()
-        {
-            GUILayout.Label("Bus Intensity Monitor:");
-            GUILayout.Space(5);
             
-            GUILayout.BeginVertical("box");
+            GUILayout.Space(15);
             
-            if (!IsAudioBusMonitorAvailable())
-            {
-                DrawAudioBusMonitorWarning();
-                GUILayout.EndVertical();
-                return;
-            }
-            
-            DrawBusIntensityBars();
-            GUILayout.Space(10);
-            DrawLoudestBusInfo();
+            // Gizmo info
+            GUI.color = Color.cyan;
+            GUILayout.Label("Gizmos:", GUILayout.Height(20));
+            GUI.color = Color.white;
+            GUILayout.Label("• Select AudioSourceTracker to see active sources");
+            GUILayout.Label("• Select AudioReactiveObject to see listen radius");
             
             GUILayout.EndVertical();
-        }
-
-        private bool IsAudioBusMonitorAvailable()
-        {
-            return AudioBusMonitor.Instance != null;
-        }
-
-        private void DrawAudioBusMonitorWarning()
-        {
-            GUI.color = Color.yellow;
-            GUILayout.Label("AudioBusMonitor not found in scene!");
-            GUILayout.Label("Add AudioBusMonitor component to use bus monitoring.");
-            GUI.color = Color.white;
-        }
-
-        private void DrawBusIntensityBars()
-        {
-            foreach (BusType busType in System.Enum.GetValues(typeof(BusType)))
-            {
-                // Use RAW values for debug menu - want to see real-time response
-                float rawIntensity = AudioBusMonitor.Instance.GetBusIntensityRaw(busType);
-                
-                GUILayout.Label($"{busType}: {rawIntensity:F3}");
-                DrawIntensityBar(busType, rawIntensity);
-                GUILayout.Space(5);
-            }
-        }
-
-        private void DrawIntensityBar(BusType busType, float intensity)
-        {
-            Rect barRect = GUILayoutUtility.GetRect(380, 20);
-            GUI.Box(barRect, "");
-            
-            Rect fillRect = new Rect(
-                barRect.x + 2, 
-                barRect.y + 2, 
-                (barRect.width - 4) * intensity, 
-                barRect.height - 4
-            );
-            
-            GUI.color = BusTypeUtility.GetBusColor(busType);
-            GUI.DrawTexture(fillRect, Texture2D.whiteTexture);
-            GUI.color = Color.white;
-        }
-
-        private void DrawLoudestBusInfo()
-        {
-            // Find loudest bus based on raw values
-            BusType loudestBus = BusType.Foley;
-            float maxIntensity = 0f;
-            
-            foreach (BusType busType in System.Enum.GetValues(typeof(BusType)))
-            {
-                float intensity = AudioBusMonitor.Instance.GetBusIntensityRaw(busType);
-                if (intensity > maxIntensity)
-                {
-                    maxIntensity = intensity;
-                    loudestBus = busType;
-                }
-            }
-            
-            GUI.color = BusTypeUtility.GetBusColor(loudestBus);
-            GUILayout.Label($"Loudest Bus: {loudestBus} ({maxIntensity:F3})", GUILayout.Height(25));
-            GUI.color = Color.white;
         }
         #endregion
         
         #region Sound Triggering
         private void TriggerTestSound()
         {
-            if (!ValidateEmitter()) return;
+            if (emitter == null)
+            {
+                Debug.LogWarning("[AudioDebugPanel] No emitter assigned!");
+                return;
+            }
             
             Debug.Log($"[AudioDebugPanel] Triggering '{testEvent}' on {emitter.name}");
             AkUnitySoundEngine.PostEvent(testEvent, emitter);
+            
+            // Register with spatial tracker if available
+            if (AudioSourceTracker.Instance != null)
+            {
+                AudioSourceTracker.Instance.RegisterSound(emitter.transform.position, testBusType);
+            }
         }
         
         private void TriggerCustomSound(string eventName)
@@ -205,20 +123,20 @@ namespace Resonance.DebugTools
                 return;
             }
             
-            if (!ValidateEmitter()) return;
-            
-            Debug.Log($"[AudioDebugPanel] Triggering '{eventName}' on {emitter.name}");
-            AkUnitySoundEngine.PostEvent(eventName, emitter);
-        }
-
-        private bool ValidateEmitter()
-        {
             if (emitter == null)
             {
                 Debug.LogWarning("[AudioDebugPanel] No emitter assigned!");
-                return false;
+                return;
             }
-            return true;
+            
+            Debug.Log($"[AudioDebugPanel] Triggering '{eventName}' on {emitter.name}");
+            AkUnitySoundEngine.PostEvent(eventName, emitter);
+            
+            // Register with spatial tracker if available
+            if (AudioSourceTracker.Instance != null)
+            {
+                AudioSourceTracker.Instance.RegisterSound(emitter.transform.position, testBusType);
+            }
         }
         #endregion
     }

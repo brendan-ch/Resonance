@@ -16,14 +16,10 @@ namespace Resonance.Audio
         [SerializeField] private AK.Wwise.RTPC foleyRTPC;
         [SerializeField] private AK.Wwise.RTPC sfxRTPC;
         [SerializeField] private AK.Wwise.RTPC environmentRTPC;
-        
-        [Header("Settings")]
-        [SerializeField] private float smoothingSpeed = 10f;
         #endregion
 
         #region Private Fields
         private Dictionary<BusType, float> _intensities;
-        private Dictionary<BusType, float> _smoothedIntensities;
         private Dictionary<BusType, AK.Wwise.RTPC> _rtpcs;
         #endregion
 
@@ -56,7 +52,6 @@ namespace Resonance.Audio
         private void InitializeBusData()
         {
             _intensities = new Dictionary<BusType, float>();
-            _smoothedIntensities = new Dictionary<BusType, float>();
             _rtpcs = new Dictionary<BusType, AK.Wwise.RTPC>();
             
             _rtpcs[BusType.Foley] = foleyRTPC;
@@ -66,7 +61,6 @@ namespace Resonance.Audio
             foreach (BusType busType in System.Enum.GetValues(typeof(BusType)))
             {
                 _intensities[busType] = 0f;
-                _smoothedIntensities[busType] = 0f;
             }
         }
         #endregion
@@ -76,14 +70,7 @@ namespace Resonance.Audio
         {
             foreach (BusType busType in System.Enum.GetValues(typeof(BusType)))
             {
-                float rawValue = QueryRTPCValue(busType);
-                
-                _intensities[busType] = rawValue;
-                _smoothedIntensities[busType] = Mathf.Lerp(
-                    _smoothedIntensities[busType], 
-                    rawValue, 
-                    smoothingSpeed * Time.deltaTime
-                );
+                _intensities[busType] = QueryRTPCValue(busType);
             }
         }
 
@@ -91,7 +78,7 @@ namespace Resonance.Audio
         {
             if (!_rtpcs.ContainsKey(busType) || _rtpcs[busType] == null)
             {
-                Debug.LogWarning($"[AudioBusMonitor] No RTPC assigned for {busType}");
+                Debug.LogWarning($"[AudioBusMonitor] RTPC not assigned for {busType}!");
                 return 0f;
             }
 
@@ -109,11 +96,6 @@ namespace Resonance.Audio
         #region Public API
         public float GetBusIntensity(BusType busType)
         {
-            return _smoothedIntensities.TryGetValue(busType, out float value) ? value : 0f;
-        }
-        
-        public float GetBusIntensityRaw(BusType busType)
-        {
             return _intensities.TryGetValue(busType, out float value) ? value : 0f;
         }
         
@@ -121,7 +103,7 @@ namespace Resonance.Audio
         {
             float maxIntensity = 0f;
             
-            foreach (float intensity in _smoothedIntensities.Values)
+            foreach (float intensity in _intensities.Values)
             {
                 maxIntensity = Mathf.Max(maxIntensity, intensity);
             }
@@ -134,7 +116,7 @@ namespace Resonance.Audio
             BusType loudestBus = BusType.Foley;
             float maxIntensity = 0f;
             
-            foreach (var kvp in _smoothedIntensities)
+            foreach (var kvp in _intensities)
             {
                 if (kvp.Value > maxIntensity)
                 {
@@ -142,13 +124,13 @@ namespace Resonance.Audio
                     loudestBus = kvp.Key;
                 }
             }
-            
+
             return loudestBus;
         }
         
         public IReadOnlyDictionary<BusType, float> GetAllBusIntensities()
         {
-            return _smoothedIntensities;
+            return _intensities;
         }
         #endregion
     }
