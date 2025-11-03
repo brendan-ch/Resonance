@@ -29,6 +29,11 @@ namespace Resonance.DebugTools
             if (emitter == null)
             {
                 emitter = GameObject.FindGameObjectWithTag("Player");
+                
+                if (emitter != null)
+                {
+                    Debug.Log($"[AudioDebugPanel] Found emitter: {emitter.name}");
+                }
             }
         }
         #endregion
@@ -36,6 +41,12 @@ namespace Resonance.DebugTools
         #region Public Methods
         public void DrawPanel()
         {
+            // Re-find emitter if it's null (happens after scene changes)
+            if (emitter == null)
+            {
+                FindSoundEmitter();
+            }
+            
             GUILayout.BeginVertical("box");
             GUILayout.Label("=== AUDIO DEBUG ===");
             GUILayout.Space(10);

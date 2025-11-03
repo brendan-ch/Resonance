@@ -76,7 +76,7 @@ namespace Resonance.DebugTools
         {
             if (!_showMenu) return;
             
-            GUI.Window(0, new Rect(50, 50, 450, 600), DrawDebugWindow, "Resonance Debug Menu");
+            GUI.Window(0, new Rect(50, 50, 450, 700), DrawDebugWindow, "Resonance Debug Menu");
         }
 
         private void DrawDebugWindow(int windowID)

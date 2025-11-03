@@ -32,10 +32,29 @@ namespace Resonance.DebugTools
             
             GUILayout.Space(15);
             
-            // Future: Scene list will go here
-            GUILayout.Label("Scene Switching: Coming Soon");
+            // Scene Switching
+            GUILayout.Label("=== SCENE SWITCHING ===");
+            GUILayout.Space(10);
+            
+            if (GUILayout.Button("TB_Locomotion", GUILayout.Height(35)))
+            {
+                LoadScene("TB_Locomotion");
+            }
+            
+            GUILayout.Space(5);
+            
+            if (GUILayout.Button("TB_AudioReactivity", GUILayout.Height(35)))
+            {
+                LoadScene("TB_AudioReactivity");
+            }
             
             GUILayout.EndVertical();
+        }
+        
+        private void LoadScene(string sceneName)
+        {
+            Debug.Log($"[SceneDebugPanel] Loading scene: {sceneName}");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
         }
         #endregion
     }
