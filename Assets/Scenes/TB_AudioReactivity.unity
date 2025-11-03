@@ -292,7 +292,7 @@ MonoBehaviour:
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
-  propagationSpeed: 80
+  propagationSpeed: 75
   enablePropagationDelay: 1
   enableLOD: 1
   lodNearDistance: 15
@@ -314,7 +314,7 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   minVolumeThreshold: 0.01
-  maxFeedbackVolume: 100
+  maxFeedbackVolume: 80
   drawDebugRadius: 0
 --- !u!1 &131877402
 GameObject:
@@ -1405,7 +1405,7 @@ MonoBehaviour:
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
-  propagationSpeed: 80
+  propagationSpeed: 75
   enablePropagationDelay: 1
   enableLOD: 1
   lodNearDistance: 15
@@ -1427,7 +1427,7 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   minVolumeThreshold: 0.01
-  maxFeedbackVolume: 100
+  maxFeedbackVolume: 80
   drawDebugRadius: 1
 --- !u!1 &1775915917
 GameObject:
@@ -1559,7 +1559,7 @@ MonoBehaviour:
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
-  propagationSpeed: 80
+  propagationSpeed: 75
   enablePropagationDelay: 1
   enableLOD: 1
   lodNearDistance: 15
@@ -1581,7 +1581,7 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   minVolumeThreshold: 0.01
-  maxFeedbackVolume: 100
+  maxFeedbackVolume: 80
   drawDebugRadius: 0
 --- !u!1 &1818242583
 GameObject:
@@ -2011,7 +2011,7 @@ MonoBehaviour:
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
-  propagationSpeed: 80
+  propagationSpeed: 75
   enablePropagationDelay: 1
   enableLOD: 1
   lodNearDistance: 15
@@ -2033,7 +2033,7 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   minVolumeThreshold: 0.01
-  maxFeedbackVolume: 100
+  maxFeedbackVolume: 80
   drawDebugRadius: 0
 --- !u!1 &1985560573
 GameObject:
@@ -2353,7 +2353,7 @@ MonoBehaviour:
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
-  propagationSpeed: 80
+  propagationSpeed: 75
   enablePropagationDelay: 1
   enableLOD: 1
   lodNearDistance: 15
@@ -2375,7 +2375,7 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   minVolumeThreshold: 0.01
-  maxFeedbackVolume: 100
+  maxFeedbackVolume: 80
   drawDebugRadius: 0
 --- !u!1001 &8626028017861178022
 PrefabInstance:

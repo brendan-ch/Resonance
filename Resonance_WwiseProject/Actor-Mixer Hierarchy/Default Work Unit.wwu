@@ -133,7 +133,7 @@
 						<SourcePlugin Name="Sine" ID="{D756AAF5-D53A-444D-9106-A6844FB36D72}" ShortID="750451834" PluginName="Wwise Sine" CompanyID="0" PluginID="100">
 							<PropertyList>
 								<Property Name="SineFrequency" Type="Real32" Value="600"/>
-								<Property Name="SineGain" Type="Real32" Value="-15"/>
+								<Property Name="SineGain" Type="Real32" Value="-20"/>
 							</PropertyList>
 							<Language>SFX</Language>
 						</SourcePlugin>
