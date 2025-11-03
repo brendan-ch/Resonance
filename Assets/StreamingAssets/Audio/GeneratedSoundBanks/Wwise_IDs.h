@@ -13,7 +13,9 @@ namespace AK
 {
     namespace EVENTS
     {
+        static const AkUniqueID PLAY_REACTIVE_FEEDBACK = 3062989335U;
         static const AkUniqueID PLAY_TEST_SOUND = 3211564518U;
+        static const AkUniqueID STOP_REACTIVE_FEEDBACK = 3211783545U;
     } // namespace EVENTS
 
     namespace GAME_PARAMETERS
@@ -21,6 +23,7 @@ namespace AK
         static const AkUniqueID METER_ENVIRONMENT_INTENSITY = 1541695584U;
         static const AkUniqueID METER_FOLEY_INTENSITY = 4188395422U;
         static const AkUniqueID METER_SFX_INTENSITY = 2553996342U;
+        static const AkUniqueID REACTIVEOBJECT_VOLUME = 1585979646U;
     } // namespace GAME_PARAMETERS
 
     namespace BANKS

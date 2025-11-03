@@ -5,7 +5,9 @@
 			<ChildrenList>
 				<SoundBank Name="Main_Soundbank" ID="{95F38882-910E-47AF-A1A2-7B0E207EEBA0}">
 					<ObjectInclusionList>
+						<ObjectRef Name="Stop_Reactive_Feedback" ID="{AC0C71A3-5A4A-4700-84BE-F8438F763A1A}" WorkUnitID="{248B0F1E-BC76-4EE6-BF50-C70B54392B94}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="Play_Test_Sound" ID="{DD204AD6-06A3-4E14-98F9-F6A1DC814F3D}" WorkUnitID="{248B0F1E-BC76-4EE6-BF50-C70B54392B94}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Play_Reactive_Feedback" ID="{96722AA4-1038-4FBD-A751-61F7B5327803}" WorkUnitID="{248B0F1E-BC76-4EE6-BF50-C70B54392B94}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>

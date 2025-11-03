@@ -1,6 +1,12 @@
 Event	ID	Name			Wwise Object Path	Notes
+	3062989335	Play_Reactive_Feedback			\Default Work Unit\Play_Reactive_Feedback	
 	3211564518	Play_Test_Sound			\Default Work Unit\Play_Test_Sound	
+	3211783545	Stop_Reactive_Feedback			\Default Work Unit\Stop_Reactive_Feedback	
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	1585979646	ReactiveObject_Volume			\Default Work Unit\ReactiveObject_Volume	
 
 Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
 	431755879	Sine	Wwise Sine		\Actor-Mixer Hierarchy\Default Work Unit\Test_Sound\Sine	
+	750451834	Sine	Wwise Sine		\Actor-Mixer Hierarchy\Default Work Unit\Reactive_Feedback\Sine	
 

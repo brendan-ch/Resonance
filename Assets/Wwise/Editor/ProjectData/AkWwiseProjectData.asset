@@ -151,7 +151,7 @@ MonoBehaviour:
     ParentPath: SoundBanks\Default Work Unit
     guid: c52c3223b4912a44a6114f8eb6753508
     GuidInternal: 
-    m_lastTime: -8584395699716930474
+    m_lastTime: -8584394623651761864
     List:
     - name: Main_Soundbank
       guid: 8288f3950e91af47a1a27b0e207eeba0
@@ -179,8 +179,25 @@ MonoBehaviour:
     ParentPath: Events\Default Work Unit
     guid: 1e0f8b2476bce64ebf50c70b54392b94
     GuidInternal: 
-    m_lastTime: -8584395703653980548
+    m_lastTime: -8584394623707015217
     List:
+    - name: Play_Reactive_Feedback
+      guid: a42a72963810bd4fa75161f7b5327803
+      id: 3062989335
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1e0f8b2476bce64ebf50c70b54392b94
+      - ElementName: Play_Reactive_Feedback
+        ObjectType: 3
+        guid: a42a72963810bd4fa75161f7b5327803
+      Path: Events\Default Work Unit\Play_Reactive_Feedback
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
     - name: Play_Test_Sound
       guid: d64a20dda306144e98f9f6a1dc814f3d
       id: 3211564518
@@ -198,6 +215,23 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: 0.5
       minDuration: 0.5
+    - name: Stop_Reactive_Feedback
+      guid: a3710cac4a5a004784bef8438f763a1a
+      id: 3211783545
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1e0f8b2476bce64ebf50c70b54392b94
+      - ElementName: Stop_Reactive_Feedback
+        ObjectType: 3
+        guid: a3710cac4a5a004784bef8438f763a1a
+      Path: Events\Default Work Unit\Stop_Reactive_Feedback
+      maxAttenuation: 0
+      maxDuration: 0
+      minDuration: 0
   RtpcWwu:
   - PhysicalPath: Game Parameters\Default Work Unit.wwu
     PathAndIcons:
@@ -210,7 +244,7 @@ MonoBehaviour:
     ParentPath: Game Parameters\Default Work Unit
     guid: 3eab493116002a41853e1f21a63c0a57
     GuidInternal: 
-    m_lastTime: -8584395658857099729
+    m_lastTime: -8584394624163597195
     List:
     - name: Meter_Environment_Intensity
       guid: 2f8d00d68202fd4aa98ea873a0bf9ac4
@@ -254,6 +288,20 @@ MonoBehaviour:
         ObjectType: 13
         guid: ad91bb52c9dd624b883246c14c04e59c
       Path: Game Parameters\Default Work Unit\Meter_SFX_Intensity
+    - name: ReactiveObject_Volume
+      guid: 1c88627f90db35499d2c04107d29bf53
+      id: 1585979646
+      PathAndIcons:
+      - ElementName: Game Parameters
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 3eab493116002a41853e1f21a63c0a57
+      - ElementName: ReactiveObject_Volume
+        ObjectType: 13
+        guid: 1c88627f90db35499d2c04107d29bf53
+      Path: Game Parameters\Default Work Unit\ReactiveObject_Volume
   StateWwu:
   - PhysicalPath: States\Default Work Unit.wwu
     PathAndIcons:
@@ -297,7 +345,7 @@ MonoBehaviour:
     m_lastTime: -8584435181061361653
     List: []
   ExpandedFileSystemItemIds: 
-  ExpandedWaapiItemIds: 030000000400000006000000070000000a0000000b0000000c000000130000001400000015000000
+  ExpandedWaapiItemIds: 03000000040000000500000006000000070000000a0000000b0000000c00000013000000140000001500000016000000
   AutoSyncSelection: 0
   autoPopulateEnabled: 1
   currentDataSource: 0

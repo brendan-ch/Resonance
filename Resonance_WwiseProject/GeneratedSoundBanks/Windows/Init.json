@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{2F923E51-49FF-2A8E-6CED-7086783AA4F5}",
+    "Hash": "{3AA8AABE-CA87-CEE5-9FFB-B420B4769C30}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -127,6 +127,12 @@
       "GUID": "{D6008D2F-0282-4AFD-A98E-A873A0BF9AC4}"
      },
      {
+      "Id": "1585979646",
+      "Name": "ReactiveObject_Volume",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\ReactiveObject_Volume",
+      "GUID": "{7F62881C-DB90-4935-9D2C-04107D29BF53}"
+     },
+     {
       "Id": "2553996342",
       "Name": "Meter_SFX_Intensity",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\Meter_SFX_Intensity",
@@ -141,6 +147,6 @@
     ]
    }
   ],
-  "FileHash": "{6C509154-21E3-7085-D51E-E5BCB3C794B3}"
+  "FileHash": "{AEC44B65-03DA-B001-53CC-BD88E49EF3E4}"
  }
 }

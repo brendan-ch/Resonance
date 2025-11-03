@@ -6,14 +6,28 @@
   <component name="ChangeListManager">
     <list default="true" id="ab354f86-6b88-42df-8f93-2e8adb1d51b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Audio/AudioBusMonitor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/AudioBusMonitor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/AudioDebugPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/AudioDebugPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TB_AudioReactivity.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TB_AudioReactivity.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Audio/AudioBusMonitor.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Audio/AudioBusMonitor.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Audio/BusType.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Audio/BusType.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Audio/ReactiveAudio/AudioReactiveObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/ReactiveAudio/AudioReactiveObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/Wwise_IDs.h" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/Wwise_IDs.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Wwise/Editor/ProjectData/AkWwiseProjectData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Wwise/Editor/ProjectData/AkWwiseProjectData.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/Actor-Mixer Hierarchy/Default Work Unit.wwu" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/Actor-Mixer Hierarchy/Default Work Unit.wwu" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/Events/Default Work Unit.wwu" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/Events/Default Work Unit.wwu" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/Game Parameters/Default Work Unit.wwu" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/Game Parameters/Default Work Unit.wwu" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Init.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Init.bnk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Init.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Init.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.bnk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Init.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Init.bnk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Init.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Init.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.bnk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/SoundBanks/Default Work Unit.wwu" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/SoundBanks/Default Work Unit.wwu" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -8,6 +8,9 @@ namespace Resonance.Audio
         #region Inspector Fields
         [Header("Listening Settings")]
         [SerializeField] private float listenRadius = 20f;
+        [SerializeField] private float falloffDistance = 10f;
+        [Tooltip("Controls how quickly intensity fades with distance. Higher = less falloff")]
+        [SerializeField] private float falloffSmoothness = 1f;
         
         [Header("Material Settings")]
         [SerializeField] private Material targetMaterial;
@@ -28,6 +31,14 @@ namespace Resonance.Audio
         [SerializeField] private bool enableSmoothing = false;
         [SerializeField] private float smoothSpeed = 10f;
         
+        [Header("Audio Feedback")]
+        [SerializeField] private bool enableAudioFeedback = true;
+        [SerializeField] private AK.Wwise.Event feedbackStartEvent;
+        [SerializeField] private AK.Wwise.Event feedbackStopEvent;
+        [SerializeField] private AK.Wwise.RTPC feedbackVolumeRTPC;
+        [SerializeField] private float minVolumeThreshold = 0.01f;
+        [SerializeField] private float maxFeedbackVolume = 100f;
+        
         [Header("Debug")]
         [SerializeField] private bool drawDebugRadius = false;
         #endregion
@@ -38,6 +49,10 @@ namespace Resonance.Audio
         private float _smoothedIntensity;
         private int _frameCounter = 0;
         private Camera _mainCamera;
+        
+        // Audio feedback tracking
+        private uint _feedbackPlayingID = AkSoundEngine.AK_INVALID_PLAYING_ID;
+        private bool _isFeedbackPlaying = false;
         #endregion
         
         #region Unity Lifecycle
@@ -66,6 +81,7 @@ namespace Resonance.Audio
         private void OnDestroy()
         {
             CleanupMaterial();
+            StopAudioFeedback();
         }
         #endregion
         
@@ -128,7 +144,9 @@ namespace Resonance.Audio
             {
                 float distance = Vector3.Distance(transform.position, nearestSource.Position);
                 float sourceIntensity = nearestSource.GetCurrentIntensity();
-                float attenuation = 1f / (1f + distance * distance);
+                
+                float normalizedDistance = distance / falloffDistance;
+                float attenuation = 1f / (1f + Mathf.Pow(normalizedDistance, 2f / falloffSmoothness));
                 
                 _currentIntensity = sourceIntensity * attenuation;
             }
@@ -140,6 +158,12 @@ namespace Resonance.Audio
             float finalIntensity = enableSmoothing ? GetSmoothedIntensity() : _currentIntensity;
             
             ApplyEmission(finalIntensity);
+            
+            // Update audio feedback
+            if (enableAudioFeedback)
+            {
+                UpdateAudioFeedback(finalIntensity);
+            }
         }
         
         private float GetSmoothedIntensity()
@@ -159,6 +183,67 @@ namespace Resonance.Audio
             
             Color finalEmission = emissionColor * (intensity * emissionIntensity);
             targetMaterial.SetColor("_EmissionColor", finalEmission);
+        }
+        #endregion
+        
+        #region Audio Feedback
+        private void UpdateAudioFeedback(float intensity)
+        {
+            bool shouldPlay = intensity > minVolumeThreshold;
+            
+            if (shouldPlay)
+            {
+                if (!_isFeedbackPlaying)
+                {
+                    StartAudioFeedback();
+                }
+                
+                if (_isFeedbackPlaying && feedbackVolumeRTPC != null)
+                {
+                    float volumeValue = Mathf.Lerp(0f, maxFeedbackVolume, intensity);
+                    feedbackVolumeRTPC.SetValue(gameObject, volumeValue);
+                }
+            }
+            else
+            {
+                if (_isFeedbackPlaying)
+                {
+                    StopAudioFeedback();
+                }
+            }
+        }
+        
+        private void StartAudioFeedback()
+        {
+            if (feedbackStartEvent == null)
+            {
+                Debug.LogWarning($"[AudioReactiveObject] Feedback start event not assigned on {gameObject.name}");
+                return;
+            }
+            
+            _feedbackPlayingID = feedbackStartEvent.Post(gameObject);
+            
+            if (_feedbackPlayingID != AkSoundEngine.AK_INVALID_PLAYING_ID)
+            {
+                _isFeedbackPlaying = true;
+            }
+        }
+        
+        private void StopAudioFeedback()
+        {
+            if (!_isFeedbackPlaying) return;
+            
+            if (feedbackStopEvent != null)
+            {
+                feedbackStopEvent.Post(gameObject);
+            }
+            else if (_feedbackPlayingID != AkSoundEngine.AK_INVALID_PLAYING_ID)
+            {
+                AkSoundEngine.StopPlayingID(_feedbackPlayingID);
+            }
+            
+            _feedbackPlayingID = AkSoundEngine.AK_INVALID_PLAYING_ID;
+            _isFeedbackPlaying = false;
         }
         #endregion
         

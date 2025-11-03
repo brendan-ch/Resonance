@@ -14,6 +14,31 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Play_Reactive_Feedback" ID="{96722AA4-1038-4FBD-A751-61F7B5327803}">
+					<ChildrenList>
+						<Action Name="" ID="{D87963E7-D03C-4432-8C5B-D61363D1FD08}" ShortID="487407952">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Reactive_Feedback" ID="{A00BD35F-4EC1-4BE7-9CD1-7D645193AE68}" WorkUnitID="{A0953ED0-0717-4C8C-B006-DE01ACC1580F}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Stop_Reactive_Feedback" ID="{AC0C71A3-5A4A-4700-84BE-F8438F763A1A}">
+					<ChildrenList>
+						<Action Name="" ID="{3419A8CA-8B5E-4347-980F-FE7C9E1A89F0}" ShortID="991223275">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Reactive_Feedback" ID="{A00BD35F-4EC1-4BE7-9CD1-7D645193AE68}" WorkUnitID="{A0953ED0-0717-4C8C-B006-DE01ACC1580F}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

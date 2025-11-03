@@ -245,11 +245,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioReactiveObject
   listenRadius: 20
+  falloffDistance: 10
+  falloffSmoothness: 1
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
+  propagationSpeed: 100
+  enablePropagationDelay: 1
+  enableLOD: 1
+  lodNearDistance: 15
+  lodMediumDistance: 40
+  lodFarDistance: 80
   enableSmoothing: 0
   smoothSpeed: 10
+  enableAudioFeedback: 1
+  feedbackStartEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  feedbackStopEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  feedbackVolumeRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 0}
+  minVolumeThreshold: 0.01
+  maxFeedbackVolume: 100
   drawDebugRadius: 0
 --- !u!114 &57360072
 MonoBehaviour:
@@ -263,12 +286,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f20aab51ccec04b804a28d35ff4c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioReactiveObject
-  listenRadius: 20
+  listenRadius: 40
+  falloffDistance: 10
+  falloffSmoothness: 2
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
-  enableSmoothing: 0
+  propagationSpeed: 80
+  enablePropagationDelay: 1
+  enableLOD: 1
+  lodNearDistance: 15
+  lodMediumDistance: 40
+  lodFarDistance: 80
+  enableSmoothing: 1
   smoothSpeed: 10
+  enableAudioFeedback: 1
+  feedbackStartEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: f15e3407ad8986b419045614ef118274, type: 2}
+  feedbackStopEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 9eb23c51bbda5d24a84f6f5eecf4288e, type: 2}
+  feedbackVolumeRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
+  minVolumeThreshold: 0.01
+  maxFeedbackVolume: 100
   drawDebugRadius: 0
 --- !u!1 &131877402
 GameObject:
@@ -1353,12 +1399,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f20aab51ccec04b804a28d35ff4c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioReactiveObject
-  listenRadius: 20
+  listenRadius: 40
+  falloffDistance: 10
+  falloffSmoothness: 2
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
-  enableSmoothing: 0
+  propagationSpeed: 80
+  enablePropagationDelay: 1
+  enableLOD: 1
+  lodNearDistance: 15
+  lodMediumDistance: 40
+  lodFarDistance: 80
+  enableSmoothing: 1
   smoothSpeed: 10
+  enableAudioFeedback: 1
+  feedbackStartEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: f15e3407ad8986b419045614ef118274, type: 2}
+  feedbackStopEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 9eb23c51bbda5d24a84f6f5eecf4288e, type: 2}
+  feedbackVolumeRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
+  minVolumeThreshold: 0.01
+  maxFeedbackVolume: 100
   drawDebugRadius: 1
 --- !u!1 &1775915917
 GameObject:
@@ -1484,12 +1553,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f20aab51ccec04b804a28d35ff4c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioReactiveObject
-  listenRadius: 20
+  listenRadius: 40
+  falloffDistance: 10
+  falloffSmoothness: 2
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
-  enableSmoothing: 0
+  propagationSpeed: 80
+  enablePropagationDelay: 1
+  enableLOD: 1
+  lodNearDistance: 15
+  lodMediumDistance: 40
+  lodFarDistance: 80
+  enableSmoothing: 1
   smoothSpeed: 10
+  enableAudioFeedback: 1
+  feedbackStartEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: f15e3407ad8986b419045614ef118274, type: 2}
+  feedbackStopEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 9eb23c51bbda5d24a84f6f5eecf4288e, type: 2}
+  feedbackVolumeRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
+  minVolumeThreshold: 0.01
+  maxFeedbackVolume: 100
   drawDebugRadius: 0
 --- !u!1 &1818242583
 GameObject:
@@ -1913,12 +2005,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f20aab51ccec04b804a28d35ff4c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioReactiveObject
-  listenRadius: 20
+  listenRadius: 40
+  falloffDistance: 10
+  falloffSmoothness: 2
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
-  enableSmoothing: 0
+  propagationSpeed: 80
+  enablePropagationDelay: 1
+  enableLOD: 1
+  lodNearDistance: 15
+  lodMediumDistance: 40
+  lodFarDistance: 80
+  enableSmoothing: 1
   smoothSpeed: 10
+  enableAudioFeedback: 1
+  feedbackStartEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: f15e3407ad8986b419045614ef118274, type: 2}
+  feedbackStopEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 9eb23c51bbda5d24a84f6f5eecf4288e, type: 2}
+  feedbackVolumeRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
+  minVolumeThreshold: 0.01
+  maxFeedbackVolume: 100
   drawDebugRadius: 0
 --- !u!1 &1985560573
 GameObject:
@@ -1949,7 +2064,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 828e9ec775a6a384ab9577359857c36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioSourceTracker
-  sourceLifetime: 0.5
+  defaultDuration: 1
 --- !u!4 &1985560575
 Transform:
   m_ObjectHideFlags: 0
@@ -2232,12 +2347,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f20aab51ccec04b804a28d35ff4c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioReactiveObject
-  listenRadius: 20
+  listenRadius: 40
+  falloffDistance: 10
+  falloffSmoothness: 2
   targetMaterial: {fileID: 0}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
-  enableSmoothing: 0
+  propagationSpeed: 80
+  enablePropagationDelay: 1
+  enableLOD: 1
+  lodNearDistance: 15
+  lodMediumDistance: 40
+  lodFarDistance: 80
+  enableSmoothing: 1
   smoothSpeed: 10
+  enableAudioFeedback: 1
+  feedbackStartEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: f15e3407ad8986b419045614ef118274, type: 2}
+  feedbackStopEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 9eb23c51bbda5d24a84f6f5eecf4288e, type: 2}
+  feedbackVolumeRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
+  minVolumeThreshold: 0.01
+  maxFeedbackVolume: 100
   drawDebugRadius: 0
 --- !u!1001 &8626028017861178022
 PrefabInstance:
