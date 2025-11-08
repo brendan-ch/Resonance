@@ -1,5 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using Resonance.Player;
 
 namespace Resonance.PlayerController
 {
@@ -10,6 +10,7 @@ namespace Resonance.PlayerController
         [SerializeField] private float overdriveDuration = 8f;
         [SerializeField] private float overdriveCooldown = 30f;
         [SerializeField] private float overdriveSpeedMultiplier = 2f;
+        [SerializeField] private float overdriveHealAmount = 50f;
         
         public bool IsInOverdrive { get; private set; } = false;
         public bool IsOnCooldown { get; private set; } = false;
@@ -22,12 +23,14 @@ namespace Resonance.PlayerController
         public float SpeedMultiplier => overdriveSpeedMultiplier;
 
         private PlayerState _playerState;
+        private PlayerStats _playerStats;
         #endregion
 
         #region Startup
         private void Awake()
         {
             _playerState = GetComponent<PlayerState>();
+            _playerStats = GetComponent<PlayerStats>();
         }
         #endregion
         
@@ -93,7 +96,15 @@ namespace Resonance.PlayerController
             SetState(OverdriveState.Active);
             DurationTimeRemaining = overdriveDuration;
             
-            Debug.Log("Overdrive ACTIVATED!");
+            if (_playerStats != null)
+            {
+                _playerStats.Heal(overdriveHealAmount);
+                Debug.Log($"Overdrive ACTIVATED! Healed {overdriveHealAmount} HP");
+            }
+            else
+            {
+                Debug.Log("Overdrive ACTIVATED!");
+            }
         }
 
         private void DeactivateOverdrive()
