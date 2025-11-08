@@ -1,5 +1,6 @@
 using UnityEngine;
 using Resonance.PlayerController;
+using Resonance.Player;
 
 namespace Resonance.DebugTools
 {
@@ -11,6 +12,11 @@ namespace Resonance.DebugTools
         private PlayerLocomotionInput _playerInput;
         private OverdriveAbility _overdriveAbility;
         private CharacterController _characterController;
+        private PlayerStats _playerStats;
+        
+        // Damage and heal input fields
+        private string _damageAmount = "10";
+        private string _healAmount = "25";
         #endregion
 
         #region Startup
@@ -33,6 +39,7 @@ namespace Resonance.DebugTools
             _playerInput = player.GetComponent<PlayerLocomotionInput>();
             _overdriveAbility = player.GetComponent<OverdriveAbility>();
             _characterController = player.GetComponent<CharacterController>();
+            _playerStats = player.GetComponent<PlayerStats>();
         }
         #endregion
 
@@ -64,6 +71,13 @@ namespace Resonance.DebugTools
             GUILayout.Label("Overdrive:");
             GUILayout.Space(5);
             DrawOverdriveStats();
+            
+            GUILayout.Space(15);
+            
+            // Health
+            GUILayout.Label("Health:");
+            GUILayout.Space(5);
+            DrawHealthStats();
             
             GUILayout.EndVertical();
         }
@@ -170,6 +184,98 @@ namespace Resonance.DebugTools
             }
             
             UnityEngine.Debug.Log("Overdrive cooldown reset via debug tools");
+        }
+        
+        private void DrawHealthStats()
+        {
+            if (_playerStats == null)
+            {
+                GUILayout.BeginVertical("box");
+                GUILayout.Label("No PlayerStats found");
+                GUILayout.EndVertical();
+                return;
+            }
+
+            GUILayout.BeginVertical("box");
+            
+            GUILayout.Label($"Current Health: {_playerStats.CurrentHealth:F0} / {_playerStats.MaxHealth:F0}");
+            
+            GUILayout.Space(10);
+            
+            // Damage input and button
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Damage Amount:", GUILayout.Width(120));
+            _damageAmount = GUILayout.TextField(_damageAmount, GUILayout.Width(60));
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(5);
+            
+            if (GUILayout.Button("Apply Damage", GUILayout.Height(30)))
+            {
+                ApplyDamage();
+            }
+            
+            GUILayout.Space(10);
+            
+            // Heal input and button
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Heal Amount:", GUILayout.Width(120));
+            _healAmount = GUILayout.TextField(_healAmount, GUILayout.Width(60));
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(5);
+            
+            if (GUILayout.Button("Apply Heal", GUILayout.Height(30)))
+            {
+                ApplyHeal();
+            }
+            
+            GUILayout.Space(5);
+            
+            if (GUILayout.Button("Heal to Max", GUILayout.Height(25)))
+            {
+                HealToMax();
+            }
+            
+            GUILayout.EndVertical();
+        }
+        
+        private void ApplyDamage()
+        {
+            if (_playerStats == null) return;
+            
+            if (float.TryParse(_damageAmount, out float damage))
+            {
+                _playerStats.TakeDamage(damage);
+                UnityEngine.Debug.Log($"Applied {damage} damage to player via debug tools");
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning("Invalid damage amount entered");
+            }
+        }
+        
+        private void ApplyHeal()
+        {
+            if (_playerStats == null) return;
+            
+            if (float.TryParse(_healAmount, out float healAmount))
+            {
+                _playerStats.Heal(healAmount);
+                UnityEngine.Debug.Log($"Applied {healAmount} heal to player via debug tools");
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning("Invalid heal amount entered");
+            }
+        }
+        
+        private void HealToMax()
+        {
+            if (_playerStats == null) return;
+            
+            _playerStats.Heal(_playerStats.MaxHealth);
+            UnityEngine.Debug.Log("Player healed to max via debug tools");
         }
         #endregion
     }

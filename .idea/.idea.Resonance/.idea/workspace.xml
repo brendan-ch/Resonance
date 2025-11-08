@@ -7,15 +7,11 @@
     <list default="true" id="ab354f86-6b88-42df-8f93-2e8adb1d51b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/TB_Locomotion.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TB_Locomotion.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/AudioDebugPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/AudioDebugPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/DebugMenuManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/DebugMenuManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/SceneDebugPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/SceneDebugPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/Actor-Mixer Hierarchy/Default Work Unit.wwu" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/Actor-Mixer Hierarchy/Default Work Unit.wwu" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.bnk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.bnk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/PlayerDebugPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/PlayerDebugPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PerformanceStatsOverlay.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PerformanceStatsOverlay.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ThirdPersonListener.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ThirdPersonListener.cs.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,14 +27,12 @@
     <setting file="file://$PROJECT_DIR$/Assets/CharacterController/Scripts/Overdrive/OverdriveChromaticAberration.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/CharacterController/Scripts/Overdrive/OverdriveTrailEffect.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/CharacterController/Scripts/PlayerController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Audio/AudioBusMonitor.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Audio/BusType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Audio/LoadBank.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Debug/AudioDebugPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Debug/PerformanceDebugPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Debug/PlayerDebugPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Debug/SceneDebugPanel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/ReactiveAudio/AudioSourceTracker.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/HealthBar.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -161,6 +155,7 @@
       <workItem from="1761597578791" duration="4310000" />
       <workItem from="1762035187737" duration="13250000" />
       <workItem from="1762122537896" duration="360000" />
+      <workItem from="1762585153982" duration="2462000" />
     </task>
     <servers />
   </component>
