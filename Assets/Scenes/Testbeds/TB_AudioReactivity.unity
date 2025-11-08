@@ -314,7 +314,7 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   minVolumeThreshold: 0.01
-  maxFeedbackVolume: 80
+  maxFeedbackVolume: 50
   drawDebugRadius: 0
 --- !u!1 &131877402
 GameObject:
@@ -1557,7 +1557,7 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   minVolumeThreshold: 0.01
-  maxFeedbackVolume: 80
+  maxFeedbackVolume: 50
   drawDebugRadius: 1
 --- !u!1 &1775915917
 GameObject:
@@ -1711,7 +1711,7 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   minVolumeThreshold: 0.01
-  maxFeedbackVolume: 80
+  maxFeedbackVolume: 50
   drawDebugRadius: 0
 --- !u!1 &1818242583
 GameObject:
@@ -2334,7 +2334,7 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   minVolumeThreshold: 0.01
-  maxFeedbackVolume: 80
+  maxFeedbackVolume: 50
   drawDebugRadius: 0
 --- !u!1 &1985560573
 GameObject:
@@ -2786,7 +2786,7 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   minVolumeThreshold: 0.01
-  maxFeedbackVolume: 80
+  maxFeedbackVolume: 50
   drawDebugRadius: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
