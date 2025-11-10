@@ -1,11 +1,12 @@
 using System;
+using PurrNet;
 using UnityEngine;
 using Unity.Cinemachine;
 
 namespace Resonance.PlayerController
 {
     [DefaultExecutionOrder(-1)]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : NetworkBehaviour
     {
         #region Class Variables
         [Header("Components")]
@@ -77,6 +78,14 @@ namespace Resonance.PlayerController
         #endregion
 
         #region Startup
+        protected override void OnSpawned()
+        {
+            base.OnSpawned();
+
+            enabled = isOwner;
+            _virtualCamera.gameObject.SetActive(isOwner);
+        }
+
         private void Awake()
         {
             _playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
@@ -124,7 +133,7 @@ namespace Resonance.PlayerController
                 _playerState.SetPlayerMovementState(PlayerMovementState.Sliding);
                 _wasCrouchPressedLastFrame = isCrouchToggled;
                 _characterController.stepOffset = _stepOffset;
-                return; // Exit early
+                return;
             }
 
             _wasCrouchPressedLastFrame = isCrouchToggled;
@@ -151,9 +160,8 @@ namespace Resonance.PlayerController
                 }
                 else
                 {
-                    // Continue sliding
                     _playerState.SetPlayerMovementState(PlayerMovementState.Sliding);
-                    return; // Exit early
+                    return;
                 }
             }
             
@@ -219,7 +227,6 @@ namespace Resonance.PlayerController
                 return;
             }
             
-			// Create quick reference for current state
 			bool isSprinting = _playerState.CurrentPlayerMovementState == PlayerMovementState.Sprinting;
             bool isGrounded = _playerState.InGroundedState();
             bool isCrouching = _playerState.CurrentPlayerMovementState == PlayerMovementState.Crouching;
@@ -258,14 +265,11 @@ namespace Resonance.PlayerController
 
         private void HandleSlideMovement()
         {
-            // Get ground slope information
             Vector3 groundNormal = CharacterControllerUtils.GetNormalWithSphereCast(_characterController, _groundLayers);
             float slopeAngle = Vector3.Angle(groundNormal, Vector3.up);
     
-            // Find downhill direction of slope
             Vector3 slopeDownDirection = Vector3.ProjectOnPlane(Vector3.down, groundNormal).normalized;
     
-            // Determine if moving with or against the slope
             float slopeDot = Vector3.Dot(_slideDirection, slopeDownDirection);
     
             bool isDownhill = slopeAngle > slopeAngleThreshold && slopeDot > 0.1f;
