@@ -2201,7 +2201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adea7913c6705ae4d8cca0dc117b81dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.OverdriveVisualEffects
-  _postProcessVolume: {fileID: 0}
+  _postProcessVolume: {fileID: 1074391282495710671, guid: 88b1af0e1549cbd49a6dd1f5d85958d1, type: 3}
   overdriveTintColor: {r: 0, g: 1, b: 0.5, a: 1}
   tintIntensity: 0.3
   tintTransitionSpeed: 5
@@ -2267,7 +2267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4b33c7f3e63db4419972f228d4d1eec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.OverdriveChromaticAberration
-  _postProcessVolume: {fileID: 0}
+  _postProcessVolume: {fileID: 1074391282495710671, guid: 88b1af0e1549cbd49a6dd1f5d85958d1, type: 3}
   aberrationIntensity: 1
   aberrationTransitionSpeed: 5
 --- !u!114 &6996863292890564416
@@ -3088,7 +3088,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4226273858392661457
 Transform:
   m_ObjectHideFlags: 0
