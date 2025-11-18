@@ -59,6 +59,9 @@ namespace Resonance.PlayerController
         private PlayerState _playerState;
         private OverdriveAbility _overdriveAbility;
         
+        // Death flag to immediately block all movement
+        public bool IsPlayerDead { get; set; } = false;
+        
         private Vector2 _cameraRotation = Vector2.zero;
         private Vector2 _playerTargetRotation = Vector2.zero;
 
@@ -100,9 +103,40 @@ namespace Resonance.PlayerController
         }
         #endregion
 
+        #region Public Methods
+        public void ResetState()
+        {
+            _verticalVelocity = 0f;
+            _slideTimer = 0f;
+            _slideDirection = Vector3.zero;
+            _jumpedLastFrame = false;
+            _wasCrouchPressedLastFrame = false;
+            _rotatingToTargetTimer = 0f;
+            IsRotatingToTarget = false;
+            
+            // Restore step offset to original value
+            if (_characterController != null)
+            {
+                _characterController.stepOffset = _stepOffset;
+            }
+        }
+        #endregion
+
         #region Update Logic
         private void Update()
         {
+            // Immediately return if player is dead (flag-based check)
+            if (IsPlayerDead)
+                return;
+            
+            // Don't process movement if player is dead
+            if (_playerState.IsDead())
+                return;
+            
+            // Don't process movement if CharacterController is disabled
+            if (!_characterController.enabled)
+                return;
+                
             UpdateMovementState();
             HandleVerticalMovement();
             HandleLateralMovement();
@@ -343,6 +377,10 @@ namespace Resonance.PlayerController
         #region Late Update Logic
         private void LateUpdate()
         {
+            // Don't process if player is dead
+            if (IsPlayerDead)
+                return;
+                
             UpdateCameraRotation();
             UpdateCameraFOV();
         }

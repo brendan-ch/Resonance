@@ -26,6 +26,11 @@ namespace Resonance.PlayerController
                    movementState == PlayerMovementState.Sprinting ||
                    movementState == PlayerMovementState.Sliding;
         }
+
+        public bool IsDead()
+        {
+            return CurrentPlayerMovementState == PlayerMovementState.Dead;
+        }
     }
     
     public enum PlayerMovementState
@@ -37,6 +42,6 @@ namespace Resonance.PlayerController
         Jumping = 4,
         Falling = 5,
         Sliding = 6,
-        Strafing = 7,
+        Dead = 7,
     }
 }

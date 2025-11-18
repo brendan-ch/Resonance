@@ -76,16 +76,30 @@ namespace Resonance.PlayerController
         #region Input Callbacks
         public void OnMovement(InputAction.CallbackContext context)
         {
+            if (_playerState.IsDead())
+            {
+                MovementInput = Vector2.zero;
+                return;
+            }
+            
             MovementInput = context.ReadValue<Vector2>();
         }
 
         public void OnLook(InputAction.CallbackContext context)
         {
+            if (_playerState.IsDead())
+            {
+                LookInput = Vector2.zero;
+                return;
+            }
+            
             LookInput = context.ReadValue<Vector2>();
         }
 
         public void OnToggleSprint(InputAction.CallbackContext context)
         {
+            if (_playerState.IsDead()) return;
+            
             if (context.performed)
             {
                 SprintToggledOn = holdToSprint || !SprintToggledOn;
@@ -98,7 +112,7 @@ namespace Resonance.PlayerController
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (!context.performed)
+            if (!context.performed || _playerState.IsDead())
                 return;
 
             JumpPressed = true;
@@ -106,7 +120,7 @@ namespace Resonance.PlayerController
 
         public void OnToggleCrouch(InputAction.CallbackContext context)
         {
-            if (!context.performed)
+            if (!context.performed || _playerState.IsDead())
                 return;
 
             CrouchToggledOn = !CrouchToggledOn;
@@ -115,4 +129,3 @@ namespace Resonance.PlayerController
         #endregion
     }
 }
-

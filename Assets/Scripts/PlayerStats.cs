@@ -1,51 +1,206 @@
+using Resonance.PlayerController;
 using UnityEngine;
+using System.Collections;
 
 namespace Resonance.Player
 {
     public class PlayerStats : MonoBehaviour
     {
-        [SerializeField] private float maxHealth;
-
-        private float currentHealth;
+        #region Inspector Fields
+        [SerializeField] private float maxHealth = 100f;
+        [SerializeField] private bool respawnOnDeath = true;
         
         public HealthBar healthBar;
+        #endregion
         
-        // Public properties for debug tools
-        public float CurrentHealth => currentHealth;
+        #region Properties
+        public float CurrentHealth { get; private set; }
         public float MaxHealth => maxHealth;
+        public bool IsDead { get; private set; }
+        #endregion
+        
+        #region Events
+        public event System.Action OnPlayerDeath;
+        public event System.Action OnPlayerRespawn;
+        #endregion
+        
+        #region Component References
+        private PlayerState _playerState;
+        private CharacterController _characterController;
+        private PlayerController.PlayerController _playerController;
+        #endregion
 
+        #region Startup
+
+        public void Awake()
+        {
+            _playerState = GetComponent<PlayerState>();
+            _characterController = GetComponent<CharacterController>();
+            _playerController = GetComponent<PlayerController.PlayerController>();
+        }
+        
         private void Start()
         {
-            currentHealth = maxHealth;
-            
-            healthBar.SetSliderMax(maxHealth);
-        }
+            CurrentHealth = maxHealth;
 
+            if (healthBar != null)
+            {
+                healthBar.SetSliderMax(maxHealth);
+            }
+        }
+        #endregion
+
+        #region Health Management
         public void TakeDamage(float amount)
         {
-            currentHealth -= amount;
-            currentHealth = Mathf.Max(0, currentHealth);
-            healthBar.SetSlider(currentHealth);
-        }
-        
-        public void Heal(float amount)
-        {
-            currentHealth += amount;
-            currentHealth = Mathf.Min(currentHealth, maxHealth);
-            healthBar.SetSlider(currentHealth);
-        }
-
-        private void Update()
-        {
-            if (currentHealth <= 0)
+            if (IsDead) return;
+            
+            CurrentHealth -= amount;
+            CurrentHealth = Mathf.Max(0, CurrentHealth);
+            
+            if (healthBar != null)
+            {
+                healthBar.SetSlider(CurrentHealth);
+            }
+            
+            if (CurrentHealth <= 0)
             {
                 Die();
             }
         }
+        
+        public void Heal(float amount)
+        {
+            if (IsDead) return;
+            
+            CurrentHealth += amount;
+            CurrentHealth = Mathf.Min(CurrentHealth, maxHealth);
+            
+            if (healthBar != null)
+            {
+                healthBar.SetSlider(CurrentHealth);
+            }
+        }
+        #endregion
 
+        #region Death & Respawn
         private void Die()
         {
-            // TODO: add logic
+            if (IsDead) return;
+
+            IsDead = true;
+
+            // Set dead flag to block all movement
+            if (_playerController != null)
+            {
+                _playerController.IsPlayerDead = true;
+            }
+
+            // Set state to Dead
+            if (_playerState != null)
+            {
+                _playerState.SetPlayerMovementState(PlayerMovementState.Dead);
+            }
+
+            // Disable PlayerController script
+            if (_playerController != null)
+            {
+                _playerController.enabled = false;
+            }
+
+            // Disable CharacterController
+            if (_characterController != null)
+            {
+                _characterController.enabled = false;
+            }
+
+            Debug.Log("[PlayerStats] Player died!");
+            
+            OnPlayerDeath?.Invoke();
+
+            if (respawnOnDeath)
+            {
+                StartCoroutine(RespawnCoroutine());
+            }
         }
+
+        private IEnumerator RespawnCoroutine()
+        {
+            float respawnDelay = Resonance.Player.Respawn.Instance != null ? 
+                                 Resonance.Player.Respawn.Instance.RespawnDelay : 3f;
+            
+            Debug.Log("[PlayerStats] Respawning in " + respawnDelay);
+            yield return new WaitForSeconds(respawnDelay);
+            Respawn();
+        }
+
+        public void Respawn()
+        {
+            StartCoroutine(RespawnSequence());
+        }
+        
+        private IEnumerator RespawnSequence()
+        {
+            // Reset death state
+            IsDead = false;
+            
+            if (_playerState != null)
+            {
+                _playerState.SetPlayerMovementState(PlayerMovementState.Idling);
+            }
+            
+            // Reset movement state but keep IsPlayerDead flag true until physics settles
+            if (_playerController != null)
+            {
+                _playerController.ResetState();
+            }
+            
+            // Teleport to spawn point
+            Transform spawnPoint = Resonance.Player.Respawn.Instance?.GetSpawnPoint();
+
+            if (spawnPoint != null && _characterController != null)
+            {
+                transform.position = spawnPoint.position;
+                transform.rotation = spawnPoint.rotation;
+            }
+            
+            // Validate and re-enable CharacterController
+            if (_characterController != null)
+            {
+                if (_characterController.stepOffset <= 0)
+                {
+                    _characterController.stepOffset = 0.3f;
+                }
+                
+                _characterController.enabled = true;
+            }
+            
+            // Re-enable PlayerController (IsPlayerDead still true)
+            if (_playerController != null)
+            {
+                _playerController.enabled = true;
+            }
+            
+            // Wait for physics to settle and ground detection
+            yield return null;
+            
+            // Clear dead flag to allow movement
+            if (_playerController != null)
+            {
+                _playerController.IsPlayerDead = false;
+            }
+            
+            // Restore health
+            CurrentHealth = maxHealth;
+            if (healthBar != null)
+            {
+                healthBar.SetSlider(CurrentHealth);
+            }
+            
+            Debug.Log("[PlayerStats] Player respawned!");
+            
+            OnPlayerRespawn?.Invoke();
+        }
+        #endregion
     }
 }

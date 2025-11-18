@@ -12,6 +12,7 @@ namespace Resonance.PlayerController
         
         private PlayerLocomotionInput _playerLocomotionInput;
         private OverdriveAbility _overdriveAbility;
+        private PlayerState _playerState;
         #endregion
         
         #region Startup
@@ -19,6 +20,7 @@ namespace Resonance.PlayerController
         {
             _playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
             _overdriveAbility =  GetComponent<OverdriveAbility>();
+            _playerState = GetComponent<PlayerState>();
         }
 
         private void OnEnable()
@@ -72,7 +74,7 @@ namespace Resonance.PlayerController
         #region Input Callbacks
         public void OnAttack(InputAction.CallbackContext context)
         {
-            if (!context.performed)
+            if (!context.performed || _playerState.IsDead())
                 return;
 
             AttackPressed = true;
@@ -80,7 +82,7 @@ namespace Resonance.PlayerController
         
         public void OnReload(InputAction.CallbackContext context)
         {
-            if (!context.performed)
+            if (!context.performed || _playerState.IsDead())
                 return;
 
             ReloadPressed = true;
@@ -88,7 +90,7 @@ namespace Resonance.PlayerController
 
         public void OnOverdrive(InputAction.CallbackContext context)
         {
-            if (!context.performed)
+            if (!context.performed || _playerState.IsDead())
                 return;
 
             if (_overdriveAbility != null)
