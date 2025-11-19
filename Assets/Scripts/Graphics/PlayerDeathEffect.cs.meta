@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 9ca360bb62ba71c4883fbc6104d1191d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - deathShardMaterial: {fileID: 2100000, guid: 8c18848641698f949a07ef904e5b3d70, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

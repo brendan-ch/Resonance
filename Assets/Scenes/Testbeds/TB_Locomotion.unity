@@ -440,7 +440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Player.Respawn
   spawnPoints: []
   defaultSpawnPoint: {fileID: 0}
-  respawnDelay: 3
+  respawnDelay: 5
 --- !u!4 &108243403
 Transform:
   m_ObjectHideFlags: 0
@@ -2445,6 +2445,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 872638920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1599817474 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7386327058069600429, guid: dc598ef76c71cce4fb0c3a1f4127a5bc, type: 3}
+  m_PrefabInstance: {fileID: 3233295205914678918}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1599817490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599817474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ca360bb62ba71c4883fbc6104d1191d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.VFX.PlayerDeathEffect
+  explosionDuration: 1.5
+  deathShardMaterial: {fileID: 2100000, guid: 8c18848641698f949a07ef904e5b3d70, type: 2}
+  shardColor: {r: 0.5518868, g: 0.9654463, b: 1, a: 1}
+  emissionColor: {r: 0, g: 1, b: 1, a: 1}
+  emissionIntensity: 5
+  noiseScale: 1
+  shardDensity: 0.3
 --- !u!1 &1676890609
 GameObject:
   m_ObjectHideFlags: 0
@@ -3321,7 +3345,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7386327058069600429, guid: dc598ef76c71cce4fb0c3a1f4127a5bc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1599817490}
   m_SourcePrefab: {fileID: 100100000, guid: dc598ef76c71cce4fb0c3a1f4127a5bc, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
