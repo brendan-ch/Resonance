@@ -32,6 +32,24 @@ namespace Resonance.PlayerController
             _playerState = GetComponent<PlayerState>();
             _playerStats = GetComponent<PlayerStats>();
         }
+        
+        private void Start()
+        {
+            if (_playerStats != null)
+            {
+                _playerStats.OnPlayerDeath += HandlePlayerDeath;
+                _playerStats.OnPlayerRespawn += HandlePlayerRespawn;
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            if (_playerStats != null)
+            {
+                _playerStats.OnPlayerDeath -= HandlePlayerDeath;
+                _playerStats.OnPlayerRespawn -= HandlePlayerRespawn;
+            }
+        }
         #endregion
         
         #region Update Logic
@@ -124,6 +142,23 @@ namespace Resonance.PlayerController
             IsInOverdrive = (newState == OverdriveState.Active);
             IsOnCooldown = (newState == OverdriveState.Cooldown);
         }
+        
+        private void HandlePlayerDeath()
+        {
+            if (CurrentState == OverdriveState.Active)
+            {
+                DeactivateOverdrive();
+                Debug.Log("[OverdriveAbility] Overdrive interrupted by death");
+            }
+            
+            enabled = false;
+        }
+        
+        private void HandlePlayerRespawn()
+        {
+            enabled = true;
+            Debug.Log("[OverdriveAbility] Component resumed after respawn");
+        }
         #endregion
 
         public enum OverdriveState
@@ -134,4 +169,3 @@ namespace Resonance.PlayerController
         }
     }
 }
-

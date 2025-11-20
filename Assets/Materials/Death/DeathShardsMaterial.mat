@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: DeathShardsMaterial
-  m_Shader: {fileID: 4800000, guid: 1f707ea5d464c42439fe4c16001d44d1, type: 3}
+  m_Shader: {fileID: 4800000, guid: dffc6f95bcf1f1045a249b31d84c8bd8, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -122,7 +122,7 @@ Material:
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _ShardDensity: 0.2
+    - _ShardDensity: 0.1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

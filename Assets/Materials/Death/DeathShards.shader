@@ -102,19 +102,16 @@ Shader "Resonance/DeathShards"
                 float noiseValue = noise3D(center * _NoiseScale);
                 float dissolveThreshold = _DissolveAmount + noiseValue * 0.3 - 0.15;
                 
-                // Strong outward explosion from body center
-                float3 randomDir = normalize(float3(
-                    noise3D(center * 7.3) - 0.5,
-                    noise3D(center * 5.7) - 0.5,
-                    noise3D(center * 9.1) - 0.5
-                ));
+                // Float upward with slight drift
+                float3 upwardDir = float3(
+                    (noise3D(center * 8.5) - 0.5) * 0.4,
+                    1.0,
+                    (noise3D(center * 6.7) - 0.5) * 0.4
+                );
+                upwardDir = normalize(upwardDir);
                 
-                // Mix surface normal with random direction for more natural spread
-                float3 explosionDir = normalize(normal * 0.4 + randomDir * 0.6);
-                
-                // Vary speed per fragment for more dynamic explosion
-                float speed = (noiseValue * 0.5 + 0.5) * 2.0;
-                float3 movementOffset = explosionDir * _FragmentationAmount * speed;
+                float speed = (noiseValue * 0.3 + 0.7) * 1.2;
+                float3 movementOffset = upwardDir * _FragmentationAmount * speed;
                 
                 // Gentle rotation
                 float angle = noiseValue * 3.14159 * _FragmentationAmount * 0.4;

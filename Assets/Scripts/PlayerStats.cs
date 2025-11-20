@@ -28,6 +28,7 @@ namespace Resonance.Player
         private PlayerState _playerState;
         private CharacterController _characterController;
         private PlayerController.PlayerController _playerController;
+        private Animator _animator;
         #endregion
 
         #region Startup
@@ -37,6 +38,7 @@ namespace Resonance.Player
             _playerState = GetComponent<PlayerState>();
             _characterController = GetComponent<CharacterController>();
             _playerController = GetComponent<PlayerController.PlayerController>();
+            _animator = GetComponent<Animator>();
         }
         
         private void Start()
@@ -90,28 +92,29 @@ namespace Resonance.Player
 
             IsDead = true;
 
-            // Set dead flag to block all movement
             if (_playerController != null)
             {
                 _playerController.IsPlayerDead = true;
             }
 
-            // Set state to Dead
             if (_playerState != null)
             {
                 _playerState.SetPlayerMovementState(PlayerMovementState.Dead);
             }
 
-            // Disable PlayerController script
             if (_playerController != null)
             {
                 _playerController.enabled = false;
             }
 
-            // Disable CharacterController
             if (_characterController != null)
             {
                 _characterController.enabled = false;
+            }
+
+            if (_animator != null)
+            {
+                _animator.enabled = false;
             }
 
             Debug.Log("[PlayerStats] Player died!");
@@ -141,7 +144,6 @@ namespace Resonance.Player
         
         private IEnumerator RespawnSequence()
         {
-            // Reset death state
             IsDead = false;
             
             if (_playerState != null)
@@ -149,13 +151,11 @@ namespace Resonance.Player
                 _playerState.SetPlayerMovementState(PlayerMovementState.Idling);
             }
             
-            // Reset movement state but keep IsPlayerDead flag true until physics settles
             if (_playerController != null)
             {
                 _playerController.ResetState();
             }
             
-            // Teleport to spawn point
             Transform spawnPoint = Resonance.Player.Respawn.Instance?.GetSpawnPoint();
 
             if (spawnPoint != null && _characterController != null)
@@ -164,7 +164,6 @@ namespace Resonance.Player
                 transform.rotation = spawnPoint.rotation;
             }
             
-            // Validate and re-enable CharacterController
             if (_characterController != null)
             {
                 if (_characterController.stepOffset <= 0)
@@ -175,22 +174,23 @@ namespace Resonance.Player
                 _characterController.enabled = true;
             }
             
-            // Re-enable PlayerController (IsPlayerDead still true)
             if (_playerController != null)
             {
                 _playerController.enabled = true;
             }
             
-            // Wait for physics to settle and ground detection
+            if (_animator != null)
+            {
+                _animator.enabled = true;
+            }
+            
             yield return null;
             
-            // Clear dead flag to allow movement
             if (_playerController != null)
             {
                 _playerController.IsPlayerDead = false;
             }
             
-            // Restore health
             CurrentHealth = maxHealth;
             if (healthBar != null)
             {

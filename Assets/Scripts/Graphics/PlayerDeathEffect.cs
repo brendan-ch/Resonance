@@ -9,7 +9,8 @@ namespace Resonance.VFX
     {
         #region Inspector Fields
         [Header("Effect Settings")]
-        [SerializeField] private float explosionDuration = 2.0f;
+        [SerializeField] private float highlightDuration = 3.0f;
+        [SerializeField] private float fragmentationDuration = 1.5f;
         [SerializeField] private Material deathShardMaterial;
         
         [Header("Colors")]
@@ -75,26 +76,36 @@ namespace Resonance.VFX
         {
             _isPlayingEffect = true;
             
-            // Create material instances for each renderer
             CreateEffectMaterials();
             
-            // Immediate explosion with fragmentation
+            // Phase 1: Highlight with glow (no fragmentation yet)
             float elapsed = 0f;
-            while (elapsed < explosionDuration)
+            while (elapsed < highlightDuration)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / explosionDuration;
+                float t = elapsed / highlightDuration;
                 
-                // Smooth curve for explosion
+                // Fade in the glow
+                UpdateEffectMaterials(0f, 0f, Mathf.Lerp(0f, emissionIntensity, t));
+                
+                yield return null;
+            }
+            
+            // Phase 2: Fragmentation and dissolution - float upward
+            elapsed = 0f;
+            while (elapsed < fragmentationDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / fragmentationDuration;
+                
                 float dissolve = Mathf.Pow(t, 1.5f);
-                float fragmentation = Mathf.Pow(t, 1.5f) * 4.0f; // More intense explosion
+                float fragmentation = Mathf.Pow(t, 2f) * 3.0f;
                 
                 UpdateEffectMaterials(dissolve, fragmentation, emissionIntensity);
                 
                 yield return null;
             }
             
-            // Hide the mesh completely after effect
             foreach (var renderer in _meshRenderers)
             {
                 renderer.enabled = false;
@@ -115,7 +126,6 @@ namespace Resonance.VFX
             
             foreach (var renderer in _meshRenderers)
             {
-                // Create material instances
                 Material[] instanceMaterials = new Material[renderer.materials.Length];
                 for (int i = 0; i < renderer.materials.Length; i++)
                 {
@@ -133,7 +143,7 @@ namespace Resonance.VFX
             {
                 mat.SetColor("_Color", shardColor);
                 mat.SetColor("_EmissionColor", emissionColor);
-                mat.SetFloat("_EmissionIntensity", emissionIntensity); // Full glow immediately
+                mat.SetFloat("_EmissionIntensity", 0f);
                 mat.SetFloat("_NoiseScale", noiseScale);
                 mat.SetFloat("_ShardDensity", shardDensity);
             }
@@ -153,11 +163,9 @@ namespace Resonance.VFX
         
         private void ResetEffect()
         {
-            // Stop any running effect
             StopAllCoroutines();
             _isPlayingEffect = false;
             
-            // Restore original materials and visibility
             foreach (var renderer in _meshRenderers)
             {
                 if (_originalMaterials.ContainsKey(renderer))
@@ -167,7 +175,6 @@ namespace Resonance.VFX
                 renderer.enabled = true;
             }
             
-            // Clean up effect material instances
             if (_effectMaterials != null)
             {
                 foreach (var mat in _effectMaterials)
@@ -185,7 +192,6 @@ namespace Resonance.VFX
         #region Cleanup
         private void OnDestroy()
         {
-            // Clean up any material instances
             if (_effectMaterials != null)
             {
                 foreach (var mat in _effectMaterials)

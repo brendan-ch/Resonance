@@ -6,9 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="ab354f86-6b88-42df-8f93-2e8adb1d51b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CharacterController/Animation/PlayerAnimator.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CharacterController/Animation/PlayerAnimator.controller" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CharacterController/Animation/Rifle/Rifle_Death.fbx.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CharacterController/Animation/Rifle/Rifle_Death.fbx.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CharacterController/Scripts/Overdrive/OverdriveAbility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CharacterController/Scripts/Overdrive/OverdriveAbility.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Death/DeathShards.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Death/DeathShards.shader" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Death/DeathShards.shader.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Death/DeathShards.shader.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Death/DeathShardsMaterial.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Death/DeathShardsMaterial.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_Locomotion.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_Locomotion.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graphics/PlayerDeathEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graphics/PlayerDeathEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PlayerStats.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PlayerStats.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +160,7 @@
       <workItem from="1762585153982" duration="4187000" />
       <workItem from="1762645140841" duration="794000" />
       <workItem from="1762752500483" duration="2294000" />
-      <workItem from="1763498420483" duration="9085000" />
+      <workItem from="1763498420483" duration="12272000" />
     </task>
     <servers />
   </component>
