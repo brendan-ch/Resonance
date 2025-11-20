@@ -27,10 +27,23 @@ namespace Resonance.DebugTools
 
         private void FindPlayerComponents()
         {
-            var player = GameObject.FindGameObjectWithTag("Player");
+            // Find all objects with Player tag
+            var players = GameObject.FindGameObjectsWithTag("Player");
+            GameObject player = null;
+            
+            // Find the one with PlayerStats component (the actual player, not dummies)
+            foreach (var obj in players)
+            {
+                if (obj.GetComponent<PlayerStats>() != null)
+                {
+                    player = obj;
+                    break;
+                }
+            }
+            
             if (player == null)
             {
-                UnityEngine.Debug.LogWarning("PlayerDebugPanel: No GameObject with 'Player' tag found!");
+                UnityEngine.Debug.LogWarning("PlayerDebugPanel: No GameObject with PlayerStats found!");
                 return;
             }
 
@@ -55,7 +68,7 @@ namespace Resonance.DebugTools
             
             if (_playerController == null)
             {
-                GUILayout.Label("No player found! (Tag with 'Player')");
+                GUILayout.Label("No player found! (Need PlayerStats component)");
                 GUILayout.EndVertical();
                 return;
             }

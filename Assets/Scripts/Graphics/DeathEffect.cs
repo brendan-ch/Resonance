@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Resonance.Player;
+using Resonance.Entities;
 
 namespace Resonance.VFX
 {
-    public class PlayerDeathEffect : MonoBehaviour
+    public class DeathEffect : MonoBehaviour
     {
         #region Inspector Fields
         [Header("Effect Settings")]
@@ -25,6 +26,7 @@ namespace Resonance.VFX
         
         #region Private Fields
         private PlayerStats _playerStats;
+        private TargetDummy _targetDummy;
         private SkinnedMeshRenderer[] _meshRenderers;
         private Dictionary<SkinnedMeshRenderer, Material[]> _originalMaterials;
         private Material[] _effectMaterials;
@@ -35,10 +37,10 @@ namespace Resonance.VFX
         private void Awake()
         {
             _playerStats = GetComponentInParent<PlayerStats>();
+            _targetDummy = GetComponentInParent<TargetDummy>();
             _meshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
             _originalMaterials = new Dictionary<SkinnedMeshRenderer, Material[]>();
             
-            // Store original materials
             foreach (var renderer in _meshRenderers)
             {
                 _originalMaterials[renderer] = renderer.materials;
@@ -52,6 +54,12 @@ namespace Resonance.VFX
                 _playerStats.OnPlayerDeath += PlayDeathEffect;
                 _playerStats.OnPlayerRespawn += ResetEffect;
             }
+            
+            if (_targetDummy != null)
+            {
+                _targetDummy.OnDeath += PlayDeathEffect;
+                _targetDummy.OnRespawn += ResetEffect;
+            }
         }
         
         private void OnDisable()
@@ -60,6 +68,12 @@ namespace Resonance.VFX
             {
                 _playerStats.OnPlayerDeath -= PlayDeathEffect;
                 _playerStats.OnPlayerRespawn -= ResetEffect;
+            }
+            
+            if (_targetDummy != null)
+            {
+                _targetDummy.OnDeath -= PlayDeathEffect;
+                _targetDummy.OnRespawn -= ResetEffect;
             }
         }
         #endregion
@@ -78,20 +92,19 @@ namespace Resonance.VFX
             
             CreateEffectMaterials();
             
-            // Phase 1: Highlight with glow (no fragmentation yet)
+            // Phase 1: Highlight with glow
             float elapsed = 0f;
             while (elapsed < highlightDuration)
             {
                 elapsed += Time.deltaTime;
                 float t = elapsed / highlightDuration;
                 
-                // Fade in the glow
                 UpdateEffectMaterials(0f, 0f, Mathf.Lerp(0f, emissionIntensity, t));
                 
                 yield return null;
             }
             
-            // Phase 2: Fragmentation and dissolution - float upward
+            // Phase 2: Fragmentation and dissolution
             elapsed = 0f;
             while (elapsed < fragmentationDuration)
             {
@@ -118,7 +131,7 @@ namespace Resonance.VFX
         {
             if (deathShardMaterial == null)
             {
-                Debug.LogError("[PlayerDeathEffect] Death shard material not assigned!");
+                Debug.LogError("[DeathEffect] Death shard material not assigned!");
                 return;
             }
             
@@ -138,7 +151,6 @@ namespace Resonance.VFX
             
             _effectMaterials = materials.ToArray();
             
-            // Set initial material properties
             foreach (var mat in _effectMaterials)
             {
                 mat.SetColor("_Color", shardColor);

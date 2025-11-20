@@ -1,4 +1,5 @@
 using Resonance.PlayerController;
+using Resonance.UI;
 using UnityEngine;
 using System.Collections;
 
