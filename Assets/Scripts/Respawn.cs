@@ -10,7 +10,6 @@ namespace Resonance.Player
         #region Inspector Fields
         [Header("Spawn Points")]
         [SerializeField] private List<Transform> spawnPoints = new List<Transform>();
-        [SerializeField] private Transform defaultSpawnPoint;
 
         [Header("Respawn Settings")]
         [SerializeField] private float respawnDelay = 3f;
@@ -42,24 +41,22 @@ namespace Resonance.Player
 
         private void ValidateSpawnPoints()
         {
-            if (spawnPoints.Count == 0 && defaultSpawnPoint == null)
+            if (spawnPoints.Count == 0)
             {
-                Debug.LogWarning("[Respawn] No spawn points configured! Creating default at origin.");
-                GameObject defaultSpawn = new GameObject("DefaultSpawnPoint");
-                defaultSpawn.transform.position = Vector3.zero;
-                defaultSpawnPoint = defaultSpawn.transform;
+                Debug.LogError("[Respawn] No spawn points configured! Please add spawn points in the inspector.");
             }
         }
         
         public Transform GetSpawnPoint()
         {
-            if (spawnPoints.Count > 0)
+            if (spawnPoints.Count == 0)
             {
-                // for now this is returning the first spawn point. should be reconfigured later
-                return spawnPoints[0];
+                Debug.LogError("[Respawn] No spawn points available!");
+                return null;
             }
-            
-            return defaultSpawnPoint;
+
+            int randomIndex = Random.Range(0, spawnPoints.Count);
+            return spawnPoints[randomIndex];
         }
 
         public void AddSpawnPoint(Transform spawnPoint)
@@ -73,11 +70,6 @@ namespace Resonance.Player
         public void RemoveSpawnPoint(Transform spawnPoint)
         {
             spawnPoints.Remove(spawnPoint);
-        }
-
-        public void SetDefaultSpawnPoint(Transform spawnPoint)
-        {
-            defaultSpawnPoint = spawnPoint;
         }
         #endregion
     }
