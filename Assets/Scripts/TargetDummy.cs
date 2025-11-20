@@ -1,4 +1,5 @@
 using UnityEngine;
+using Resonance.Match;
 
 namespace Resonance.Entities
 {
@@ -6,6 +7,7 @@ namespace Resonance.Entities
     {
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private float respawnDelay = 3f;
+        [SerializeField] private bool countsAsKill = true; // Whether killing this dummy counts as a kill
         
         public float CurrentHealth { get; private set; }
         public bool IsDead { get; private set; }
@@ -15,6 +17,7 @@ namespace Resonance.Entities
         
         private Vector3 _spawnPosition;
         private Quaternion _spawnRotation;
+        private GameObject _lastAttacker;
 
         private void Start()
         {
@@ -25,7 +28,19 @@ namespace Resonance.Entities
 
         public void TakeDamage(float amount)
         {
+            TakeDamage(amount, null);
+        }
+        
+        public void TakeDamage(float amount, GameObject attacker)
+        {
             if (IsDead) return;
+            
+            // Track damage for assists
+            if (attacker != null && MatchStatTracker.Instance != null && countsAsKill)
+            {
+                MatchStatTracker.Instance.RecordDamage(attacker, gameObject, amount);
+                _lastAttacker = attacker;
+            }
             
             CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
             
@@ -39,6 +54,14 @@ namespace Resonance.Entities
         {
             if (IsDead) return;
             IsDead = true;
+            
+            // Record kill in match stats
+            if (_lastAttacker != null && MatchStatTracker.Instance != null && countsAsKill)
+            {
+                MatchStatTracker.Instance.RecordKill(_lastAttacker, gameObject);
+                Debug.Log($"[TargetDummy] {gameObject.name} killed by {_lastAttacker.name}");
+            }
+            
             OnDeath?.Invoke();
             Invoke(nameof(Respawn), respawnDelay);
         }
@@ -49,6 +72,8 @@ namespace Resonance.Entities
             transform.position = _spawnPosition;
             transform.rotation = _spawnRotation;
             CurrentHealth = maxHealth;
+            _lastAttacker = null;
+            
             OnRespawn?.Invoke();
         }
     }

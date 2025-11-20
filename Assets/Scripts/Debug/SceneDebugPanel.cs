@@ -48,6 +48,13 @@ namespace Resonance.DebugTools
                 LoadScene("TB_AudioReactivity");
             }
             
+            GUILayout.Space(5);
+            
+            if (GUILayout.Button("TB_ArenaDemo", GUILayout.Height(35)))
+            {
+                LoadScene("TB_ArenaDemo");
+            }
+            
             GUILayout.EndVertical();
         }
         

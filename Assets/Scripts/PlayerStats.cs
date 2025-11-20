@@ -1,5 +1,6 @@
 using Resonance.PlayerController;
 using Resonance.UI;
+using Resonance.Match;
 using UnityEngine;
 using System.Collections;
 
@@ -31,6 +32,11 @@ namespace Resonance.Player
         private PlayerController.PlayerController _playerController;
         private Animator _animator;
         #endregion
+        
+        #region Damage Tracking
+        private GameObject lastAttacker;
+        private float lastDamageTime;
+        #endregion
 
         #region Startup
 
@@ -50,13 +56,41 @@ namespace Resonance.Player
             {
                 healthBar.SetSliderMax(maxHealth);
             }
+            
+            // Register with match stat tracker
+            if (MatchStatTracker.Instance != null)
+            {
+                MatchStatTracker.Instance.RegisterPlayer(gameObject);
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            // Unregister from match stat tracker
+            if (MatchStatTracker.Instance != null)
+            {
+                MatchStatTracker.Instance.UnregisterPlayer(gameObject);
+            }
         }
         #endregion
 
         #region Health Management
         public void TakeDamage(float amount)
         {
+            TakeDamage(amount, null);
+        }
+        
+        public void TakeDamage(float amount, GameObject attacker)
+        {
             if (IsDead) return;
+            
+            // Track damage for assists
+            if (attacker != null && attacker != gameObject && MatchStatTracker.Instance != null)
+            {
+                MatchStatTracker.Instance.RecordDamage(attacker, gameObject, amount);
+                lastAttacker = attacker;
+                lastDamageTime = Time.time;
+            }
             
             CurrentHealth -= amount;
             CurrentHealth = Mathf.Max(0, CurrentHealth);
@@ -68,7 +102,7 @@ namespace Resonance.Player
             
             if (CurrentHealth <= 0)
             {
-                Die();
+                Die(attacker);
             }
         }
         
@@ -87,7 +121,7 @@ namespace Resonance.Player
         #endregion
 
         #region Death & Respawn
-        private void Die()
+        private void Die(GameObject killer = null)
         {
             if (IsDead) return;
 
@@ -118,7 +152,21 @@ namespace Resonance.Player
                 _animator.enabled = false;
             }
 
-            Debug.Log("[PlayerStats] Player died!");
+            Debug.Log($"[PlayerStats] {gameObject.name} died!");
+            
+            // Record kill/death in match stats
+            if (MatchStatTracker.Instance != null)
+            {
+                if (killer != null && killer != gameObject)
+                {
+                    MatchStatTracker.Instance.RecordKill(killer, gameObject);
+                }
+                else
+                {
+                    // Suicide or environmental death
+                    MatchStatTracker.Instance.RecordDeath(gameObject);
+                }
+            }
             
             OnPlayerDeath?.Invoke();
 
@@ -133,7 +181,7 @@ namespace Resonance.Player
             float respawnDelay = Resonance.Player.Respawn.Instance != null ? 
                                  Resonance.Player.Respawn.Instance.RespawnDelay : 3f;
             
-            Debug.Log("[PlayerStats] Respawning in " + respawnDelay);
+            Debug.Log($"[PlayerStats] {gameObject.name} respawning in {respawnDelay}s");
             yield return new WaitForSeconds(respawnDelay);
             Respawn();
         }
@@ -146,6 +194,9 @@ namespace Resonance.Player
         private IEnumerator RespawnSequence()
         {
             IsDead = false;
+            
+            // Clear damage tracking
+            lastAttacker = null;
             
             if (_playerState != null)
             {
@@ -198,7 +249,7 @@ namespace Resonance.Player
                 healthBar.SetSlider(CurrentHealth);
             }
             
-            Debug.Log("[PlayerStats] Player respawned!");
+            Debug.Log($"[PlayerStats] {gameObject.name} respawned!");
             
             OnPlayerRespawn?.Invoke();
         }

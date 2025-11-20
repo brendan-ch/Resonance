@@ -61,7 +61,7 @@ namespace Resonance.Combat
                 TargetDummy dummy = collision.gameObject.GetComponent<TargetDummy>();
                 if (dummy != null)
                 {
-                    dummy.TakeDamage(damage);
+                    dummy.TakeDamage(damage, _shooter);
                     DestroyProjectile();
                     return;
                 }
@@ -69,7 +69,8 @@ namespace Resonance.Combat
                 PlayerStats player = collision.gameObject.GetComponent<PlayerStats>();
                 if (player != null)
                 {
-                    player.TakeDamage(damage);
+                    // Pass the shooter reference for damage tracking
+                    player.TakeDamage(damage, _shooter);
                     DestroyProjectile();
                     return;
                 }
