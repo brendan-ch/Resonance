@@ -57,6 +57,8 @@ public partial class AkUtilities
 		AkAmbient_v2019_1_0 = 17,
 		NewScriptableObjectFolder_v2019_2_0 = 18,
 		AutoDefinedSoundBanks_v2023_1_0 = 19,
+		RootOutputPath_v2025_1_0 = 20,
+		
 		/// <summary>
 		/// The value that is currently in the Version.txt file.
 		/// </summary>
@@ -93,6 +95,8 @@ public partial class AkUtilities
 	}
 
 	private static int migrationStartIndex = MigrationStopIndex;
+	
+	
 	#endregion
 
 	private static readonly System.Collections.Generic.Dictionary<string, string> s_ProjectBankPaths =
@@ -273,7 +277,6 @@ public partial class AkUtilities
 		return s_ProjectBankPaths;
 	}
 
-
 	// Parses the .wproj to find out where SoundBanks are generated for the given path.
 	public static string GetWwiseSoundBankDestinationFolder(string Platform, string wwiseProjectAbsolutePath)
 	{
@@ -348,6 +351,10 @@ public partial class AkUtilities
 	
 	private static bool UpdateAutoBankSetting(string WwiseProjectPath)
 	{
+		if (WwiseProjectPath.Length == 0)
+		{
+			return false;
+		}
 		var doc = new System.Xml.XmlDocument { PreserveWhitespace = true };
 		doc.Load(WwiseProjectPath);
 		var Navigator = doc.CreateNavigator();
@@ -359,29 +366,6 @@ public partial class AkUtilities
 		s_AutoBankEnabled = node != null;
 		return s_AutoBankEnabled;
 	}
-	
-	public static string GetRootOutputPath(string WwiseProjectPath)
-	{
-		var doc = new System.Xml.XmlDocument { PreserveWhitespace = true };
-		doc.Load(WwiseProjectPath);
-		var Navigator = doc.CreateNavigator();
-
-		// Navigate the wproj file (XML format) to where our setting should be
-		var pathInXml = string.Format("/WwiseDocument/ProjectInfo/Project/PropertyList/Property[@Name='{0}']", "SoundBankHeaderFilePath");
-		var expression = System.Xml.XPath.XPathExpression.Compile(pathInXml);
-		var rootOutputPath = Navigator.SelectSingleNode(expression).GetAttribute("Value", "");
-#if UNITY_EDITOR_OSX
-		rootOutputPath = ParseOsxPathFromWinePath(rootOutputPath);
-		if (!Path.IsPathRooted(rootOutputPath))
-		{
-			string projectPath = Path.GetDirectoryName(WwiseProjectPath);
-			projectPath = ParseOsxPathFromWinePath(projectPath);
-			rootOutputPath = GetFullPath(projectPath, rootOutputPath);
-		}
-#endif
-		return rootOutputPath;
-	}
-	
 	public static void SetWwiseRootOutputPath(string WwiseProjectPath, string destinationPath)
 	{
 		try
@@ -676,6 +660,7 @@ public partial class AkUtilities
 
 	public static bool SetSoundbankHeaderFilePath(string WwiseProjectPath, string SoundbankPath)
 	{
+		string pathRelativeToWwiseProject = AkUtilities.MakeRelativePath(System.IO.Path.GetDirectoryName(WwiseProjectPath), SoundbankPath);
 		try
 		{
 			if (WwiseProjectPath.Length == 0)
@@ -705,7 +690,9 @@ public partial class AkUtilities
 				return false;
 			}
 
-			node.SetValue(SoundbankPath);
+			node.SetValue(pathRelativeToWwiseProject);
+			
+
 			doc.Save(WwiseProjectPath);
 			return true;
 		}

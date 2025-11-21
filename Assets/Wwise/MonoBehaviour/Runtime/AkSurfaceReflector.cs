@@ -49,10 +49,16 @@ public class AkSurfaceReflector : UnityEngine.MonoBehaviour
 	public bool EnableDiffractionOnBoundaryEdges = false;
 
 	[UnityEngine.Tooltip("A solid geometry instance applies transmission loss once, over its volume. A non-solid geometry instance is one where each surface is infinitely thin, applying transmission loss at each surface.")]
+	/// A solid geometry instance applies transmission loss once, over its volume. A non-solid geometry instance is one where each surface is infinitely thin, applying transmission loss at each surface.
 	public bool Solid = false;
+
+	[UnityEngine.Tooltip("Set to true to set this geometry as static: a geometry that will not move nor will its properties change during gameplay. A non-static geometry will check the state of its transform and the state of its properties each frame and update the geometry in Wwise if there is a change.")]
+	/// Set to true to set this geometry as static: a geometry that will not move nor will its properties change during gameplay. A non-static geometry will check the state of its transform and the state of its properties each frame and update the geometry in Wwise if there is a change.
+	public bool isStatic = false;
 
 	private int PreviousTransformState;
 	private int PreviousGeometryState;
+	private int PreviousGeometryInstanceState;
 
 	private bool isGeometrySetInWwise = false;
 
@@ -88,6 +94,15 @@ public class AkSurfaceReflector : UnityEngine.MonoBehaviour
 			hashCodes[idx] = TransmissionLossValue.GetHashCode();
 			idx++;
 		}
+
+		return AK.Wwise.BaseType.CombineHashCodes(hashCodes);
+	}
+
+	private int GetGeometryInstanceState()
+	{
+		int[] hashCodes = new[] {
+			Solid.GetHashCode(),
+		};
 
 		return AK.Wwise.BaseType.CombineHashCodes(hashCodes);
 	}
@@ -449,12 +464,24 @@ public class AkSurfaceReflector : UnityEngine.MonoBehaviour
 			return;
 		}
 #endif
+		// if the MeshFilter component was not available in Awake, check again here
+		if (Mesh == null)
+		{
+			var meshFilter = GetComponent<UnityEngine.MeshFilter>();
+			if (meshFilter != null)
+			{
+				Mesh = meshFilter.sharedMesh;
+			}
+		}
 
 		// init update conditions
 		PreviousTransformState = GetTransformState();
 		PreviousGeometryState = GetGeometryState();
-		// need to call geometry, even if it might have already been sent to wwise, in case something changed while the component was disabled.
+		PreviousGeometryInstanceState = GetGeometryInstanceState();
+
+		// need to call SetGeometry, even if it might have already been sent to wwise, in case something changed while the component was disabled.
 		SetGeometry();
+
 		if (isGeometrySetInWwise)
 		{
             SetGeometryInstance();
@@ -506,19 +533,36 @@ public class AkSurfaceReflector : UnityEngine.MonoBehaviour
 		if (!UnityEditor.EditorApplication.isPlaying) return;
 #endif
 
-		int CurrentGeometryState = GetGeometryState();
-		int CurrentTransformState = GetTransformState();
+		// don't update if is static
+		if (isStatic) return;
 
+		int CurrentGeometryState = GetGeometryState();
 		if (PreviousGeometryState != CurrentGeometryState)
 		{
 			SetGeometry();
 			PreviousGeometryState = CurrentGeometryState;
 		}
 
+		bool UpdateGeometryInstance = false;
+		int CurrentTransformState = GetTransformState();
 		if (PreviousTransformState != CurrentTransformState)
 		{
-			UpdateGeometry();
+			UpdateGeometryInstance = true;
 			PreviousTransformState = CurrentTransformState;
+		}
+		else
+		{
+			int CurrentGeometryInstanceState = GetGeometryInstanceState();
+			if (PreviousGeometryInstanceState != CurrentGeometryInstanceState)
+			{
+				UpdateGeometryInstance = true;
+				PreviousGeometryInstanceState = CurrentGeometryInstanceState;
+			}
+		}
+
+		if (UpdateGeometryInstance)
+		{
+			SetGeometryInstance();
 		}
 	}
 

@@ -26,12 +26,6 @@ public class AkWindowsBuildPreprocessor
 			return;
 		}
 
-		var buildConfig = new AkBuildPreprocessor.PlatformConfiguration
-		{
-			WwisePlatformName = "Windows"
-		};
-		AkBuildPreprocessor.RegisterBuildTarget(UnityEditor.BuildTarget.StandaloneWindows, buildConfig);
-		AkBuildPreprocessor.RegisterBuildTarget(UnityEditor.BuildTarget.StandaloneWindows64, buildConfig);
 		WwiseSetupWizard.AddBuildTargetGroup(UnityEditor.BuildTargetGroup.Standalone);
 	}
 }

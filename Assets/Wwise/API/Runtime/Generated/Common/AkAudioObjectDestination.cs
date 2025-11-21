@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 
 
+///  Enum of the possible object destinations when reaching a 3D audio-capable sink
 public enum AkAudioObjectDestination {
   eDefault = 0,
   eMainMix = 1,

@@ -41,3 +41,15 @@ public partial class AkBasePathGetter
 	}
 }
 #endif
+
+#if UNITY_EDITOR
+[UnityEditor.InitializeOnLoad]
+public partial class AkWindowsBasePathGetter
+{
+	static AkWindowsBasePathGetter()
+	{
+		AkBasePathGetter.AddTargetPlatform(UnityEditor.BuildTarget.StandaloneWindows, "Windows");
+		AkBasePathGetter.AddTargetPlatform(UnityEditor.BuildTarget.StandaloneWindows64, "Windows");
+	}
+}
+#endif

@@ -16,6 +16,11 @@ in a written agreement between you and Audiokinetic Inc.
 Copyright (c) 2025 Audiokinetic Inc.
 *******************************************************************************/
 
+using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
+using UnityEditor;
+
 /// <summary>
 ///     This class is responsible for determining the path where sound banks are located. When using custom platforms, this
 ///     class needs to be extended.
@@ -30,7 +35,7 @@ public partial class AkBasePathGetter
 	public delegate void CustomPlatformNameGetter(ref string platformName);
 
 	public static CustomPlatformNameGetter GetCustomPlatformName;
-
+	
 	/// <summary>
 	///     Determines the platform name which is also the sub-folder within the base path where sound banks are located for
 	///     this platform.
@@ -46,6 +51,42 @@ public partial class AkBasePathGetter
 
 		return DefaultPlatformName;
 	}
+	
+#if UNITY_EDITOR
+	/// <summary>
+	///     User hook called to retrieve the custom target platform name used to determine the base path. Do not modify platformName
+	///     to use default platform names.
+	/// </summary>
+	/// <param name="platformName">The custom platform name. Leave unaffected if the default location is acceptable.</param>
+	public delegate void CustomTargetPlatformNameGetter(ref string platformName, UnityEditor.BuildTarget target);
+
+	public static CustomTargetPlatformNameGetter GetCustomTargetPlatformName;
+	
+	private static Dictionary<UnityEditor.BuildTarget, string> TargetPlatforms = new Dictionary<UnityEditor.BuildTarget, string>();
+
+	public static void AddTargetPlatform(UnityEditor.BuildTarget target, string platformName)
+	{
+		TargetPlatforms[target] = platformName;
+	}
+	
+	public static string GetTargetPlatformName(UnityEditor.BuildTarget target)
+	{
+		var platformSubDir = string.Empty;
+		GetCustomTargetPlatformName?.Invoke(ref platformSubDir, target);
+
+		if (!string.IsNullOrEmpty(platformSubDir))
+			return platformSubDir;
+
+		if (TargetPlatforms.ContainsKey(target))
+		{
+			return TargetPlatforms[target];
+		}
+		
+		UnityEngine.Debug.LogWarning($"WwiseUnity: Target {target.ToString()} is not supported by default by Wwise. Make sure to create a custom script and subscribe to GetCustomTargetPlatformName delegate to add it. ");
+
+		return string.Empty;
+	}
+#endif
 }
 
 public partial class AkBasePathGetter
@@ -73,7 +114,7 @@ public partial class AkBasePathGetter
 		if (!string.IsNullOrEmpty(platformBasePathEditor))
 			return platformBasePathEditor;
 
-		var fullBasePath = AkWwiseEditorSettings.Instance.SoundbankPath;
+		var fullBasePath = AkWwiseEditorSettings.Instance.WwiseStreamingAssetsPath;
 #else
 		var fullBasePath = string.Empty;
 #endif
@@ -120,24 +161,9 @@ public partial class AkBasePathGetter
 	/// <returns>The absolute sound bank base path.</returns>
 	public static string GetFullSoundBankPathEditor()
 	{
-		string fullBasePath = System.IO.Path.Combine(UnityEngine.Application.streamingAssetsPath, AkWwiseEditorSettings.Instance.SoundbankPath);
+		string fullBasePath = System.IO.Path.Combine(UnityEngine.Application.streamingAssetsPath, AkWwiseEditorSettings.Instance.WwiseStreamingAssetsPath);
 		AkUtilities.FixSlashes(ref fullBasePath);
 		return fullBasePath;
-	}
-	
-	public static string GetWwiseRootOutputPath(string wwiseAbsolutePath = "")
-	{
-		string wwiseRootOuputPath = AkUtilities.GetRootOutputPath(wwiseAbsolutePath == "" ? AkWwiseEditorSettings.WwiseProjectAbsolutePath : wwiseAbsolutePath);
-#if UNITY_EDITOR_OSX
-		wwiseRootOuputPath = AkUtilities.ParseOsxPathFromWinePath(wwiseRootOuputPath);
-#endif
-		if (System.IO.Path.IsPathRooted(wwiseRootOuputPath))
-		{
-			return wwiseRootOuputPath;
-		}
-		var combinedPath = System.IO.Path.Combine(GetWwiseProjectDirectory(wwiseAbsolutePath), wwiseRootOuputPath);
-		AkUtilities.FixSlashes(ref combinedPath);
-		return combinedPath;
 	}
 
 	public static string GetWwiseProjectPath()
@@ -152,9 +178,15 @@ public partial class AkBasePathGetter
 		return System.IO.Path.GetDirectoryName(projectPath);
 	}
 
-	public static string GetDefaultGeneratedSoundbanksPath()
+	public static string GetDefaultRootOutputPath()
 	{
-		return System.IO.Path.Combine(GetWwiseProjectPath(), "GeneratedSoundBanks");
+		string path = Path.GetDirectoryName(GetWwiseProjectPath());
+		if (path == null)
+		{
+			return null;
+		}
+		path = System.IO.Path.Combine(path, "GeneratedSoundBanks");
+		return AkUtilities.MakeRelativePath(UnityEngine.Application.dataPath, path);
 	}
 
 	/// <summary>

@@ -126,6 +126,8 @@ public class AkWwiseComponentPicker : UnityEditor.EditorWindow
 			m_WwiseObjectReference.objectReferenceValue = reference;
 			m_serializedObject.ApplyModifiedProperties();
 		}
+		
+		AkWwiseBrowser.SelectInWwiseBrowser(in_element.objectGuid);
 
 		m_close = true;
 	}
@@ -190,7 +192,7 @@ public class AkWwiseComponentPicker : UnityEditor.EditorWindow
 			s_componentPicker.m_ObjectSelectorId = pickedSourceControlId;
 
 			UnityEditor.IMGUI.Controls.TreeViewState treeViewState = new UnityEditor.IMGUI.Controls.TreeViewState();
-			s_componentPicker.m_treeView = new AkWwiseTreeView(treeViewState, AkWwiseProjectInfo.GetTreeData(), objectType);
+			s_componentPicker.m_treeView = new AkWwiseTreeView(treeViewState, AkWwiseProjectInfo.GetCurrentTreeData(), objectType);
 			s_componentPicker.m_treeView.DragDropEnabled = false;
 			s_componentPicker.m_treeView.SetDoubleClickFunction(s_componentPicker.SetGuid);
 

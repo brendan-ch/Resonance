@@ -188,6 +188,8 @@ public class ak
 				public const string delete = "ak.wwise.core.object.delete";
 				/// <summary>Retrieves the list of property and reference names for an object.</summary>
 				public const string getPropertyAndReferenceNames = "ak.wwise.core.object.getPropertyAndReferenceNames";
+				/// <summary>Retrieves the list of operation made to objects.</summary>
+				public const string structureChanged = "ak.wwise.core.object.structureChanged";
 			}
 			public class undo
 			{
@@ -249,6 +251,8 @@ public class ak
 				public const string generated = "ak.wwise.core.soundbank.generated";
 				/// <summary>Modifies a SoundBank's inclusion list.  The 'operation' argument determines how the 'inclusions' argument modifies the SoundBank's inclusion list; 'inclusions' may be added to / removed from / replace the SoundBank's inclusion list.</summary>
 				public const string setInclusions = "ak.wwise.core.soundbank.setInclusions";
+				/// <summary>Generate the soundbanks.</summary>
+				public const string generate = "ak.wwise.core.soundbank.generate";
 			}
 			public class audio
 			{

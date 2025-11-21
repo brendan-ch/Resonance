@@ -164,9 +164,7 @@ public class AkWwisePostImportCallbackSetup
 		{
 			if (!string.IsNullOrEmpty(AkWwiseEditorSettings.Instance.WwiseProjectPath))
 			{
-				AkWwisePicker.Refresh(ignoreIfWaapi: true); 
-				if (AkWwiseProjectInfo.GetData().autoPopulateEnabled)
-					AkWwiseWWUBuilder.StartWWUWatcher();
+				AkWwiseBrowser.Refresh(ignoreIfWaapi: true); 
 			}
 		}
 		catch (System.Exception e)
@@ -228,10 +226,7 @@ public class AkWwisePostImportCallbackSetup
 			if (!string.IsNullOrEmpty(settings.WwiseProjectPath))
 			{
 				AkWwiseProjectInfo.Populate();
-				AkWwisePicker.InitPickerWindow();
-
-				if (AkWwiseProjectInfo.GetData().autoPopulateEnabled)
-					AkWwiseWWUBuilder.StartWWUWatcher();
+				AkWwiseBrowser.InitBrowserWindow();
 
 				settings.CreatedPicker = true;
 				settings.SaveSettings();
@@ -378,7 +373,7 @@ public class AkWwisePostImportCallbackSetup
 				EditorUtility.SetDirty(bankHolder);
 			}
 #else
-			var initBankPath = System.IO.Path.Combine("Assets",settings.GeneratedSoundbanksPath,"Init.asset");
+			var initBankPath = System.IO.Path.Combine("Assets",settings.RootOutputPath,"Init.asset");
 			var initbank = UnityEditor.AssetDatabase.LoadAssetAtPath<AK.Wwise.Unity.WwiseAddressables.WwiseAddressableSoundBank>(initBankPath);
 			bankHolder.InitBank = initbank;
 			EditorUtility.SetDirty(bankHolder);

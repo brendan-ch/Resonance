@@ -44,11 +44,16 @@ public static class AddressableInstaller
     private static void OnPackagesRegistered(PackageRegistrationEventArgs args)
     {
 #if AK_WWISE_ADDRESSABLES && UNITY_ADDRESSABLES
-        foreach (var package in args.added)
+        if (AkWwiseEditorSettings.Instance.InstallationWasRequested)
         {
-            if (package.assetPath == "Packages/com.audiokinetic.wwise.addressables")
+            foreach (var package in args.added)
             {
-                AddressableSetup();
+                if (package.assetPath == "Packages/com.audiokinetic.wwise.addressables")
+                {
+                    AkWwiseEditorSettings.Instance.InstallationWasRequested = false;
+                    AkWwiseEditorSettings.Instance.SaveSettings();
+                    AddressableSetup();
+                }
             }
         }
 #else
@@ -69,6 +74,8 @@ public static class AddressableInstaller
 #if AK_WWISE_ADDRESSABLES && UNITY_ADDRESSABLES
     private static bool _automaticallyUpdateExternalSourcesPath = false;
     private static string _externalSourcesPath = "";
+    private static bool _enableUninstallationPrompt = true;
+    private static bool _disableAsynchronousBankLoading = true;
 #else
     private static string _packageSource = "";
 #endif
@@ -115,8 +122,20 @@ public static class AddressableInstaller
             useCustomBuildScript = true;
         }
         AddressableAssetBuilder.ApplySettings(useCustomBuildScript, addressableAssetBuilderPath);
+        _enableUninstallationPrompt = AkWwiseEditorSettings.Instance.EnableUninstallationPrompt;
+        if (args.Contains("-disableUninstallationPrompt"))
+        {
+            int index = Array.IndexOf(args, "-disableUninstallationPrompt");
+            _enableUninstallationPrompt = args[index + 1] == "true";
+        } 
+        _disableAsynchronousBankLoading = AkWwiseEditorSettings.Instance.DisableAsynchronousBankLoading;
+        if (args.Contains("-disableAsynchronousBankLoadingOnUninstallation"))
+        {
+            int index = Array.IndexOf(args, "-disableAsynchronousBankLoadingOnUninstallation");
+            _disableAsynchronousBankLoading = args[index + 1] == "true";
+        }
 #else
-        _packageSource = AkWwiseEditorSettings.Instance.PackageSource;
+        _packageSource = AkWwiseEditorSettings.Instance.UseGitRepository ? WwiseSettings.GitRepositoryLink : AkWwiseEditorSettings.Instance.PackageSource;
         if (args.Contains("-packageSource"))
         {
             int index = Array.IndexOf(args, "-packageSource");
@@ -171,6 +190,8 @@ public static class AddressableInstaller
     public static void InstallPackage()
     {
         ReadSettings();
+        AkWwiseEditorSettings.Instance.InstallationWasRequested = true;
+        AkWwiseEditorSettings.Instance.SaveSettings();
         var installationPathIsEmpty = string.IsNullOrEmpty(AkWwiseEditorSettings.Instance.WwiseInstallationPath);
         var waapiPortIsEmpty = string.IsNullOrEmpty(AkWwiseEditorSettings.Instance.WaapiPort);
         var waapiIPIsEmpty = string.IsNullOrEmpty(AkWwiseEditorSettings.Instance.WaapiIP);
@@ -182,6 +203,7 @@ public static class AddressableInstaller
             EditorUtility.DisplayDialog("Wwise Addressables installation aborted", $"The installation process was aborted as the following setting(s) were not set:\n{missingSettings}.\nAdjust your Wwise integration settings and try again.", "OK");
             return;
         }
+        AdjustLoadBankAsynchronously();
         if (!InstallAddressablePackage(_packageSource))
         {
             LogError(Name, $"Failed to install the Wwise Unity Addressable package from {_packageSource}");
@@ -195,11 +217,13 @@ public static class AddressableInstaller
     [MenuItem("Wwise/Uninstall Addressables")]
     public static void UninstallPackage()
     {
+        ReadSettings();
         ToggleAkInitializer(false);
+        AdjustLoadBankAsynchronously();
         AkSoundEngineController.Instance.DisableEditorLateUpdate();
         EditorApplication.update += ContinueUninstallation;
     }
-    
+
     /// <summary>
     /// Continue the uninstallation process after disabling Wwise components interacting with the Wwise Addressables Package.
     /// </summary>
@@ -214,13 +238,57 @@ public static class AddressableInstaller
         DeleteWwiseAddressablesBankFolder();
         //Delete the Wwise Addressable Groups
         DeleteWwiseAddressableGroups();
+        //Remove the build script
+        AddressableAssetBuilder.RemoveBuildScript();
         //Remove the Wwise Addresables Package
         RemoveWwiseAddressablePackage();
         EditorApplication.update -= ContinueUninstallation;
     }
     
 #endif
-    
+
+    private static void AdjustLoadBankAsynchronously()
+    {
+#if AK_WWISE_ADDRESSABLES
+        bool shouldDisableAsynchronousBankLoading = false;
+        if (_enableUninstallationPrompt)
+        {
+            shouldDisableAsynchronousBankLoading = EditorUtility.DisplayDialog(
+                "Wwise Unity Addressables Uninstallation",
+                "Do you wish to set the Load Bank Asynchrnous settings to false during uninstallation? The original value was modified during the installation of the Wwise Unity Addressables integration package. Most project have it set to disabled when not working with addressables. It is possible to set a default value for this prompt as well as disabling it in the Wwise Settings.",
+                "Yes, do it",
+                "No, leave the setting as is"
+            );
+        }
+        else
+        {
+            shouldDisableAsynchronousBankLoading = _disableAsynchronousBankLoading;
+        }
+
+        if (shouldDisableAsynchronousBankLoading)
+        {
+            var platformSettings = AkWwiseInitializationSettings.GetAllPlatformSettings();
+            foreach (var platformSetting in platformSettings)
+            {
+                platformSetting.LoadBanksAsynchronously = false;
+                EditorUtility.SetDirty(platformSetting);
+            }
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+#else
+        
+        var platformSettings = AkWwiseInitializationSettings.Instance.PlatformSettingsList;
+        foreach (var platformSetting in platformSettings)
+        {
+            platformSetting.LoadBanksAsynchronously = true;
+            EditorUtility.SetDirty(platformSetting);
+        }
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+#endif
+    }
+  
 #if AK_WWISE_ADDRESSABLES && UNITY_ADDRESSABLES
     /// <summary>
     /// Setup the Wwise Addressable Package
@@ -260,7 +328,7 @@ public static class AddressableInstaller
         ReadSettings();
         //Reset the Root output Path and SoundBank Paths to asset the Unity Application Data Path.
         var settings = AkWwiseEditorSettings.Instance;
-        AddressableBankPathSetter.SetSoundbankPath(settings.SoundbankPath);
+        AddressableBankPathSetter.SetStreamingAssetsPath(settings.WwiseStreamingAssetsPath);
         AddressableBankPathSetter.SetExternalSourcePath("GeneratedSoundBanks");
 
         //Regenerate the soundbanks
@@ -281,6 +349,9 @@ public static class AddressableInstaller
         //Re-enable the SoundEngineController LateUpdate and the AkInitializer that were disabled during the uninstallation process.
         AkSoundEngineController.Instance.EnableEditorLateUpdate();
         ToggleAkInitializer(true);
+#if UNITY_ADDRESSABLES
+        AddressableAssetBuilder.Build(false);
+#endif
         if (UnityEditorInternal.InternalEditorUtility.inBatchMode)
         {
             EditorApplication.Exit(0);

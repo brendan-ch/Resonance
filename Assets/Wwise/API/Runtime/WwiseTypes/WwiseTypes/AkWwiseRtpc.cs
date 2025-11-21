@@ -33,11 +33,11 @@ namespace AK.Wwise
 
 		public override WwiseObjectType WwiseObjectType { get { return WwiseObjectType.GameParameter; } }
 
-		public void SetValue(UnityEngine.GameObject gameObject, float value)
+		public void SetValue(UnityEngine.GameObject gameObject, float value, int changeDuration = 0)
 		{
 			if (IsValid())
 			{
-				var result = AkUnitySoundEngine.SetRTPCValue(Id, value, gameObject);
+				var result = AkUnitySoundEngine.SetRTPCValue(Id, value, gameObject, changeDuration);
 				Verify(result);
 			}
 		}

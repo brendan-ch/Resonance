@@ -443,7 +443,6 @@ public class Wamp
 		{
 			ws.Dispose();
 			stopServerTokenSource.Cancel();
-			return;
 		}
 	}
 

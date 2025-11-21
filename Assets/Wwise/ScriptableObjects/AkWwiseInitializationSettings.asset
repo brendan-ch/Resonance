@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: AK.Wwise.Unity.API::AkWwiseInitializationSettings
   PlatformSettingsNameList:
   - Mac
+  - Web
   - Windows
   PlatformSettingsList:
   - {fileID: 11400000, guid: 9ffc374db44c60249a2b59bb54c3d1ee, type: 2}
+  - {fileID: 11400000, guid: 8ae7781b183a2a24a92c5ece721e052f, type: 2}
   - {fileID: 11400000, guid: 45931be53986d114abba9970c2d3c891, type: 2}
   InvalidReferencePlatforms: []
   UserSettings:
@@ -58,6 +60,9 @@ MonoBehaviour:
       m_MaxDiffractionAngleDegrees: 180
       m_SmoothingConstantMs: 0
       m_TransmissionOperation: 2
+      m_ClusteringMinPoints: 0
+      m_ClusteringMaxDistance: 5
+      m_ClusteringDeadZoneDistance: 10
   AdvancedSettings:
     m_IOMemorySize: 2097152
     m_TargetAutoStreamBufferLengthMs: 380

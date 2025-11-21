@@ -19,6 +19,7 @@ Copyright (c) 2025 Audiokinetic Inc.
 using System.Linq;
 using System.Collections.Generic;
 using UnityEditor.IMGUI.Controls;
+
 public class AkWwiseTreeView : TreeView
 {
 
@@ -28,8 +29,22 @@ public class AkWwiseTreeView : TreeView
 		ComponentPicker
 	}
 
+	public class AkWwiseTreeViewCellInfo
+	{
+		public AkWwiseTreeViewCellInfo(UnityEngine.Rect inCellRect, AkWwiseTreeViewItem inItem, ObjectColumns inColumn)
+		{
+			CellRect = inCellRect; 
+			Item = inItem;
+			Column = inColumn;
+		}
+		public UnityEngine.Rect CellRect;
+		public AkWwiseTreeViewItem Item;
+		public ObjectColumns Column;
+	}
+
 	private PickerMode m_pickerMode;
 	private WwiseObjectType componentObjectType;
+	public BrowserFilter Filters = BrowserFilter.None;
 
 	AkWwisePickerIcons icons;
 	protected AkWwiseTreeDataSource m_dataSource;
@@ -37,6 +52,8 @@ public class AkWwiseTreeView : TreeView
 	readonly IList<AkWwiseTreeViewItem> m_Rows = new List<AkWwiseTreeViewItem>(100);
 
 	public event System.Action treeChanged;
+	public static event System.Action<List<MultiColumnHeaderState.Column>> wwiseBrowserColumnDelegate;
+	public static event System.Action<AkWwiseTreeViewCellInfo> wwiseBrowserCellDelegate;
 
 	private static Dictionary<WwiseObjectType, UnityEditor.MonoScript> DragDropMonoScriptMap;
 	private static Dictionary<System.Type, WwiseObjectType> ScriptTypeMap
@@ -74,9 +91,8 @@ public class AkWwiseTreeView : TreeView
 
 	private void Initialize(AkWwiseTreeDataSource data)
 	{
-
 		m_dataSource = data;
-		m_dataSource.TreeView = this;
+		m_dataSource.SetWwiseTreeView(this);
 		m_dataSource.modelChanged += ModelChanged;
 		this.LoadExpansionStatus();
 
@@ -110,7 +126,22 @@ public class AkWwiseTreeView : TreeView
 	}
 
 	private bool bSearchStringChanged;
+	private bool bFiltersChanged;
 	public string m_storedSearchString;
+
+	public bool FiltersChanged
+	{
+		get { return bFiltersChanged; }
+
+		set
+		{
+			if (bFiltersChanged != value)
+			{
+				bFiltersChanged = value;
+				SaveExpansionStatus();
+			}
+		}
+	}
 	public string StoredSearchString
 	{
 		get { return m_storedSearchString; }
@@ -155,9 +186,8 @@ public class AkWwiseTreeView : TreeView
 
 	void ModelChanged()
 	{
-		if (treeChanged != null)
-			treeChanged();
-
+		treeChanged?.Invoke();
+		m_dataSource.UpdateSearchResults(searchString, componentObjectType, Filters);
 		SetDirty();
 	}
 
@@ -170,12 +200,14 @@ public class AkWwiseTreeView : TreeView
 
 	public override void OnGUI(UnityEngine.Rect rect)
 	{
-		if (bSearchStringChanged)
+		if (bSearchStringChanged || bFiltersChanged)
 		{
 			if (!m_dataSource.isSearching)
 			{
-				m_dataSource.UpdateSearchResults(searchString, componentObjectType);
+				m_dataSource.UpdateSearchResults(searchString, componentObjectType, Filters);
 				bSearchStringChanged = false;
+				bFiltersChanged = false;
+				Reload();
 			}
 		}
 
@@ -204,7 +236,7 @@ public class AkWwiseTreeView : TreeView
 			dataRoot = m_dataSource.GetComponentDataRoot(componentObjectType);
 		}
 
-		if (!string.IsNullOrEmpty(searchString))
+		if ((!string.IsNullOrEmpty(searchString)) || Filters != BrowserFilter.None)
 		{
 			dataRoot = m_dataSource.GetSearchResults();
 		}
@@ -267,7 +299,7 @@ public class AkWwiseTreeView : TreeView
 	public void SelectItem(System.Guid guid)
 	{
 		var item = m_dataSource.FindByGuid(guid);
-		if (item == null && AkWwiseProjectInfo.GetData().currentDataSource == AkWwiseProjectInfo.DataSourceType.WwiseAuthoring)
+		if (item == null)
 		{
 			m_dataSource.SelectItem(guid);
 		}
@@ -290,19 +322,16 @@ public class AkWwiseTreeView : TreeView
 		if (item != null)
 		{
 			AkWwiseTreeViewItem parent = item;
-			while (parent.parent != null && GetItemByGuid(parent.objectGuid) == null)
+			while (parent.parent is AkWwiseTreeViewItem nextParent)
 			{
-				parent = parent.parent as AkWwiseTreeViewItem;
-			}
-			if (parent != null)
-			{
-				SetExpandedRecursive(parent.id, true);
-				if (select)
+				if (nextParent.objectType == WwiseObjectType.Project)
 				{
-					return false;
+					break;
 				}
-				return true;
+				parent = nextParent;
 			}
+			SetExpandedRecursive(parent.id, true);
+			return !select;
 		}
 		return false;
 	}
@@ -322,40 +351,55 @@ public class AkWwiseTreeView : TreeView
 	}
 
 	#region Mulicolumn 
-	enum ObjectColumns
+	public enum ObjectColumns
 	{
 		Name,
-		Guid,
-		Depth,
+		Status,
+		AddressableGroup
 	}
 
 	public static MultiColumnHeaderState CreateDefaultMultiColumnHeaderState()
 	{
-		var columns = new[]
+		List<MultiColumnHeaderState.Column> columns = new List<MultiColumnHeaderState.Column>
 		{
-				new MultiColumnHeaderState.Column
+				new()
 				{
 					headerContent = new UnityEngine.GUIContent("Name"),
 					headerTextAlignment = UnityEngine.TextAlignment.Left,
 					sortedAscending = true,
 					sortingArrowAlignment = UnityEngine.TextAlignment.Center,
 					width = 300,
-					minWidth = 200,
+					minWidth = 100,
 					autoResize = true,
-					allowToggleVisibility = false
+					allowToggleVisibility = false,
+					canSort = false
+				},
+				new()
+				{
+					headerContent = new UnityEngine.GUIContent("Status"),
+					headerTextAlignment = UnityEngine.TextAlignment.Left,
+					sortedAscending = true,
+					sortingArrowAlignment = UnityEngine.TextAlignment.Center,
+					width = 300,
+					minWidth = 100,
+					autoResize = true,
+					allowToggleVisibility = false,
+					canSort = false
 				},
 			};
-
-		var state = new MultiColumnHeaderState(columns);
+		
+		wwiseBrowserColumnDelegate?.Invoke(columns);
+		
+		var state = new MultiColumnHeaderState(columns.ToArray());
 		return state;
 	}
 
 
 	public static MultiColumnHeaderState CreateDebug()
 	{
-		var columns = new[]
+		List<MultiColumnHeaderState.Column> columns = new List<MultiColumnHeaderState.Column>
 		{
-				new MultiColumnHeaderState.Column
+				new()
 				{
 					headerContent = new UnityEngine.GUIContent("Name"),
 					headerTextAlignment = UnityEngine.TextAlignment.Left,
@@ -366,7 +410,7 @@ public class AkWwiseTreeView : TreeView
 					autoResize = true,
 					allowToggleVisibility = false
 				},
-				new MultiColumnHeaderState.Column
+				new()
 				{
 					headerContent = new UnityEngine.GUIContent("Guid"),
 					headerTextAlignment = UnityEngine.TextAlignment.Right,
@@ -376,7 +420,7 @@ public class AkWwiseTreeView : TreeView
 					minWidth = 60,
 					autoResize = true
 				},
-				new MultiColumnHeaderState.Column
+				new()
 				{
 					headerContent = new UnityEngine.GUIContent("depth"),
 					headerTextAlignment = UnityEngine.TextAlignment.Right,
@@ -387,8 +431,9 @@ public class AkWwiseTreeView : TreeView
 					autoResize = true
 				},
 			};
+		wwiseBrowserColumnDelegate?.Invoke(columns);
 
-		var state = new MultiColumnHeaderState(columns);
+		var state = new MultiColumnHeaderState(columns.ToArray());
 		return state;
 	}
 
@@ -430,6 +475,7 @@ public class AkWwiseTreeView : TreeView
 
 	void CellGUI(UnityEngine.Rect cellRect, AkWwiseTreeViewItem item, ObjectColumns column, ref RowGUIArgs args)
 	{
+		wwiseBrowserCellDelegate?.Invoke(new AkWwiseTreeViewCellInfo(cellRect, item, column));
 		// Center cell rect vertically (makes it easier to place controls, icons etc in the cells)
 		CenterRectUsingSingleLineHeight(ref cellRect);
 
@@ -446,14 +492,17 @@ public class AkWwiseTreeView : TreeView
 					base.RowGUI(args);
 				}
 				break;
-			case ObjectColumns.Guid:
+			case ObjectColumns.Status:
 				{
-					UnityEngine.GUI.Label(cellRect, item.objectGuid.ToString());
-				}
-				break;
-			case ObjectColumns.Depth:
-				{
-					UnityEngine.GUI.Label(cellRect, item.depth.ToString());
+					if (item.IsUpToDate)
+					{
+						UnityEngine.GUI.Label(cellRect, item.status);						
+					}
+					else
+					{
+						UnityEngine.GUI.Label(cellRect, item.status, AkWwiseTreeViewItem.OutOfDateStyle);
+					}
+
 				}
 				break;
 		}
@@ -480,7 +529,7 @@ public class AkWwiseTreeView : TreeView
 	#region click and drag/drop
 	protected override bool CanMultiSelect(TreeViewItem item)
 	{
-		return false;
+		return true;
 	}
 
 	protected override void SelectionChanged(IList<int> selectedIds)
@@ -491,80 +540,138 @@ public class AkWwiseTreeView : TreeView
 
 	public bool CheckWaapi()
 	{
-		return AkWwiseEditorSettings.Instance.UseWaapi && AkWaapiUtilities.IsConnected() &&
-			AkWwiseProjectInfo.GetData().currentDataSource == AkWwiseProjectInfo.DataSourceType.WwiseAuthoring;
+		return AkWwiseEditorSettings.Instance.UseWaapi && AkWaapiUtilities.IsConnected();
 	}
 
 	protected override void ContextClickedItem(int id)
 	{
+		List<int> selectedIDs = GetSelection().ToList();
+
+		List<AkWwiseTreeViewItem> selectedItems = selectedIDs
+			.Select(this.Find)
+			.Where(item => item != null)
+			.ToList();
+
 		UnityEditor.GenericMenu menu = new UnityEditor.GenericMenu();
-		var item = Find(id);
 		if (CheckWaapi())
 		{
-			if (CanPlay(item))
+			List<AkWwiseTreeViewItem> soundBankItems = selectedItems
+				.Where(item => item.objectType == WwiseObjectType.Soundbank)
+				.ToList();
+
+			List<AkWwiseTreeViewItem> nonSoundBankItems = selectedItems
+				.Where(item => item.objectType != WwiseObjectType.Soundbank)
+				.ToList();
+
+			List<AkWwiseTreeViewItem> playableItems = selectedItems
+				.Where(item => CanPlay(item))
+				.ToList();
+
+			if (playableItems.Any())
+			{
 				menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Play \u2215 Stop _SPACE"), false,
-					() => AkWaapiUtilities.TogglePlayEvent(item.objectType, item.objectGuid));
+					() => 
+					{
+						playableItems.ForEach(item => 
+						{
+							AkWaapiUtilities.TogglePlayEvent(item.objectType, item.objectGuid);
+						});
+					});
+			}
 			else
+			{
 				menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Play \u2215 Stop _Space"));
+			}
 
 			menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Stop All"), false,
 					() => AkWaapiUtilities.StopAllTransports());
 
 			menu.AddSeparator("");
 
-			if (CanRenameWithLog(item, false))
-				menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Rename _F2"), false,
-					() => BeginRename(item));
-			else
-				menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Rename"));
-
-			if (CanDelete(item, false))
-				menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Delete _Delete"), false,
-					() => AkWaapiUtilities.Delete(item.objectGuid));
-			else
-				menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Delete"));
+			CreateExpansionOptions(menu, selectedItems);
 
 			menu.AddSeparator("");
-			if (item.objectType == WwiseObjectType.Soundbank)
+
+			bool shouldOpenNewExplorerTab = soundBankItems.Count() + nonSoundBankItems.Count() > 1;
+			
+			if (soundBankItems.Any())
 			{
-				menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Open Folder/WorkUnit #O"), false,
-					() => AkWaapiUtilities.OpenWorkUnitInExplorer(item.objectGuid));
-				menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Open Folder/SoundBank "), false,
-					() => AkWaapiUtilities.OpenSoundBankInExplorer(item.objectGuid));
+				menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Open Folder (SoundBanks)/WorkUnit #O"), false,
+					() => soundBankItems.ForEach(item => 
+					{
+						AkWaapiUtilities.OpenWorkUnitInExplorer(item.objectGuid, shouldOpenNewExplorerTab);
+					}));
+
+				menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Open Folder (SoundBanks)/SoundBank "), false,
+					() => soundBankItems.ForEach(item => 
+					{
+						AkWaapiUtilities.OpenSoundBankInExplorer(item.objectGuid);
+					}));
 			}
-			else
+
+			if(nonSoundBankItems.Any())
 			{
 				menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Open Containing Folder #O"), false,
-					() => AkWaapiUtilities.OpenWorkUnitInExplorer(item.objectGuid));
+					() => nonSoundBankItems.ForEach(item => 
+					{
+						AkWaapiUtilities.OpenWorkUnitInExplorer(item.objectGuid, shouldOpenNewExplorerTab);
+					}));
 			}
-
-			menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Find in Project Explorer #F"), false,
-				() => m_dataSource.SelectObjectInAuthoring(item.objectGuid));
-
 		}
 		else
 		{
-			if (AkWwiseProjectInfo.GetData().currentDataSource == AkWwiseProjectInfo.DataSourceType.WwiseAuthoring)
-			{
-				menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Wwise Connection Settings"), false,
-					OpenSettings);
-				menu.AddSeparator("");
-			}
+			menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Wwise Connection Settings"), false,
+				OpenSettings);
+			menu.AddSeparator("");
 
 			menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Play \u2215 Stop"));
 			menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Stop all"));
+
 			menu.AddSeparator("");
-			menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Rename"));
-			menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Delete"));
+
+			CreateExpansionOptions(menu, selectedItems);
+
 			menu.AddSeparator("");
 			menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Open Containing Folder"));
-			menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Find in Project Explorer"));
 		}
 
+		//This is the only operation that does not support multiple selection.
+		var item = Find(id);
 		menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Find References in Scene #R"), false,
 			 () => FindReferencesInScene(item));
 
 		menu.ShowAsContext();
+	}
+
+	private void CreateExpansionOptions(UnityEditor.GenericMenu menu, List<AkWwiseTreeViewItem> selectedItems)
+	{
+		List<AkWwiseTreeViewItem> expandableItems = selectedItems
+			.Where((item) => CanExpandItem(item))
+			.ToList();
+
+		List<AkWwiseTreeViewItem> collapsableItems = selectedItems
+			.Where((item) => CanCollapseItem(item))
+			.ToList();
+
+		if (expandableItems.Any())
+		{
+			menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Expand Selected"), false,
+				() => expandableItems.ForEach(item => SetExpandedRecursive(item.id, true)));
+		}
+		else
+		{
+			menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Expand Selected"));
+		}
+
+		if(collapsableItems.Any())
+		{
+			menu.AddItem(UnityEditor.EditorGUIUtility.TrTextContent("Collapse Selected"), false,
+				() => collapsableItems.ForEach(item => SetExpandedRecursive(item.id, false)));
+		}
+		else
+		{
+			menu.AddDisabledItem(UnityEditor.EditorGUIUtility.TrTextContent("Collapse Selected"));
+		}
 	}
 
 	protected void OpenSettings()
@@ -579,56 +686,54 @@ public class AkWwiseTreeView : TreeView
 		{
 			return;
 		}
-		var item = Find(GetSelection()[0]);
+
 		if (UnityEngine.Event.current.type == UnityEngine.EventType.KeyDown)
 		{
-			switch (UnityEngine.Event.current.keyCode)
+			foreach (var selection in selected)
 			{
-				case UnityEngine.KeyCode.KeypadEnter:
-					DoubleClickedItem(item.id);
-					UnityEngine.Event.current.Use();
-					break;
-				case UnityEngine.KeyCode.Space:
-					if (CanPlay(item))
-						AkWaapiUtilities.TogglePlayEvent(item.objectType, item.objectGuid);
-					UnityEngine.Event.current.Use();
-					break;
-				case UnityEngine.KeyCode.Delete:
-					if (CanDelete(item))
-						AkWaapiUtilities.Delete(item.objectGuid);
-					UnityEngine.Event.current.Use();
-					break;
-				case UnityEngine.KeyCode.F2:
-					if (CanRename(item))
-						BeginRename(item);
-					UnityEngine.Event.current.Use();
-					break;
-				case UnityEngine.KeyCode.O:
-					if (UnityEngine.Event.current.shift)
-					{
-						if (CanOpen(item))
-							AkWaapiUtilities.OpenWorkUnitInExplorer(item.objectGuid);
+				var item = Find(selection);
+
+				switch (UnityEngine.Event.current.keyCode)
+				{
+					case UnityEngine.KeyCode.KeypadEnter:
+						DoubleClickedItem(item.id);
 						UnityEngine.Event.current.Use();
-					}
-					break;
-				case UnityEngine.KeyCode.F:
-					if (UnityEngine.Event.current.shift)
-					{
-						if (CanSelect(item))
-							m_dataSource.SelectObjectInAuthoring(item.objectGuid);
+						break;
+					case UnityEngine.KeyCode.Space:
+						if (CanPlay(item))
+							AkWaapiUtilities.TogglePlayEvent(item.objectType, item.objectGuid);
 						UnityEngine.Event.current.Use();
-					}
-					break;
-				case UnityEngine.KeyCode.R:
-					if (UnityEngine.Event.current.shift)
-					{
-						FindReferencesInScene(item);
-						UnityEngine.Event.current.Use();
-					}
-					break;
+						break;
+					case UnityEngine.KeyCode.O:
+						if (UnityEngine.Event.current.shift)
+						{
+							if (CanOpen(item))
+								AkWaapiUtilities.OpenWorkUnitInExplorer(item.objectGuid);
+							UnityEngine.Event.current.Use();
+						}
+
+						break;
+					case UnityEngine.KeyCode.F:
+						if (UnityEngine.Event.current.shift)
+						{
+							if (CanSelect(item))
+								m_dataSource.SelectObjectInAuthoring(item.objectGuid);
+							UnityEngine.Event.current.Use();
+						}
+
+						break;
+					case UnityEngine.KeyCode.R:
+						if (UnityEngine.Event.current.shift)
+						{
+							FindReferencesInScene(item);
+							UnityEngine.Event.current.Use();
+						}
+
+						break;
+				}
 			}
 		}
-	}
+}
 
 	internal static void FindReferencesInScene(AkWwiseTreeViewItem item)
 	{
@@ -675,48 +780,6 @@ public class AkWwiseTreeView : TreeView
 		}
 	}
 
-	protected override void RenameEnded(RenameEndedArgs args)
-	{
-		var item = Find(args.itemID);
-
-		if (ValidateNameChange(item, args.newName))
-		{
-			var name = args.newName.Replace(" ", "_");
-			AkWaapiUtilities.Rename(item.objectGuid, name);
-			item.displayName = args.newName;
-		}
-	}
-	protected override bool CanRename(TreeViewItem item)
-	{
-		return CanRenameWithLog(item, true);
-	}
-
-	protected bool CanRenameWithLog(TreeViewItem item, bool log)
-	{
-		if (!CheckWaapi()) return false;
-
-		var wwiseItem = (AkWwiseTreeViewItem)item;
-		if (item == null)
-		{
-			if (log) UnityEngine.Debug.LogWarning("Tree item no longer exists");
-			return false;
-		}
-
-		if ((wwiseItem.objectType == WwiseObjectType.PhysicalFolder) || (wwiseItem.objectType == WwiseObjectType.WorkUnit))
-		{
-			if (log) UnityEngine.Debug.LogWarning("You can't change the name of a PhysicalFolder/WorkUnit");
-			return false;
-		}
-
-		if (item.parent == null)
-		{
-			if (log) UnityEngine.Debug.LogWarning("A root tree item can not be renamed");
-			return false;
-		}
-
-		return true;
-	}
-
 	protected bool CanPlay(TreeViewItem item)
 	{
 		if (!CheckWaapi()) return false;
@@ -726,20 +789,15 @@ public class AkWwiseTreeView : TreeView
 
 		return false;
 	}
-	protected bool CanDelete(TreeViewItem item, bool log = true)
+
+	protected bool CanExpandItem(TreeViewItem item)
 	{
-		if (!CheckWaapi()) return false;
+		return item.children.Count > 0 && !IsExpanded(item.id);
+	}
 
-		var wwiseItem = (AkWwiseTreeViewItem)item;
-
-		if ((wwiseItem.objectType == WwiseObjectType.PhysicalFolder) || (wwiseItem.objectType == WwiseObjectType.WorkUnit)
-			|| wwiseItem.WwiseTypeInChildren(WwiseObjectType.WorkUnit))
-		{
-			if (log) UnityEngine.Debug.LogWarning("You can't delete a PhysicalFolder/WorkUnit from within Unity");
-			return false;
-		}
-
-		return true;
+	protected bool CanCollapseItem(TreeViewItem item)
+	{
+		return item.children.Count > 0 && IsExpanded(item.id);
 	}
 
 	protected bool CanSelect(TreeViewItem item)
@@ -862,11 +920,11 @@ public class AkWwiseTreeView : TreeView
 		if (m_dataSource != null)
 		{
 			m_dataSource.modelChanged -= this.ModelChanged;
-			m_dataSource.TreeView = null;
+			m_dataSource.SetWwiseTreeView(null);
 		}
 		m_dataSource = datasource;
 		m_dataSource.modelChanged += this.ModelChanged;
-		m_dataSource.TreeView = this;
+		m_dataSource.SetWwiseTreeView(this);
 		m_dataSource.FetchData();
 	}
 
@@ -895,7 +953,7 @@ public class AkWwisePickerIcons
 	private UnityEngine.Texture2D m_textureWwiseWorkUnitIcon;
 	private UnityEngine.Texture2D m_textureWwiseTriggerIcon;
 
-	protected UnityEngine.Texture2D GetTexture(string texturePath)
+	public static UnityEngine.Texture2D GetTexture(string texturePath)
 	{
 		try
 		{
@@ -960,7 +1018,7 @@ public class AkWwisePickerIcons
 			case WwiseObjectType.SwitchGroup:
 				return m_textureWwiseSwitchGroupIcon;
 			case WwiseObjectType.WorkUnit:
-				return m_textureWwiseWorkUnitIcon;
+				return m_textureWwiseFolderIcon;
 			case WwiseObjectType.Trigger:
 				return m_textureWwiseTriggerIcon;
 			default:

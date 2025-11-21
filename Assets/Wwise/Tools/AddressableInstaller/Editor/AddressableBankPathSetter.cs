@@ -38,7 +38,7 @@ public class AddressableBankPathSetter
 		if (bankFolder.Length != 0)
 		{
 			var settings = AkWwiseEditorSettings.Instance;
-			settings.GeneratedSoundbanksPath = bankFolder;
+			settings.RootOutputPath = bankFolder;
 			var projectPath = AkUtilities.GetFullPath(UnityEngine.Application.dataPath, settings.WwiseProjectPath);
 			var relPath = AkUtilities.MakeRelativePath(System.IO.Path.GetDirectoryName(projectPath), fullPath);
 			AkUtilities.SetSoundbanksDestinationFoldersInWproj(projectPath, relPath);
@@ -71,12 +71,11 @@ public class AddressableBankPathSetter
 	    return true;
     }
     
-    public static void SetSoundbankPath(string soundBankPath)
+    public static void SetStreamingAssetsPath(string soundBankPath)
     {
 	    if (soundBankPath == null)
 	    {
 		    UnityEngine.Debug.LogError("AddressableBankPathSetter: Bank folder was not specified.");
-		    return;
 	    }
 
 	    var fullPath = Path.Combine(UnityEngine.Application.streamingAssetsPath, soundBankPath);
@@ -85,7 +84,7 @@ public class AddressableBankPathSetter
 	    if (soundBankPath.Length != 0)
 	    {
 		    var settings = AkWwiseEditorSettings.Instance;
-		    settings.GeneratedSoundbanksPath = AkUtilities.MakeRelativePath(UnityEngine.Application.dataPath, fullPath);
+		    settings.RootOutputPath = AkUtilities.MakeRelativePath(UnityEngine.Application.dataPath, fullPath);
 		    var projectPath = AkUtilities.GetFullPath(UnityEngine.Application.dataPath, settings.WwiseProjectPath);
 		    var relPath = AkUtilities.MakeRelativePath(System.IO.Path.GetDirectoryName(projectPath), fullPath);
 		    AkUtilities.SetWwiseRootOutputPath(projectPath, relPath);

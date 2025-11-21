@@ -85,7 +85,10 @@ public class AkSoundEngineController
 #if !(AK_WWISE_ADDRESSABLES && UNITY_ADDRESSABLES)
 		AkBankManager.DoUnloadBanks();
 #elif WWISE_ADDRESSABLES_24_1_OR_LATER
-		AkAddressableBankManager.Instance.DoUnloadBank();
+		if (AkAddressableBankManager.Instance != null) ;
+		{
+			AkAddressableBankManager.Instance.DoUnloadBank();
+		}
 #endif
 #if UNITY_WEBGL && !UNITY_EDITOR
 		AkUnitySoundEngine.PerformStreamMgrIO();

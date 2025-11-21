@@ -115,6 +115,7 @@ public class AkReverbZone : UnityEngine.MonoBehaviour
 		RemoveReverbZone();
 	}
 
+	// editor only function
 	private void OnValidate()
 	{
 		if (ReverbZone == null)
@@ -132,18 +133,19 @@ public class AkReverbZone : UnityEngine.MonoBehaviour
 		needsUpdate = true;
 	}
 
+	// needsUpdate is only set to true in editor. No need to update in non-editor
+#if UNITY_EDITOR
 	private void Update()
 	{
-#if UNITY_EDITOR
 		if (!UnityEditor.EditorApplication.isPlaying)
 		{
 			return;
 		}
-#endif
 		if (isActiveAndEnabled && needsUpdate)
 		{
 			SetReverbZone();
 		}
 	}
+#endif
 }
 #endif // #if ! (UNITY_DASHBOARD_WIDGET || UNITY_WEBPLAYER || UNITY_WII || UNITY_WIIU || UNITY_NACL || UNITY_FLASH || UNITY_BLACKBERRY) // Disable under unsupported platforms.

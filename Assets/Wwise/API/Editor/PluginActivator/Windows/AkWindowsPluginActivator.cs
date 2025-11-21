@@ -68,5 +68,11 @@ public class AkWindowsPluginActivator : AkPlatformPluginActivator
 		pluginImporter.SetPlatformData(BuildTarget.StandaloneOSX, "CPU", "None");
 		return true;
 	}
+	
+	public override void FilterOutPlatformIfNeeded(BuildTarget target, PluginImporter pluginImporter,
+		string pluginPlatform)
+	{
+		pluginImporter.SetCompatibleWithPlatform(target, false);
+	}
 }
 #endif

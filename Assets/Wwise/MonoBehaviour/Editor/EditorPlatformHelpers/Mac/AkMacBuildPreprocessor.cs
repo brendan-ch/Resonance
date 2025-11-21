@@ -26,10 +26,7 @@ public class AkMacBuildPreprocessor
 			return;
 		}
 
-		AkBuildPreprocessor.RegisterBuildTarget(UnityEditor.BuildTarget.StandaloneOSX, new AkBuildPreprocessor.PlatformConfiguration
-		{
-			WwisePlatformName = "Mac"
-		});
+
 		
 		WwiseSetupWizard.AddBuildTargetGroup(UnityEditor.BuildTargetGroup.Standalone);
 	}

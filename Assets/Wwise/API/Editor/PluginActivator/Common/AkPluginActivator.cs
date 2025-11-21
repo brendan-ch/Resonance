@@ -134,6 +134,13 @@ public class AkPluginActivator : UnityEditor.AssetPostprocessor
 		var assetChanged = false;
 		foreach (var pluginImporter in importers)
 		{
+			if (pluginImporter.GetCompatibleWithAnyPlatform())
+			{
+				LogVerbose("Plugin" + pluginImporter.assetPath + " was compatible with the \"any\" platform, deactivating.");
+				pluginImporter.SetCompatibleWithAnyPlatform(false);
+				assetChanged = true;
+			}
+
 			var pluginPlatform = GetPluginInfoPlatform(pluginImporter.assetPath);
 			if (pluginPlatform != platformPluginActivator.PluginDirectoryName)
 			{
@@ -147,13 +154,6 @@ public class AkPluginActivator : UnityEditor.AssetPostprocessor
 
 			var pluginInfo = platformPluginActivator.GetPluginImporterInformation(pluginImporter);
 			var bShouldActivatePlugin = platformPluginActivator.ConfigurePlugin(pluginImporter, pluginInfo);
-
-			if (pluginImporter.GetCompatibleWithAnyPlatform())
-			{
-				LogVerbose("Plugin" + pluginImporter.assetPath + " was compatible with the \"any\" platform, deactivating.");
-				pluginImporter.SetCompatibleWithAnyPlatform(false);
-				assetChanged = true;
-			}
 
 			if (pluginInfo.PluginConfig == "DSP")
 			{
@@ -225,7 +225,7 @@ public class AkPluginActivator : UnityEditor.AssetPostprocessor
 					pluginBuildTarget = BuildTarget.StandaloneWindows64;
 					break;
 			}
-			
+
 			if (!BuildTargetToPlatformPluginActivator.TryGetValue(pluginBuildTarget, out var platformPluginActivator))
 			{
 				Debug.Log("WwiseUnity: Build Target " + pluginBuildTarget + " not supported.");

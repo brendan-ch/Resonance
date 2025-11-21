@@ -3,14 +3,14 @@
   "Platform": "Windows",
   "BasePlatform": "Windows",
   "SchemaVersion": "16",
-  "SoundBankVersion": "154",
+  "SoundBankVersion": "172",
   "SoundBanks": [
    {
     "Id": "2228651116",
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{DA7386B1-B15E-3501-664D-63E92BD2758D}",
+    "Hash": "{130328A6-34B2-FEED-2203-4DD334EF4122}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
@@ -19,7 +19,7 @@
       {
        "Id": "431755879",
        "Name": "Sine",
-       "ObjectPath": "\\Actor-Mixer Hierarchy\\Default Work Unit\\Test_Sound\\Sine",
+       "ObjectPath": "\\Containers\\Default Work Unit\\Test_Sound\\Sine",
        "GUID": "{CD3090AF-2AE9-427F-8059-38A6AEB7EB62}",
        "LibName": "Wwise Sine",
        "LibId": "6553602"
@@ -27,7 +27,7 @@
       {
        "Id": "750451834",
        "Name": "Sine",
-       "ObjectPath": "\\Actor-Mixer Hierarchy\\Default Work Unit\\Reactive_Feedback\\Sine",
+       "ObjectPath": "\\Containers\\Default Work Unit\\Reactive_Feedback\\Sine",
        "GUID": "{D756AAF5-D53A-444D-9106-A6844FB36D72}",
        "LibName": "Wwise Sine",
        "LibId": "6553602"
@@ -86,6 +86,6 @@
     ]
    }
   ],
-  "FileHash": "{071E2F9F-7DF5-98A5-60C0-1E9BF9540134}"
+  "FileHash": "{9B3928DA-E937-AF29-5828-9260AF13A05A}"
  }
 }

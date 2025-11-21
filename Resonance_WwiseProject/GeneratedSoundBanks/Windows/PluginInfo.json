@@ -14,7 +14,7 @@
     "LibName": "Wwise Meter",
     "LibId": "8454147",
     "Type": "Effect",
-    "DLL": "AkSoundEngineDLL",
+    "DLL": "AkMeter",
     "StaticLib": "AkMeterFX"
    },
    {
@@ -28,6 +28,6 @@
     "Type": "AudioDevice"
    }
   ],
-  "FileHash": "{8B1B3DA7-BB52-9AA4-5A2E-FCA392D2E1EB}"
+  "FileHash": "{717C3DB3-1ABD-D471-729D-2930C82A6033}"
  }
 }

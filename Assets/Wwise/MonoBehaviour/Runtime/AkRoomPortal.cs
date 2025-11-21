@@ -58,6 +58,10 @@ public class AkRoomPortal : AkTriggerHandler
 	[UnityEngine.SerializeField]
 	private AkRoom[] rooms = new AkRoom[MAX_ROOMS_PER_PORTAL];
 
+	[UnityEngine.Tooltip("Set to true to set this portal as static: a portal that will not move during gameplay. A non-static portal will check the state of its transform each frame and update the portal in Wwise if there is a change.")]
+	/// Set to true to set this portal as static: a portal that will not move during gameplay. A non-static portal will check the state of its transform each frame and update the portal in Wwise if there is a change.
+	public bool isStatic = false;
+
 	/// The list of rooms sorted by priority in front and in the back of the portal
 	private AkRoom.PriorityList[] roomList = { new AkRoom.PriorityList(), new AkRoom.PriorityList() };
 
@@ -72,9 +76,6 @@ public class AkRoomPortal : AkTriggerHandler
 	private UnityEngine.BoxCollider portalCollider;
 	private bool portalSet = false;
 	private bool portalNeedsUpdate = false;
-	private UnityEngine.Vector3 previousPosition;
-	private UnityEngine.Vector3 previousScale;
-	private UnityEngine.Quaternion previousRotation;
 
 	private void SetRoomPortal()
 	{
@@ -195,9 +196,7 @@ public class AkRoomPortal : AkTriggerHandler
 		RegisterTriggers(closePortalTriggerList, ClosePortal);
 
 		// init update condition
-		previousPosition = transform.position;
-		previousScale = transform.lossyScale;
-		previousRotation = transform.rotation;
+		transform.hasChanged = false;
 
 		base.Awake();
 	}
@@ -249,15 +248,14 @@ public class AkRoomPortal : AkTriggerHandler
 	}
 	private void Update()
 	{
-		if (previousPosition != transform.position ||
-			previousScale != transform.lossyScale ||
-			previousRotation != transform.rotation)
+		// don't update if is static
+		if (isStatic) return;
+
+		if (transform.hasChanged)
 		{
 			portalNeedsUpdate = true;
 			AkRoomManager.RegisterPortalUpdate(this);
-			previousPosition = transform.position;
-			previousScale = transform.lossyScale;
-			previousRotation = transform.rotation;
+			transform.hasChanged = false;
 		}
 	}
 

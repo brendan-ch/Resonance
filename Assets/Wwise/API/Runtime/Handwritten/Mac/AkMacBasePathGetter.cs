@@ -41,3 +41,15 @@ public partial class AkBasePathGetter
 	}
 }
 #endif
+
+#if UNITY_EDITOR
+[UnityEditor.InitializeOnLoad]
+public partial class AkMacBasePathGetter
+{
+	static AkMacBasePathGetter()
+	{
+		AkBasePathGetter.AddTargetPlatform(UnityEditor.BuildTarget.StandaloneOSX, "Mac");
+	}
+}
+#endif
+

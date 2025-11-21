@@ -38,7 +38,7 @@ public static class AkDelegates
                 // If the Unity object is null/destroyed, unsubscribe and skip
                 if (unityTarget == null)
                 {
-                    Debug.Log($"WwiseUnity: Removing stale delegate from Action. Method: {del.Method.Name}, Target ID: {unityTarget.GetInstanceID()}");
+                    Debug.LogWarning($"WwiseUnity: Removing stale delegate from Action. Method: {del.Method.Name}, Target ID: {unityTarget.GetInstanceID()}");
                     action -= (Action)del;
                     continue;
                 }

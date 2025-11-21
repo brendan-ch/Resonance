@@ -32,7 +32,6 @@ public class AkPluginActivatorConstants
 			PluginID.AkExpander,
 			PluginID.AkGain,
 			PluginID.AkMatrixReverb,
-			PluginID.AkMeter,
 			PluginID.AkParametricEQ,
 			PluginID.AkPeakLimiter,
 			PluginID.AkRoomVerb,
@@ -72,13 +71,14 @@ public class AkPluginActivatorConstants
 			{ PluginID.AkChannelRouter, "AkChannelRouterFX" },
 			{ PluginID.AkConvolutionReverb, "AkConvolutionReverbFX" },
 			{ PluginID.AkDelay, "AkDelayFX" },
-			{ PluginID.AkExpander, "AkExpanderFX" },
+			{ PluginID.AkExpander, "AkCompressorFX" }, // Compressor lib contains Expander
 			{ PluginID.AkFlanger, "AkFlangerFX" },
 			{ PluginID.AkGain, "AkGainFX" },
 			{ PluginID.AkGuitarDistortion, "AkGuitarDistortionFX" },
 			{ PluginID.AkHarmonizer, "AkHarmonizerFX" },
 			{ PluginID.AkMatrixReverb, "AkMatrixReverbFX" },
-			{ PluginID.AkMeter, "AkMeterFX" },
+			{ PluginID.AkMeter, "AkMeterFX" }, 
+			{ PluginID.AkMultibandMeter, "AkMeterFX" },  // Meter lib contains MultibandMeter
 			{ PluginID.AkMotionSink, "AkMotionSink" },
 			{ PluginID.AkMotionSource, "AkMotionSourceSource" },
 			{ PluginID.AkParametricEQ, "AkParametricEQFX" },
@@ -132,6 +132,7 @@ public class AkPluginActivatorConstants
 		AkGain = 0x008B0003, //Gain
 		AkMatrixReverb = 0x00730003, //Matrix Reverb
 		AkMeter = 0x00810003, //Wwise Meter
+		AkMultibandMeter = 0x00C40003, //Wwise Multiband Meter
 		AkParametricEQ = 0x00690003, //Wwise Parametric EQ
 		AkPeakLimiter = 0x006E0003, //Wwise Peak Limiter
 		AkRoomVerb = 0x00760003, //Wwise RoomVerb

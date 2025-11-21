@@ -3,14 +3,14 @@
   "Platform": "Windows",
   "BasePlatform": "Windows",
   "SchemaVersion": "16",
-  "SoundBankVersion": "154",
+  "SoundBankVersion": "172",
   "SoundBanks": [
    {
     "Id": "1355168291",
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{3AA8AABE-CA87-CEE5-9FFB-B420B4769C30}",
+    "Hash": "{81462A05-1806-DDDB-2F06-906376F30E78}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -19,7 +19,7 @@
       {
        "Id": "258589154",
        "Name": "Meter (Custom)",
-       "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Foley\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Foley\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
        "GUID": "{A34A176F-5F08-403A-8349-001190F96737}",
        "LibName": "Wwise Meter",
        "LibId": "8454147"
@@ -27,7 +27,7 @@
       {
        "Id": "538595301",
        "Name": "Meter (Custom)",
-       "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Environment\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Environment\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
        "GUID": "{EBD972E9-8EF2-4EAC-8691-2E4872EE3EC3}",
        "LibName": "Wwise Meter",
        "LibId": "8454147"
@@ -35,7 +35,7 @@
       {
        "Id": "551947351",
        "Name": "Meter (Custom)",
-       "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\SFX\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\SFX\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
        "GUID": "{0FD00287-02C5-41CB-A92E-924261E4463D}",
        "LibName": "Wwise Meter",
        "LibId": "8454147"
@@ -45,7 +45,7 @@
       {
        "Id": "2317455096",
        "Name": "No_Output",
-       "ObjectPath": "\\Audio Devices\\Default Work Unit\\No_Output",
+       "ObjectPath": "\\Devices\\Default Work Unit\\No_Output",
        "GUID": "{7D9F26C0-31DA-49D9-89B3-6AA3BEA63134}",
        "LibName": "No Output",
        "LibId": "11862023"
@@ -53,7 +53,7 @@
       {
        "Id": "3859886410",
        "Name": "System",
-       "ObjectPath": "\\Audio Devices\\Default Work Unit\\System",
+       "ObjectPath": "\\Devices\\Default Work Unit\\System",
        "GUID": "{C2FF7F5A-18CD-4BC3-ABFC-73CFAD3B3F13}",
        "LibName": "System",
        "LibId": "11403271"
@@ -64,7 +64,7 @@
      {
       "Id": "247557814",
       "Name": "Foley",
-      "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Foley",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Foley",
       "GUID": "{24ADE9C4-BC2E-4743-98CF-EE06AF5D5543}",
       "PluginRefs": {
        "Custom": [
@@ -77,7 +77,7 @@
      {
       "Id": "393239870",
       "Name": "SFX",
-      "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\SFX",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\SFX",
       "GUID": "{C22677A5-D637-423D-8AED-F11F0D85B4DE}",
       "PluginRefs": {
        "Custom": [
@@ -90,7 +90,7 @@
      {
       "Id": "1229948536",
       "Name": "Environment",
-      "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Environment",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Environment",
       "GUID": "{5E127F26-65C7-464D-BF68-DFF4DEEDEE02}",
       "PluginRefs": {
        "Custom": [
@@ -103,19 +103,19 @@
      {
       "Id": "1551306167",
       "Name": "UI",
-      "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\UI",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\UI",
       "GUID": "{0C9C6BEC-3135-422B-BDB8-AD709CF8F3FB}"
      },
      {
       "Id": "3803692087",
       "Name": "Master Audio Bus",
-      "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus",
       "GUID": "{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}"
      },
      {
       "Id": "3991942870",
       "Name": "Music",
-      "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus\\Music",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Music",
       "GUID": "{26A4A81B-B389-46FE-B5B6-6B67F3D37ED1}"
      }
     ],
@@ -147,6 +147,6 @@
     ]
    }
   ],
-  "FileHash": "{AEC44B65-03DA-B001-53CC-BD88E49EF3E4}"
+  "FileHash": "{EF8C2722-D353-348D-2764-9446E8429509}"
  }
 }

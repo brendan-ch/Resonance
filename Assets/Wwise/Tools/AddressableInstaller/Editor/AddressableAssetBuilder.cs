@@ -5,19 +5,21 @@ The content of this file may not be used without valid licenses to the
 AUDIOKINETIC Wwise Technology.
 Note that the use of the game engine is subject to the Unity(R) Terms of
 Service at https://unity3d.com/legal/terms-of-service
- 
+
 License Usage
- 
+
 Licensees holding valid licenses to the AUDIOKINETIC Wwise Technology may use
 this file in accordance with the end user license agreement provided with the
 software or, alternatively, in accordance with the terms contained
 in a written agreement between you and Audiokinetic Inc.
 Copyright (c) 2025 Audiokinetic Inc.
 *******************************************************************************/
-#if AK_WWISE_ADDRESSABLES && UNITY_ADDRESSABLES
+#if UNITY_ADDRESSABLES
 using System;
 using System.IO;
+#if AK_WWISE_ADDRESSABLES && UNITY_ADDRESSABLES
 using AK.Wwise.Unity.WwiseAddressables;
+#endif
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Build;
@@ -51,7 +53,7 @@ public static class AddressableAssetBuilder
     /// <summary>
     /// Execute an Addressable Group build using the Wwise Build script
     /// </summary>
-    public static void Build()
+    public static void Build(bool isInstalling)
     {
         // Get the Addressable Asset Settings
         AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
@@ -61,16 +63,24 @@ public static class AddressableAssetBuilder
             return;
         }
 
-        // Find the custom build script
-        BuildScriptPackedMode customBuildScript = AssetDatabase.LoadAssetAtPath<ScriptableObject>(_addressableAssetBuilderPath) as BuildScriptPackedMode;
-
-        if (customBuildScript == null)
+        BuildScriptPackedMode buildScript;
+        if (isInstalling)
         {
-            AddressableInstaller.LogError(Name,$"Asset at {_addressableAssetBuilderPath} could not be loaded or is not a BuildScriptPackedMode.");
+            buildScript = AssetDatabase.LoadAssetAtPath<ScriptableObject>(_addressableAssetBuilderPath) as BuildScriptPackedMode;
+            
+            if (buildScript == null)
+            {
+                AddressableInstaller.LogError(Name,$"Asset at {_addressableAssetBuilderPath} could not be loaded or is not a BuildScriptPackedMode.");
+            }
+        }
+        else
+        {
+            string defaultBuilderPath = "Assets/AddressableAssetsData/DataBuilders/BuildScriptPackedMode.asset";
+            buildScript = AssetDatabase.LoadAssetAtPath<ScriptableObject>(defaultBuilderPath) as BuildScriptPackedMode;
         }
 
         // Set the custom build script as the active data builder
-        settings.ActivePlayerDataBuilderIndex = settings.DataBuilders.IndexOf(customBuildScript);
+        settings.ActivePlayerDataBuilderIndex = settings.DataBuilders.IndexOf(buildScript);
 
         if (settings.ActivePlayerDataBuilderIndex < 0)
         {
@@ -78,12 +88,14 @@ public static class AddressableAssetBuilder
             return;
         }
 
-        Debug.Log($"Using custom build script: {customBuildScript.Name}");
+        Debug.Log($"Using build script: {buildScript.Name}");
         // Start the Addressables build process
         UnityEngine.Debug.Log("Starting Addressables build...");
         AddressableAssetSettings.BuildPlayerContent();
         UnityEngine.Debug.Log("Addressables build completed successfully.");
     }
+    
+#if AK_WWISE_ADDRESSABLES && UNITY_ADDRESSABLES
     /// <summary>
     /// Create the BuildScriptWwisePacked content builder.
     /// </summary>
@@ -129,7 +141,7 @@ public static class AddressableAssetBuilder
         if (settings == null)
         {
             AddressableInstaller.LogError(Name,"AddressableAssetSettings not found. Ensure Addressables is set up in your project.");
-            return;
+            settings = AddressableAssetSettings.Create(AddressableAssetSettingsDefaultObject.kDefaultConfigFolder, AddressableAssetSettingsDefaultObject.kDefaultConfigAssetName, false, true);
         }
 
         // Load the custom build script asset
@@ -157,7 +169,7 @@ public static class AddressableAssetBuilder
 
         Debug.Log($"Added build script to Addressables settings: {assetPath}");
     }
-    
+
     /// <summary>
     /// Utility function that combines all the necessary steps to do a Wwise Addressable Group build
     /// </summary>
@@ -168,7 +180,43 @@ public static class AddressableAssetBuilder
             CreateContentBuilder();
         }
         AddBuildScript();
-        Build();
+        Build(true);
+    }
+#endif
+    
+    /// <summary>
+    /// Remove the build script created at Assets/AddressableAssetsData/DataBuilders/BuildScriptWwisePacked.asset from the addressable group build
+    /// </summary> 
+    public static void RemoveBuildScript()
+    {
+        //We do not handle uninstalling a custom build script
+        if (_useCustomBuildScript)
+        {
+            return;
+        }
+        string assetPath = "Assets/AddressableAssetsData/DataBuilders/BuildScriptWwisePacked.asset";
+
+        // Load the Addressable Asset Settings
+        AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
+        if (settings == null)
+        {
+            AddressableInstaller.LogError(Name,"AddressableAssetSettings not found. Ensure Addressables is set up in your project.");
+            return;
+        }
+
+        // Load the custom build script asset
+        var customBuildScript = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPath);
+        if (customBuildScript == null)
+        {
+            AddressableInstaller.LogError(Name,$"Build script asset not found at path: {assetPath}");
+            return;
+        }
+
+        // Remove the build scripts
+        settings.DataBuilders.Remove(customBuildScript);
+        EditorUtility.SetDirty(settings);
+        AssetDatabase.SaveAssets();
+        Debug.Log($"Removed build script from Addressables settings: {assetPath}");
     }
 }
 #endif

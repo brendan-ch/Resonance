@@ -16,6 +16,7 @@ Copyright (c) 2025 Audiokinetic Inc.
 *******************************************************************************/
 
 using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 public class AkUnitySoundEngineInitialization
@@ -23,11 +24,10 @@ public class AkUnitySoundEngineInitialization
 	protected static AkUnitySoundEngineInitialization m_Instance;
 
 	public System.Action initializationDelegate;
-	
+
 	public System.Action reInitializationDelegate;
-	
+
 	public System.Action terminationDelegate;
-	
 	public static AkUnitySoundEngineInitialization Instance
 	{
 		get
@@ -44,7 +44,7 @@ public class AkUnitySoundEngineInitialization
 	public bool InitializeSoundEngine()
 	{
 		UnityEngine.Debug.LogFormat("WwiseUnity: Wwise(R) SDK Version {0}.", AkUnitySoundEngine.WwiseVersion);
-		
+
 #if UNITY_ANDROID && ! UNITY_EDITOR
 		//Obtains the Android Java Object "currentActivity" in order to set it for the android io hook initialization
 		try
@@ -64,8 +64,12 @@ public class AkUnitySoundEngineInitialization
 			UnityEngine.Debug.LogError($"Failed to pass activity to native code: {ex.Message}");
 		}
 #endif
-		var ActivePlatformSettings = AkWwiseInitializationSettings.ActivePlatformSettings;
-		var initResult = AkUnitySoundEngine.Init(ActivePlatformSettings.AkInitializationSettings);
+		var activePlatformSettings = AkWwiseInitializationSettings.ActivePlatformSettings;
+		var initSettings = activePlatformSettings.AkInitializationSettings;
+		// DO NOT REMOVE until AkInitializationSettings.getCPtr(AkInitializationSettings obj) uses a safe handle (e.g. HandleRef)
+		var handle = GCHandle.Alloc(initSettings);
+		var initResult = AkUnitySoundEngine.Init(initSettings);
+		handle.Free();
 		if (initResult != AKRESULT.AK_Success)
 		{
 			UnityEngine.Debug.LogError($"WwiseUnity: Failed to initialize the sound engine. Reason: {initResult}");
@@ -73,12 +77,20 @@ public class AkUnitySoundEngineInitialization
 			return false;
 		}
 
-		if (AkUnitySoundEngine.InitSpatialAudio(ActivePlatformSettings.AkSpatialAudioInitSettings) != AKRESULT.AK_Success)
+		var spatialAudioInitSettings = activePlatformSettings.AkSpatialAudioInitSettings;
+		// DO NOT REMOVE until AkSpatialAudioInitSettings.getCPtr(AkSpatialAudioInitSettings obj) uses a safe handle (e.g. HandleRef)
+		handle = GCHandle.Alloc(spatialAudioInitSettings);
+		if (AkUnitySoundEngine.InitSpatialAudio(spatialAudioInitSettings) != AKRESULT.AK_Success)
 		{
 			UnityEngine.Debug.LogWarning("WwiseUnity: Failed to initialize spatial audio.");
 		}
+		handle.Free();
 
-		AkUnitySoundEngine.InitCommunication(ActivePlatformSettings.AkCommunicationSettings);
+		var communicationSettings = activePlatformSettings.AkCommunicationSettings;
+		// DO NOT REMOVE until AkCommunicationSettings.getCPtr(AkCommunicationSettings obj) uses a safe handle (e.g. HandleRef)
+		handle = GCHandle.Alloc(communicationSettings);
+		AkUnitySoundEngine.InitCommunication(communicationSettings);
+		handle.Free();
 
 		var akBasePathGetterInstance = AkBasePathGetter.Get();
 		var soundBankBasePath = akBasePathGetterInstance.SoundBankBasePath;
@@ -95,7 +107,7 @@ public class AkUnitySoundEngineInitialization
 
 		var persistentDataPath = akBasePathGetterInstance.PersistentDataPath;
 		var isBasePathSameAsPersistentPath = soundBankBasePath == persistentDataPath;
-		
+
 #if UNITY_ANDROID
 		var canSetBasePath = !isBasePathSameAsPersistentPath;
 		var canSetPersistentDataPath = true;
@@ -134,9 +146,9 @@ public class AkUnitySoundEngineInitialization
 			AkUnitySoundEngine.AddBasePath(decodedBankFullPath);
 		}
 
-		AkUnitySoundEngine.SetCurrentLanguage(ActivePlatformSettings.InitialLanguage);
+		AkUnitySoundEngine.SetCurrentLanguage(activePlatformSettings.InitialLanguage);
 
-		AkCallbackManager.Init(ActivePlatformSettings.CallbackManagerInitializationSettings);
+		AkCallbackManager.Init(activePlatformSettings.CallbackManagerInitializationSettings);
 		UnityEngine.Debug.Log("WwiseUnity: Sound engine initialized successfully.");
 		LoadInitBank();
 		initializationDelegate?.InvokeUnitySafe();
@@ -168,7 +180,7 @@ public class AkUnitySoundEngineInitialization
 		}
 
 		AkCallbackManager.Init(AkWwiseInitializationSettings.ActivePlatformSettings.CallbackManagerInitializationSettings);
-		
+
 		reInitializationDelegate?.InvokeUnitySafe();
 		return true;
 	}
@@ -203,7 +215,7 @@ public class AkUnitySoundEngineInitialization
 		return result;
 #else
 		return false;
-#endif // UNITY_EDITOR 
+#endif // UNITY_EDITOR
 	}
 
 	public void ResetSoundEngine()
@@ -232,7 +244,7 @@ public class AkUnitySoundEngineInitialization
 		{
 			return;
 		}
-
+		
 		terminationDelegate?.InvokeUnitySafe();
 
 		AkUnitySoundEngine.SetOfflineRendering(false);

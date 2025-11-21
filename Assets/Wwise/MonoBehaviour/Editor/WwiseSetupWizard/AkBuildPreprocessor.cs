@@ -59,10 +59,23 @@ public partial class AkBuildPreprocessor
 		if (!string.IsNullOrEmpty(platformSubDir))
 			return platformSubDir;
 
+		//New way to access target platform name
+		string platformName = AkBasePathGetter.GetTargetPlatformName(target);
+		if (platformName != string.Empty)
+		{
+			return platformName;
+		}
+		
+		//For legacy code compatibility. Should maybe remove in 26.1 or 27.1 to give time to adjust 
 		if (PlatformConfigurations.ContainsKey(target))
 		{
-			return PlatformConfigurations[target].WwisePlatformName;
+			if (platformName == string.Empty)
+			{
+				platformName = PlatformConfigurations[target].WwisePlatformName;
+			}
+			return platformName;
 		}
+		//Keeping the old fallback of using the Unity target name.
 		return target.ToString();
 	}
 }
@@ -112,7 +125,7 @@ public partial class AkBuildPreprocessor : UnityEditor.Build.IPreprocessBuild, U
 			return false;
 		}
 
-		UnityEngine.Debug.LogFormat("WwiseUnity: Copied SoundBank folder to streaming assets folder <{0}> for <{1}> platform build", destinationFolder, platformName);
+		UnityEngine.Debug.Log($"WwiseUnity: Copied SoundBank folder from <{sourceFolder}> to streaming assets folder <{destinationFolder}> for <{platformName}> platform build");
 		return true;
 	}
 
@@ -144,7 +157,7 @@ public partial class AkBuildPreprocessor : UnityEditor.Build.IPreprocessBuild, U
 		}
 		
 		// Init ProjectDB for platform being built
-		WwiseProjectDatabase.Init(AkUtilities.GetRootOutputPath(AkWwiseEditorSettings.WwiseProjectAbsolutePath), platformName);
+		WwiseProjectDatabase.Init(AkWwiseEditorSettings.GetRootOutputPath(), platformName);
 		AkPluginActivator.ForceUpdate();
 		AkPluginActivator.ActivatePluginsForDeployment(target, true);
 	}
@@ -162,7 +175,7 @@ public partial class AkBuildPreprocessor : UnityEditor.Build.IPreprocessBuild, U
 		destinationSoundBankFolder = string.Empty;
 		
 		// Point the ProjectDB back on the current editor platform
-		WwiseProjectDatabase.Init(AkUtilities.GetRootOutputPath(AkWwiseEditorSettings.WwiseProjectAbsolutePath), AkBasePathGetter.GetPlatformName());
+		WwiseProjectDatabase.Init(AkWwiseEditorSettings.GetRootOutputPath(), AkBasePathGetter.GetPlatformName());
 	}
 
 #if UNITY_2018_1_OR_NEWER

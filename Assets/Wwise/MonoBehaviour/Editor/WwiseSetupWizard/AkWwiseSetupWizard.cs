@@ -17,6 +17,8 @@ Copyright (c) 2025 Audiokinetic Inc.
 
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.PackageManager;
@@ -34,6 +36,9 @@ public class WwiseSetupWizard
 	{
 		{2024, "WWISE_2024_OR_LATER"}
 	};
+	
+	//Change this when an API change is introduced that would break older version of the addrerssables package
+	private static string WwiseAddressableAPIDefine = "ADDRESSABLES_API_2025_DEFAULT";
 
 	public static void RunModify()
 	{
@@ -326,9 +331,6 @@ public class WwiseSetupWizard
 		if (obj is UnityEngine.GUISkin)
 			return false;
 
-		if (obj is AkWwiseProjectData)
-			return false;
-
 		if (obj is AkWwiseInitializationSettings)
 			return false;
 
@@ -478,8 +480,7 @@ public class WwiseSetupWizard
 			AkUtilities.CreateFolder(AkWwiseEditorSettings.WwiseScriptableObjectRelativePath);
 		}
 
-		AkWwiseProjectInfo.GetData().Migrate();
-		AkWwiseWWUBuilder.UpdateWwiseObjectReferenceData();
+		AkWwiseEditorSettings.GetRootOutputPath();
 
 		UnityEngine.Debug.LogFormat("WwiseUnity: Migrating Prefabs...");
 		MigratePrefabs();
@@ -550,7 +551,7 @@ public class WwiseSetupWizard
 		AkPluginActivator.DeactivateAllPlugins();
 
 		// 0. Make sure the SoundBank directory exists
-		var sbPath = AkUtilities.GetFullPath(UnityEngine.Application.streamingAssetsPath, AkWwiseEditorSettings.Instance.SoundbankPath);
+		var sbPath = AkWwiseEditorSettings.GetRootOutputPath();
 		if (!System.IO.Directory.Exists(sbPath))
 			System.IO.Directory.CreateDirectory(sbPath);
 
@@ -652,6 +653,8 @@ public class WwiseSetupWizard
 				PlayerSettings.SetScriptingDefineSymbols(namedTarget, defines);
 			}
 		}
+
+		SetAddressableAdapterSymbol();
 	}
 	
 	// Create a Wwise Global object containing the initializer and terminator scripts. Set the SoundBank path of the initializer script.
@@ -693,6 +696,21 @@ public class WwiseSetupWizard
 		return true;
 	}
 
+	private static void MigrateRootOutputPath(string wprojPath)
+	{
+		if (string.IsNullOrEmpty(AkWwiseEditorSettings.Instance.RootOutputPath))
+		{
+			var defaultRootOutputPath = AkBasePathGetter.GetDefaultRootOutputPath();
+			var pathRelativeToApplicationDataPath = AkUtilities.MakeRelativePath(UnityEngine.Application.dataPath, defaultRootOutputPath);
+			AkWwiseEditorSettings.Instance.RootOutputPath = pathRelativeToApplicationDataPath;
+			AkWwiseEditorSettings.Instance.SaveSettings();
+		}
+		if (AkUtilities.IsMigrationRequired(AkUtilities.MigrationStep.RootOutputPath_v2025_1_0))
+		{
+			AkWwiseEditorSettings.MigrateRootOutputPath(wprojPath);
+		}
+	}
+
 	// Modify the .wproj file to set needed SoundBank settings
 	private static bool SetSoundbankSettings()
 	{
@@ -700,22 +718,25 @@ public class WwiseSetupWizard
 		if (string.IsNullOrEmpty(settings.WwiseProjectPath))
 			return true;
 
-		var r = new System.Text.RegularExpressions.Regex("_WwiseIntegrationTemp.*?([/\\\\])");
-#if AK_WWISE_ADDRESSABLES && UNITY_ADDRESSABLES
-		var FullPath = AkUtilities.GetFullPath(r.Replace(UnityEngine.Application.dataPath, "$1"), settings.GeneratedSoundbanksPath);
-		var ProjectPath = AkUtilities.GetFullPath(r.Replace(UnityEngine.Application.dataPath, "$1"), settings.WwiseProjectPath);
-		var SoundbankPath = AkUtilities.MakeRelativePath(System.IO.Path.GetDirectoryName(ProjectPath), FullPath);
-#else
-		var SoundbankPath = AkUtilities.GetFullPath(r.Replace(UnityEngine.Application.streamingAssetsPath, "$1"), settings.SoundbankPath);
-#endif
+		var SoundbankPath = AkBasePathGetter.GetDefaultRootOutputPath();
+		if (AkWwiseEditorSettings.Instance.RootOutputPath != null)
+		{
+			var rootOutputPath = AkWwiseEditorSettings.GetRootOutputPath();
+			var r = new Regex(Regex.Escape("_WwiseIntegrationTemp"));
+			SoundbankPath = r.Replace(rootOutputPath, "", 1);
+		}
+		if (SoundbankPath == null)
+		{
+			Debug.LogWarning("Could not get Default Root Output Path.");
+			return false;
+		}
 		var WprojPath = AkUtilities.GetFullPath(UnityEngine.Application.dataPath, settings.WwiseProjectPath);
 #if UNITY_EDITOR_OSX
-		SoundbankPath = AkUtilities.ParseOsxPathFromWinePath(SoundbankPath);
+		SoundbankPath = "Z:" + SoundbankPath;
 #endif
-
-		SoundbankPath = AkUtilities.MakeRelativePath(System.IO.Path.GetDirectoryName(WprojPath), SoundbankPath);
+		MigrateRootOutputPath(WprojPath);
 		string[] settingsToDisable = {"GenerateSoundBankXML"};
-		string[] settingsToEnable = {"SoundBankGenerateHeaderFile", "SoundBankGenerateMaxAttenuationInfo", "GenerateSoundBankJSON", "SoundBankGeneratePrintGUID", "SoundBankGeneratePrintPath"};
+		string[] settingsToEnable = {"SoundBankGenerateHeaderFile", "SoundBankGenerateMaxAttenuationInfo", "GenerateSoundBankJSON", "SoundBankGeneratePrintGUID", "SoundBankGeneratePrintPath",  "AutoSoundBankEnabled"};
 		if (AkUtilities.SetSoundbankHeaderFilePath(WprojPath, SoundbankPath))
 			if (AkUtilities.ToggleBoolSoundbankSettingInWproj(settingsToDisable, WprojPath, false))
 				return AkUtilities.ToggleBoolSoundbankSettingInWproj(settingsToEnable, WprojPath, true);
@@ -782,6 +803,50 @@ public class WwiseSetupWizard
 			UnityEngine.Debug.LogWarning("Automatically added AkAudioListener to Main Camera. Go to \"Edit > Wwise Settings...\" to disable this functionality.");
 		}
 	}
+	
+	public static BuildTargetGroup[] GetNonObsoleteTargetGroups()
+	{
+		System.Type enumType = typeof(BuildTargetGroup);
+
+		return System.Enum.GetValues(enumType).Cast<BuildTargetGroup>().Where(targetGroup =>
+		{
+			string name = targetGroup.ToString();
+			MemberInfo member = enumType.GetMember(name).FirstOrDefault();
+
+			if (member == null) return false; 
+
+			return member.GetCustomAttribute<System.ObsoleteAttribute>() == null;
+		}).ToArray();
+	}
+	
+	private static void SetAddressableAdapterSymbol()
+	{
+		if (PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone).Contains(WwiseAddressableAPIDefine))
+		{
+			return;
+		}
+        
+		foreach (BuildTargetGroup targetGroup in GetNonObsoleteTargetGroups())
+		{
+#if UNITY_5_4_OR_NEWER
+			if (targetGroup == BuildTargetGroup.Unknown)
+			{
+				continue;
+			}
+#endif
+			string currentDefines = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
+			var currentDefineList = currentDefines.Split(';').ToList();
+
+			const string wwiseAddressablePrefix = "ADDRESSABLES_API";
+			currentDefineList.RemoveAll(define => define.StartsWith(wwiseAddressablePrefix));
+
+			currentDefineList.Add(WwiseAddressableAPIDefine);
+
+			string newDefinesString = string.Join(";", currentDefineList.Distinct());
+			PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, newDefinesString);
+		}
+	}
+
 }
 
 #endif // UNITY_EDITOR

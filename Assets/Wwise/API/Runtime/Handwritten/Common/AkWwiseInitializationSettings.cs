@@ -99,6 +99,9 @@ public class AkWwiseInitializationSettings : AkCommonPlatformSettings
 		"UserSettings.m_SpatialAudioSettings.m_EnableGeometricDiffractionAndTransmission",
 		"UserSettings.m_SpatialAudioSettings.m_CalcEmitterVirtualPosition",
 		"UserSettings.m_SpatialAudioSettings.m_LoadBalancingSpread",
+		"UserSettings.m_SpatialAudioSettings.m_ClusteringMinPoints",
+		"UserSettings.m_SpatialAudioSettings.m_ClusteringMaxDistance",
+		"UserSettings.m_SpatialAudioSettings.m_ClusteringDeadZoneDistance",
 		"CommsSettings.m_PoolSize",
 		"CommsSettings.m_DiscoveryBroadcastPort",
 		"CommsSettings.m_CommandPort",
@@ -285,6 +288,17 @@ public class AkWwiseInitializationSettings : AkCommonPlatformSettings
 
 			return m_Instance;
 		}
+	}
+
+	public static System.Collections.Generic.List<PlatformSettings> GetAllPlatformSettings()
+	{
+		var instance = Instance;
+		if (!instance.IsValid)
+		{
+			return new System.Collections.Generic.List<PlatformSettings>();
+		}
+
+		return instance.PlatformSettingsList;
 	}
 
 	private static AkBasePlatformSettings GetPlatformSettings(string platformName)

@@ -9,6 +9,7 @@
 // the SWIG interface file instead.
 //------------------------------------------------------------------------------
 
+///  Obstruction/occlusion pair for a position
 
 public class AkObstructionOcclusionValues : global::System.IDisposable {
   private global::System.IntPtr swigCPtr;
@@ -50,9 +51,11 @@ public class AkObstructionOcclusionValues : global::System.IDisposable {
     }
   }
 
+  ///  OcclusionLevel: [0.0f..1.0f]
   public float occlusion { set { AkUnitySoundEnginePINVOKE.CSharp_AkObstructionOcclusionValues_occlusion_set(swigCPtr, value); }  get { return AkUnitySoundEnginePINVOKE.CSharp_AkObstructionOcclusionValues_occlusion_get(swigCPtr); } 
   }
 
+  ///  ObstructionLevel: [0.0f..1.0f]
   public float obstruction { set { AkUnitySoundEnginePINVOKE.CSharp_AkObstructionOcclusionValues_obstruction_set(swigCPtr, value); }  get { return AkUnitySoundEnginePINVOKE.CSharp_AkObstructionOcclusionValues_obstruction_get(swigCPtr); } 
   }
 

@@ -125,14 +125,17 @@ public class AkEnvironmentPortalInspector : UnityEditor.Editor
 
 		AkGameObjectInspector.RigidbodyCheck(m_envPortal.gameObject);
 	}
-
+	
 	private string GetEnvironmentName(AkEnvironment in_env)
 	{
-		foreach (var wwu in AkWwiseProjectInfo.GetData().AuxBusWwu)
-			foreach (var env in wwu.List)
-				if (in_env.data.Id == env.Id)
-					return env.Name;
-
+		foreach (var wwu in AkWwiseProjectInfo.GetData().BusRoot)
+		{
+			var found = wwu.Find(in_env.data.Id);
+			if (found != null)
+			{
+				return found.Name;
+			}
+		}
 		return string.Empty;
 	}
 

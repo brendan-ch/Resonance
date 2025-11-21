@@ -22,6 +22,7 @@ public class AkRoomPortalInspector : UnityEditor.Editor
 {
 	private UnityEditor.SerializedProperty initialState;
 	private UnityEditor.SerializedProperty rooms;
+	private UnityEditor.SerializedProperty isStatic;
 
 	private readonly AkUnityEventHandlerInspector m_ClosePortalEventHandlerInspector = new AkUnityEventHandlerInspector();
 	private readonly AkUnityEventHandlerInspector m_OpenPortalEventHandlerInspector = new AkUnityEventHandlerInspector();
@@ -43,6 +44,7 @@ public class AkRoomPortalInspector : UnityEditor.Editor
 	{
 		initialState = serializedObject.FindProperty("initialState");
 		rooms = serializedObject.FindProperty("rooms");
+		isStatic = serializedObject.FindProperty("isStatic");
 
 		m_OpenPortalEventHandlerInspector.Init(serializedObject, "triggerList", "Open On: ", false);
 		m_ClosePortalEventHandlerInspector.Init(serializedObject, "closePortalTriggerList", "Close On: ", false);
@@ -53,6 +55,8 @@ public class AkRoomPortalInspector : UnityEditor.Editor
 	public override void OnInspectorGUI()
 	{
 		serializedObject.Update();
+
+		UnityEditor.EditorGUILayout.PropertyField(isStatic);
 
 		using (new UnityEditor.EditorGUILayout.VerticalScope("box"))
 		{
