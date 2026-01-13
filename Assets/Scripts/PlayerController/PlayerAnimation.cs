@@ -1,11 +1,13 @@
 using System.Linq;
 using UnityEngine;
+using PurrNet;
 
 namespace Resonance.PlayerController
 {
     public class PlayerAnimation : MonoBehaviour
     {
         [SerializeField] private Animator _animator;
+        [SerializeField] private NetworkAnimator _networkAnimator;
         [SerializeField] private float locomotionBlendSpeed = 4f;
         
         private PlayerLocomotionInput _playerLocomotionInput;
@@ -69,21 +71,21 @@ namespace Resonance.PlayerController
             
             _currentBlendInput = Vector3.Lerp(_currentBlendInput, inputTarget, locomotionBlendSpeed * Time.deltaTime);
             
-            _animator.SetBool(isGroundedHash, isGrounded);
-            _animator.SetBool(isIdlingHash, isIdling);
-            _animator.SetBool(isFallingHash, isFalling);
-            _animator.SetBool(isJumpingHash, isJumping);
-            _animator.SetBool(isCrouchingHash, isCrouching);
-            _animator.SetBool(isSlidingHash, isSliding);
-            _animator.SetBool(isRotatingToTargetHash, _playerController.IsRotatingToTarget);
-            _animator.SetBool(isAttackingHash, _playerActionsInput.AttackPressed);
-            _animator.SetBool(isReloadingHash, _playerActionsInput.ReloadPressed);
-            _animator.SetBool(isPlayingActionHash, isPlayingAction);
+            _networkAnimator.SetBool(isGroundedHash, isGrounded);
+            _networkAnimator.SetBool(isIdlingHash, isIdling);
+            _networkAnimator.SetBool(isFallingHash, isFalling);
+            _networkAnimator.SetBool(isJumpingHash, isJumping);
+            _networkAnimator.SetBool(isCrouchingHash, isCrouching);
+            _networkAnimator.SetBool(isSlidingHash, isSliding);
+            _networkAnimator.SetBool(isRotatingToTargetHash, _playerController.IsRotatingToTarget);
+            _networkAnimator.SetBool(isAttackingHash, _playerActionsInput.AttackPressed);
+            _networkAnimator.SetBool(isReloadingHash, _playerActionsInput.ReloadPressed);
+            _networkAnimator.SetBool(isPlayingActionHash, isPlayingAction);
             
-            _animator.SetFloat(inputXHash, _currentBlendInput.x);
-            _animator.SetFloat(inputYHash, _currentBlendInput.y);
-            _animator.SetFloat(inputMagnitudeHash, _currentBlendInput.magnitude);
-            _animator.SetFloat(rotationMismatchHash, _playerController.RotationMismatch);
+            _networkAnimator.SetFloat(inputXHash, _currentBlendInput.x);
+            _networkAnimator.SetFloat(inputYHash, _currentBlendInput.y);
+            _networkAnimator.SetFloat(inputMagnitudeHash, _currentBlendInput.magnitude);
+            _networkAnimator.SetFloat(rotationMismatchHash, _playerController.RotationMismatch);
         }
     }
 }

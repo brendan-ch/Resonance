@@ -13,6 +13,7 @@ namespace Resonance.PlayerController
         [Header("Components")]
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private CinemachineCamera _virtualCamera;
+        
         public float RotationMismatch { get; private set; } = 0f;
         public bool IsRotatingToTarget { get; private set; } = false;
 
