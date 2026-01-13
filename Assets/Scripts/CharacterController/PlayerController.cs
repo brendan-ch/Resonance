@@ -11,7 +11,6 @@ namespace Resonance.PlayerController
         #region Class Variables
         [Header("Components")]
         [SerializeField] private CharacterController _characterController;
-        [SerializeField] private Camera _playerCamera;
         [SerializeField] private CinemachineCamera _virtualCamera;
         public float RotationMismatch { get; private set; } = 0f;
         public bool IsRotatingToTarget { get; private set; } = false;
@@ -279,8 +278,8 @@ namespace Resonance.PlayerController
                 clampLateralMagnitude *= _overdriveAbility.SpeedMultiplier;
             }
 
-            Vector3 cameraForwardXZ = new Vector3(_playerCamera.transform.forward.x, 0f, _playerCamera.transform.forward.z).normalized;
-            Vector3 cameraRightXZ = new Vector3(_playerCamera.transform.right.x, 0f, _playerCamera.transform.right.z).normalized;
+            Vector3 cameraForwardXZ = new Vector3(_virtualCamera.transform.forward.x, 0f, _virtualCamera.transform.forward.z).normalized;
+            Vector3 cameraRightXZ = new Vector3(_virtualCamera.transform.right.x, 0f, _virtualCamera.transform.right.z).normalized;
             Vector3 movementDirection = cameraRightXZ * _playerLocomotionInput.MovementInput.x + cameraForwardXZ * _playerLocomotionInput.MovementInput.y;
             
             Vector3 movementDelta = movementDirection * lateralAcceleration * Time.deltaTime;
@@ -429,10 +428,10 @@ namespace Resonance.PlayerController
                 UpdateIdleRotation(rotationTolerance);
             }
             
-            _playerCamera.transform.rotation = Quaternion.Euler(_cameraRotation.y, _cameraRotation.x, 0f);
+            _virtualCamera.transform.rotation = Quaternion.Euler(_cameraRotation.y, _cameraRotation.x, 0f);
             
             // Get angle between camera and player
-            Vector3 camForwardProjectedXZ = new Vector3(_playerCamera.transform.forward.x, 0f, _playerCamera.transform.forward.z).normalized;
+            Vector3 camForwardProjectedXZ = new Vector3(_virtualCamera.transform.forward.x, 0f, _virtualCamera.transform.forward.z).normalized;
             Vector3 crossProduct = Vector3.Cross(transform.forward, camForwardProjectedXZ);
             float sign = Mathf.Sign(Vector3.Dot(crossProduct, transform.up));
             RotationMismatch = sign * Vector3.Angle(transform.forward, camForwardProjectedXZ);
