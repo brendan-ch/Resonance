@@ -6,6 +6,7 @@ using Unity.Cinemachine;
 namespace Resonance.PlayerController
 {
     [DefaultExecutionOrder(-1)]
+    [RequireComponent(typeof(CharacterController))]
     public class PlayerController : NetworkBehaviour
     {
         #region Class Variables
@@ -77,13 +78,14 @@ namespace Resonance.PlayerController
         private Vector3 _slideDirection = Vector3.zero;
 
         private PlayerMovementState _lastMovementState = PlayerMovementState.Falling;
+
         #endregion
 
         #region Startup
         protected override void OnSpawned()
         {
             base.OnSpawned();
-
+            
             enabled = isOwner;
             _virtualCamera.gameObject.SetActive(isOwner);
         }

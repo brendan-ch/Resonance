@@ -7,9 +7,13 @@
     <list default="true" id="ab354f86-6b88-42df-8f93-2e8adb1d51b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefabs/FirstPersonController.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/FirstPersonController.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/NetworkPrefabs.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/NetworkPrefabs.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/NetworkPrefabs.asset.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/NetworkPrefabs.asset.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/PostProcessVolume.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/PostProcessVolume.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/ThirdPersonController.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/ThirdPersonController.prefab.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_FirstPersonTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_FirstPersonTest.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_Networking.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_Networking.unity.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/CharacterController/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/CharacterController/PlayerController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -171,7 +175,7 @@
       <workItem from="1762752500483" duration="2294000" />
       <workItem from="1763498420483" duration="17069000" />
       <workItem from="1763675337043" duration="2906000" />
-      <workItem from="1768305717710" duration="703000" />
+      <workItem from="1768305717710" duration="3893000" />
     </task>
     <servers />
   </component>
