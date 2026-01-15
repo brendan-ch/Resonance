@@ -2387,9 +2387,9 @@ MonoBehaviour:
   _playerPrefab: {fileID: 6809321870534573542, guid: 3beb74802a435e54da51d4fd0f95b9b8, type: 3}
   _ignoreNetworkRules: 0
   spawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 922037468}
+  - {fileID: 472460313}
+  - {fileID: 849268405}
 --- !u!114 &1341767647
 MonoBehaviour:
   m_ObjectHideFlags: 0
