@@ -716,8 +716,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd422646f801404bb568665b636fa9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lobbyManager: {fileID: 0}
-  friendEntry: {fileID: 0}
+  lobbyManager: {fileID: 1097043115}
+  friendEntry: {fileID: 1508615511672977223, guid: 701273401acb61842af8f9ea5bd0871b, type: 3}
   content: {fileID: 0}
   filter: 0
 --- !u!1 &230791597
@@ -938,7 +938,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 706456176}
   m_HandleRect: {fileID: 706456175}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1312,8 +1312,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PurrLobby.LobbyManager, PurrNetLobbySetup
+      - m_Target: {fileID: 1097043115}
+        m_TargetAssemblyTypeName: Resonance.LobbySystem.LobbyManager, Assembly-CSharp
         m_MethodName: ToggleLocalReady
         m_Mode: 1
         m_Arguments:
@@ -1504,7 +1504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92d9e0cbe160d0b4485295e71d66e790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  codeText: {fileID: 0}
+  codeText: {fileID: 230791599}
 --- !u!114 &632432961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1909,7 +1909,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1969197302}
   m_HandleRect: {fileID: 1969197301}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2074,8 +2074,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be1241bac039f1d4ba7ec88803cc607d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberEntryPrefab: {fileID: 0}
-  content: {fileID: 0}
+  memberEntryPrefab: {fileID: 1132880664040779526, guid: 028e89ef3472d6b46b953456b578c5f6, type: 3}
+  content: {fileID: 1137537746}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2261,7 +2261,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.65
+  m_fontSize: 31.3
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2903,8 +2903,8 @@ MonoBehaviour:
   OnRoomJoined:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PurrLobby.ViewManager, PurrNetLobbySetup
+      - m_Target: {fileID: 1267779088}
+        m_TargetAssemblyTypeName: Resonance.LobbySystem.ViewManager, Assembly-CSharp
         m_MethodName: OnRoomJoined
         m_Mode: 1
         m_Arguments:
@@ -2933,9 +2933,9 @@ MonoBehaviour:
   OnRoomLeft:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PurrLobby.LobbyMemberList, PurrNetLobbySetup
-        m_MethodName: OnLobbyLeave
+      - m_Target: {fileID: 1267779088}
+        m_TargetAssemblyTypeName: Resonance.LobbySystem.ViewManager, Assembly-CSharp
+        m_MethodName: OnRoomLeft
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2945,9 +2945,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PurrLobby.ViewManager, PurrNetLobbySetup
-        m_MethodName: OnRoomLeft
+      - m_Target: {fileID: 777771659}
+        m_TargetAssemblyTypeName: Resonance.LobbySystem.LobbyMemberList, Assembly-CSharp
+        m_MethodName: OnLobbyLeave
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2959,7 +2959,19 @@ MonoBehaviour:
         m_CallState: 2
   OnRoomUpdated:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 777771659}
+        m_TargetAssemblyTypeName: Resonance.LobbySystem.LobbyMemberList, Assembly-CSharp
+        m_MethodName: LobbyDataUpdate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnPlayerListUpdated:
     m_PersistentCalls:
       m_Calls: []
@@ -3029,8 +3041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bffc99f43c7c4224b8dccb9831f662a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lobbyManager: {fileID: 0}
-  nextScene: 
+  lobbyManager: {fileID: 1097043115}
+  nextScene: GameBootstrapScene
 --- !u!114 &1097043117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3147,6 +3159,7 @@ GameObject:
   - component: {fileID: 1267779086}
   - component: {fileID: 1267779085}
   - component: {fileID: 1267779084}
+  - component: {fileID: 1267779088}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3239,6 +3252,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1267779088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267779083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c54081c8e8cd414f8a12457ffd9958b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.LobbySystem.ViewManager
+  allViews:
+  - {fileID: 32129103}
+  - {fileID: 2001797541}
+  defaultView: {fileID: 32129103}
 --- !u!1 &1390983128
 GameObject:
   m_ObjectHideFlags: 0
@@ -3359,7 +3388,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.45
+  m_fontSize: 39.7
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3955,10 +3984,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PurrLobby.LobbyManager, PurrNetLobbySetup
+      - m_Target: {fileID: 1097043115}
+        m_TargetAssemblyTypeName: Resonance.LobbySystem.LobbyManager, Assembly-CSharp
         m_MethodName: LeaveLobby
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4246,7 +4275,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 46.95
+  m_fontSize: 50
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4459,9 +4488,8 @@ GameObject:
   - component: {fileID: 2001797540}
   - component: {fileID: 2001797542}
   - component: {fileID: 2001797541}
-  - component: {fileID: 2001797543}
   m_Layer: 5
-  m_Name: RoomScreen
+  m_Name: LobbyScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4511,7 +4539,7 @@ MonoBehaviour:
   OnViewHide:
     m_PersistentCalls:
       m_Calls: []
-  codeButton: {fileID: 0}
+  codeButton: {fileID: 632432960}
   lobbyManager: {fileID: 1097043115}
 --- !u!225 &2001797542
 CanvasGroup:
@@ -4521,30 +4549,10 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2001797539}
   m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 0
+  m_Alpha: 1
+  m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &2001797543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2001797539}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fdd4683bf8e7ab48a545555a285b1f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Resonance.LobbySystem.LobbyView
-  OnViewShow:
-    m_PersistentCalls:
-      m_Calls: []
-  OnViewHide:
-    m_PersistentCalls:
-      m_Calls: []
-  codeButton: {fileID: 0}
-  lobbyManager: {fileID: 0}
 --- !u!1 &2022084686
 GameObject:
   m_ObjectHideFlags: 0
