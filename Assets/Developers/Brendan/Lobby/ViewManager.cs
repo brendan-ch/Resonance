@@ -83,26 +83,6 @@ namespace Resonance.LobbySystem
             ShowView<MainMenuView>();
         }
 
-        public void OnBrowseClicked()
-        {
-            ShowView<BrowseView>();
-        }
-        
-        public void OnRoomCreateClicked()
-        {
-            ShowView<CreatingRoomView>(false);
-        }
-        
-        public void OnJoiningRoom()
-        {
-            ShowView<LoadingRoomView>(false);
-        }
-
-        public void OnLeaveBrowseClicked()
-        {
-            ShowView<MainMenuView>();
-        }
-
         #endregion
     }
     
