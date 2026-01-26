@@ -2,6 +2,7 @@ namespace Resonance.LobbySystem
 {
     public enum GameMode
     {
-        arena
+        arena,
+        polarity
     }
 }
