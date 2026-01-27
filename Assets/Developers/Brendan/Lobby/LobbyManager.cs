@@ -327,19 +327,34 @@ namespace Resonance.LobbySystem
                 await _currentProvider.SetIsReadyAsync(userId, isReady);
             });
         }
+
+        /// <summary>
+        /// Set the selected game mode on the current lobby as metadata.
+        /// </summary>
+        /// <param name="gameMode"></param>
+        public void CycleGameModeOnLobby()
+        {
+            var nextGameMode = _currentLobby.GameMode.CycleNext();
+            SetLobbyData(LobbyMetadataKeys.GameMode.ToString(), nextGameMode.ToString());
+        }
         
         /// <summary>
         /// Sets meta data on the current lobby we're in
         /// </summary>
         /// <param name="key">Key/Identifier of the meta data</param>
         /// <param name="value">The value of the meta data to be stored</param>
-        public void SetLobbyData(string key, string value)
+        private void SetLobbyData(string key, string value)
         {
             RunTask(async () =>
             {
                 EnsureProviderSet();
                 await _currentProvider.SetLobbyDataAsync(key, value);
             });
+        }
+
+        public GameMode GetGameMode()
+        {
+            return _currentLobby.GameMode;
         }
         
         /// <summary>

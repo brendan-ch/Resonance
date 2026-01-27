@@ -15,6 +15,7 @@ using Steamworks;
 #endif
 using UnityEngine;
 using UnityEngine.Events;
+using WebSocketSharp;
 
 namespace Resonance.LobbySystem.Providers
 {
@@ -572,6 +573,10 @@ namespace Resonance.LobbySystem.Providers
             var updatedLobbyUsers = GetLobbyUsers(_currentLobby);
 
             var gameMode = SteamMatchmaking.GetLobbyData(_currentLobby, LobbyMetadataKeys.GameMode);
+            if (gameMode.IsNullOrEmpty())
+            {
+                gameMode = GameMode.Arena.ToString();
+            }
             
             var updatedLobby = LobbyFactory.Create(
                 Steamworks.SteamMatchmaking.GetLobbyData(_currentLobby, "Name"),

@@ -6,34 +6,16 @@ namespace Resonance.LobbySystem
     public class ModeButton : MonoBehaviour
     {
         [SerializeField] private TMP_Text modeText;
-        private GameMode _gameMode;
+        [SerializeField] private LobbyManager lobbyManager;
 
         public void Start()
         {
-            _gameMode = GameMode.Arena;
             UpdateModeText();
         }
 
-        public void UpdateMode(GameMode mode)
+        public void UpdateModeText()
         {
-            _gameMode = mode;
-            UpdateModeText();
+            modeText.text = lobbyManager.GetGameMode().ToString();
         }
-
-        private void UpdateModeText()
-        {
-            // Surely there's a more C#-like way to do this
-            if (_gameMode == GameMode.Arena)
-            {
-                modeText.text = "Arena";
-            } else if (_gameMode == GameMode.Polarity)
-            {
-                modeText.text = "Polarity";
-            } else
-            {
-                modeText.text = "Unknown";
-            }
-        }
-
     }
 }
