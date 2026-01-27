@@ -45,7 +45,7 @@ namespace Resonance.LobbySystem
                 Properties = properties ?? new Dictionary<string, string>(),
                 IsOwner = isOwner,
                 Members = members,
-                GameMode = GameMode.arena
+                GameMode = GameMode.Arena
             };
         }
 
@@ -60,7 +60,7 @@ namespace Resonance.LobbySystem
                 IsOwner = isOwner,
                 Members = members,
                 ServerObject = serverObject,
-                GameMode = GameMode.arena
+                GameMode = GameMode.Arena
             };
         }
     }

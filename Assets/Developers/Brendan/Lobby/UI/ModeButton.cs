@@ -10,7 +10,7 @@ namespace Resonance.LobbySystem
 
         public void Start()
         {
-            _gameMode = GameMode.arena;
+            _gameMode = GameMode.Arena;
             UpdateModeText();
         }
 
@@ -23,10 +23,10 @@ namespace Resonance.LobbySystem
         private void UpdateModeText()
         {
             // Surely there's a more C#-like way to do this
-            if (_gameMode == GameMode.arena)
+            if (_gameMode == GameMode.Arena)
             {
                 modeText.text = "Arena";
-            } else if (_gameMode == GameMode.polarity)
+            } else if (_gameMode == GameMode.Polarity)
             {
                 modeText.text = "Polarity";
             } else
