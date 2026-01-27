@@ -8,14 +8,20 @@ namespace Resonance.LobbySystem
         public string LobbyId;
         public string LobbyCode;
         public int MaxPlayers;
-        public Dictionary<string, string> Properties;
         public bool IsOwner;
         public List<LobbyUser> Members;
         public object ServerObject;
         public GameMode GameMode;
 
+        /// <summary>
+        /// All additional metadata supplied by the lobby provider.
+        /// If no typed property reads the desired metadata from the provider,
+        /// use this object to retrieve the metadata.
+        /// </summary>
+        public Dictionary<string, string> UnderlyingProviderProperties;
+
         public bool HasChanged(Lobby @new) {
-            if(!IsValid || Name != @new.Name || LobbyId != @new.LobbyId || LobbyCode != @new.LobbyCode || Members.Count != @new.Members.Count || Properties.Count != @new.Properties.Count || ServerObject != @new.ServerObject)
+            if(!IsValid || Name != @new.Name || LobbyId != @new.LobbyId || LobbyCode != @new.LobbyCode || Members.Count != @new.Members.Count || UnderlyingProviderProperties.Count != @new.UnderlyingProviderProperties.Count || ServerObject != @new.ServerObject)
                 return true;
 
             for(int i = 0; i < @new.Members.Count; i++) {
@@ -26,8 +32,8 @@ namespace Resonance.LobbySystem
                     return true;
             }
 
-            foreach(var oldProp in Properties) {
-                if(!@new.Properties.TryGetValue(oldProp.Key, out var newVal) || oldProp.Value != newVal)
+            foreach(var oldProp in UnderlyingProviderProperties) {
+                if(!@new.UnderlyingProviderProperties.TryGetValue(oldProp.Key, out var newVal) || oldProp.Value != newVal)
                     return true;
             }
 
@@ -42,7 +48,7 @@ namespace Resonance.LobbySystem
                 IsValid = true,
                 LobbyId = lobbyId,
                 MaxPlayers = maxPlayers,
-                Properties = properties ?? new Dictionary<string, string>(),
+                UnderlyingProviderProperties = properties ?? new Dictionary<string, string>(),
                 IsOwner = isOwner,
                 Members = members,
                 GameMode = gameMode
@@ -56,7 +62,7 @@ namespace Resonance.LobbySystem
                 LobbyId = lobbyId,
                 LobbyCode = lobbyCode,
                 MaxPlayers = maxPlayers,
-                Properties = properties ?? new Dictionary<string, string>(),
+                UnderlyingProviderProperties = properties ?? new Dictionary<string, string>(),
                 IsOwner = isOwner,
                 Members = members,
                 ServerObject = serverObject,

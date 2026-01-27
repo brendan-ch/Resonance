@@ -323,7 +323,7 @@ namespace Resonance.LobbySystem.Providers
                         IsValid = true,
                         LobbyId = lobbyId.m_SteamID.ToString(),
                         MaxPlayers = maxPlayers,
-                        Properties = lobbyProperties,
+                        UnderlyingProviderProperties = lobbyProperties,
                         Members = GetLobbyUsers(lobbyId)
                     });
                 }
@@ -554,7 +554,7 @@ namespace Resonance.LobbySystem.Providers
                 IsValid = true,
                 LobbyId = _currentLobby.m_SteamID.ToString(),
                 MaxPlayers = Steamworks.SteamMatchmaking.GetLobbyMemberLimit(_currentLobby),
-                Properties = new Dictionary<string, string>(), // Use existing properties if needed
+                UnderlyingProviderProperties = new Dictionary<string, string>(), // Use existing properties if needed
                 Members = updatedMembers
             };
 
