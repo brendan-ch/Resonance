@@ -36,7 +36,7 @@ namespace Resonance.LobbySystem
     }
 
     public static class LobbyFactory {
-        public static Lobby Create(string name, string lobbyId, int maxPlayers, bool isOwner, List<LobbyUser> members, Dictionary<string, string> properties) {
+        public static Lobby Create(string name, string lobbyId, int maxPlayers, bool isOwner, List<LobbyUser> members, GameMode gameMode, Dictionary<string, string> properties) {
             return new Lobby {
                 Name = name,
                 IsValid = true,
@@ -45,11 +45,11 @@ namespace Resonance.LobbySystem
                 Properties = properties ?? new Dictionary<string, string>(),
                 IsOwner = isOwner,
                 Members = members,
-                GameMode = GameMode.Arena
+                GameMode = gameMode
             };
         }
 
-        public static Lobby Create(string name, string lobbyId, string lobbyCode, int maxPlayers, bool isOwner, List<LobbyUser> members, Dictionary<string, string> properties, object serverObject = null) {
+        public static Lobby Create(string name, string lobbyId, string lobbyCode, int maxPlayers, bool isOwner, List<LobbyUser> members, GameMode gameMode, Dictionary<string, string> properties, object serverObject = null) {
             return new Lobby {
                 Name = name,
                 IsValid = true,
@@ -60,7 +60,7 @@ namespace Resonance.LobbySystem
                 IsOwner = isOwner,
                 Members = members,
                 ServerObject = serverObject,
-                GameMode = GameMode.Arena
+                GameMode = gameMode
             };
         }
     }
