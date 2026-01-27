@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Resonance.LobbySystem
+namespace Resonance.LobbySystem.TemporaryUI
 {
     public class BrowseView : View
     {
