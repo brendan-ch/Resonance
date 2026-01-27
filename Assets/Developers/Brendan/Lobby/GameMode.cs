@@ -2,8 +2,8 @@ namespace Resonance.LobbySystem
 {
     public enum GameMode
     {
-        Arena,
-        Polarity
+        Arena = 0,  // default
+        Polarity = 1,
     }
 
     public static class Extensions

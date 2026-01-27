@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 
 namespace Resonance.LobbySystem
 {
-    public struct Lobby {
+    public struct Lobby
+    {
         public string Name;
         public bool IsValid;
         public string LobbyId;
@@ -11,7 +13,23 @@ namespace Resonance.LobbySystem
         public bool IsOwner;
         public List<LobbyUser> Members;
         public object ServerObject;
-        public GameMode GameMode;
+        public readonly GameMode GameMode
+        {
+            get
+            {
+                if (UnderlyingProviderProperties == null)
+                {
+                    return default;
+                }
+
+                var gameModeString = UnderlyingProviderProperties.GetValueOrDefault<string, string>(LobbyMetadataKeys.GameMode);
+                if (Enum.TryParse(typeof(GameMode), gameModeString, out object result))
+                {
+                    return (GameMode)result;
+                }
+                return default;
+            }
+        }
 
         /// <summary>
         /// All additional metadata supplied by the lobby provider.
@@ -20,20 +38,23 @@ namespace Resonance.LobbySystem
         /// </summary>
         public Dictionary<string, string> UnderlyingProviderProperties;
 
-        public bool HasChanged(Lobby @new) {
-            if(!IsValid || Name != @new.Name || LobbyId != @new.LobbyId || LobbyCode != @new.LobbyCode || Members.Count != @new.Members.Count || UnderlyingProviderProperties.Count != @new.UnderlyingProviderProperties.Count || ServerObject != @new.ServerObject)
+        public bool HasChanged(Lobby @new)
+        {
+            if (!IsValid || Name != @new.Name || LobbyId != @new.LobbyId || LobbyCode != @new.LobbyCode || Members.Count != @new.Members.Count || UnderlyingProviderProperties.Count != @new.UnderlyingProviderProperties.Count || ServerObject != @new.ServerObject)
                 return true;
 
-            for(int i = 0; i < @new.Members.Count; i++) {
+            for (int i = 0; i < @new.Members.Count; i++)
+            {
                 var newMember = @new.Members[i];
                 var oldMember = Members[i];
 
-                if(newMember.Id != oldMember.Id || newMember.IsReady != oldMember.IsReady || newMember.DisplayName != oldMember.DisplayName || newMember.Avatar != oldMember.Avatar)
+                if (newMember.Id != oldMember.Id || newMember.IsReady != oldMember.IsReady || newMember.DisplayName != oldMember.DisplayName || newMember.Avatar != oldMember.Avatar)
                     return true;
             }
 
-            foreach(var oldProp in UnderlyingProviderProperties) {
-                if(!@new.UnderlyingProviderProperties.TryGetValue(oldProp.Key, out var newVal) || oldProp.Value != newVal)
+            foreach (var oldProp in UnderlyingProviderProperties)
+            {
+                if (!@new.UnderlyingProviderProperties.TryGetValue(oldProp.Key, out var newVal) || oldProp.Value != newVal)
                     return true;
             }
 
@@ -41,9 +62,12 @@ namespace Resonance.LobbySystem
         }
     }
 
-    public static class LobbyFactory {
-        public static Lobby Create(string name, string lobbyId, int maxPlayers, bool isOwner, List<LobbyUser> members, GameMode gameMode, Dictionary<string, string> properties) {
-            return new Lobby {
+    public static class LobbyFactory
+    {
+        public static Lobby Create(string name, string lobbyId, int maxPlayers, bool isOwner, List<LobbyUser> members, Dictionary<string, string> properties)
+        {
+            return new Lobby
+            {
                 Name = name,
                 IsValid = true,
                 LobbyId = lobbyId,
@@ -51,12 +75,13 @@ namespace Resonance.LobbySystem
                 UnderlyingProviderProperties = properties ?? new Dictionary<string, string>(),
                 IsOwner = isOwner,
                 Members = members,
-                GameMode = gameMode
             };
         }
 
-        public static Lobby Create(string name, string lobbyId, string lobbyCode, int maxPlayers, bool isOwner, List<LobbyUser> members, GameMode gameMode, Dictionary<string, string> properties, object serverObject = null) {
-            return new Lobby {
+        public static Lobby Create(string name, string lobbyId, string lobbyCode, int maxPlayers, bool isOwner, List<LobbyUser> members, Dictionary<string, string> properties, object serverObject = null)
+        {
+            return new Lobby
+            {
                 Name = name,
                 IsValid = true,
                 LobbyId = lobbyId,
@@ -66,7 +91,6 @@ namespace Resonance.LobbySystem
                 IsOwner = isOwner,
                 Members = members,
                 ServerObject = serverObject,
-                GameMode = gameMode
             };
         }
     }
