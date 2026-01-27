@@ -22,12 +22,32 @@ namespace Resonance.LobbySystem
                     return default;
                 }
 
-                var gameModeString = UnderlyingProviderProperties.GetValueOrDefault<string, string>(LobbyMetadataKeys.GameMode);
+                var gameModeString = UnderlyingProviderProperties.GetValueOrDefault(LobbyMetadataKeys.GameMode);
                 if (Enum.TryParse(typeof(GameMode), gameModeString, out object result))
                 {
                     return (GameMode)result;
                 }
                 return default;
+            }
+        }
+
+        /// <summary>
+        /// The scene to move players to after all players are ready.
+        /// </summary>
+        public readonly string SceneName
+        {
+            get
+            {
+                if (UnderlyingProviderProperties == null)
+                {
+                    return null;
+                }
+
+                if (UnderlyingProviderProperties.TryGetValue(LobbyMetadataKeys.SceneName, out string sceneName))
+                {
+                    return sceneName;
+                }
+                return null;
             }
         }
 
