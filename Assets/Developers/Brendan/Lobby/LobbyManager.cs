@@ -329,6 +329,15 @@ namespace Resonance.LobbySystem
         }
 
         /// <summary>
+        /// Update the name of the next scene to load into.
+        /// </summary>
+        /// <param name="name"></param>
+        public void SetSceneNameOnLobby(string name)
+        {
+            SetLobbyData(LobbyMetadataKeys.SceneName.ToString(), name);
+        }
+
+        /// <summary>
         /// Set the selected game mode on the current lobby as metadata.
         /// </summary>
         /// <param name="gameMode"></param>
