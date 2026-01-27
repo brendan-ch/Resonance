@@ -256,7 +256,7 @@ namespace Resonance.LobbySystem.Providers
                 Steamworks.SteamMatchmaking.GetLobbyMemberLimit(_currentLobby),
                 false,
                 GetLobbyUsers(cLobbyId),
-                (GameMode) Enum.Parse(typeof(GameMode), Steamworks.SteamMatchmaking.GetLobbyData(_currentLobby, LobbyKeys.GameMode)),
+                (GameMode) Enum.Parse(typeof(GameMode), Steamworks.SteamMatchmaking.GetLobbyData(_currentLobby, LobbyMetadataKeys.GameMode)),
                 GetLobbyProperties(_currentLobby)
             );
 
@@ -571,7 +571,7 @@ namespace Resonance.LobbySystem.Providers
 
             var updatedLobbyUsers = GetLobbyUsers(_currentLobby);
 
-            var gameMode = SteamMatchmaking.GetLobbyData(_currentLobby, LobbyKeys.GameMode);
+            var gameMode = SteamMatchmaking.GetLobbyData(_currentLobby, LobbyMetadataKeys.GameMode);
             
             var updatedLobby = LobbyFactory.Create(
                 Steamworks.SteamMatchmaking.GetLobbyData(_currentLobby, "Name"),
@@ -644,7 +644,7 @@ namespace Resonance.LobbySystem.Providers
             var properties = GetLobbyProperties(_currentLobby);
             var updatedLobbyUsers = GetLobbyUsers(_currentLobby);
 
-            var gameMode = SteamMatchmaking.GetLobbyData(_currentLobby, LobbyKeys.GameMode);
+            var gameMode = SteamMatchmaking.GetLobbyData(_currentLobby, LobbyMetadataKeys.GameMode);
 
             var updatedLobby = LobbyFactory.Create(
                 data,
