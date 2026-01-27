@@ -1,8 +1,8 @@
 using TMPro;
 using UnityEngine;
 
-// To be replaced with map selection?
-namespace Resonance.LobbySystem
+// To be replaced with map selection UI, potentially
+namespace Resonance.LobbySystem.TemporaryUI
 {
     public class UpdateSceneNameButton : MonoBehaviour
     {

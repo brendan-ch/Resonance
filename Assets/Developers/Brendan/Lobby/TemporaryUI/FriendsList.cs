@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Resonance.LobbySystem
+namespace Resonance.LobbySystem.TemporaryUI
 {
     public class FriendsList : MonoBehaviour
     {

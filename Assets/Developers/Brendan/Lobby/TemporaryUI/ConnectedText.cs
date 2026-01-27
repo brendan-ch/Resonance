@@ -1,11 +1,10 @@
-using System;
 using System.Collections;
 using PurrNet;
 using PurrNet.Transports;
 using UnityEngine;
 using TMPro;
 
-namespace Resonance.LobbySystem
+namespace Resonance.LobbySystem.TemporaryUI
 {
     public class ConnectedText : MonoBehaviour
     {

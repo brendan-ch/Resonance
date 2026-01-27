@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Resonance.LobbySystem
+namespace Resonance.LobbySystem.TemporaryUI
 {
     public class ModeButton : MonoBehaviour
     {

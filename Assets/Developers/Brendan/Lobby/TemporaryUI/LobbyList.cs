@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using PurrNet.Logging;
 using UnityEngine;
 
-namespace Resonance.LobbySystem
+namespace Resonance.LobbySystem.TemporaryUI
 {
     public class LobbyList : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Resonance.LobbySystem
+namespace Resonance.LobbySystem.TemporaryUI
 {
     public class MemberEntry : MonoBehaviour
     {

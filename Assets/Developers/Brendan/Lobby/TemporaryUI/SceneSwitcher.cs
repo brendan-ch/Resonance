@@ -2,7 +2,7 @@ using PurrNet;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Resonance.LobbySystem
+namespace Resonance.LobbySystem.TemporaryUI
 {
     public class SceneSwitcher : MonoBehaviour
     {
