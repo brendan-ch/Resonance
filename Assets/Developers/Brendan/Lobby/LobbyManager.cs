@@ -352,11 +352,6 @@ namespace Resonance.LobbySystem
             });
         }
 
-        public GameMode GetGameMode()
-        {
-            return _currentLobby.GameMode;
-        }
-        
         /// <summary>
         /// Gets meta data from the current lobby we're in
         /// </summary>

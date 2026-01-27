@@ -15,7 +15,7 @@ namespace Resonance.LobbySystem
 
         public void UpdateModeText()
         {
-            modeText.text = lobbyManager.GetGameMode().ToString();
+            modeText.text = lobbyManager.CurrentLobby.GameMode.ToString();
         }
     }
 }
