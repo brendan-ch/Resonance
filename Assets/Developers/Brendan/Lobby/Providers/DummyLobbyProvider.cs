@@ -14,7 +14,6 @@ namespace Resonance.LobbySystem
 {
     public class DummyLobbyProvider : MonoBehaviour, ILobbyProvider
     {
-
         class Content : HttpContent
         {
             private readonly string _data;
@@ -88,11 +87,11 @@ namespace Resonance.LobbySystem
             return JsonConvert.DeserializeObject<DummyLobbyServer.Lobby>(content);
         }
 
-        private async Task RefreshLobbyDataAndTriggerUpdate()
+        private async Task<Lobby> RefreshLobbyDataAndTriggerUpdate()
         {
             if (string.IsNullOrEmpty(currentLobbyId))
             {
-                return;
+                return new Lobby { IsValid = false };
             }
 
             try
@@ -101,7 +100,7 @@ namespace Resonance.LobbySystem
                 var lobbyResponse = await client.GetAsync($"api/lobby/{currentLobbyId}");
                 if (!lobbyResponse.IsSuccessStatusCode)
                 {
-                    return;
+                    return new Lobby { IsValid = false };
                 }
 
                 var lobbyContent = await lobbyResponse.Content.ReadAsStringAsync();
@@ -131,16 +130,18 @@ namespace Resonance.LobbySystem
                     name: lobby.Name,
                     lobbyId: lobby.LobbyId,
                     maxPlayers: lobby.MaxPlayers,
-                    isOwner: lobby.IsOwner,
+                    isOwner: lobby.OwnerId == localUserId,
                     members: members,
                     properties: lobby.Properties ?? new Dictionary<string, string>()
                 );
 
                 OnLobbyUpdated?.Invoke(result);
+                return result;
             }
             catch (Exception ex)
             {
                 OnError?.Invoke("Failed to refresh lobby data: " + ex.Message);
+                return new Lobby { IsValid = false };
             }
         }
 
@@ -217,18 +218,7 @@ namespace Resonance.LobbySystem
 
                 await JoinLobbyAsync(lobby.LobbyId);
 
-                await RefreshLobbyDataAndTriggerUpdate();
-
-                var result = LobbyFactory.Create(
-                    name: lobby.Name,
-                    lobbyId: lobby.LobbyId,
-                    maxPlayers: lobby.MaxPlayers,
-                    isOwner: lobby.IsOwner,
-                    members: new List<LobbyUser>(),
-                    properties: lobby.Properties ?? new Dictionary<string, string>()
-                );
-
-                return result;
+                return await RefreshLobbyDataAndTriggerUpdate();
             }
             catch (Exception ex)
             {
@@ -371,19 +361,7 @@ namespace Resonance.LobbySystem
 
                 currentLobbyId = lobbyId;
 
-                // Refresh lobby data to trigger update event
-                await RefreshLobbyDataAndTriggerUpdate();
-
-                var result = LobbyFactory.Create(
-                    name: lobby.Name,
-                    lobbyId: lobby.LobbyId,
-                    maxPlayers: lobby.MaxPlayers,
-                    isOwner: lobby.IsOwner,
-                    members: new List<LobbyUser>(),
-                    properties: lobby.Properties ?? new Dictionary<string, string>()
-                );
-
-                return result;
+                return await RefreshLobbyDataAndTriggerUpdate();
             }
             catch (Exception ex)
             {

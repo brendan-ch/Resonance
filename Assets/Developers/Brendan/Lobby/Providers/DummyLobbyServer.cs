@@ -19,7 +19,7 @@ namespace Resonance.LobbySystem
             public string LobbyId;
             public string LobbyCode;
             public int MaxPlayers;
-            public bool IsOwner;
+            public string OwnerId;
             public Dictionary<string, string> Properties;
         }
 
@@ -270,7 +270,7 @@ namespace Resonance.LobbySystem
                     Name = lobbyName,
                     MaxPlayers = maxPlayers,
                     IsValid = true,
-                    IsOwner = true,
+                    OwnerId = null,
                     LobbyCode = Guid.NewGuid().ToString().Substring(0, 6),
                     Properties = new Dictionary<string, string>()
                 };
@@ -322,9 +322,9 @@ namespace Resonance.LobbySystem
         {
             try
             {
-                var lobby = lobbies.Find(l => l.LobbyId == lobbyId.ToString());
+                var lobbyIndex = lobbies.FindIndex(l => l.LobbyId == lobbyId.ToString());
 
-                if (lobby.LobbyId == null)
+                if (lobbies[lobbyIndex].LobbyId == null)
                 {
                     await WriteErrorResponse(response, HttpStatusCode.NotFound, "Lobby not found");
                     return;
@@ -333,6 +333,7 @@ namespace Resonance.LobbySystem
                 string requestBody = await ReadRequestBody(request);
                 var userData = JsonConvert.DeserializeObject<Dictionary<string, object>>(requestBody);
 
+
                 string userId = userData != null && userData.ContainsKey("UserId")
                     ? userData["UserId"].ToString()
                     : nextUserId.ToString();
@@ -340,6 +341,13 @@ namespace Resonance.LobbySystem
                 string displayName = userData != null && userData.ContainsKey("DisplayName")
                     ? userData["DisplayName"].ToString()
                     : "User " + userId;
+
+                if (lobbies[lobbyIndex].OwnerId == null)
+                {
+                    var lobbyToUpdate = lobbies[lobbyIndex];
+                    lobbyToUpdate.OwnerId = userId;
+                    lobbies[lobbyIndex] = lobbyToUpdate;
+                }
 
                 // Check if user already exists
                 var existingUser = users.Find(u => u.Id == userId);
