@@ -72,7 +72,7 @@ namespace Resonance.LobbySystem
             var method = request.HttpMethod;
             var rawUrl = request.RawUrl ?? "";
 
-            var lobbyUserIdMatch = Regex.Match(rawUrl, @"^.*/lobby/(\d+)/users/(\d+)$");
+            var lobbyUserIdMatch = Regex.Match(rawUrl, @"^.*/lobby/(\d+)/users/(\d+)(?:/|$)$");
             if (lobbyUserIdMatch.Success)
             {
                 int lobbyId = int.Parse(lobbyUserIdMatch.Groups[1].Value);
@@ -159,9 +159,10 @@ namespace Resonance.LobbySystem
                 if (lobbyData != null)
                 {
                     // Update custom properties
-                    if (lobbyData.ContainsKey("properties") && lobbyData["properties"] is Dictionary<string, object> properties)
+                    if (lobbyData.ContainsKey("Properties"))
                     {
-                        foreach (var prop in properties)
+                        var lobbyPropertiesData = JsonConvert.DeserializeObject<Dictionary<string, string>>(lobbyData["Properties"].ToString());
+                        foreach (var prop in lobbyPropertiesData)
                         {
                             lobbies[lobbyIndex].Properties[prop.Key] = prop.Value?.ToString();
                         }
@@ -332,12 +333,12 @@ namespace Resonance.LobbySystem
                 string requestBody = await ReadRequestBody(request);
                 var userData = JsonConvert.DeserializeObject<Dictionary<string, object>>(requestBody);
 
-                string userId = userData != null && userData.ContainsKey("userId")
-                    ? userData["userId"].ToString()
+                string userId = userData != null && userData.ContainsKey("UserId")
+                    ? userData["UserId"].ToString()
                     : nextUserId.ToString();
 
-                string displayName = userData != null && userData.ContainsKey("displayName")
-                    ? userData["displayName"].ToString()
+                string displayName = userData != null && userData.ContainsKey("DisplayName")
+                    ? userData["DisplayName"].ToString()
                     : "User " + userId;
 
                 // Check if user already exists
@@ -407,10 +408,10 @@ namespace Resonance.LobbySystem
                     return;
                 }
                 
-                if (updateData.ContainsKey("isReady"))
+                if (updateData.ContainsKey("IsReady"))
                 {
                     var user = users[userIndex];
-                    user.IsReady = Convert.ToBoolean(updateData["isReady"]);
+                    user.IsReady = Convert.ToBoolean(updateData["IsReady"]);
                     users[userIndex] = user;
                 }
                 
