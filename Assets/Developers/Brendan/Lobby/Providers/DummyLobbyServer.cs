@@ -10,6 +10,12 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Resonance.LobbySystem
 {
+    /// <summary>
+    /// Use for development only.
+    /// Controls a localhost server which implements basic functionality required
+    /// for a lobby provider. Some functionality off the critical path (e.g. friends)
+    /// are not implemented and should be stubbed by the provider instead.
+    /// </summary>
     public class DummyLobbyServer
     {
         [Serializable]

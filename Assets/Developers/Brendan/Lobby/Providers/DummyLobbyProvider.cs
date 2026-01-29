@@ -12,6 +12,13 @@ using UnityEngine.Events;
 
 namespace Resonance.LobbySystem
 {
+    /// <summary>
+    /// Use for development only.
+    /// An in-memory lobby provider which contains no external dependencies.
+    /// The first client that is run starts an instance of DummyLobbyServer
+    /// on the specified port. Other clients connect to the instance started
+    /// by the first client. Not all functionality is implemented (e.g. friends).
+    /// </summary>
     public class DummyLobbyProvider : MonoBehaviour, ILobbyProvider
     {
         class Content : HttpContent
@@ -299,7 +306,6 @@ namespace Resonance.LobbySystem
                         Id = serverUser.Id,
                         DisplayName = serverUser.DisplayName,
                         IsReady = serverUser.IsReady
-                        // Avatar is left null as per requirements
                     });
                 }
 
@@ -320,13 +326,11 @@ namespace Resonance.LobbySystem
 
         public Task InitializeAsync()
         {
-            // No initialization needed for dummy provider
             return Task.CompletedTask;
         }
 
         public Task InviteFriendAsync(FriendUser user)
         {
-            // Friends functionality is stubbed as per requirements
             return Task.CompletedTask;
         }
 
@@ -334,7 +338,6 @@ namespace Resonance.LobbySystem
         {
             try
             {
-                // Get lobby info first
                 var lobbyResponse = await client.GetAsync($"api/lobby/{lobbyId}");
                 if (!lobbyResponse.IsSuccessStatusCode)
                 {
@@ -390,8 +393,6 @@ namespace Resonance.LobbySystem
             try
             {
                 var response = await client.DeleteAsync($"api/lobby/{lobbyId}/users/{localUserId}");
-                // currentLobbyId = null;
-                // OnLobbyLeft?.Invoke();
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -414,7 +415,6 @@ namespace Resonance.LobbySystem
 
         public async Task<List<Lobby>> SearchLobbiesAsync(int maxRoomsToFind = 10, Dictionary<string, string> filters = null)
         {
-            // Lobby searching is stubbed as per requirements
             try
             {
                 var response = await client.GetAsync("api/lobby");
@@ -540,7 +540,6 @@ namespace Resonance.LobbySystem
 
         public Task SetLobbyStartedAsync()
         {
-            // Lobby started functionality is stubbed as per requirements
             return Task.CompletedTask;
         }
 
