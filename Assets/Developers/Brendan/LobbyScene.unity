@@ -264,6 +264,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 36216182}
   m_CullTransparentMesh: 1
+--- !u!1 &71460452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 71460453}
+  - component: {fileID: 71460454}
+  m_Layer: 0
+  m_Name: SteamLobbyProvider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &71460453
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71460452}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 382.64694, y: 226.61086, z: 12.1391}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &71460454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71460452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15156e7f57bff964485891eba8344bbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.LobbySystem.Providers.SteamLobbyProvider
+  lobbyType: 2
+  maxLobbiesToFind: 10
+  handleSteamInit: 0
 --- !u!1 &97698401
 GameObject:
   m_ObjectHideFlags: 0
@@ -1401,7 +1448,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3827469, y: 0.124508224}
   m_AnchorMax: {x: 0.6183736, y: 0.20542626}
-  m_AnchoredPosition: {x: 0.5239563, y: -0.49993896}
+  m_AnchoredPosition: {x: 0.5239258, y: -0.49993896}
   m_SizeDelta: {x: 1.0480042, y: 1.5239868}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &395666972
@@ -2317,7 +2364,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1969197302}
   m_HandleRect: {fileID: 1969197301}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2669,7 +2716,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.65
+  m_fontSize: 32.75
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3551,8 +3598,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1097043113}
   - component: {fileID: 1097043115}
-  - component: {fileID: 1097043118}
-  - component: {fileID: 1097043117}
   - component: {fileID: 1097043116}
   m_Layer: 0
   m_Name: LobbyManager
@@ -3588,7 +3633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018749c98c25d47418932e090d8f8fbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentProvider: {fileID: 1097043118}
+  currentProvider: {fileID: 1542312765}
   createRoomArgs:
     maxPlayers: 5
     roomProperties:
@@ -3772,33 +3817,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyManager: {fileID: 1097043115}
   nextScene: GameBootstrapScene
---- !u!114 &1097043117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1097043112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 361aa9233dd46274d92b8b56df069adb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: PurrNetLobbySetup::PurrLobby.Providers.UnityLobbyProvider
---- !u!114 &1097043118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1097043112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15156e7f57bff964485891eba8344bbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: PurrNetLobbySetup::PurrLobby.Providers.SteamLobbyProvider
-  lobbyType: 2
-  maxLobbiesToFind: 10
-  handleSteamInit: 1
 --- !u!1 &1137537745
 GameObject:
   m_ObjectHideFlags: 0
@@ -4320,7 +4338,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 41.2
+  m_fontSize: 41.35
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4525,6 +4543,50 @@ MonoBehaviour:
   moveAmount: 0.5
   waveDistance: 2
   speed: 1
+--- !u!1 &1542312763
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1542312764}
+  - component: {fileID: 1542312765}
+  m_Layer: 0
+  m_Name: DummyLobbyProvider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1542312764
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542312763}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 382.64694, y: 226.61086, z: 12.1391}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1542312765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542312763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dffbac1dcb525412190ae51e435841d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.LobbySystem.DummyLobbyProvider
 --- !u!1 &1569512992
 GameObject:
   m_ObjectHideFlags: 0
@@ -5870,3 +5932,5 @@ SceneRoots:
   - {fileID: 1267779087}
   - {fileID: 1740937621}
   - {fileID: 1736733131}
+  - {fileID: 1542312764}
+  - {fileID: 71460453}
