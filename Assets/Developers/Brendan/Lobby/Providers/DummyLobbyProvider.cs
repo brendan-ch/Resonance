@@ -501,9 +501,9 @@ namespace Resonance.LobbySystem
 
             try
             {
-                var updateData = new { UserId = userId, IsReady = isReady };
+                var updateData = new { IsReady = isReady };
                 string jsonData = JsonConvert.SerializeObject(updateData);
-                var response = await client.PutAsync($"api/lobby/{currentLobbyId}/users", new Content(jsonData));
+                var response = await client.PutAsync($"api/lobby/{currentLobbyId}/users/{userId}", new Content(jsonData));
 
                 if (!response.IsSuccessStatusCode)
                 {
