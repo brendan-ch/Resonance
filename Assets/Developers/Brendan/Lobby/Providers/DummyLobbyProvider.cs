@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -7,7 +8,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
-using WebSocketSharp;
 
 namespace Resonance.LobbySystem
 {
@@ -33,7 +33,7 @@ namespace Resonance.LobbySystem
 
             // SerializeToStream* methods are internally used by CopyTo* methods
             // which in turn are used to copy the content to the NetworkStream.
-            protected override Task SerializeToStreamAsync(Stream stream, TransportContext? context)
+            protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
                 => stream.WriteAsync(Encoding.UTF8.GetBytes(_data)).AsTask();
         }
 
@@ -44,13 +44,59 @@ namespace Resonance.LobbySystem
         public event UnityAction<List<FriendUser>> OnFriendListPulled;
         public event UnityAction<string> OnError;
 
+        private async Task<bool> CheckServerRunning()
+        {
+            try
+            {
+                using (var testClient = new HttpClient())
+                {
+                    testClient.Timeout = TimeSpan.FromSeconds(1);
+                    var response = await testClient.GetAsync("http://localhost:5001/api/lobby");
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        
+        private async Task<DummyLobbyServer.Lobby> GetLobbyDataFullAsync()
+        {
+            if (string.IsNullOrEmpty(currentLobbyId))
+            {
+                throw new InvalidOperationException("No current lobby");
+            }
+            
+            var response = await client.GetAsync($"api/lobby/{currentLobbyId}");
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Failed to get lobby data: " + response.StatusCode);
+            }
+            
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<DummyLobbyServer.Lobby>(content);
+        }
+
         private DummyLobbyServer server;
         private HttpClient client;
+        private string currentLobbyId;
+        private string localUserId;
 
-        private void Start()
+        private async void Start()
         {
-            server = new DummyLobbyServer();
-            server.AttemptStart();
+            // Generate a local user ID if we don't have one
+            localUserId = "user_" + UnityEngine.Random.Range(1000, 9999);
+            
+            // Check if server is already running
+            bool serverRunning = await CheckServerRunning();
+            
+            if (!serverRunning)
+            {
+                server = new DummyLobbyServer();
+                server.AttemptStart();
+            }
 
             client = new HttpClient
             {
@@ -60,26 +106,58 @@ namespace Resonance.LobbySystem
 
         private void OnApplicationQuit()
         {
-            server.Stop();
+            server?.Stop();
         }
 
         public async Task<Lobby> CreateLobbyAsync(int maxPlayers, Dictionary<string, string> lobbyProperties = null)
         {
-            var response = await client.PostAsync("lobby", new Content(""));
-            var lobby = JsonConvert.DeserializeObject<DummyLobbyServer.Lobby>(response.Content.ToString());
-            if (lobby.LobbyId.IsNullOrEmpty())
+            try
             {
+                var lobbyData = new {
+                    maxPlayers = maxPlayers,
+                    name = "Dummy Lobby",
+                    properties = lobbyProperties ?? new Dictionary<string, string>()
+                };
+                
+                string jsonData = JsonConvert.SerializeObject(lobbyData);
+                var response = await client.PostAsync("api/lobby", new Content(jsonData));
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    OnError?.Invoke("Failed to create lobby: " + response.StatusCode);
+                    return new Lobby { IsValid = false };
+                }
+                
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var lobby = JsonConvert.DeserializeObject<DummyLobbyServer.Lobby>(responseContent);
+                
+                if (string.IsNullOrEmpty(lobby.LobbyId))
+                {
+                    return new Lobby { IsValid = false };
+                }
+                
+                currentLobbyId = lobby.LobbyId;
+                
+                // Join the lobby as the owner
+                await JoinLobbyAsync(lobby.LobbyId);
+                
+                var result = LobbyFactory.Create(
+                    name: lobby.Name,
+                    lobbyId: lobby.LobbyId,
+                    maxPlayers: lobby.MaxPlayers,
+                    isOwner: lobby.IsOwner,
+                    members: new List<LobbyUser>(),
+                    properties: lobby.Properties ?? new Dictionary<string, string>()
+                );
+                
+                OnLobbyUpdated?.Invoke(result);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke("Failed to create lobby: " + ex.Message);
                 return new Lobby { IsValid = false };
             }
-            
-            return LobbyFactory.Create(
-                name: lobby.Name,
-                lobbyId: lobby.LobbyId,
-                maxPlayers: lobby.MaxPlayers,
-                isOwner: lobby.IsOwner,
-                members: new List<LobbyUser>(),
-                properties: new Dictionary<string, string>()
-            );
         }
 
         public async Task<List<FriendUser>> GetFriendsAsync(LobbyManager.FriendFilter filter)
@@ -87,74 +165,326 @@ namespace Resonance.LobbySystem
             return new List<FriendUser>();
         }
 
-        public Task<string> GetLobbyDataAsync(string key)
+        public async Task<string> GetLobbyDataAsync(string key)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(currentLobbyId))
+            {
+                OnError?.Invoke("No current lobby");
+                return null;
+            }
+            
+            try
+            {
+                var response = await client.GetAsync($"api/lobby/{currentLobbyId}");
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    OnError?.Invoke("Failed to get lobby data: " + response.StatusCode);
+                    return null;
+                }
+                
+                var content = await response.Content.ReadAsStringAsync();
+                var lobby = JsonConvert.DeserializeObject<DummyLobbyServer.Lobby>(content);
+                
+                if (lobby.Properties != null && lobby.Properties.TryGetValue(key, out string value))
+                {
+                    return value;
+                }
+                
+                return null;
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke("Failed to get lobby data: " + ex.Message);
+                return null;
+            }
         }
 
-        public Task<List<LobbyUser>> GetLobbyMembersAsync()
+        public async Task<List<LobbyUser>> GetLobbyMembersAsync()
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(currentLobbyId))
+            {
+                OnError?.Invoke("No current lobby");
+                return new List<LobbyUser>();
+            }
+            
+            try
+            {
+                var response = await client.GetAsync($"api/lobby/{currentLobbyId}/users");
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    OnError?.Invoke("Failed to get lobby members: " + response.StatusCode);
+                    return new List<LobbyUser>();
+                }
+                
+                var content = await response.Content.ReadAsStringAsync();
+                var serverUsers = JsonConvert.DeserializeObject<List<DummyLobbyServer.User>>(content);
+                
+                var lobbyUsers = new List<LobbyUser>();
+                foreach (var serverUser in serverUsers)
+                {
+                    lobbyUsers.Add(new LobbyUser
+                    {
+                        Id = serverUser.Id,
+                        DisplayName = serverUser.DisplayName,
+                        IsReady = serverUser.IsReady
+                        // Avatar is left null as per requirements
+                    });
+                }
+                
+                OnLobbyPlayerListUpdated?.Invoke(lobbyUsers);
+                return lobbyUsers;
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke("Failed to get lobby members: " + ex.Message);
+                return new List<LobbyUser>();
+            }
         }
 
         public Task<string> GetLocalUserIdAsync()
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(localUserId);
         }
 
         public Task InitializeAsync()
         {
-            throw new System.NotImplementedException();
+            // No initialization needed for dummy provider
+            return Task.CompletedTask;
         }
 
         public Task InviteFriendAsync(FriendUser user)
         {
-            throw new System.NotImplementedException();
+            // Friends functionality is stubbed as per requirements
+            return Task.CompletedTask;
         }
 
-        public Task<Lobby> JoinLobbyAsync(string lobbyId)
+        public async Task<Lobby> JoinLobbyAsync(string lobbyId)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                // Get lobby info first
+                var lobbyResponse = await client.GetAsync($"api/lobby/{lobbyId}");
+                if (!lobbyResponse.IsSuccessStatusCode)
+                {
+                    OnLobbyJoinFailed?.Invoke("Failed to get lobby information");
+                    return new Lobby { IsValid = false };
+                }
+                
+                var lobbyContent = await lobbyResponse.Content.ReadAsStringAsync();
+                var lobby = JsonConvert.DeserializeObject<DummyLobbyServer.Lobby>(lobbyContent);
+                
+                if (string.IsNullOrEmpty(lobby.LobbyId))
+                {
+                    OnLobbyJoinFailed?.Invoke("Lobby not found");
+                    return new Lobby { IsValid = false };
+                }
+                
+                // Join the lobby
+                var joinData = new { userId = localUserId, displayName = "Player " + localUserId };
+                string jsonData = JsonConvert.SerializeObject(joinData);
+                var joinResponse = await client.PostAsync($"api/lobby/{lobbyId}/users", new Content(jsonData));
+                
+                if (!joinResponse.IsSuccessStatusCode)
+                {
+                    OnLobbyJoinFailed?.Invoke("Failed to join lobby: " + joinResponse.StatusCode);
+                    return new Lobby { IsValid = false };
+                }
+                
+                currentLobbyId = lobbyId;
+                
+                // Get updated lobby members
+                var members = await GetLobbyMembersAsync();
+                
+                var result = LobbyFactory.Create(
+                    name: lobby.Name,
+                    lobbyId: lobby.LobbyId,
+                    maxPlayers: lobby.MaxPlayers,
+                    isOwner: lobby.IsOwner,
+                    members: members,
+                    properties: lobby.Properties ?? new Dictionary<string, string>()
+                );
+                
+                OnLobbyUpdated?.Invoke(result);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                OnLobbyJoinFailed?.Invoke("Failed to join lobby: " + ex.Message);
+                return new Lobby { IsValid = false };
+            }
         }
 
-        public Task LeaveLobbyAsync()
+        public async Task LeaveLobbyAsync()
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(currentLobbyId))
+            {
+                OnError?.Invoke("No current lobby to leave");
+                return;
+            }
+            
+            await LeaveLobbyAsync(currentLobbyId);
         }
 
-        public Task LeaveLobbyAsync(string lobbyId)
+        public async Task LeaveLobbyAsync(string lobbyId)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var response = await client.DeleteAsync($"api/lobby/{lobbyId}/users/{localUserId}");
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    if (lobbyId == currentLobbyId)
+                    {
+                        currentLobbyId = null;
+                        OnLobbyLeft?.Invoke();
+                    }
+                }
+                else
+                {
+                    OnError?.Invoke("Failed to leave lobby: " + response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke("Failed to leave lobby: " + ex.Message);
+            }
         }
 
-        public Task<List<Lobby>> SearchLobbiesAsync(int maxRoomsToFind = 10, Dictionary<string, string> filters = null)
+        public async Task<List<Lobby>> SearchLobbiesAsync(int maxRoomsToFind = 10, Dictionary<string, string> filters = null)
         {
-            throw new System.NotImplementedException();
+            // Lobby searching is stubbed as per requirements
+            try
+            {
+                var response = await client.GetAsync("api/lobby");
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new List<Lobby>();
+                }
+                
+                var content = await response.Content.ReadAsStringAsync();
+                var serverLobbies = JsonConvert.DeserializeObject<List<DummyLobbyServer.Lobby>>(content);
+                
+                var result = new List<Lobby>();
+                foreach (var serverLobby in serverLobbies)
+                {
+                    result.Add(LobbyFactory.Create(
+                        name: serverLobby.Name,
+                        lobbyId: serverLobby.LobbyId,
+                        maxPlayers: serverLobby.MaxPlayers,
+                        isOwner: false, // Not owner when searching
+                        members: new List<LobbyUser>(),
+                        properties: serverLobby.Properties ?? new Dictionary<string, string>()
+                    ));
+                }
+                
+                return result;
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke("Failed to search lobbies: " + ex.Message);
+                return new List<Lobby>();
+            }
         }
 
-        public Task SetAllReadyAsync()
+        public async Task SetAllReadyAsync()
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(currentLobbyId))
+            {
+                OnError?.Invoke("No current lobby");
+                return;
+            }
+            
+            try
+            {
+                // Get all members and set them to ready
+                var members = await GetLobbyMembersAsync();
+                foreach (var member in members)
+                {
+                    await SetIsReadyAsync(member.Id, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke("Failed to set all ready: " + ex.Message);
+            }
         }
 
-        public Task SetIsReadyAsync(string userId, bool isReady)
+        public async Task SetIsReadyAsync(string userId, bool isReady)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(currentLobbyId))
+            {
+                OnError?.Invoke("No current lobby");
+                return;
+            }
+            
+            try
+            {
+                var updateData = new { userId = userId, isReady = isReady };
+                string jsonData = JsonConvert.SerializeObject(updateData);
+                var response = await client.PutAsync($"api/lobby/{currentLobbyId}/users", new Content(jsonData));
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    OnError?.Invoke("Failed to set ready state: " + response.StatusCode);
+                    return;
+                }
+                
+                // Refresh lobby members to trigger update event
+                var members = await GetLobbyMembersAsync();
+                OnLobbyPlayerListUpdated?.Invoke(members);
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke("Failed to set ready state: " + ex.Message);
+            }
         }
 
-        public Task SetLobbyDataAsync(string key, string value)
+        public async Task SetLobbyDataAsync(string key, string value)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(currentLobbyId))
+            {
+                OnError?.Invoke("No current lobby");
+                return;
+            }
+            
+            try
+            {
+                var lobbyData = await GetLobbyDataFullAsync();
+                if (lobbyData.Properties == null)
+                {
+                    lobbyData.Properties = new Dictionary<string, string>();
+                }
+                
+                lobbyData.Properties[key] = value;
+                
+                string jsonData = JsonConvert.SerializeObject(lobbyData);
+                var response = await client.PutAsync($"api/lobby/{currentLobbyId}", new Content(jsonData));
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    OnError?.Invoke("Failed to set lobby data: " + response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke("Failed to set lobby data: " + ex.Message);
+            }
         }
 
         public Task SetLobbyStartedAsync()
         {
-            throw new System.NotImplementedException();
+            // Lobby started functionality is stubbed as per requirements
+            return Task.CompletedTask;
         }
 
         public void Shutdown()
         {
-            throw new System.NotImplementedException();
+            server?.Stop();
+            client?.Dispose();
+            currentLobbyId = null;
         }
     }
 }
