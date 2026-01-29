@@ -45,12 +45,36 @@ namespace Resonance.LobbySystem
         public event UnityAction<List<FriendUser>> OnFriendListPulled;
         public event UnityAction<string> OnError;
 
+        [SerializeField] private string portNumber = "5001";
+
         private DummyLobbyServer server;
         private HttpClient client;
         private string currentLobbyId;
         private string localUserId;
         private Coroutine updateCoroutine;
         private static WaitForSeconds coroutineWaitForSeconds = new WaitForSeconds(2f);
+
+        private async void Start()
+        {
+            // Generate a local user ID if we don't have one
+            localUserId = "" + UnityEngine.Random.Range(1000, 9999);
+
+            bool serverRunning = await CheckServerRunning();
+
+            if (!serverRunning)
+            {
+                server = new DummyLobbyServer();
+                server.AttemptStart(portNumber);
+            }
+
+            client = new HttpClient
+            {
+                BaseAddress = new Uri($"http://localhost:{portNumber}")
+            };
+
+            updateCoroutine = StartCoroutine(PeriodicLobbyUpdate());
+        }
+
 
         private async Task<bool> CheckServerRunning()
         {
@@ -59,7 +83,7 @@ namespace Resonance.LobbySystem
                 using (var testClient = new HttpClient())
                 {
                     testClient.Timeout = TimeSpan.FromSeconds(1);
-                    var response = await testClient.GetAsync("http://localhost:5001/api/lobby");
+                    var response = await testClient.GetAsync($"http://localhost:{portNumber}/api/lobby");
                     return response.IsSuccessStatusCode;
                 }
             }
@@ -155,27 +179,6 @@ namespace Resonance.LobbySystem
             }
         }
 
-
-        private async void Start()
-        {
-            // Generate a local user ID if we don't have one
-            localUserId = "" + UnityEngine.Random.Range(1000, 9999);
-
-            bool serverRunning = await CheckServerRunning();
-
-            if (!serverRunning)
-            {
-                server = new DummyLobbyServer();
-                server.AttemptStart();
-            }
-
-            client = new HttpClient
-            {
-                BaseAddress = new Uri("http://localhost:5001")
-            };
-
-            updateCoroutine = StartCoroutine(PeriodicLobbyUpdate());
-        }
 
         private void OnApplicationQuit()
         {

@@ -310,7 +310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.LobbySystem.Providers.SteamLobbyProvider
   lobbyType: 2
   maxLobbiesToFind: 10
-  handleSteamInit: 0
+  handleSteamInit: 1
 --- !u!1 &97698401
 GameObject:
   m_ObjectHideFlags: 0
@@ -4587,6 +4587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dffbac1dcb525412190ae51e435841d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.LobbySystem.DummyLobbyProvider
+  portNumber: 3000
 --- !u!1 &1569512992
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using UnityEditor.Experimental.GraphView;
 
 namespace Resonance.LobbySystem
 {
@@ -39,13 +40,13 @@ namespace Resonance.LobbySystem
 
         private HttpListener httpListener;
 
-        public void AttemptStart()
+        public void AttemptStart(string portNumber)
         {
             lobbies = new List<Lobby>();
             users = new List<User>();
 
             httpListener = new HttpListener();
-            httpListener.Prefixes.Add("http://localhost:5001/api/");
+            httpListener.Prefixes.Add($"http://localhost:{portNumber}/api/");
             httpListener.Start();
 
             Listen();
