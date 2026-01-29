@@ -50,7 +50,7 @@ namespace Resonance.LobbySystem
         private string currentLobbyId;
         private string localUserId;
         private Coroutine updateCoroutine;
-        private static WaitForSeconds coroutineWaitForSeconds = new WaitForSeconds(5f);
+        private static WaitForSeconds coroutineWaitForSeconds = new WaitForSeconds(2f);
 
         private async Task<bool> CheckServerRunning()
         {
