@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{228A5974-93B9-0DAE-BD84-E005468D8860}",
+    "Hash": "{8E48DD33-F8C8-0D33-06F0-C2466AAF85DC}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -39,6 +39,14 @@
        "GUID": "{0FD00287-02C5-41CB-A92E-924261E4463D}",
        "LibName": "Wwise Meter",
        "LibId": "8454147"
+      },
+      {
+       "Id": "770269781",
+       "Name": "RoomVerb (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Reverb_Master\\[Effect Slot [0]: (RoomVerb)]\\RoomVerb (Custom)",
+       "GUID": "{745ED99A-D152-413E-8D0E-5AB2E4E51C20}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
       }
      ],
      "AudioDevices": [
@@ -85,7 +93,15 @@
          "Id": "551947351"
         }
        ]
-      }
+      },
+      "AuxBusRefs": [
+       {
+        "Id": "2783051634",
+        "Name": "Reverb_Master",
+        "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Reverb_Master",
+        "GUID": "{C8A2C4AE-C9BE-484B-BE2E-F56C3E08FF4D}"
+       }
+      ]
      },
      {
       "Id": "1229948536",
@@ -119,12 +135,57 @@
       "GUID": "{26A4A81B-B389-46FE-B5B6-6B67F3D37ED1}"
      }
     ],
+    "AuxBusses": [
+     {
+      "Id": "2783051634",
+      "Name": "Reverb_Master",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Reverb_Master",
+      "GUID": "{C8A2C4AE-C9BE-484B-BE2E-F56C3E08FF4D}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "770269781"
+        }
+       ]
+      }
+     }
+    ],
     "GameParameters": [
+     {
+      "Id": "105837875",
+      "Name": "RoomSize",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\RoomSize",
+      "GUID": "{8FE22EA3-E5DD-48C4-8390-D5F8B4C1B5B6}"
+     },
+     {
+      "Id": "142454441",
+      "Name": "AmbienceMix",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\AmbienceMix",
+      "GUID": "{0FF9B36C-12DC-4B98-8374-150CECB1370E}"
+     },
+     {
+      "Id": "183903552",
+      "Name": "Occlusion",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Occlusion",
+      "GUID": "{DAAB43F5-A1A7-46AA-9E41-1AB0ABCD0152}"
+     },
+     {
+      "Id": "499096576",
+      "Name": "Diffraction",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Diffraction",
+      "GUID": "{3AD53E5D-776D-45D4-B11B-3D1F723DD2F1}"
+     },
      {
       "Id": "1541695584",
       "Name": "Meter_Environment_Intensity",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\Meter_Environment_Intensity",
       "GUID": "{D6008D2F-0282-4AFD-A98E-A873A0BF9AC4}"
+     },
+     {
+      "Id": "1572469619",
+      "Name": "ReverbSend",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\ReverbSend",
+      "GUID": "{1FEE75FD-DAA1-4E06-9C5D-09CA4508A215}"
      },
      {
       "Id": "1585979646",
@@ -139,6 +200,12 @@
       "GUID": "{52BB91AD-DDC9-4B62-8832-46C14C04E59C}"
      },
      {
+      "Id": "4004954295",
+      "Name": "Enclosure",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Enclosure",
+      "GUID": "{94EFA164-A969-4AF3-A59B-248F6FD443C6}"
+     },
+     {
       "Id": "4188395422",
       "Name": "Meter_Foley_Intensity",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\Meter_Foley_Intensity",
@@ -147,6 +214,6 @@
     ]
    }
   ],
-  "FileHash": "{5A97DE0D-6448-8DF9-2BF1-55497F9A1635}"
+  "FileHash": "{0B0AC937-0D72-6B92-51EF-F0D309E25698}"
  }
 }
