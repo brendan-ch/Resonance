@@ -3,6 +3,7 @@ using Resonance.UI;
 using Resonance.Match;
 using UnityEngine;
 using System.Collections;
+using Resonance.Assemblies.Match;
 
 namespace Resonance.Player
 {

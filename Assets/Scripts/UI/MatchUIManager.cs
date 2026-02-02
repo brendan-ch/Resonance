@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using Resonance.Match;
 using System.Collections.Generic;
+using Resonance.Assemblies.Match;
 
 namespace Resonance.UI
 {

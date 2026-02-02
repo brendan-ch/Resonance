@@ -1,12 +1,11 @@
 using System.Collections;
 using NUnit.Framework;
-using Resonance.Match;
+using Resonance.Assemblies.Match;
 using UnityEngine;
 using UnityEngine.TestTools;
 
 public class MatchStatTrackerTests
 {
-    private GameObject trackerObject;
     private MatchStatTracker tracker;
     private GameObject player1;
     private GameObject player2;
@@ -14,8 +13,7 @@ public class MatchStatTrackerTests
     [SetUp]
     public void Setup()
     {
-        trackerObject = new GameObject("MatchStatTracker");
-        tracker = trackerObject.AddComponent<MatchStatTracker>();
+        tracker = new MatchStatTracker();
 
         player1 = new GameObject("Player1");
         player2 = new GameObject("Player2");

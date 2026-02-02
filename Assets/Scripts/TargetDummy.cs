@@ -1,5 +1,6 @@
 using UnityEngine;
 using Resonance.Match;
+using Resonance.Assemblies.Match;
 
 namespace Resonance.Entities
 {

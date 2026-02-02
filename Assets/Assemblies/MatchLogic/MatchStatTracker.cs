@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using PurrNet;
 
-namespace Resonance.Match
+namespace Resonance.Assemblies.Match
 {
-    public class MatchStatTracker : NetworkBehaviour
+    public class MatchStatTracker : NetworkModule
     {
         public static MatchStatTracker Instance { get; private set; }
         
@@ -16,25 +16,13 @@ namespace Resonance.Match
         
         #region Player Stats Data
         private SyncDictionary<GameObject, PlayerMatchStats> playerStats = new();
-        private Dictionary<GameObject, List<DamageContribution>> recentDamage = new Dictionary<GameObject, List<DamageContribution>>();
+        private SyncDictionary<GameObject, List<DamageContribution>> recentDamage = new();
         #endregion
         
         #region Events
         public event System.Action<GameObject, PlayerMatchStats> OnStatsUpdated;
         public event System.Action<GameObject, GameObject> OnPlayerKill; // (killer, victim)
         public event System.Action<GameObject, GameObject> OnPlayerAssist; // (assister, victim)
-        #endregion
-        
-        #region Startup
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            Instance = this;
-        }
         #endregion
         
         #region Player Registration

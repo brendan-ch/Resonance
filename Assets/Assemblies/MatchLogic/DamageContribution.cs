@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Resonance.Match
+namespace Resonance.Assemblies.Match
 {
     internal struct DamageContribution
     {

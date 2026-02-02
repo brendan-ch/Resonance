@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using Resonance.Match;
+using Resonance.Assemblies.Match;
 public class PlayerMatchStatsTests
 {
     [Test]

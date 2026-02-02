@@ -1,4 +1,4 @@
-namespace Resonance.Match
+namespace Resonance.Assemblies.Match
 {
     [System.Serializable]
     public struct PlayerMatchStats
