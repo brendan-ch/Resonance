@@ -18,13 +18,14 @@ namespace Resonance.Match
 
         public PlayerMatchStats RecordKill()
         {
+            int newKillStreak = killStreak + 1;
             return new PlayerMatchStats
             {
                 assists = assists,
-                bestKillStreak = killStreak > bestKillStreak ? killStreak : bestKillStreak,
+                bestKillStreak = newKillStreak > bestKillStreak ? newKillStreak : bestKillStreak,
                 deaths = deaths,
                 kills = kills + 1,
-                killStreak = killStreak + 1
+                killStreak = newKillStreak
             };
         }
 
