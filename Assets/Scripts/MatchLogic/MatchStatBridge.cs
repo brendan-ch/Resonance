@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PurrNet;
+using PurrNet.Packing;
 using Resonance.Assemblies.Match;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Resonance.Match
 {
@@ -20,6 +22,8 @@ namespace Resonance.Match
         [SerializeField] private float assistDamageThreshold = 20f; // Minimum damage for assist credit
         #endregion 
 
+        public UnityEvent<Dictionary<PlayerID, PlayerMatchStats>> OnAllStatsUpdate = new();
+
         private MatchStatTracker tracker_Server;
 
         #region Startup
@@ -35,19 +39,44 @@ namespace Resonance.Match
             if (isServer)
             {
                 tracker_Server = new MatchStatTracker();
+                
+                tracker_Server.OnAllStatsUpdated += FirePlayerStatObservers;
             }
         }
         #endregion
 
-        #region Kill/Death/Assist Recording
+        #region Server to client methods
+        [ObserversRpc]
+        private void FirePlayerStatObservers(Dictionary<ulong, PlayerMatchStats> allStats)
+        {
+            // define and fire UI-related listeners, etc.
+            // new PackedULong();
+            // new PlayerID();
+            
+            var toPropagate = new Dictionary<PlayerID, PlayerMatchStats>();
+            
+            foreach (var (id, stats) in allStats)
+            {
+                toPropagate.Add(new PlayerID(new PackedULong(id), false), stats);
+            }
+            OnAllStatsUpdate?.Invoke(toPropagate);
+        }
+        #endregion
+
+        #region Kill/Death/Assist recording
         [ServerRpc]
         public void RecordKill(GameObject killer, GameObject victim)
         {
+            // not sure if GameObject can be sent like this, if not then
+            // define another method RecordKill_Server which takes player ID instead
+
             if (!killer.TryGetComponent(out PlayerController.PlayerController controller))
             {
                 return;
             }
         }
+
+        
         #endregion
 
         #region Getters for clients
