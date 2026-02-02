@@ -1,4 +1,4 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 namespace Resonance.Assemblies.Match
@@ -7,11 +7,8 @@ namespace Resonance.Assemblies.Match
     {
         public static MatchStatTracker Instance { get; private set; }
         
-        #region Inspector Fields
-        [Header("Assist Settings")]
-        [SerializeField] private float assistTimeWindow = 5f; // Time window for assists
-        [SerializeField] private float assistDamageThreshold = 20f; // Minimum damage for assist credit
-        #endregion
+        private float assistTimeWindow = 5f; // Time window for assists
+        private float assistDamageThreshold = 20f; // Minimum damage for assist credit
         
         #region Player Stats Data
         private Dictionary<ulong, PlayerMatchStats> playerStats = new();
@@ -19,9 +16,9 @@ namespace Resonance.Assemblies.Match
         #endregion
         
         #region Events
-        public event System.Action<ulong, PlayerMatchStats> OnStatsUpdated;
-        public event System.Action<ulong, ulong> OnPlayerKill; // (killer, victim)
-        public event System.Action<ulong, ulong> OnPlayerAssist; // (assister, victim)
+        public event Action<ulong, PlayerMatchStats> OnStatsUpdated;
+        public event Action<ulong, ulong> OnPlayerKill; // (killer, victim)
+        public event Action<ulong, ulong> OnPlayerAssist; // (assister, victim)
         #endregion
         
         #region Player Registration
@@ -31,7 +28,6 @@ namespace Resonance.Assemblies.Match
             {
                 playerStats[playerId] = new PlayerMatchStats();
                 recentDamage[playerId] = new List<DamageContribution>();
-                Debug.Log($"[MatchStatTracker] Registered player {playerId}");
             }
         }
         
@@ -59,7 +55,7 @@ namespace Resonance.Assemblies.Match
             {
                 attackerId = attackerId,
                 damageAmount = damageAmount,
-                timestamp = Time.time
+                timestampUnixTimeMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
             });
             
             CleanupOldDamage(victimId);
@@ -69,8 +65,8 @@ namespace Resonance.Assemblies.Match
         {
             if (!recentDamage.ContainsKey(victimId)) return;
             
-            float currentTime = Time.time;
-            recentDamage[victimId].RemoveAll(d => currentTime - d.timestamp > assistTimeWindow);
+            float currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            recentDamage[victimId].RemoveAll(d => currentTime - d.timestampUnixTimeMs > assistTimeWindow);
         }
         #endregion
         
@@ -84,8 +80,6 @@ namespace Resonance.Assemblies.Match
             
             playerStats[killerId] = playerStats[killerId].RecordKill();
             playerStats[victimId] = playerStats[victimId].RecordDeath();
-            
-            Debug.Log($"[MatchStatTracker] Killer {killerId} killed victim {victimId}! K/D: {playerStats[killerId].kills}/{playerStats[killerId].deaths}");
             
             OnPlayerKill?.Invoke(killerId, victimId);
             
@@ -120,8 +114,6 @@ namespace Resonance.Assemblies.Match
                     RegisterPlayer(contribution.attackerId);
                     playerStats[contribution.attackerId] = playerStats[contribution.attackerId].RecordAssist();
                      
-                    Debug.Log($"[MatchStatTracker] Assister {contribution.attackerId} assisted on kill of {victimId}");
-                     
                     OnPlayerAssist?.Invoke(contribution.attackerId, victimId);
                     OnStatsUpdated?.Invoke(contribution.attackerId, playerStats[contribution.attackerId]);
                 }
@@ -134,8 +126,6 @@ namespace Resonance.Assemblies.Match
             
             RegisterPlayer(victimId);
             playerStats[victimId] = playerStats[victimId].RecordDeath();
-            
-            Debug.Log($"[MatchStatTracker] Victim {victimId} died. Deaths: {playerStats[victimId].deaths}");
             
             OnStatsUpdated?.Invoke(victimId, playerStats[victimId]);
         }
@@ -190,8 +180,6 @@ namespace Resonance.Assemblies.Match
                     recentDamage[playerId].Clear();
                 }
             }
-            
-            Debug.Log("[MatchStatTracker] All stats reset!");
         }
         
         public void ResetPlayerStats(ulong playerId)
