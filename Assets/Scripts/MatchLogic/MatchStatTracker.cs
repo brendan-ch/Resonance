@@ -1,9 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
+using PurrNet;
 
 namespace Resonance.Match
 {
-    public class MatchStatTracker : MonoBehaviour
+    public class MatchStatTracker : NetworkBehaviour
     {
         public static MatchStatTracker Instance { get; private set; }
         
@@ -14,7 +15,7 @@ namespace Resonance.Match
         #endregion
         
         #region Player Stats Data
-        private Dictionary<GameObject, PlayerMatchStats> playerStats = new Dictionary<GameObject, PlayerMatchStats>();
+        private SyncDictionary<GameObject, PlayerMatchStats> playerStats = new();
         private Dictionary<GameObject, List<DamageContribution>> recentDamage = new Dictionary<GameObject, List<DamageContribution>>();
         #endregion
         
