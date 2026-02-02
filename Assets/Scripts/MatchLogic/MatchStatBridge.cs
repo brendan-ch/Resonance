@@ -38,8 +38,7 @@ namespace Resonance.Match
 
             if (isServer)
             {
-                tracker_Server = new MatchStatTracker();
-                
+                tracker_Server = new MatchStatTracker(assistTimeWindow, assistDamageThreshold);
                 tracker_Server.OnAllStatsUpdated += FirePlayerStatObservers;
             }
         }

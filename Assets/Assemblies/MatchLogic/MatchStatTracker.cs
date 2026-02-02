@@ -5,8 +5,8 @@ namespace Resonance.Assemblies.Match
 {
     public class MatchStatTracker
     {
-        private float assistTimeWindow = 5f; // Time window for assists
-        private float assistDamageThreshold = 20f; // Minimum damage for assist credit
+        private float assistTimeWindow; // Time window for assists
+        private float assistDamageThreshold; // Minimum damage for assist credit
 
         #region Player Stats Data
         private Dictionary<ulong, PlayerMatchStats> playerStats = new();
@@ -18,6 +18,20 @@ namespace Resonance.Assemblies.Match
         public event Action<ulong, PlayerMatchStats> OnStatsUpdated;
         public event Action<ulong, ulong> OnPlayerKill; // (killer, victim)
         public event Action<ulong, ulong> OnPlayerAssist; // (assister, victim)
+        #endregion
+
+        #region Startup
+        public MatchStatTracker()
+        {
+            assistTimeWindow = 5f;
+            assistDamageThreshold = 20f;
+        }
+
+        public MatchStatTracker(float assistTimeWindow, float assistDamageThreshold)
+        {
+            this.assistTimeWindow = assistTimeWindow;
+            this.assistDamageThreshold = assistDamageThreshold;
+        }
         #endregion
 
         #region Player Registration
