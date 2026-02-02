@@ -94,19 +94,8 @@ namespace Resonance.Match
             RegisterPlayer(killer);
             RegisterPlayer(victim);
             
-            // Record kill
-            playerStats[killer].kills++;
-            playerStats[killer].killStreak++;
-            
-            // Check for best killstreak
-            if (playerStats[killer].killStreak > playerStats[killer].bestKillStreak)
-            {
-                playerStats[killer].bestKillStreak = playerStats[killer].killStreak;
-            }
-            
-            // Record death
-            playerStats[victim].deaths++;
-            playerStats[victim].killStreak = 0; // Reset victim's killstreak
+            playerStats[killer] = playerStats[killer].RecordKill();
+            playerStats[victim] = playerStats[victim].RecordDeath();
             
             Debug.Log($"[MatchStatTracker] {killer.name} killed {victim.name}! K/D: {playerStats[killer].kills}/{playerStats[killer].deaths}");
             
@@ -141,7 +130,7 @@ namespace Resonance.Match
                 if (contribution.damageAmount >= assistDamageThreshold)
                 {
                     RegisterPlayer(contribution.attacker);
-                    playerStats[contribution.attacker].assists++;
+                    playerStats[contribution.attacker] = playerStats[contribution.attacker].RecordAssist();
                     
                     Debug.Log($"[MatchStatTracker] {contribution.attacker.name} assisted on kill of {victim.name}");
                     
@@ -156,8 +145,7 @@ namespace Resonance.Match
             if (victim == null) return;
             
             RegisterPlayer(victim);
-            playerStats[victim].deaths++;
-            playerStats[victim].killStreak = 0;
+            playerStats[victim] = playerStats[victim].RecordDeath();
             
             Debug.Log($"[MatchStatTracker] {victim.name} died. Deaths: {playerStats[victim].deaths}");
             
