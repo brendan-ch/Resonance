@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Resonance.Match
 {
-    internal class DamageContribution
+    internal struct DamageContribution
     {
         public GameObject attacker;
         public float damageAmount;
