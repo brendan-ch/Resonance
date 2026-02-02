@@ -5,8 +5,6 @@ namespace Resonance.Assemblies.Match
 {
     public class MatchStatTracker
     {
-        public static MatchStatTracker Instance { get; private set; }
-        
         private float assistTimeWindow = 5f; // Time window for assists
         private float assistDamageThreshold = 20f; // Minimum damage for assist credit
         

@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using PurrNet;
+using Resonance.Assemblies.Match;
 using UnityEngine;
 
 namespace Resonance.Match
@@ -17,6 +20,8 @@ namespace Resonance.Match
         [SerializeField] private float assistDamageThreshold = 20f; // Minimum damage for assist credit
         #endregion 
 
+        private MatchStatTracker tracker_Server;
+
         #region Startup
         private void Awake()
         {
@@ -26,6 +31,11 @@ namespace Resonance.Match
                 return;
             }
             Instance = this;
+
+            if (isServer)
+            {
+                tracker_Server = new MatchStatTracker();
+            }
         }
         #endregion
 
@@ -35,8 +45,22 @@ namespace Resonance.Match
         {
             if (!killer.TryGetComponent(out PlayerController.PlayerController controller))
             {
-                
+                return;
             }
+        }
+        #endregion
+
+        #region Getters for clients
+        [ServerRpc]
+        public async Task<PlayerMatchStats> GetStats(PlayerID playerId)
+        {
+            return new PlayerMatchStats {};
+        }
+
+        [ServerRpc]
+        public async Task<Dictionary<PlayerID, PlayerMatchStats>> GetAllStats()
+        {
+            return new();
         }
         #endregion
     }
