@@ -1,10 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
-using PurrNet;
 
 namespace Resonance.Assemblies.Match
 {
-    public class MatchStatTracker : NetworkModule
+    public class MatchStatTracker
     {
         public static MatchStatTracker Instance { get; private set; }
         
@@ -15,151 +14,151 @@ namespace Resonance.Assemblies.Match
         #endregion
         
         #region Player Stats Data
-        private SyncDictionary<GameObject, PlayerMatchStats> playerStats = new();
-        private SyncDictionary<GameObject, List<DamageContribution>> recentDamage = new();
+        private Dictionary<ulong, PlayerMatchStats> playerStats = new();
+        private Dictionary<ulong, List<DamageContribution>> recentDamage = new();
         #endregion
         
         #region Events
-        public event System.Action<GameObject, PlayerMatchStats> OnStatsUpdated;
-        public event System.Action<GameObject, GameObject> OnPlayerKill; // (killer, victim)
-        public event System.Action<GameObject, GameObject> OnPlayerAssist; // (assister, victim)
+        public event System.Action<ulong, PlayerMatchStats> OnStatsUpdated;
+        public event System.Action<ulong, ulong> OnPlayerKill; // (killer, victim)
+        public event System.Action<ulong, ulong> OnPlayerAssist; // (assister, victim)
         #endregion
         
         #region Player Registration
-        public void RegisterPlayer(GameObject player)
+        public void RegisterPlayer(ulong playerId)
         {
-            if (!playerStats.ContainsKey(player))
+            if (!playerStats.ContainsKey(playerId))
             {
-                playerStats[player] = new PlayerMatchStats();
-                recentDamage[player] = new List<DamageContribution>();
-                Debug.Log($"[MatchStatTracker] Registered player: {player.name}");
+                playerStats[playerId] = new PlayerMatchStats();
+                recentDamage[playerId] = new List<DamageContribution>();
+                Debug.Log($"[MatchStatTracker] Registered player {playerId}");
             }
         }
         
-        public void UnregisterPlayer(GameObject player)
+        public void UnregisterPlayer(ulong playerId)
         {
-            playerStats.Remove(player);
-            recentDamage.Remove(player);
+            playerStats.Remove(playerId);
+            recentDamage.Remove(playerId);
         }
         #endregion
         
         #region Damage Tracking
-        public void RecordDamage(GameObject attacker, GameObject victim, float damageAmount)
+        public void RecordDamage(ulong attackerId, ulong victimId, float damageAmount)
         {
-            if (attacker == null || victim == null || attacker == victim) return;
+            if (attackerId == 0 || victimId == 0 || attackerId == victimId) return;
             
-            RegisterPlayer(attacker);
-            RegisterPlayer(victim);
+            RegisterPlayer(attackerId);
+            RegisterPlayer(victimId);
             
-            if (!recentDamage.ContainsKey(victim))
+            if (!recentDamage.ContainsKey(victimId))
             {
-                recentDamage[victim] = new List<DamageContribution>();
+                recentDamage[victimId] = new List<DamageContribution>();
             }
             
-            recentDamage[victim].Add(new DamageContribution
+            recentDamage[victimId].Add(new DamageContribution
             {
-                attacker = attacker,
+                attackerId = attackerId,
                 damageAmount = damageAmount,
                 timestamp = Time.time
             });
             
-            CleanupOldDamage(victim);
+            CleanupOldDamage(victimId);
         }
         
-        private void CleanupOldDamage(GameObject victim)
+        private void CleanupOldDamage(ulong victimId)
         {
-            if (!recentDamage.ContainsKey(victim)) return;
+            if (!recentDamage.ContainsKey(victimId)) return;
             
             float currentTime = Time.time;
-            recentDamage[victim].RemoveAll(d => currentTime - d.timestamp > assistTimeWindow);
+            recentDamage[victimId].RemoveAll(d => currentTime - d.timestamp > assistTimeWindow);
         }
         #endregion
         
         #region Kill/Death/Assist Recording
-        public void RecordKill(GameObject killer, GameObject victim)
+        public void RecordKill(ulong killerId, ulong victimId)
         {
-            if (killer == null || victim == null) return;
+            if (killerId == 0 || victimId == 0) return;
             
-            RegisterPlayer(killer);
-            RegisterPlayer(victim);
+            RegisterPlayer(killerId);
+            RegisterPlayer(victimId);
             
-            playerStats[killer] = playerStats[killer].RecordKill();
-            playerStats[victim] = playerStats[victim].RecordDeath();
+            playerStats[killerId] = playerStats[killerId].RecordKill();
+            playerStats[victimId] = playerStats[victimId].RecordDeath();
             
-            Debug.Log($"[MatchStatTracker] {killer.name} killed {victim.name}! K/D: {playerStats[killer].kills}/{playerStats[killer].deaths}");
+            Debug.Log($"[MatchStatTracker] Killer {killerId} killed victim {victimId}! K/D: {playerStats[killerId].kills}/{playerStats[killerId].deaths}");
             
-            OnPlayerKill?.Invoke(killer, victim);
+            OnPlayerKill?.Invoke(killerId, victimId);
             
             // Process assists
-            ProcessAssists(killer, victim);
+            ProcessAssists(killerId, victimId);
             
             // Clear damage contributions for victim
-            if (recentDamage.ContainsKey(victim))
+            if (recentDamage.ContainsKey(victimId))
             {
-                recentDamage[victim].Clear();
+                recentDamage[victimId].Clear();
             }
             
             // Notify stats updated
-            OnStatsUpdated?.Invoke(killer, playerStats[killer]);
-            OnStatsUpdated?.Invoke(victim, playerStats[victim]);
+            OnStatsUpdated?.Invoke(killerId, playerStats[killerId]);
+            OnStatsUpdated?.Invoke(victimId, playerStats[victimId]);
         }
         
-        private void ProcessAssists(GameObject killer, GameObject victim)
+        private void ProcessAssists(ulong killerId, ulong victimId)
         {
-            if (!recentDamage.ContainsKey(victim)) return;
+            if (!recentDamage.ContainsKey(victimId)) return;
             
-            CleanupOldDamage(victim);
+            CleanupOldDamage(victimId);
             
-            foreach (var contribution in recentDamage[victim])
+            foreach (var contribution in recentDamage[victimId])
             {
                 // Skip if the contributor is the killer
-                if (contribution.attacker == killer) continue;
-                
+                if (contribution.attackerId == killerId) continue;
+                 
                 // Check if damage meets threshold
                 if (contribution.damageAmount >= assistDamageThreshold)
                 {
-                    RegisterPlayer(contribution.attacker);
-                    playerStats[contribution.attacker] = playerStats[contribution.attacker].RecordAssist();
-                    
-                    Debug.Log($"[MatchStatTracker] {contribution.attacker.name} assisted on kill of {victim.name}");
-                    
-                    OnPlayerAssist?.Invoke(contribution.attacker, victim);
-                    OnStatsUpdated?.Invoke(contribution.attacker, playerStats[contribution.attacker]);
+                    RegisterPlayer(contribution.attackerId);
+                    playerStats[contribution.attackerId] = playerStats[contribution.attackerId].RecordAssist();
+                     
+                    Debug.Log($"[MatchStatTracker] Assister {contribution.attackerId} assisted on kill of {victimId}");
+                     
+                    OnPlayerAssist?.Invoke(contribution.attackerId, victimId);
+                    OnStatsUpdated?.Invoke(contribution.attackerId, playerStats[contribution.attackerId]);
                 }
             }
         }
         
-        public void RecordDeath(GameObject victim)
+        public void RecordDeath(ulong victimId)
         {
-            if (victim == null) return;
+            if (victimId == 0) return;
             
-            RegisterPlayer(victim);
-            playerStats[victim] = playerStats[victim].RecordDeath();
+            RegisterPlayer(victimId);
+            playerStats[victimId] = playerStats[victimId].RecordDeath();
             
-            Debug.Log($"[MatchStatTracker] {victim.name} died. Deaths: {playerStats[victim].deaths}");
+            Debug.Log($"[MatchStatTracker] Victim {victimId} died. Deaths: {playerStats[victimId].deaths}");
             
-            OnStatsUpdated?.Invoke(victim, playerStats[victim]);
+            OnStatsUpdated?.Invoke(victimId, playerStats[victimId]);
         }
         #endregion
         
         #region Stats Retrieval
-        public PlayerMatchStats GetStats(GameObject player)
+        public PlayerMatchStats GetStats(ulong playerId)
         {
-            if (!playerStats.ContainsKey(player))
+            if (!playerStats.ContainsKey(playerId))
             {
-                RegisterPlayer(player);
+                RegisterPlayer(playerId);
             }
-            return playerStats[player];
+            return playerStats[playerId];
         }
         
-        public float GetKDA(GameObject player)
+        public float GetKDA(ulong playerId)
         {
-            if (!playerStats.ContainsKey(player))
+            if (!playerStats.ContainsKey(playerId))
             {
                 return 0f;
             }
             
-            PlayerMatchStats stats = playerStats[player];
+            PlayerMatchStats stats = playerStats[playerId];
             
             // KDA = (Kills + Assists) / Deaths
             // If deaths is 0, just return kills + assists
@@ -171,9 +170,9 @@ namespace Resonance.Assemblies.Match
             return (float)(stats.kills + stats.assists) / stats.deaths;
         }
         
-        public Dictionary<GameObject, PlayerMatchStats> GetAllStats()
+        public Dictionary<ulong, PlayerMatchStats> GetAllStats()
         {
-            return new Dictionary<GameObject, PlayerMatchStats>(playerStats);
+            return new Dictionary<ulong, PlayerMatchStats>(playerStats);
         }
         #endregion
         
@@ -181,26 +180,26 @@ namespace Resonance.Assemblies.Match
         public void ResetAllStats()
         {
             // Create a list of keys to avoid collection modification during enumeration
-            var players = new List<GameObject>(playerStats.Keys);
+            var playerIds = new List<ulong>(playerStats.Keys);
             
-            foreach (var player in players)
+            foreach (var playerId in playerIds)
             {
-                playerStats[player] = new PlayerMatchStats();
-                if (recentDamage.ContainsKey(player))
+                playerStats[playerId] = new PlayerMatchStats();
+                if (recentDamage.ContainsKey(playerId))
                 {
-                    recentDamage[player].Clear();
+                    recentDamage[playerId].Clear();
                 }
             }
             
             Debug.Log("[MatchStatTracker] All stats reset!");
         }
         
-        public void ResetPlayerStats(GameObject player)
+        public void ResetPlayerStats(ulong playerId)
         {
-            if (playerStats.ContainsKey(player))
+            if (playerStats.ContainsKey(playerId))
             {
-                playerStats[player] = new PlayerMatchStats();
-                recentDamage[player].Clear();
+                playerStats[playerId] = new PlayerMatchStats();
+                recentDamage[playerId].Clear();
             }
         }
         #endregion
