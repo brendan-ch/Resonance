@@ -111,9 +111,9 @@ namespace Resonance.Match
             
             if (winner != null)
             {
-                PlayerMatchStats stats = MatchStatTracker.Instance?.GetStats(winner);
-                Debug.Log($"[ArenaRoundManager] Match ended! Winner: {winner.name} with {stats?.kills ?? 0} eliminations!");
-                Debug.Log($"[ArenaRoundManager] Final Stats: {stats?.ToString()}");
+                PlayerMatchStats stats = MatchStatTracker.Instance.GetStats(winner);
+                Debug.Log($"[ArenaRoundManager] Match ended! Winner: {winner.name} with {stats.kills} eliminations!");
+                Debug.Log($"[ArenaRoundManager] Final Stats: {stats}");
             }
             else
             {
