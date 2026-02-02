@@ -59,18 +59,18 @@ namespace Resonance.Player
             }
             
             // Register with match stat tracker
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.RegisterPlayer(gameObject);
+                MatchStatBridge.Instance.RegisterPlayer(gameObject);
             }
         }
         
         private void OnDestroy()
         {
             // Unregister from match stat tracker
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.UnregisterPlayer(gameObject);
+                MatchStatBridge.Instance.UnregisterPlayer(gameObject);
             }
         }
         #endregion
@@ -86,9 +86,9 @@ namespace Resonance.Player
             if (IsDead) return;
             
             // Track damage for assists
-            if (attacker != null && attacker != gameObject && MatchStatTracker.Instance != null)
+            if (attacker != null && attacker != gameObject && MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.RecordDamage(attacker, gameObject, amount);
+                MatchStatBridge.Instance.RecordDamage(attacker, gameObject, amount);
                 lastAttacker = attacker;
                 lastDamageTime = Time.time;
             }
@@ -156,16 +156,16 @@ namespace Resonance.Player
             Debug.Log($"[PlayerStats] {gameObject.name} died!");
             
             // Record kill/death in match stats
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
                 if (killer != null && killer != gameObject)
                 {
-                    MatchStatTracker.Instance.RecordKill(killer, gameObject);
+                    MatchStatBridge.Instance.RecordKill(killer, gameObject);
                 }
                 else
                 {
                     // Suicide or environmental death
-                    MatchStatTracker.Instance.RecordDeath(gameObject);
+                    MatchStatBridge.Instance.RecordDeath(gameObject);
                 }
             }
             

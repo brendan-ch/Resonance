@@ -63,9 +63,9 @@ namespace Resonance.UI
                 ArenaRoundManager.Instance.OnLeaderChanged += OnLeaderChanged;
             }
             
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.OnPlayerKill += OnPlayerKill;
+                MatchStatBridge.Instance.OnPlayerKill += OnPlayerKill;
             }
         }
         
@@ -77,9 +77,9 @@ namespace Resonance.UI
                 ArenaRoundManager.Instance.OnLeaderChanged -= OnLeaderChanged;
             }
             
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.OnPlayerKill -= OnPlayerKill;
+                MatchStatBridge.Instance.OnPlayerKill -= OnPlayerKill;
             }
         }
         #endregion
@@ -136,9 +136,9 @@ namespace Resonance.UI
         #region HUD Updates
         private void UpdateHUD()
         {
-            if (playerObject == null || MatchStatTracker.Instance == null) return;
+            if (playerObject == null || MatchStatBridge.Instance == null) return;
             
-            PlayerMatchStats stats = MatchStatTracker.Instance.GetStats(playerObject);
+            PlayerMatchStats stats = MatchStatBridge.Instance.GetStats(playerObject);
             
             // Update KDA
             if (kdaText != null)
@@ -207,9 +207,9 @@ namespace Resonance.UI
             }
             
             // Optionally show basic stats in winner text
-            if (winner != null && MatchStatTracker.Instance != null)
+            if (winner != null && MatchStatBridge.Instance != null)
             {
-                PlayerMatchStats stats = MatchStatTracker.Instance.GetStats(winner);
+                PlayerMatchStats stats = MatchStatBridge.Instance.GetStats(winner);
                 if (finalStatsText != null)
                 {
                     finalStatsText.text = $"Final Score: {stats.kills} Kills";

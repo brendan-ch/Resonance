@@ -64,17 +64,17 @@ namespace Resonance.Match
         #region Event Subscriptions
         private void SubscribeToEvents()
         {
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.OnPlayerKill += OnPlayerKilled;
+                MatchStatBridge.Instance.OnPlayerKill += OnPlayerKilled;
             }
         }
         
         private void UnsubscribeFromEvents()
         {
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.OnPlayerKill -= OnPlayerKilled;
+                MatchStatBridge.Instance.OnPlayerKill -= OnPlayerKilled;
             }
         }
         #endregion
@@ -94,9 +94,9 @@ namespace Resonance.Match
             highestEliminations = 0;
             
             // Reset all player stats
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.ResetAllStats();
+                MatchStatBridge.Instance.ResetAllStats();
             }
             
             Debug.Log($"[ArenaRoundManager] Match started! First to {eliminationsToWin} eliminations wins!");
@@ -112,7 +112,7 @@ namespace Resonance.Match
             
             if (winner != null)
             {
-                PlayerMatchStats stats = MatchStatTracker.Instance.GetStats(winner);
+                PlayerMatchStats stats = MatchStatBridge.Instance.GetStats(winner);
                 Debug.Log($"[ArenaRoundManager] Match ended! Winner: {winner.name} with {stats.kills} eliminations!");
                 Debug.Log($"[ArenaRoundManager] Final Stats: {stats}");
             }
@@ -143,9 +143,9 @@ namespace Resonance.Match
         {
             if (!matchActive || matchEnded) return;
             
-            if (killer == null || MatchStatTracker.Instance == null) return;
+            if (killer == null || MatchStatBridge.Instance == null) return;
             
-            PlayerMatchStats killerStats = MatchStatTracker.Instance.GetStats(killer);
+            PlayerMatchStats killerStats = MatchStatBridge.Instance.GetStats(killer);
             int currentEliminations = killerStats.kills;
             
             // Update leader tracking
@@ -173,9 +173,9 @@ namespace Resonance.Match
         #region Leaderboard Queries
         public List<PlayerRanking> GetLeaderboard()
         {
-            if (MatchStatTracker.Instance == null) return new List<PlayerRanking>();
+            if (MatchStatBridge.Instance == null) return new List<PlayerRanking>();
             
-            var allStats = MatchStatTracker.Instance.GetAllStats();
+            var allStats = MatchStatBridge.Instance.GetAllStats();
             var rankings = new List<PlayerRanking>();
             
             foreach (var kvp in allStats)
