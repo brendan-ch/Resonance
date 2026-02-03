@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PurrNet;
-using PurrNet.Packing;
 using Resonance.Assemblies.Match;
 using UnityEngine;
 using UnityEngine.Events;
@@ -42,7 +41,8 @@ namespace Resonance.Match
             InstanceHandler.RegisterInstance(this);
 
             tracker_Server = new MatchStatTracker(assistTimeWindow, assistDamageThreshold);
-            tracker_Server.OnAllStatsUpdated += (allStats) => {
+            tracker_Server.OnAllStatsUpdated += (allStats) =>
+            {
                 FirePlayerStatObservers(JsonConvert.SerializeObject(allStats));
             };
             tracker_Server.OnPlayerKill += FireOnKillObservers;
@@ -57,13 +57,9 @@ namespace Resonance.Match
 
             var allStats = JsonConvert.DeserializeObject<Dictionary<ulong, PlayerMatchStats>>(serializedPlayerData);
 
-            var toPropagate = new Dictionary<PlayerID, PlayerMatchStats>();
-
-            foreach (var (id, stats) in allStats)
-            {
-                toPropagate.Add(PlayerIDExtractor.UlongToPlayerId(id), stats);
-            }
+            Dictionary<PlayerID, PlayerMatchStats> toPropagate = UlongDictionaryToPlayerIDDictionary(allStats);
             OnAllStatsUpdate?.Invoke(toPropagate);
+
         }
 
         [ObserversRpc]
@@ -175,11 +171,21 @@ namespace Resonance.Match
         [ServerRpc]
         public async Task<Dictionary<PlayerID, PlayerMatchStats>> GetAllStats()
         {
-            return new();
+            return UlongDictionaryToPlayerIDDictionary(tracker_Server.GetAllStats());
         }
         #endregion
 
         #region Conversion helpers
+        private Dictionary<PlayerID, PlayerMatchStats> UlongDictionaryToPlayerIDDictionary(Dictionary<ulong, PlayerMatchStats> allStats)
+        {
+            var toPropagate = new Dictionary<PlayerID, PlayerMatchStats>();
+            foreach (var (id, stats) in allStats)
+            {
+                toPropagate.Add(PlayerIDExtractor.UlongToPlayerId(id), stats);
+            }
+
+            return toPropagate;
+        }
         #endregion
     }
 }
