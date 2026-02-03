@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using PurrNet;
 using PurrNet.Packing;
 using Resonance.Assemblies.Match;
@@ -40,19 +41,22 @@ namespace Resonance.Match
         {
             InstanceHandler.RegisterInstance(this);
 
-            if (isServer)
-            {
-                tracker_Server = new MatchStatTracker(assistTimeWindow, assistDamageThreshold);
-                tracker_Server.OnAllStatsUpdated += FirePlayerStatObservers;
-                tracker_Server.OnPlayerKill += FireOnKillObservers;
-            }
+            tracker_Server = new MatchStatTracker(assistTimeWindow, assistDamageThreshold);
+            tracker_Server.OnAllStatsUpdated += (allStats) => {
+                FirePlayerStatObservers(JsonConvert.SerializeObject(allStats));
+            };
+            tracker_Server.OnPlayerKill += FireOnKillObservers;
         }
         #endregion
 
         #region Server to client methods
         [ObserversRpc]
-        private void FirePlayerStatObservers(Dictionary<ulong, PlayerMatchStats> allStats)
+        private void FirePlayerStatObservers(string serializedPlayerData)
         {
+            Debug.Log($"Stats: {serializedPlayerData}");
+
+            var allStats = JsonConvert.DeserializeObject<Dictionary<ulong, PlayerMatchStats>>(serializedPlayerData);
+
             var toPropagate = new Dictionary<PlayerID, PlayerMatchStats>();
 
             foreach (var (id, stats) in allStats)
