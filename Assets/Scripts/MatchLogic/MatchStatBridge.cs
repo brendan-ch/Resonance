@@ -158,6 +158,11 @@ namespace Resonance.Match
             return null;
         }
 
+        public async Task<PlayerMatchStats?> GetStats(PlayerID player)
+        {
+            return await GetStats(player.id.value);
+        }
+
         [ServerRpc]
         public async Task<PlayerMatchStats> GetStats(ulong playerId)
         {

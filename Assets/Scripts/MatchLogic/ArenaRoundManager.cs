@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Resonance.Assemblies.Match;
 using System.Threading.Tasks;
+using PurrNet;
 
 namespace Resonance.Match
 {
@@ -22,21 +23,21 @@ namespace Resonance.Match
         #region State
         private bool matchActive = false;
         private bool matchEnded = false;
-        private GameObject currentLeader = null;
+        private PlayerID? currentLeader = null;
         private int highestEliminations = 0;
         #endregion
 
         #region Events
         public event System.Action OnMatchStart;
-        public event System.Action<GameObject> OnMatchEnd; // Winner
-        public event System.Action<GameObject, int> OnLeaderChanged; // New leader, their eliminations
+        public event System.Action<PlayerID?> OnMatchEnd; // Winner
+        public event System.Action<PlayerID, int> OnLeaderChanged; // New leader, their eliminations
         #endregion
 
         #region Properties
         public bool IsMatchActive => matchActive;
         public bool IsMatchEnded => matchEnded;
         public int EliminationsToWin => eliminationsToWin;
-        public GameObject CurrentLeader => currentLeader;
+        public PlayerID? CurrentLeader => currentLeader;
         public int HighestEliminations => highestEliminations;
         #endregion
 
@@ -67,7 +68,7 @@ namespace Resonance.Match
         {
             if (MatchStatBridge.Instance != null)
             {
-                // MatchStatBridge.Instance.OnPlayerKill += OnPlayerKilled;
+                MatchStatBridge.Instance.OnPlayerKill.AddListener(OnPlayerKilled);
             }
         }
 
@@ -104,17 +105,17 @@ namespace Resonance.Match
             OnMatchStart?.Invoke();
         }
 
-        public async void EndMatch(GameObject winner)
+        public async void EndMatch(PlayerID? winner)
         {
             if (!matchActive || matchEnded) return;
 
             matchActive = false;
             matchEnded = true;
 
-            if (winner != null)
+            if (winner is PlayerID id)
             {
-                PlayerMatchStats? stats = await MatchStatBridge.Instance.GetStats(winner);
-                Debug.Log($"[ArenaRoundManager] Match ended! Winner: {winner.name} with {stats?.kills} eliminations!");
+                PlayerMatchStats? stats = await MatchStatBridge.Instance.GetStats(id);
+                Debug.Log($"[ArenaRoundManager] Match ended! Winner: {id} with {stats?.kills} eliminations!");
                 Debug.Log($"[ArenaRoundManager] Final Stats: {stats}");
             }
             else
@@ -140,7 +141,7 @@ namespace Resonance.Match
         #endregion
 
         #region Kill Event Handling
-        private async void OnPlayerKilled(GameObject killer, GameObject victim)
+        private async void OnPlayerKilled(PlayerID killer, PlayerID victim)
         {
             if (!matchActive || matchEnded) return;
 
@@ -155,12 +156,12 @@ namespace Resonance.Match
                 if (currentEliminations > highestEliminations)
                 {
                     highestEliminations = currentEliminations;
-                    GameObject previousLeader = currentLeader;
+                    var previousLeader = currentLeader;
                     currentLeader = killer;
 
                     if (previousLeader != killer)
                     {
-                        Debug.Log($"[ArenaRoundManager] New leader: {killer.name} with {currentEliminations} eliminations!");
+                        Debug.Log($"[ArenaRoundManager] New leader: {killer} with {currentEliminations} eliminations!");
                         OnLeaderChanged?.Invoke(killer, currentEliminations);
                     }
                 }
