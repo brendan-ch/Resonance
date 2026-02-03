@@ -65,8 +65,6 @@ namespace Resonance.Match
         [ObserversRpc]
         private void FireOnKillObservers(ulong killer, ulong victim)
         {
-            var allPlayers = networkManager.players;
-
             OnPlayerKill?.Invoke(PlayerIDExtractor.UlongToPlayerId(killer), PlayerIDExtractor.UlongToPlayerId(victim));
         }
         #endregion
@@ -142,9 +140,7 @@ namespace Resonance.Match
             tracker_Server?.UnregisterPlayer(id);
         }
 
-        [Obsolete("Will be made private in the future; should only be consumed by game mode manager")]
         [ServerRpc]
-        // for compatibility purposes only
         public void ResetAllStats()
         {
             tracker_Server?.ResetAllStats();
