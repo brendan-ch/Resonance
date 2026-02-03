@@ -15,7 +15,13 @@ namespace Resonance.Match
     /// </summary>
     public class MatchStatBridge : NetworkBehaviour
     {
-        public static MatchStatBridge Instance { get; private set; }
+        public static MatchStatBridge Instance
+        {
+            get
+            {
+                return InstanceHandler.GetInstance<MatchStatBridge>();
+            }
+        }
 
         #region Inspector Fields
         [Header("Assist Settings")]
@@ -31,12 +37,7 @@ namespace Resonance.Match
         #region Startup
         private void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            Instance = this;
+            InstanceHandler.RegisterInstance(this);
 
             if (isServer)
             {
