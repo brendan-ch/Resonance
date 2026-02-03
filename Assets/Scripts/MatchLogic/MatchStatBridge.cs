@@ -13,6 +13,7 @@ namespace Resonance.Match
     /// Bridge MatchStatTracker with Unity, specifically regarding
     /// RPC calls, to ensure that logic only runs on the server.
     /// </summary>
+    [DefaultExecutionOrder(-1)]
     public class MatchStatBridge : NetworkBehaviour
     {
         public static MatchStatBridge Instance
