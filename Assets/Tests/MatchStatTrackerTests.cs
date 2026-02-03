@@ -1,30 +1,24 @@
 using System.Collections;
 using NUnit.Framework;
 using Resonance.Assemblies.Match;
-using UnityEngine;
 using UnityEngine.TestTools;
 
 public class MatchStatTrackerTests
 {
     private MatchStatTracker tracker;
-    private GameObject player1;
-    private GameObject player2;
 
     [SetUp]
     public void Setup()
     {
         tracker = new MatchStatTracker();
-
-        player1 = new GameObject("Player1");
-        player2 = new GameObject("Player2");
     }
 
     // A Test behaves as an ordinary method
     [Test]
     public void RecordKill_FiresEvent()
     {
-        GameObject killerCaptured = null;
-        GameObject victimCaptured = null;
+        ulong killerCaptured = default;
+        ulong victimCaptured = default;
 
         tracker.OnPlayerKill += (killer, victim) =>
         {
@@ -32,12 +26,10 @@ public class MatchStatTrackerTests
             victimCaptured = victim;
         };
 
-        tracker.RecordKill(player1, player2);
+        tracker.RecordKill(1, 2);
 
-        Assert.IsNotNull(killerCaptured);
-        Assert.IsNotNull(victimCaptured);
-        Assert.AreEqual(player1, killerCaptured);
-        Assert.AreEqual(player2, victimCaptured);
+        Assert.AreEqual(1, killerCaptured);
+        Assert.AreEqual(2, victimCaptured);
     }
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
@@ -45,8 +37,6 @@ public class MatchStatTrackerTests
     [UnityTest]
     public IEnumerator MatchStatTrackerTestsWithEnumeratorPasses()
     {
-
-
         // Use the Assert class to test conditions.
         // Use yield to skip a frame.
         yield return null;
