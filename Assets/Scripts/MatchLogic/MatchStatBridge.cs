@@ -63,23 +63,18 @@ namespace Resonance.Match
         [ObserversRpc]
         private void FireOnKillObservers(ulong killer, ulong victim)
         {
+            var allPlayers = networkManager.players;
+
             OnPlayerKill?.Invoke(UlongToPlayerId(killer), UlongToPlayerId(victim));
         }
         #endregion
 
-        #region Kill/Death/Assist recording
+        #region Client to server actions
         public void RecordKill(GameObject killer, GameObject victim)
         {
-            PlayerController.PlayerController killerController, victimController;
-            if (TryExtractPlayerControllers(killer, victim, out killerController, out victimController))
+            if (TryExtractPlayerIds(killer, victim, out ulong killerId, out ulong victimId))
             {
-                return;
-            }
-
-            if (killerController.id?.id.value is ulong killerIdPrimitive
-                && victimController.id?.id.value is ulong victimIdPrimitive)
-            {
-                RecordKill_Server(killerIdPrimitive, victimIdPrimitive);
+                RecordKill_Server(killerId, victimId);
             }
         }
 
@@ -92,16 +87,9 @@ namespace Resonance.Match
 
         public void RecordDamage(GameObject attacker, GameObject victim, float amount)
         {
-            PlayerController.PlayerController attackerController, victimController;
-            if (TryExtractPlayerControllers(attacker, victim, out attackerController, out victimController))
+            if (TryExtractPlayerIds(attacker, victim, out ulong attackerId, out ulong victimId))
             {
-                return;
-            }
-
-            if (attackerController.id?.id.value is ulong attackerIdPrimitive
-                && victimController.id?.id.value is ulong victimIdPrimitive)
-            {
-                RecordDamage_Server(attackerIdPrimitive, victimIdPrimitive, amount);
+                RecordDamage_Server(attackerId, victimId, amount);
             }
         }
 
@@ -113,14 +101,9 @@ namespace Resonance.Match
 
         public void RecordDeath(GameObject victim)
         {
-            if (!victim.TryGetComponent(out PlayerController.PlayerController controller))
+            if (TryExtractPlayerIds(victim, out ulong victimId))
             {
-                return;
-            }
-
-            if (controller.id?.id.value is ulong idPrimitive)
-            {
-                RecordDeath_Server(idPrimitive);
+                RecordDeath_Server(victimId);
             }
         }
 
@@ -130,13 +113,57 @@ namespace Resonance.Match
             tracker_Server?.RecordDeath(idPrimitive);
         }
 
+        public void RegisterPlayer(GameObject player)
+        {
+            if (TryExtractPlayerIds(player, out ulong id))
+            {
+                RegisterPlayer_Server(id);
+            }
+        }
+
+        [ServerRpc]
+        private void RegisterPlayer_Server(ulong id)
+        {
+            tracker_Server?.RegisterPlayer(id);
+        }
+
+        public void UnregisterPlayer(GameObject player)
+        {
+            if (TryExtractPlayerIds(player, out ulong id))
+            {
+                UnregisterPlayer_Server(id);
+            }
+        }
+
+        private void UnregisterPlayer_Server(ulong id)
+        {
+            tracker_Server?.UnregisterPlayer(id);
+        }
+
+        [Obsolete("Will be made private in the future; should only be consumed by game mode manager")]
+        [ServerRpc]
+        // for compatibility purposes only
+        public void ResetAllStats()
+        {
+            tracker_Server?.ResetAllStats();
+        }
+
         #endregion
 
-        #region Getters for clients
-        [ServerRpc]
-        public async Task<PlayerMatchStats> GetStats(PlayerID playerId)
+        #region Getters for client
+        public async Task<PlayerMatchStats?> GetStats(GameObject player)
         {
-            return new PlayerMatchStats { };
+            if (TryExtractPlayerIds(player, out ulong playerId))
+            {
+                return await GetStats(playerId);
+            }
+            return null;
+        }
+
+        [ServerRpc]
+        public async Task<PlayerMatchStats> GetStats(ulong playerId)
+        {
+            return tracker_Server.GetStats(playerId);
         }
 
         [ServerRpc]
@@ -152,15 +179,39 @@ namespace Resonance.Match
             return new PlayerID(new PackedULong(id), false);
         }
 
-        private static bool TryExtractPlayerControllers(GameObject first, GameObject second, out PlayerController.PlayerController killerController, out PlayerController.PlayerController victimController)
+        private bool TryExtractPlayerIds(GameObject gameObject, out ulong playerId)
         {
-            if (!first.TryGetComponent(out killerController) || !second.TryGetComponent(out victimController))
-            {
-                victimController = null;
+            playerId = 0;
+            if (!gameObject.TryGetComponent(out PlayerController.PlayerController controller))
                 return false;
+
+            if (controller.id?.id.value is ulong idPrimitive)
+            {
+                playerId = idPrimitive;
+                return true;
             }
 
-            return true;
+            return false;
+        }
+
+        private bool TryExtractPlayerIds(GameObject first, GameObject second, out ulong firstId, out ulong secondId)
+        {
+            firstId = 0;
+            secondId = 0;
+
+            if (!first.TryGetComponent(out PlayerController.PlayerController firstController) ||
+                !second.TryGetComponent(out PlayerController.PlayerController secondController))
+                return false;
+
+            if (firstController.id?.id.value is ulong firstIdPrimitive &&
+                secondController.id?.id.value is ulong secondIdPrimitive)
+            {
+                firstId = firstIdPrimitive;
+                secondId = secondIdPrimitive;
+                return true;
+            }
+
+            return false;
         }
         #endregion
     }
