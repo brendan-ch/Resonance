@@ -13,47 +13,47 @@ namespace Resonance.UI
         [SerializeField] private TextMeshProUGUI kdaText;
         [SerializeField] private TextMeshProUGUI killStreakText;
         [SerializeField] private TextMeshProUGUI eliminationsText;
-        
+
         [Header("Match End UI")]
         [SerializeField] private GameObject matchEndPanel;
         [SerializeField] private TextMeshProUGUI winnerText;
         [SerializeField] private TextMeshProUGUI finalStatsText;
         [SerializeField] private Button playAgainButton;
         [SerializeField] private Button quitButton;
-        
+
         [Header("Settings")]
         [SerializeField] private GameObject playerObject; // Assign the player to track
         [SerializeField] private bool showKillStreak = true;
-        
+
         private void Start()
         {
             if (matchEndPanel != null)
             {
                 matchEndPanel.SetActive(false);
             }
-            
+
             // Initialize kill streak text to show 0
             if (killStreakText != null && showKillStreak)
             {
                 killStreakText.text = "Kill Streak: 0";
                 killStreakText.gameObject.SetActive(true);
             }
-            
+
             SetupButtons();
             SubscribeToEvents();
             UpdateHUD();
         }
-        
+
         private void OnDestroy()
         {
             UnsubscribeFromEvents();
         }
-        
+
         private void Update()
         {
             UpdateHUD();
         }
-        
+
         #region Event Subscriptions
         private void SubscribeToEvents()
         {
@@ -62,13 +62,13 @@ namespace Resonance.UI
                 ArenaRoundManager.Instance.OnMatchEnd += OnMatchEnd;
                 ArenaRoundManager.Instance.OnLeaderChanged += OnLeaderChanged;
             }
-            
+
             if (MatchStatBridge.Instance != null)
             {
-                MatchStatBridge.Instance.OnPlayerKill += OnPlayerKill;
+                // MatchStatBridge.Instance.OnPlayerKill.AddListener(OnPlayerKill);
             }
         }
-        
+
         private void UnsubscribeFromEvents()
         {
             if (ArenaRoundManager.Instance != null)
@@ -76,14 +76,14 @@ namespace Resonance.UI
                 ArenaRoundManager.Instance.OnMatchEnd -= OnMatchEnd;
                 ArenaRoundManager.Instance.OnLeaderChanged -= OnLeaderChanged;
             }
-            
+
             if (MatchStatBridge.Instance != null)
             {
-                MatchStatBridge.Instance.OnPlayerKill -= OnPlayerKill;
+                // MatchStatBridge.Instance.OnPlayerKill.RemoveListener(OnPlayerKill);
             }
         }
         #endregion
-        
+
         #region Button Setup
         private void SetupButtons()
         {
@@ -96,7 +96,7 @@ namespace Resonance.UI
             {
                 Debug.LogWarning("[MatchUI] Play Again button is null!");
             }
-            
+
             if (quitButton != null)
             {
                 quitButton.onClick.AddListener(OnQuitClicked);
@@ -107,73 +107,74 @@ namespace Resonance.UI
                 Debug.LogWarning("[MatchUI] Quit button is null!");
             }
         }
-        
+
         private void OnPlayAgainClicked()
         {
             Debug.Log("[MatchUI] Play Again clicked!");
-            
+
             // Reset time scale in case it was paused
             Time.timeScale = 1f;
-            
+
             if (ArenaRoundManager.Instance != null)
             {
                 ArenaRoundManager.Instance.ReloadLevel();
             }
         }
-        
+
         private void OnQuitClicked()
         {
             Debug.Log("[MatchUI] Quit clicked!");
-            
-            #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-            #else
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
                 Application.Quit();
-            #endif
+#endif
         }
         #endregion
-        
+
         #region HUD Updates
-        private void UpdateHUD()
+        private async void UpdateHUD()
         {
             if (playerObject == null || MatchStatBridge.Instance == null) return;
-            
-            PlayerMatchStats stats = MatchStatBridge.Instance.GetStats(playerObject);
-            
+
+            PlayerMatchStats? stats = await MatchStatBridge.Instance.GetStats(playerObject);
+            if (stats == null) return;
+
             // Update KDA
             if (kdaText != null)
             {
-                kdaText.text = $"K/D/A: {stats.kills}/{stats.deaths}/{stats.assists} | KDA: {stats.KDA:F2}";
+                kdaText.text = $"K/D/A: {stats?.kills}/{stats?.deaths}/{stats?.assists} | KDA: {stats?.KDA:F2}";
             }
-            
+
             // Update kill streak
             if (killStreakText != null && showKillStreak)
             {
-                killStreakText.text = $"Kill Streak: {stats.killStreak}";
+                killStreakText.text = $"Kill Streak: {stats?.killStreak}";
                 killStreakText.gameObject.SetActive(true);
             }
-            
+
             // Update eliminations progress
             if (eliminationsText != null && ArenaRoundManager.Instance != null)
             {
                 int target = ArenaRoundManager.Instance.EliminationsToWin;
-                eliminationsText.text = $"Eliminations: {stats.kills}/{target}";
+                eliminationsText.text = $"Eliminations: {stats?.kills}/{target}";
             }
         }
         #endregion
-        
+
         #region Event Handlers
-        private void OnMatchEnd(GameObject winner)
+        private async void OnMatchEnd(GameObject winner)
         {
             if (matchEndPanel != null)
             {
                 matchEndPanel.SetActive(true);
             }
-            
+
             // Unlock cursor so player can click buttons
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            
+
             // Disable player controls
             if (playerObject != null)
             {
@@ -182,17 +183,17 @@ namespace Resonance.UI
                 {
                     playerController.enabled = false;
                 }
-                
+
                 var projectileShooter = playerObject.GetComponent<Resonance.Combat.ProjectileShooter>();
                 if (projectileShooter != null)
                 {
                     projectileShooter.enabled = false;
                 }
             }
-            
+
             // Pause time (optional - uncomment if you want to freeze everything)
             // Time.timeScale = 0f;
-            
+
             if (winnerText != null)
             {
                 if (winner != null)
@@ -205,36 +206,36 @@ namespace Resonance.UI
                     winnerText.text = "Match Ended";
                 }
             }
-            
+
             // Optionally show basic stats in winner text
             if (winner != null && MatchStatBridge.Instance != null)
             {
-                PlayerMatchStats stats = MatchStatBridge.Instance.GetStats(winner);
-                if (finalStatsText != null)
+                PlayerMatchStats? stats = await MatchStatBridge.Instance.GetStats(winner);
+                if (stats != null && finalStatsText != null)
                 {
-                    finalStatsText.text = $"Final Score: {stats.kills} Kills";
+                    finalStatsText.text = $"Final Score: {stats?.kills} Kills";
                 }
             }
         }
-        
+
         private void OnLeaderChanged(GameObject newLeader, int eliminations)
         {
             // Leader tracking removed
         }
-        
+
         private void OnPlayerKill(GameObject killer, GameObject victim)
         {
             // Optional: Add kill feed notifications here
         }
         #endregion
-        
+
         #region Public Methods
         public void SetPlayerObject(GameObject player)
         {
             playerObject = player;
             UpdateHUD();
         }
-        
+
         public void ShowMatchEndScreen()
         {
             if (matchEndPanel != null)
@@ -242,7 +243,7 @@ namespace Resonance.UI
                 matchEndPanel.SetActive(true);
             }
         }
-        
+
         public void HideMatchEndScreen()
         {
             if (matchEndPanel != null)

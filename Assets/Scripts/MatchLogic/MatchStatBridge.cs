@@ -61,7 +61,7 @@ namespace Resonance.Match
 
             foreach (var (id, stats) in allStats)
             {
-                toPropagate.Add(UlongToPlayerId(id), stats);
+                toPropagate.Add(PlayerIDExtractor.UlongToPlayerId(id), stats);
             }
             OnAllStatsUpdate?.Invoke(toPropagate);
         }
@@ -71,14 +71,14 @@ namespace Resonance.Match
         {
             var allPlayers = networkManager.players;
 
-            OnPlayerKill?.Invoke(UlongToPlayerId(killer), UlongToPlayerId(victim));
+            OnPlayerKill?.Invoke(PlayerIDExtractor.UlongToPlayerId(killer), PlayerIDExtractor.UlongToPlayerId(victim));
         }
         #endregion
 
         #region Client to server actions
         public void RecordKill(GameObject killer, GameObject victim)
         {
-            if (TryExtractPlayerIds(killer, victim, out ulong killerId, out ulong victimId))
+            if (PlayerIDExtractor.TryExtractPlayerIds(killer, victim, out ulong killerId, out ulong victimId))
             {
                 RecordKill_Server(killerId, victimId);
             }
@@ -93,7 +93,7 @@ namespace Resonance.Match
 
         public void RecordDamage(GameObject attacker, GameObject victim, float amount)
         {
-            if (TryExtractPlayerIds(attacker, victim, out ulong attackerId, out ulong victimId))
+            if (PlayerIDExtractor.TryExtractPlayerIds(attacker, victim, out ulong attackerId, out ulong victimId))
             {
                 RecordDamage_Server(attackerId, victimId, amount);
             }
@@ -107,7 +107,7 @@ namespace Resonance.Match
 
         public void RecordDeath(GameObject victim)
         {
-            if (TryExtractPlayerIds(victim, out ulong victimId))
+            if (PlayerIDExtractor.TryExtractPlayerIds(victim, out ulong victimId))
             {
                 RecordDeath_Server(victimId);
             }
@@ -121,7 +121,7 @@ namespace Resonance.Match
 
         public void RegisterPlayer(GameObject player)
         {
-            if (TryExtractPlayerIds(player, out ulong id))
+            if (PlayerIDExtractor.TryExtractPlayerIds(player, out ulong id))
             {
                 RegisterPlayer_Server(id);
             }
@@ -135,7 +135,7 @@ namespace Resonance.Match
 
         public void UnregisterPlayer(GameObject player)
         {
-            if (TryExtractPlayerIds(player, out ulong id))
+            if (PlayerIDExtractor.TryExtractPlayerIds(player, out ulong id))
             {
                 UnregisterPlayer_Server(id);
             }
@@ -159,7 +159,7 @@ namespace Resonance.Match
         #region Getters for client
         public async Task<PlayerMatchStats?> GetStats(GameObject player)
         {
-            if (TryExtractPlayerIds(player, out ulong playerId))
+            if (PlayerIDExtractor.TryExtractPlayerIds(player, out ulong playerId))
             {
                 return await GetStats(playerId);
             }
@@ -180,45 +180,6 @@ namespace Resonance.Match
         #endregion
 
         #region Conversion helpers
-        private PlayerID UlongToPlayerId(ulong id)
-        {
-            return new PlayerID(new PackedULong(id), false);
-        }
-
-        private bool TryExtractPlayerIds(GameObject gameObject, out ulong playerId)
-        {
-            playerId = 0;
-            if (!gameObject.TryGetComponent(out PlayerController.PlayerController controller))
-                return false;
-
-            if (controller.id?.id.value is ulong idPrimitive)
-            {
-                playerId = idPrimitive;
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool TryExtractPlayerIds(GameObject first, GameObject second, out ulong firstId, out ulong secondId)
-        {
-            firstId = 0;
-            secondId = 0;
-
-            if (!first.TryGetComponent(out PlayerController.PlayerController firstController) ||
-                !second.TryGetComponent(out PlayerController.PlayerController secondController))
-                return false;
-
-            if (firstController.id?.id.value is ulong firstIdPrimitive &&
-                secondController.id?.id.value is ulong secondIdPrimitive)
-            {
-                firstId = firstIdPrimitive;
-                secondId = secondIdPrimitive;
-                return true;
-            }
-
-            return false;
-        }
         #endregion
     }
 }

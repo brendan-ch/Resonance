@@ -4801,9 +4801,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2070937843}
-  - component: {fileID: 2070937845}
   - component: {fileID: 2070937844}
   - component: {fileID: 2070937846}
+  - component: {fileID: 2070937847}
   m_Layer: 0
   m_Name: MatchManager
   m_TagString: Untagged
@@ -4841,20 +4841,6 @@ MonoBehaviour:
   eliminationsToWin: 8
   matchEndDelay: 3
   autoStartNextRound: 0
---- !u!114 &2070937845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070937842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6e7d71475c5cc9428dbbe949ad381ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Match.MatchStatTracker
-  assistTimeWindow: 5
-  assistDamageThreshold: 20
 --- !u!114 &2070937846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4869,6 +4855,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Match.MatchStarter
   autoStartOnSceneLoad: 1
   startDelay: 0.5
+--- !u!114 &2070937847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070937842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58777560f041f46859536d010c7899d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Match.MatchStatBridge
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  assistTimeWindow: 5
+  assistDamageThreshold: 20
+  OnAllStatsUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerKill:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2075370078
 GameObject:
   m_ObjectHideFlags: 0
