@@ -1,0 +1,40 @@
+{
+ "PluginInfo": {
+  "Platform": "Web",
+  "BasePlatform": "Web",
+  "PluginLibs": [
+   {
+    "LibName": "Wwise Sine",
+    "LibId": "6553602",
+    "Type": "Source",
+    "DLL": "AkSineTone",
+    "StaticLib": "AkSineSource"
+   },
+   {
+    "LibName": "Wwise RoomVerb",
+    "LibId": "7733251",
+    "Type": "Effect",
+    "DLL": "AkRoomVerb",
+    "StaticLib": "AkRoomVerbFX"
+   },
+   {
+    "LibName": "Wwise Meter",
+    "LibId": "8454147",
+    "Type": "Effect",
+    "DLL": "AkMeter",
+    "StaticLib": "AkMeterFX"
+   },
+   {
+    "LibName": "System",
+    "LibId": "11403271",
+    "Type": "AudioDevice"
+   },
+   {
+    "LibName": "No Output",
+    "LibId": "11862023",
+    "Type": "AudioDevice"
+   }
+  ],
+  "FileHash": "{A1A86307-E660-0B7C-6D39-1C23F20BC5A9}"
+ }
+}
