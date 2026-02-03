@@ -4,6 +4,7 @@ using TMPro;
 using Resonance.Match;
 using System.Collections.Generic;
 using Resonance.Assemblies.Match;
+using PurrNet;
 
 namespace Resonance.UI
 {
@@ -60,7 +61,6 @@ namespace Resonance.UI
             if (ArenaRoundManager.Instance != null)
             {
                 ArenaRoundManager.Instance.OnMatchEnd += OnMatchEnd;
-                ArenaRoundManager.Instance.OnLeaderChanged += OnLeaderChanged;
             }
 
             if (MatchStatBridge.Instance != null)
@@ -74,7 +74,6 @@ namespace Resonance.UI
             if (ArenaRoundManager.Instance != null)
             {
                 ArenaRoundManager.Instance.OnMatchEnd -= OnMatchEnd;
-                ArenaRoundManager.Instance.OnLeaderChanged -= OnLeaderChanged;
             }
 
             if (MatchStatBridge.Instance != null)
@@ -164,7 +163,7 @@ namespace Resonance.UI
         #endregion
 
         #region Event Handlers
-        private async void OnMatchEnd(GameObject winner)
+        private async void OnMatchEnd(PlayerID? winner)
         {
             if (matchEndPanel != null)
             {
@@ -196,21 +195,14 @@ namespace Resonance.UI
 
             if (winnerText != null)
             {
-                if (winner != null)
-                {
-                    string winnerName = winner == playerObject ? "You Win!" : $"{winner.name} Wins!";
-                    winnerText.text = winnerName;
-                }
-                else
-                {
-                    winnerText.text = "Match Ended";
-                }
+                string winnerName = $"{winner} Wins!";
+                winnerText.text = winnerName;
             }
 
             // Optionally show basic stats in winner text
-            if (winner != null && MatchStatBridge.Instance != null)
+            if (winner is PlayerID id && MatchStatBridge.Instance != null)
             {
-                PlayerMatchStats? stats = await MatchStatBridge.Instance.GetStats(winner);
+                PlayerMatchStats? stats = await MatchStatBridge.Instance.GetStats(id);
                 if (stats != null && finalStatsText != null)
                 {
                     finalStatsText.text = $"Final Score: {stats?.kills} Kills";
@@ -218,10 +210,6 @@ namespace Resonance.UI
             }
         }
 
-        private void OnLeaderChanged(GameObject newLeader, int eliminations)
-        {
-            // Leader tracking removed
-        }
 
         private void OnPlayerKill(GameObject killer, GameObject victim)
         {
