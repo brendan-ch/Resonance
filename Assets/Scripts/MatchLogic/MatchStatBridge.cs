@@ -65,14 +65,14 @@ namespace Resonance.Match
         [ObserversRpc]
         private void FireOnKillObservers(ulong killer, ulong victim)
         {
-            OnPlayerKill?.Invoke(PlayerIDExtractor.UlongToPlayerId(killer), PlayerIDExtractor.UlongToPlayerId(victim));
+            OnPlayerKill?.Invoke(OwnerIDExtractor.UlongToPlayerId(killer), OwnerIDExtractor.UlongToPlayerId(victim));
         }
         #endregion
 
         #region Client to server actions
         public void RecordKill(GameObject killer, GameObject victim)
         {
-            if (PlayerIDExtractor.TryExtractPlayerIds(killer, victim, out ulong killerId, out ulong victimId))
+            if (OwnerIDExtractor.TryExtractPlayerIds(killer, victim, out ulong killerId, out ulong victimId))
             {
                 RecordKill_Server(killerId, victimId);
             }
@@ -87,7 +87,7 @@ namespace Resonance.Match
 
         public void RecordDamage(GameObject attacker, GameObject victim, float amount)
         {
-            if (PlayerIDExtractor.TryExtractPlayerIds(attacker, victim, out ulong attackerId, out ulong victimId))
+            if (OwnerIDExtractor.TryExtractPlayerIds(attacker, victim, out ulong attackerId, out ulong victimId))
             {
                 RecordDamage_Server(attackerId, victimId, amount);
             }
@@ -101,8 +101,9 @@ namespace Resonance.Match
 
         public void RecordDeath(GameObject victim)
         {
-            if (PlayerIDExtractor.TryExtractPlayerIds(victim, out ulong victimId))
+            if (OwnerIDExtractor.TryExtractPlayerIds(victim, out ulong victimId))
             {
+                Debug.Log(victimId);
                 RecordDeath_Server(victimId);
             }
         }
@@ -115,7 +116,7 @@ namespace Resonance.Match
 
         public void RegisterPlayer(GameObject player)
         {
-            if (PlayerIDExtractor.TryExtractPlayerIds(player, out ulong id))
+            if (OwnerIDExtractor.TryExtractPlayerIds(player, out ulong id))
             {
                 RegisterPlayer_Server(id);
             }
@@ -129,7 +130,7 @@ namespace Resonance.Match
 
         public void UnregisterPlayer(GameObject player)
         {
-            if (PlayerIDExtractor.TryExtractPlayerIds(player, out ulong id))
+            if (OwnerIDExtractor.TryExtractPlayerIds(player, out ulong id))
             {
                 UnregisterPlayer_Server(id);
             }
@@ -151,7 +152,7 @@ namespace Resonance.Match
         #region Getters for client
         public async Task<PlayerMatchStats?> GetStats(GameObject player)
         {
-            if (PlayerIDExtractor.TryExtractPlayerIds(player, out ulong playerId))
+            if (OwnerIDExtractor.TryExtractPlayerIds(player, out ulong playerId))
             {
                 return await GetStats(playerId);
             }
@@ -182,7 +183,7 @@ namespace Resonance.Match
             var toPropagate = new Dictionary<PlayerID, PlayerMatchStats>();
             foreach (var (id, stats) in allStats)
             {
-                toPropagate.Add(PlayerIDExtractor.UlongToPlayerId(id), stats);
+                toPropagate.Add(OwnerIDExtractor.UlongToPlayerId(id), stats);
             }
 
             return toPropagate;

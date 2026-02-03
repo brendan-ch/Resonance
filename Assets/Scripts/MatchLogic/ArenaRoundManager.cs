@@ -213,7 +213,7 @@ namespace Resonance.Match
         {
             var leaderboard = await GetLeaderboard();
 
-            var didExtractPlayerId = PlayerIDExtractor.TryExtractPlayerIds(player, out ulong id);
+            var didExtractPlayerId = OwnerIDExtractor.TryExtractPlayerIds(player, out ulong id);
             var playerRanking = leaderboard.FirstOrDefault(r => r.player.id.value == id);
             return playerRanking?.rank ?? -1;
         }

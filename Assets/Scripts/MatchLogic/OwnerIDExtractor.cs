@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Resonance.Match
 {
 
-    public class PlayerIDExtractor
+    public class OwnerIDExtractor
     {
 
         public static PlayerID UlongToPlayerId(ulong id)
@@ -16,10 +16,12 @@ namespace Resonance.Match
         public static bool TryExtractPlayerIds(GameObject gameObject, out ulong playerId)
         {
             playerId = 0;
-            if (!gameObject.TryGetComponent(out PlayerController.PlayerController controller))
+            
+            // Get anything that is a NetworkBehaviour, I presume?
+            if (!gameObject.TryGetComponent(out NetworkBehaviour controller))
                 return false;
 
-            if (controller.id?.id.value is ulong idPrimitive)
+            if (controller.owner?.id.value is ulong idPrimitive)
             {
                 playerId = idPrimitive;
                 return true;
@@ -33,12 +35,12 @@ namespace Resonance.Match
             firstId = 0;
             secondId = 0;
 
-            if (!first.TryGetComponent(out PlayerController.PlayerController firstController) ||
-                !second.TryGetComponent(out PlayerController.PlayerController secondController))
+            if (!first.TryGetComponent(out NetworkBehaviour firstController) ||
+                !second.TryGetComponent(out NetworkBehaviour secondController))
                 return false;
 
-            if (firstController.id?.id.value is ulong firstIdPrimitive &&
-                secondController.id?.id.value is ulong secondIdPrimitive)
+            if (firstController.owner?.id.value is ulong firstIdPrimitive &&
+                secondController.owner?.id.value is ulong secondIdPrimitive)
             {
                 firstId = firstIdPrimitive;
                 secondId = secondIdPrimitive;
