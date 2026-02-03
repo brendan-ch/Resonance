@@ -137,8 +137,6 @@ namespace Resonance.Assemblies.Match
 
         public void RecordDeath(ulong victimId)
         {
-            if (victimId == 0) return;
-
             RegisterPlayer(victimId);
             playerStats[victimId] = playerStats[victimId].RecordDeath();
 
