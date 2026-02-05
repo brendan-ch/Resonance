@@ -5,7 +5,7 @@ namespace Resonance.Assemblies.Match
 {
     public class MatchStatTracker
     {
-        private float assistTimeWindow; // Time window for assists
+        private float assistTimeWindowMs; // Time window for assists
         private float assistDamageThreshold; // Minimum damage for assist credit
 
         #region Player Stats Data
@@ -23,13 +23,13 @@ namespace Resonance.Assemblies.Match
         #region Startup
         public MatchStatTracker()
         {
-            assistTimeWindow = 5f;
+            assistTimeWindowMs = 5f;
             assistDamageThreshold = 20f;
         }
 
-        public MatchStatTracker(float assistTimeWindow, float assistDamageThreshold)
+        public MatchStatTracker(float assistTimeWindowMs, float assistDamageThreshold)
         {
-            this.assistTimeWindow = assistTimeWindow;
+            this.assistTimeWindowMs = assistTimeWindowMs;
             this.assistDamageThreshold = assistDamageThreshold;
         }
         #endregion
@@ -79,7 +79,7 @@ namespace Resonance.Assemblies.Match
             if (!recentDamage.ContainsKey(victimId)) return;
 
             float currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            recentDamage[victimId].RemoveAll(d => currentTime - d.timestampUnixTimeMs > assistTimeWindow);
+            recentDamage[victimId].RemoveAll(d => currentTime - d.timestampUnixTimeMs > assistTimeWindowMs);
         }
         #endregion
 
