@@ -148,10 +148,12 @@ namespace Resonance.Assemblies.Match
             foreach (var playerId in playerIds)
             {
                 playerStats[playerId] = new PlayerMatchStats();
-                OnAllStatsUpdated?.Invoke(playerStats);
             }
 
             damageTracker.Clear();
+
+            // Fire event once after all stats are reset
+            OnAllStatsUpdated?.Invoke(playerStats);
         }
 
         public void ResetPlayerStats(ulong playerId)
@@ -159,6 +161,7 @@ namespace Resonance.Assemblies.Match
             if (playerStats.ContainsKey(playerId))
             {
                 playerStats[playerId] = new PlayerMatchStats();
+                OnAllStatsUpdated?.Invoke(playerStats);
             }
         }
         #endregion
