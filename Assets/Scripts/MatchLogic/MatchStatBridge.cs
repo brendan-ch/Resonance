@@ -140,6 +140,7 @@ namespace Resonance.Match
             }
         }
 
+        [ServerRpc]
         private void UnregisterPlayer_Server(ulong id)
         {
             tracker_Server?.UnregisterPlayer(id);
