@@ -460,7 +460,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 0.6901961, g: 0.76862746, b: 0.87058824, a: 1}
-  m_Intensity: 0.03
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1085,8 +1085,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f898346e55a92449a1030d1390b9900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WwiseSmartOcclusion
-  occlusionRTPCName: Occlusion
-  diffractionRTPCName: Diffraction
+  occlusionParameter: Occlusion
+  diffractionParameter: Diffraction
   coneRayCount: 6
   coneAngle: 30
   maxCheckDistance: 50
@@ -1120,8 +1120,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   scanRate: 5
-  smoothingSpeed: 5
-  suspendWhenNotPlaying: 1
   cullingDistance: 50
   drawDebugRays: 1
   clearColor: {r: 0, g: 1, b: 0, a: 1}

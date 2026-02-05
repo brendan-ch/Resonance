@@ -1,59 +1,50 @@
 using UnityEngine;
 
 /// <summary>
-/// Volumetric Occlusion & Diffraction System for Wwise
-/// Uses cone-based raycasting to simulate realistic sound obstruction
+/// Wwise Smart Occlusion - Volumetric Occlusion with Diffraction
+/// Uses cone-based raycasting to simulate realistic sound obstruction and diffraction.
 /// </summary>
 [RequireComponent(typeof(AkGameObj))]
-[AddComponentMenu("Wwise/Smart Acoustics/Wwise Smart Occlusion")]
 public class WwiseSmartOcclusion : MonoBehaviour
 {
-    [Header("RTPC Configuration")]
-    [Tooltip("Name of the RTPC in Wwise for Occlusion amount (0 = clear, 1 = fully blocked)")]
-    public string occlusionRTPCName = "Occlusion";
+    [Header("Wwise Parameters")]
+    [Tooltip("RTPC name for occlusion (0 = clear, 1 = blocked)")]
+    public string occlusionParameter = "Occlusion";
     
-    [Tooltip("Name of the RTPC in Wwise for Diffraction amount (0 = none, 1 = max)")]
-    public string diffractionRTPCName = "Diffraction";
+    [Tooltip("RTPC name for diffraction")]
+    public string diffractionParameter = "Diffraction";
 
-    [Header("Volumetric Cone Settings")]
-    [Tooltip("Number of rays in the cone (6-12 recommended)")]
-    [Range(3, 20)]
+    [Header("Volumetric Cone")]
+    [Tooltip("Number of rays in cone")]
+    [Range(3, 12)]
     public int coneRayCount = 6;
     
-    [Tooltip("Cone spread angle in degrees")]
+    [Tooltip("Cone spread angle")]
     [Range(5f, 60f)]
     public float coneAngle = 30f;
     
-    [Tooltip("Maximum occlusion check distance")]
+    [Tooltip("Maximum check distance")]
     public float maxCheckDistance = 100f;
     
-    [Tooltip("LayerMask for occluding objects")]
+    [Tooltip("Occlusion layer mask")]
     public LayerMask occlusionLayer;
 
-    [Header("Diffraction Settings")]
-    [Tooltip("Enable diffraction simulation (sound wrapping around corners)")]
+    [Header("Diffraction")]
+    [Tooltip("Enable diffraction simulation")]
     public bool enableDiffraction = true;
     
-    [Tooltip("Distance threshold for near-field corner detection")]
+    [Tooltip("Near-field threshold (prevents false occlusion)")]
     public float nearFieldThreshold = 1.5f;
     
-    [Tooltip("Maps distance behind obstacle to diffraction amount")]
+    [Tooltip("Diffraction curve (distance to amount)")]
     public AnimationCurve diffractionCurve = AnimationCurve.EaseInOut(0f, 1f, 5f, 0f);
 
-    [Header("Update Settings")]
-    [Tooltip("Scan rate in Hz (5 = every 0.2s)")]
+    [Header("Optimization")]
+    [Tooltip("Scan rate (Hz)")]
     [Range(1f, 30f)]
     public float scanRate = 5f;
     
-    [Tooltip("Smoothing speed for occlusion changes")]
-    [Range(0.1f, 10f)]
-    public float smoothingSpeed = 5f;
-
-    [Header("Optimization")]
-    [Tooltip("Suspend occlusion checks when emitter is not playing")]
-    public bool suspendWhenNotPlaying = true;
-    
-    [Tooltip("Maximum distance from listener to process occlusion")]
+    [Tooltip("Distance culling")]
     public float cullingDistance = 50f;
 
     [Header("Debug")]
@@ -62,94 +53,86 @@ public class WwiseSmartOcclusion : MonoBehaviour
     public Color occludedColor = Color.red;
     public Color diffractionColor = Color.yellow;
 
-    // Internal State
-    private AkGameObj akGameObj;
-    private Transform listenerTransform;
+    // Internal
+    private Transform listener;
     private Vector3[] coneDirections;
     private float lastScanTime;
     private float currentOcclusion;
     private float currentDiffraction;
     private float targetOcclusion;
     private float targetDiffraction;
-    private bool isPlayingCached;
-    private uint lastPlayingEventID;
+    private const float smoothingSpeed = 5f;
 
-    // Public Properties
+    // Public accessors
     public float Occlusion => currentOcclusion;
     public float Diffraction => currentDiffraction;
-    public bool IsOccluded => currentOcclusion > 0.5f;
 
-    void Awake()
+    void Start()
     {
-        akGameObj = GetComponent<AkGameObj>();
-        GenerateConeDirections();
         FindListener();
-    }
-
-    void OnEnable()
-    {
+        GenerateConeDirections();
         lastScanTime = -1f;
     }
 
     void Update()
     {
-        if (ShouldSkipProcessing())
+        if (!ShouldProcess())
             return;
 
+        // Time-sliced scanning
         if (Time.time - lastScanTime >= 1f / scanRate)
         {
             PerformOcclusionScan();
             lastScanTime = Time.time;
         }
 
+        // Smooth updates
         SmoothParameters();
     }
-    
-    /// Optimization: Skip processing when not needed
-    bool ShouldSkipProcessing()
+
+    bool ShouldProcess()
     {
-        if (listenerTransform == null)
+        if (listener == null)
         {
             FindListener();
-            if (listenerTransform == null)
-                return true;
+            return false;
         }
 
         // Distance culling
-        float distanceToListener = Vector3.Distance(transform.position, listenerTransform.position);
-        if (distanceToListener > cullingDistance)
-            return true;
-
-        // Playing state check
-        if (suspendWhenNotPlaying)
-        {
-            // In Wwise 2025, we track playing state via event posting
-            // This is a simplified check - you may need to track your own playing state
-            if (!isPlayingCached)
-                return true;
-        }
-
-        return false;
+        float distance = Vector3.Distance(transform.position, listener.position);
+        return distance <= cullingDistance;
     }
-    
+
+    void FindListener()
+    {
+        AkAudioListener akListener = FindAnyObjectByType<AkAudioListener>();
+        if (akListener != null)
+        {
+            listener = akListener.transform;
+        }
+        else
+        {
+            AudioListener unityListener = FindAnyObjectByType<AudioListener>();
+            if (unityListener != null)
+            {
+                listener = unityListener.transform;
+            }
+        }
+    }
+
     void GenerateConeDirections()
     {
         coneDirections = new Vector3[coneRayCount];
-        
-        // Center ray (always straight to listener)
-        coneDirections[0] = Vector3.zero; // Calculated dynamically
+        coneDirections[0] = Vector3.zero; // Center ray (calculated dynamically)
 
-        // Surrounding rays in a cone pattern
         if (coneRayCount > 1)
         {
             float angleStep = 360f / (coneRayCount - 1);
-            
             for (int i = 1; i < coneRayCount; i++)
             {
                 float angle = angleStep * (i - 1) * Mathf.Deg2Rad;
                 float coneRad = coneAngle * Mathf.Deg2Rad;
-                
-                // Offset perpendicular to listener direction
+
                 coneDirections[i] = new Vector3(
                     Mathf.Cos(angle) * Mathf.Sin(coneRad),
                     Mathf.Sin(angle) * Mathf.Sin(coneRad),
@@ -158,51 +141,47 @@ public class WwiseSmartOcclusion : MonoBehaviour
             }
         }
     }
-    
+
     void PerformOcclusionScan()
     {
-        if (listenerTransform == null)
+        if (listener == null)
             return;
 
         Vector3 origin = transform.position;
-        Vector3 toListener = listenerTransform.position - origin;
+        Vector3 toListener = listener.position - origin;
         float distanceToListener = toListener.magnitude;
         Vector3 dirToListener = toListener / distanceToListener;
 
         int blockedCount = 0;
-        int totalRays = coneRayCount;
         bool centerIsBlocked = false;
         float minDiffractionDist = float.MaxValue;
 
-        // Check center ray first
+        // Center ray
         RaycastHit centerHit;
         if (Physics.Raycast(origin, dirToListener, out centerHit, distanceToListener, occlusionLayer))
         {
             centerIsBlocked = true;
             blockedCount++;
-            
+
             if (drawDebugRays)
                 Debug.DrawLine(origin, centerHit.point, occludedColor, 1f / scanRate);
         }
         else if (drawDebugRays)
         {
-            Debug.DrawLine(origin, listenerTransform.position, clearColor, 1f / scanRate);
+            Debug.DrawLine(origin, listener.position, clearColor, 1f / scanRate);
         }
 
-        // Check surrounding cone rays
+        // Surrounding rays
         for (int i = 1; i < coneRayCount; i++)
         {
-            // Rotate cone direction to face listener
             Vector3 localDir = coneDirections[i];
             Quaternion rotation = Quaternion.LookRotation(dirToListener);
             Vector3 worldDir = rotation * localDir;
 
-            Ray ray = new Ray(origin, worldDir);
             RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, distanceToListener, occlusionLayer))
+            if (Physics.Raycast(origin, worldDir, out hit, distanceToListener, occlusionLayer))
             {
-                // Near-field corner logic: prevent false occlusion when standing next to walls
+                // Near-field logic: prevent false occlusion when next to walls
                 float distFromHitToListener = distanceToListener - hit.distance;
                 bool isNearField = (distFromHitToListener < nearFieldThreshold) && (!centerIsBlocked);
 
@@ -226,7 +205,7 @@ public class WwiseSmartOcclusion : MonoBehaviour
         }
 
         // Calculate occlusion
-        float blockRatio = (float)blockedCount / totalRays;
+        float blockRatio = (float)blockedCount / coneRayCount;
         targetOcclusion = Mathf.Clamp01(blockRatio);
 
         // Calculate diffraction
@@ -239,7 +218,7 @@ public class WwiseSmartOcclusion : MonoBehaviour
             targetDiffraction = 0f;
         }
     }
-    
+
     void SmoothParameters()
     {
         currentOcclusion = Mathf.Lerp(currentOcclusion, targetOcclusion, Time.deltaTime * smoothingSpeed);
@@ -247,70 +226,14 @@ public class WwiseSmartOcclusion : MonoBehaviour
 
         UpdateWwiseParameters();
     }
-    
+
     void UpdateWwiseParameters()
     {
-        AkSoundEngine.SetRTPCValue(occlusionRTPCName, currentOcclusion, gameObject);
+        AkUnitySoundEngine.SetRTPCValue(occlusionParameter, currentOcclusion, gameObject);
         
         if (enableDiffraction)
         {
-            AkSoundEngine.SetRTPCValue(diffractionRTPCName, currentDiffraction, gameObject);
-        }
-    }
-    
-    void FindListener()
-    {
-        // Try to find AkAudioListener first (Wwise 2025)
-        AkAudioListener akListener = FindObjectOfType<AkAudioListener>();
-        if (akListener != null)
-        {
-            listenerTransform = akListener.transform;
-            return;
-        }
-
-        // Fallback to Unity AudioListener
-        AudioListener unityListener = FindObjectOfType<AudioListener>();
-        if (unityListener != null)
-        {
-            listenerTransform = unityListener.transform;
-        }
-    }
-
-    // Public API for tracking playing state
-    public void OnEventPosted(uint playingID)
-    {
-        lastPlayingEventID = playingID;
-        isPlayingCached = true;
-    }
-
-    public void OnEventStopped()
-    {
-        isPlayingCached = false;
-    }
-
-    public void ForceRescan()
-    {
-        PerformOcclusionScan();
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        if (!Application.isPlaying || listenerTransform == null)
-            return;
-
-        // Draw occlusion state
-        Gizmos.color = Color.Lerp(clearColor, occludedColor, currentOcclusion);
-        Gizmos.DrawWireSphere(transform.position, 0.3f);
-
-        // Draw line to listener
-        Gizmos.color = IsOccluded ? Color.red : Color.green;
-        Gizmos.DrawLine(transform.position, listenerTransform.position);
-
-        // Draw diffraction indicator
-        if (enableDiffraction && currentDiffraction > 0.1f)
-        {
-            Gizmos.color = diffractionColor;
-            Gizmos.DrawWireSphere(transform.position, 0.5f * currentDiffraction);
+            AkUnitySoundEngine.SetRTPCValue(diffractionParameter, currentDiffraction, gameObject);
         }
     }
 

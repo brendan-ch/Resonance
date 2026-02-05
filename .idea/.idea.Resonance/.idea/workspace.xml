@@ -10,24 +10,7 @@
       <change beforePath="$PROJECT_DIR$/Assets/Developers/Isamu/ProceduralAcoustics/WwiseAmbienceManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Developers/Isamu/ProceduralAcoustics/WwiseAmbienceManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Developers/Isamu/ProceduralAcoustics/WwiseSmartOcclusion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Developers/Isamu/ProceduralAcoustics/WwiseSmartOcclusion.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Developers/Isamu/ProceduralAcoustics/WwiseSmartReverb.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Developers/Isamu/ProceduralAcoustics/WwiseSmartReverb.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/FirstPersonController.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/FirstPersonController.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_AudioReactivity.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_AudioReactivity.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/ProjectInfo.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/ProjectInfo.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/ProjectInfo.json.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/ProjectInfo.json.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/Windows.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/Windows.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/Wwise_IDs.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/GeneratedSoundBanks/Wwise_IDs.h.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Audio/ProjectInfo.json.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Wwise/MonoBehaviour/Runtime/AkGameObj.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Wwise/MonoBehaviour/Runtime/AkGameObj.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.connect.share/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.connect.share/Settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/Containers/Default Work Unit.wwu" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/Containers/Default Work Unit.wwu" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.bnk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Mac/Main_Soundbank.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Web/Main_Soundbank.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Web/Main_Soundbank.bnk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Web/Main_Soundbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Web/Main_Soundbank.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.bnk" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.bnk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/GeneratedSoundBanks/Windows/Main_Soundbank.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resonance_WwiseProject/Resonance_WwiseProject.wproj" beforeDir="false" afterPath="$PROJECT_DIR$/Resonance_WwiseProject/Resonance_WwiseProject.wproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -187,7 +170,8 @@
       <workItem from="1768305717710" duration="5966000" />
       <workItem from="1769931522796" duration="724000" />
       <workItem from="1769935892392" duration="23000" />
-      <workItem from="1770154747020" duration="2397000" />
+      <workItem from="1770154747020" duration="2694000" />
+      <workItem from="1770318121847" duration="696000" />
     </task>
     <servers />
   </component>

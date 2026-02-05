@@ -1,71 +1,65 @@
 using UnityEngine;
 
 /// <summary>
-/// Example: Procedural Ambience Manager for Wwise
-/// Automatically blends indoor/outdoor ambience based on WwiseSmartReverb data
-/// No manual trigger zones required!
+/// Wwise Ambience Manager - Procedural Ambience Blending
+/// Automatically blends outdoor/indoor ambience based on WwiseSmartReverb data.
+/// No manual trigger zones!
 /// </summary>
 [RequireComponent(typeof(AkGameObj))]
-[AddComponentMenu("Wwise/Smart Acoustics/Wwise Ambience Manager")]
 public class WwiseAmbienceManager : MonoBehaviour
 {
-    [Header("Ambience Configuration")]
-    [Tooltip("Wwise Event for ambience (should have indoor/outdoor states or RTPCs)")]
+    [Header("Wwise Event")]
+    [Tooltip("Ambience event (should have indoor/outdoor blend parameter)")]
     public AK.Wwise.Event ambienceEvent;
-    
-    [Tooltip("Name of the RTPC that blends indoor/outdoor (0 = outdoor, 100 = indoor)")]
-    public string ambMixRTPCName = "AmbienceMix";
 
-    [Header("Reverb Scanner Reference")]
-    [Tooltip("Reference to the WwiseSmartReverb component (usually on player/listener)")]
-    public WwiseSmartReverb reverbScanner;
+    [Header("Scanner Reference")]
+    [Tooltip("WwiseSmartReverb component (usually on player/listener)")]
+    public WwiseSmartReverb scannerSource;
 
-    [Header("Threshold Calibration")]
-    [Tooltip("Enclosure value considered 'fully outdoor'")]
+    [Header("Mix Parameter")]
+    [Tooltip("RTPC name for ambience mix (0 = outdoor, 100 = indoor)")]
+    public string mixParameterName = "AmbienceMix";
+
+    [Header("Thresholds")]
+    [Tooltip("Enclosure value for outdoor")]
     [Range(0f, 1f)]
     public float outdoorThreshold = 0.1f;
     
-    [Tooltip("Enclosure value considered 'fully indoor'")]
+    [Tooltip("Enclosure value for indoor")]
     [Range(0f, 1f)]
     public float indoorThreshold = 0.7f;
-    
-    [Tooltip("Curve for mapping enclosure to ambience mix")]
+
+    [Header("Blend Curve")]
+    [Tooltip("Maps enclosure to mix value")]
     public AnimationCurve mixCurve = AnimationCurve.Linear(0f, 0f, 1f, 100f);
 
-    [Header("Transition Settings")]
-    [Tooltip("How quickly ambience adapts to room changes")]
+    [Header("Settings")]
+    [Tooltip("Transition speed")]
     [Range(0.1f, 5f)]
     public float transitionSpeed = 1f;
-
-    [Header("Auto-Start")]
-    [Tooltip("Automatically start ambience on scene load")]
+    
+    [Tooltip("Auto-start on scene load")]
     public bool autoStart = true;
 
-    // Internal State
-    private AkGameObj akGameObj;
-    private uint playingAmbienceID;
+    // Internal
+    private uint playingID;
     private bool isPlaying;
     private float currentMix;
     private float targetMix;
 
-    void Awake()
+    void Start()
     {
-        akGameObj = GetComponent<AkGameObj>();
-        
-        if (reverbScanner == null)
+        if (scannerSource == null)
         {
-            reverbScanner = FindObjectOfType<WwiseSmartReverb>();
-            if (reverbScanner == null)
+            scannerSource = FindAnyObjectByType<WwiseSmartReverb>();
+            if (scannerSource == null)
             {
-                Debug.LogError("[WwiseAmbienceManager] No WwiseSmartReverb found in scene! This component requires it.");
+                Debug.LogError("[WwiseAmbienceManager] No WwiseSmartReverb found in scene!");
                 enabled = false;
                 return;
             }
         }
-    }
 
-    void Start()
-    {
         if (autoStart)
         {
             StartAmbience();
@@ -74,40 +68,32 @@ public class WwiseAmbienceManager : MonoBehaviour
 
     void Update()
     {
-        if (!isPlaying || reverbScanner == null)
+        if (!isPlaying || scannerSource == null)
             return;
 
-        // Get current enclosure from reverb scanner
-        float enclosure = reverbScanner.EnclosureFactor;
-        
-        // Map enclosure to mix value (0-100)
+        // Get enclosure from scanner
+        float enclosure = scannerSource.EnclosureFactor;
+
+        // Map to mix value
         float normalizedEnclosure = Mathf.InverseLerp(outdoorThreshold, indoorThreshold, enclosure);
         targetMix = mixCurve.Evaluate(normalizedEnclosure);
 
         // Smooth transition
         currentMix = Mathf.Lerp(currentMix, targetMix, Time.deltaTime * transitionSpeed);
 
-        // Update Wwise RTPC
-        AkSoundEngine.SetRTPCValue(ambMixRTPCName, currentMix, gameObject);
+        // Update Wwise
+        AkUnitySoundEngine.SetRTPCValue(mixParameterName, currentMix, gameObject);
     }
 
     public void StartAmbience()
     {
         if (isPlaying)
-        {
-            Debug.LogWarning("[WwiseAmbienceManager] Ambience is already playing.");
             return;
-        }
 
         if (ambienceEvent != null && ambienceEvent.IsValid())
         {
-            playingAmbienceID = ambienceEvent.Post(gameObject);
+            playingID = ambienceEvent.Post(gameObject);
             isPlaying = true;
-            Debug.Log($"[WwiseAmbienceManager] Started ambience (ID: {playingAmbienceID})");
-        }
-        else
-        {
-            Debug.LogError("[WwiseAmbienceManager] Ambience Event is not valid!");
         }
     }
 
@@ -116,50 +102,17 @@ public class WwiseAmbienceManager : MonoBehaviour
         if (!isPlaying)
             return;
 
-        if (playingAmbienceID != AkSoundEngine.AK_INVALID_PLAYING_ID)
+        if (playingID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
         {
-            AkSoundEngine.ExecuteActionOnPlayingID(
+            AkUnitySoundEngine.ExecuteActionOnPlayingID(
                 AkActionOnEventType.AkActionOnEventType_Stop,
-                playingAmbienceID,
-                (int)(fadeTime * 1000), // Convert to milliseconds
+                playingID,
+                (int)(fadeTime * 1000),
                 AkCurveInterpolation.AkCurveInterpolation_Linear
             );
         }
 
         isPlaying = false;
-        Debug.Log("[WwiseAmbienceManager] Stopped ambience");
-    }
-
-    public void PauseAmbience()
-    {
-        if (!isPlaying)
-            return;
-
-        if (playingAmbienceID != AkSoundEngine.AK_INVALID_PLAYING_ID)
-        {
-            AkSoundEngine.ExecuteActionOnPlayingID(
-                AkActionOnEventType.AkActionOnEventType_Pause,
-                playingAmbienceID
-            );
-        }
-
-        Debug.Log("[WwiseAmbienceManager] Paused ambience");
-    }
-
-    public void ResumeAmbience()
-    {
-        if (!isPlaying)
-            return;
-
-        if (playingAmbienceID != AkSoundEngine.AK_INVALID_PLAYING_ID)
-        {
-            AkSoundEngine.ExecuteActionOnPlayingID(
-                AkActionOnEventType.AkActionOnEventType_Resume,
-                playingAmbienceID
-            );
-        }
-
-        Debug.Log("[WwiseAmbienceManager] Resumed ambience");
     }
 
     void OnDisable()
@@ -168,20 +121,5 @@ public class WwiseAmbienceManager : MonoBehaviour
         {
             StopAmbience(0.5f);
         }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        if (!Application.isPlaying || reverbScanner == null)
-            return;
-
-        // Visualize current indoor/outdoor state
-        Gizmos.color = Color.Lerp(
-            new Color(0.5f, 1f, 0.5f, 0.5f), // Outdoor (green)
-            new Color(1f, 0.5f, 0.2f, 0.5f), // Indoor (orange)
-            currentMix / 100f
-        );
-        
-        Gizmos.DrawWireSphere(transform.position, 1f);
     }
 }
