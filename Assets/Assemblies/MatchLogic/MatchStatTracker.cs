@@ -7,7 +7,7 @@ namespace Resonance.Assemblies.Match
     {
         #region Player Stats Data
         private Dictionary<ulong, PlayerMatchStats> playerStats = new();
-        private DamageTracker damageTracker;
+        private AssistCalculator assistCalculator;
         #endregion
 
         #region Events
@@ -20,12 +20,12 @@ namespace Resonance.Assemblies.Match
         #region Startup
         public MatchStatTracker()
         {
-            damageTracker = new DamageTracker(5f, 20f);
+            assistCalculator = new AssistCalculator(5f, 20f);
         }
 
         public MatchStatTracker(float assistTimeWindowMs, float assistDamageThreshold)
         {
-            damageTracker = new DamageTracker(assistTimeWindowMs, assistDamageThreshold);
+            assistCalculator = new AssistCalculator(assistTimeWindowMs, assistDamageThreshold);
         }
         #endregion
 
@@ -50,7 +50,7 @@ namespace Resonance.Assemblies.Match
             RegisterPlayer(attackerId);
             RegisterPlayer(victimId);
 
-            damageTracker.RecordDamage(attackerId, victimId, damageAmount);
+            assistCalculator.RecordDamage(attackerId, victimId, damageAmount);
         }
         #endregion
 
@@ -71,7 +71,7 @@ namespace Resonance.Assemblies.Match
             ProcessAssists(killerId, victimId);
 
             // Clear damage contributions for victim
-            damageTracker.ClearDamageForVictim(victimId);
+            assistCalculator.ClearDamageForVictim(victimId);
 
             // Notify stats updated
             OnStatsUpdated?.Invoke(killerId, playerStats[killerId]);
@@ -81,7 +81,7 @@ namespace Resonance.Assemblies.Match
 
         private void ProcessAssists(ulong killerId, ulong victimId)
         {
-            var assisters = damageTracker.GetAssistAttackersForVictim(victimId, killerId);
+            var assisters = assistCalculator.GetAssistAttackersForVictim(victimId, killerId);
 
             foreach (var assisterId in assisters)
             {
@@ -150,7 +150,7 @@ namespace Resonance.Assemblies.Match
                 playerStats[playerId] = new PlayerMatchStats();
             }
 
-            damageTracker.Clear();
+            assistCalculator.Clear();
 
             // Fire event once after all stats are reset
             OnAllStatsUpdated?.Invoke(playerStats);

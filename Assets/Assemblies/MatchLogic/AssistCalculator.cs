@@ -3,13 +3,16 @@ using System.Collections.Generic;
 
 namespace Resonance.Assemblies.Match
 {
-    public class DamageTracker
+    /// <summary>
+    /// Tracks recent damage by all players to calculate who should receive assists.
+    /// </summary>
+    public class AssistCalculator
     {
         private float assistTimeWindowMs;
         private float assistDamageThreshold;
         private Dictionary<ulong, List<DamageContribution>> recentDamage = new();
 
-        public DamageTracker(float assistTimeWindowMs, float assistDamageThreshold)
+        public AssistCalculator(float assistTimeWindowMs, float assistDamageThreshold)
         {
             this.assistTimeWindowMs = assistTimeWindowMs;
             this.assistDamageThreshold = assistDamageThreshold;

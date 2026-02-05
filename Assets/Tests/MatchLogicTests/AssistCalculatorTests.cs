@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Resonance.Assemblies.Match;
 
-public class DamageTrackerTests
+public class AssistCalculatorTests
 {
     private ulong expectedVictimId = 2;
-    private DamageTracker tracker;
+    private AssistCalculator calculator;
     private HashSet<ulong> expectedAssistIds = new()
         {
             3,
@@ -16,7 +16,7 @@ public class DamageTrackerTests
     [SetUp]
     public void Setup()
     {
-        tracker = new DamageTracker(
+        calculator = new AssistCalculator(
             assistTimeWindowMs: 100f,
             assistDamageThreshold: 20
         );
@@ -29,11 +29,11 @@ public class DamageTrackerTests
         foreach (var id in expectedAssistIds)
         {
             // test out total damage before death
-            tracker.RecordDamage(id, expectedVictimId, 15);
-            tracker.RecordDamage(id, expectedVictimId, 15);
+            calculator.RecordDamage(id, expectedVictimId, 15);
+            calculator.RecordDamage(id, expectedVictimId, 15);
         }
 
-        var actualAssistIds = tracker.GetAssistAttackersForVictim(expectedVictimId, 1);
+        var actualAssistIds = calculator.GetAssistAttackersForVictim(expectedVictimId, 1);
         Assert.AreEqual(expectedAssistIds, actualAssistIds);
     }
 
@@ -42,9 +42,9 @@ public class DamageTrackerTests
     {
         foreach (var id in expectedAssistIds)
         {
-            tracker.RecordDamage(id, expectedVictimId, 30);
+            calculator.RecordDamage(id, expectedVictimId, 30);
         }
-        var actualAssistIds = tracker.GetAssistAttackersForVictim(expectedVictimId, 1);
+        var actualAssistIds = calculator.GetAssistAttackersForVictim(expectedVictimId, 1);
         Assert.AreEqual(expectedAssistIds, actualAssistIds);
     }
 
@@ -53,12 +53,12 @@ public class DamageTrackerTests
     {
         foreach (var id in expectedAssistIds)
         {
-            tracker.RecordDamage(id, expectedVictimId, 15);
-            tracker.RecordDamage(id, expectedVictimId, 15);
+            calculator.RecordDamage(id, expectedVictimId, 15);
+            calculator.RecordDamage(id, expectedVictimId, 15);
         }
 
         await Task.Delay(1000);
-        var actualAssistIds = tracker.GetAssistAttackersForVictim(expectedVictimId, 1);
+        var actualAssistIds = calculator.GetAssistAttackersForVictim(expectedVictimId, 1);
         Assert.IsEmpty(actualAssistIds);
     }
 }
