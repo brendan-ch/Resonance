@@ -1,0 +1,6 @@
+{
+    "name": "ArenaTests",
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}
