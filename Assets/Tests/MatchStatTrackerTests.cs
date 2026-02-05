@@ -83,4 +83,5 @@ public class MatchStatTrackerTests
         Assert.AreEqual(expectedStatsAfterOneKill, allStats[expectedKillerId]);
         Assert.AreEqual(expectedStatsAfterOneDeath, allStats[expectedVictimId]);
     }
+    #endregion
 }

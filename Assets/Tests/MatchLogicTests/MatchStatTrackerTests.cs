@@ -85,9 +85,25 @@ public class MatchStatTrackerTests
     }
 
     [Test]
-    public void RecordKill_ProcessesAssists()
+    public void RecordKill_ProcessesAssistsIfAboveDamageThreshold()
     {
-        
+        tracker = new MatchStatTracker(assistTimeWindowMs: 100f, assistDamageThreshold: 20f);
+        ulong[] expectedAssistIds = { 3, 4 };
+
+        foreach (var id in expectedAssistIds)
+        {
+            // test out total damage before death
+            tracker.RecordDamage(id, expectedVictimId, 15);
+            tracker.RecordDamage(id, expectedVictimId, 15);
+        }
+
+        tracker.RecordKill(expectedKillerId, expectedVictimId);
+
+        foreach (var id in expectedAssistIds)
+        {
+            var recordedStats = tracker.GetStats(id);
+            Assert.AreEqual(1, recordedStats.assists);
+        }
     }
     #endregion
 }
