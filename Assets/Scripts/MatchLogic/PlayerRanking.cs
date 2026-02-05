@@ -1,17 +1,18 @@
-using UnityEngine;
+using PurrNet;
+using Resonance.Assemblies.Match;
 
 namespace Resonance.Match
 {
     [System.Serializable]
     public class PlayerRanking
     {
-        public GameObject player;
+        public PlayerID player;
         public PlayerMatchStats stats;
         public int rank;
         
         public override string ToString()
         {
-            return $"Rank {rank}: {player.name} - {stats.ToString()}";
+            return $"Rank {rank}: {player} - {stats.ToString()}";
         }
     }
 }
