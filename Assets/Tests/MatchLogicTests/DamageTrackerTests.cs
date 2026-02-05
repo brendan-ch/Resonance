@@ -18,7 +18,7 @@ public class DamageTrackerTests
     {
         tracker = new DamageTracker(
             assistTimeWindowMs: 100f,
-            assistDamageThreshold: 5
+            assistDamageThreshold: 20
         );
     }
 
@@ -53,7 +53,8 @@ public class DamageTrackerTests
     {
         foreach (var id in expectedAssistIds)
         {
-            tracker.RecordDamage(id, expectedVictimId, 30);
+            tracker.RecordDamage(id, expectedVictimId, 15);
+            tracker.RecordDamage(id, expectedVictimId, 15);
         }
 
         await Task.Delay(1000);
