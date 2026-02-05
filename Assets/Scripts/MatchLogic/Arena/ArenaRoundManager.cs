@@ -68,7 +68,7 @@ namespace Resonance.Match
         {
             if (MatchStatBridge.Instance != null)
             {
-                MatchStatBridge.Instance.OnPlayerKill.AddListener(OnPlayerKilled);
+                MatchStatBridge.Instance.OnPlayerKill += OnPlayerKilled;
             }
         }
 
@@ -76,7 +76,7 @@ namespace Resonance.Match
         {
             if (MatchStatBridge.Instance != null)
             {
-                MatchStatBridge.Instance.OnPlayerKill.RemoveListener(OnPlayerKilled);
+                MatchStatBridge.Instance.OnPlayerKill -= OnPlayerKilled;
             }
         }
         #endregion
