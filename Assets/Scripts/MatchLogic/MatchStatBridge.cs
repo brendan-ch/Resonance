@@ -53,7 +53,7 @@ namespace Resonance.Match
         [ObserversRpc]
         private void FirePlayerStatObservers(string serializedPlayerData)
         {
-            Debug.Log($"Stats: {serializedPlayerData}");
+            Debug.Log($"[MatchStatBridge] Stats: {serializedPlayerData}");
 
             var allStats = JsonConvert.DeserializeObject<Dictionary<ulong, PlayerMatchStats>>(serializedPlayerData);
 
@@ -74,6 +74,7 @@ namespace Resonance.Match
         {
             if (OwnerIDExtractor.TryExtractPlayerIds(killer, victim, out ulong killerId, out ulong victimId))
             {
+                Debug.Log($"[MatchStatBridge] Logging kill: killer={killerId}, victim={victimId} to server");
                 RecordKill_Server(killerId, victimId);
             }
         }
@@ -89,6 +90,7 @@ namespace Resonance.Match
         {
             if (OwnerIDExtractor.TryExtractPlayerIds(attacker, victim, out ulong attackerId, out ulong victimId))
             {
+                Debug.Log($"[MatchStatBridge] Logging damage: attackerId={attackerId}, victimId={victimId}, amount={amount} to server");
                 RecordDamage_Server(attackerId, victimId, amount);
             }
         }
@@ -101,10 +103,10 @@ namespace Resonance.Match
 
         public void RecordDeath(GameObject victim)
         {
-            if (OwnerIDExtractor.TryExtractPlayerIds(victim, out ulong victimId))
+            if (OwnerIDExtractor.TryExtractPlayerIds(victim, out ulong id))
             {
-                Debug.Log(victimId);
-                RecordDeath_Server(victimId);
+                Debug.Log($"[MatchStatBridge] Logging death: id={id} to server");
+                RecordDeath_Server(id);
             }
         }
 
@@ -118,6 +120,7 @@ namespace Resonance.Match
         {
             if (OwnerIDExtractor.TryExtractPlayerIds(player, out ulong id))
             {
+                Debug.Log($"[MatchStatBridge] Logging player registration: id={id} to server");
                 RegisterPlayer_Server(id);
             }
         }
@@ -132,6 +135,7 @@ namespace Resonance.Match
         {
             if (OwnerIDExtractor.TryExtractPlayerIds(player, out ulong id))
             {
+                Debug.Log($"[MatchStatBridge] Logging player unregistration: id={id} to server");
                 UnregisterPlayer_Server(id);
             }
         }
@@ -144,6 +148,7 @@ namespace Resonance.Match
         [ServerRpc]
         public void ResetAllStats()
         {
+            Debug.Log("[MatchStatBridge] Logging reset all stats to server");
             tracker_Server?.ResetAllStats();
         }
 
