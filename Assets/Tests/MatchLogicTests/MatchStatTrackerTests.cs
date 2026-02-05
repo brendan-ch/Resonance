@@ -105,5 +105,6 @@ public class MatchStatTrackerTests
             Assert.AreEqual(1, recordedStats.assists);
         }
     }
+
     #endregion
 }

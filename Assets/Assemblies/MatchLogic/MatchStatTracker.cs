@@ -5,12 +5,9 @@ namespace Resonance.Assemblies.Match
 {
     public class MatchStatTracker
     {
-        private float assistTimeWindowMs; // Time window for assists
-        private float assistDamageThreshold; // Minimum damage for assist credit
-
         #region Player Stats Data
         private Dictionary<ulong, PlayerMatchStats> playerStats = new();
-        private Dictionary<ulong, List<DamageContribution>> recentDamage = new();
+        private DamageTracker damageTracker;
         #endregion
 
         #region Events
@@ -23,14 +20,12 @@ namespace Resonance.Assemblies.Match
         #region Startup
         public MatchStatTracker()
         {
-            assistTimeWindowMs = 5f;
-            assistDamageThreshold = 20f;
+            damageTracker = new DamageTracker(5f, 20f);
         }
 
         public MatchStatTracker(float assistTimeWindowMs, float assistDamageThreshold)
         {
-            this.assistTimeWindowMs = assistTimeWindowMs;
-            this.assistDamageThreshold = assistDamageThreshold;
+            damageTracker = new DamageTracker(assistTimeWindowMs, assistDamageThreshold);
         }
         #endregion
 
@@ -40,46 +35,22 @@ namespace Resonance.Assemblies.Match
             if (!playerStats.ContainsKey(playerId))
             {
                 playerStats[playerId] = new PlayerMatchStats();
-                recentDamage[playerId] = new List<DamageContribution>();
             }
         }
 
         public void UnregisterPlayer(ulong playerId)
         {
             playerStats.Remove(playerId);
-            recentDamage.Remove(playerId);
         }
         #endregion
 
         #region Damage Tracking
         public void RecordDamage(ulong attackerId, ulong victimId, float damageAmount)
         {
-            if (attackerId == 0 || victimId == 0 || attackerId == victimId) return;
-
             RegisterPlayer(attackerId);
             RegisterPlayer(victimId);
 
-            if (!recentDamage.ContainsKey(victimId))
-            {
-                recentDamage[victimId] = new List<DamageContribution>();
-            }
-
-            recentDamage[victimId].Add(new DamageContribution
-            {
-                attackerId = attackerId,
-                damageAmount = damageAmount,
-                timestampUnixTimeMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-            });
-
-            CleanupOldDamage(victimId);
-        }
-
-        private void CleanupOldDamage(ulong victimId)
-        {
-            if (!recentDamage.ContainsKey(victimId)) return;
-
-            float currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            recentDamage[victimId].RemoveAll(d => currentTime - d.timestampUnixTimeMs > assistTimeWindowMs);
+            damageTracker.RecordDamage(attackerId, victimId, damageAmount);
         }
         #endregion
 
@@ -100,10 +71,7 @@ namespace Resonance.Assemblies.Match
             ProcessAssists(killerId, victimId);
 
             // Clear damage contributions for victim
-            if (recentDamage.ContainsKey(victimId))
-            {
-                recentDamage[victimId].Clear();
-            }
+            damageTracker.ClearDamageForVictim(victimId);
 
             // Notify stats updated
             OnStatsUpdated?.Invoke(killerId, playerStats[killerId]);
@@ -113,25 +81,16 @@ namespace Resonance.Assemblies.Match
 
         private void ProcessAssists(ulong killerId, ulong victimId)
         {
-            if (!recentDamage.ContainsKey(victimId)) return;
+            var assisters = damageTracker.GetAssistAttackersForVictim(victimId, killerId);
 
-            CleanupOldDamage(victimId);
-
-            foreach (var contribution in recentDamage[victimId])
+            foreach (var assisterId in assisters)
             {
-                // Skip if the contributor is the killer
-                if (contribution.attackerId == killerId) continue;
+                RegisterPlayer(assisterId);
+                playerStats[assisterId] = playerStats[assisterId].RecordAssist();
 
-                // Check if damage meets threshold
-                if (contribution.damageAmount >= assistDamageThreshold)
-                {
-                    RegisterPlayer(contribution.attackerId);
-                    playerStats[contribution.attackerId] = playerStats[contribution.attackerId].RecordAssist();
-
-                    OnPlayerAssist?.Invoke(contribution.attackerId, victimId);
-                    OnStatsUpdated?.Invoke(contribution.attackerId, playerStats[contribution.attackerId]);
-                    OnAllStatsUpdated?.Invoke(playerStats);
-                }
+                OnPlayerAssist?.Invoke(assisterId, victimId);
+                OnStatsUpdated?.Invoke(assisterId, playerStats[assisterId]);
+                OnAllStatsUpdated?.Invoke(playerStats);
             }
         }
 
@@ -189,12 +148,10 @@ namespace Resonance.Assemblies.Match
             foreach (var playerId in playerIds)
             {
                 playerStats[playerId] = new PlayerMatchStats();
-                if (recentDamage.ContainsKey(playerId))
-                {
-                    recentDamage[playerId].Clear();
-                }
                 OnAllStatsUpdated?.Invoke(playerStats);
             }
+
+            damageTracker.Clear();
         }
 
         public void ResetPlayerStats(ulong playerId)
@@ -202,7 +159,6 @@ namespace Resonance.Assemblies.Match
             if (playerStats.ContainsKey(playerId))
             {
                 playerStats[playerId] = new PlayerMatchStats();
-                recentDamage[playerId].Clear();
             }
         }
         #endregion

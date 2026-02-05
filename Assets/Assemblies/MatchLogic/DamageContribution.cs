@@ -4,6 +4,6 @@ namespace Resonance.Assemblies.Match
     {
         public ulong attackerId;
         public float damageAmount;
-        public float timestampUnixTimeMs;
+        public long timestampUnixTimeMs;
     }
 }
