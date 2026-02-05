@@ -76,7 +76,7 @@ namespace Resonance.Match
         {
             if (MatchStatBridge.Instance != null)
             {
-                // MatchStatBridge.Instance.OnPlayerKill -= OnPlayerKilled;
+                MatchStatBridge.Instance.OnPlayerKill.RemoveListener(OnPlayerKilled);
             }
         }
         #endregion
