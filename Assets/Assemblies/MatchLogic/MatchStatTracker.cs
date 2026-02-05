@@ -50,6 +50,8 @@ namespace Resonance.Assemblies.Match
             RegisterPlayer(attackerId);
             RegisterPlayer(victimId);
 
+            playerStats[attackerId] = playerStats[attackerId].RecordDamage(damageAmount);
+
             assistCalculator.RecordDamage(attackerId, victimId, damageAmount);
         }
         #endregion

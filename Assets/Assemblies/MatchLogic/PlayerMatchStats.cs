@@ -9,6 +9,11 @@ namespace Resonance.Assemblies.Match
         public int killStreak;
         public int bestKillStreak;
 
+        /// <summary>
+        /// Total damage dealt by the player to all players for the game.
+        /// </summary>
+        public float totalDamageDealt;
+
         public float KDA => deaths == 0 ? (kills + assists) : (float)(kills + assists) / deaths;
 
         public override string ToString()
@@ -16,41 +21,48 @@ namespace Resonance.Assemblies.Match
             return $"K/D/A: {kills}/{deaths}/{assists} | KDA: {KDA:F2} | Streak: {killStreak}";
         }
 
+        private PlayerMatchStats With(
+            int? kills = null,
+            int? deaths = null,
+            int? assists = null,
+            int? killStreak = null,
+            int? bestKillStreak = null,
+            float? totalDamageDealt = null)
+        {
+            return new PlayerMatchStats
+            {
+                kills = kills ?? this.kills,
+                deaths = deaths ?? this.deaths,
+                assists = assists ?? this.assists,
+                killStreak = killStreak ?? this.killStreak,
+                bestKillStreak = bestKillStreak ?? this.bestKillStreak,
+                totalDamageDealt = totalDamageDealt ?? this.totalDamageDealt
+            };
+        }
+
         public PlayerMatchStats RecordKill()
         {
             int newKillStreak = killStreak + 1;
-            return new PlayerMatchStats
-            {
-                assists = assists,
-                bestKillStreak = newKillStreak > bestKillStreak ? newKillStreak : bestKillStreak,
-                deaths = deaths,
-                kills = kills + 1,
-                killStreak = newKillStreak
-            };
+            return With(
+                kills: kills + 1,
+                killStreak: newKillStreak,
+                bestKillStreak: newKillStreak > bestKillStreak ? newKillStreak : bestKillStreak
+            );
         }
 
         public PlayerMatchStats RecordDeath()
         {
-            return new PlayerMatchStats
-            {
-                assists = assists,
-                bestKillStreak = bestKillStreak,
-                deaths = deaths + 1,
-                kills = kills,
-                killStreak = 0,
-            };
+            return With(deaths: deaths + 1, killStreak: 0);
         }
 
         public PlayerMatchStats RecordAssist()
         {
-            return new PlayerMatchStats
-            {
-                assists = assists + 1,
-                bestKillStreak = bestKillStreak,
-                deaths = deaths,
-                kills = kills,
-                killStreak = killStreak,
-            };
+            return With(assists: assists + 1);
+        }
+
+        public PlayerMatchStats RecordDamage(float damage)
+        {
+            return With(totalDamageDealt: totalDamageDealt + damage);
         }
     }
 }

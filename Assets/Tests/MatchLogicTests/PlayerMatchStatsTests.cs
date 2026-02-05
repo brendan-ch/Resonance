@@ -34,6 +34,15 @@ public class PlayerMatchStatsTests
     }
 
     [Test]
+    public void RecordDamage_ShouldIncrementDamage()
+    {
+        PlayerMatchStats stats = new() { totalDamageDealt = 20 };
+        PlayerMatchStats newStats = stats.RecordDamage(50);
+
+        Assert.AreEqual(70, newStats.totalDamageDealt);
+    }
+
+    [Test]
     public void KDA_ShouldCalculateCorrectlyWithNoDeaths()
     {
         PlayerMatchStats stats1 = new() { kills = 5, assists = 3, deaths = 0 };

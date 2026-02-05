@@ -27,11 +27,26 @@ public class MatchStatTrackerTests
         tracker = new MatchStatTracker();
     }
 
+    #region RecordDamage
+    [Test]
+    public void RecordDamage_UpdatesTotalDamageDealtInStats()
+    {
+        tracker.RecordDamage(expectedKillerId, expectedVictimId, 5);
+        tracker.RecordDamage(expectedKillerId, 3, 10);
+        tracker.RecordDamage(expectedKillerId, 4, 500);
+        tracker.RecordDamage(5, 6, 20);
+
+        var stats = tracker.GetStats(expectedKillerId);
+        Assert.AreEqual(515, stats.totalDamageDealt);
+    }
+
+
+    #endregion
+
     #region RecordKill
     [Test]
     public void RecordKill_FiresOnKillEvent()
     {
-
         ulong OnPlayerKill_killerCaptured = default;
         ulong OnPlayerKill_victimCaptured = default;
 
