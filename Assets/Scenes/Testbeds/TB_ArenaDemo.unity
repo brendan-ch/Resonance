@@ -762,7 +762,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &226349787
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1889,6 +1889,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 677287701}
+  - component: {fileID: 677287702}
   m_Layer: 5
   m_Name: OverdriveHUD
   m_TagString: Untagged
@@ -1920,6 +1921,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &677287702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677287700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d96e8fb46b17c4a977dada95104f6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OverdriveHUD
+  overdrive: {fileID: 0}
+  icon: {fileID: 1820379096}
+  cooldownFill: {fileID: 2037195709}
+  timerText: {fileID: 1982033302}
+  readyColor: {r: 1, g: 1, b: 1, a: 1}
+  fadedColor: {r: 1, g: 1, b: 1, a: 0.4}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &770051476
 GameObject:
   m_ObjectHideFlags: 0

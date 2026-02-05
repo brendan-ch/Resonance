@@ -21,6 +21,7 @@ namespace Resonance.PlayerController
         public float CooldownTimeRemaining { get; private set; } = 0f;
         
         public float SpeedMultiplier => overdriveSpeedMultiplier;
+        public float CooldownDuration => overdriveCooldown;
 
         private PlayerState _playerState;
         private PlayerStats _playerStats;
@@ -39,6 +40,13 @@ namespace Resonance.PlayerController
             {
                 _playerStats.OnPlayerDeath += HandlePlayerDeath;
                 _playerStats.OnPlayerRespawn += HandlePlayerRespawn;
+            }
+            
+            OverdriveHUD hud = FindObjectOfType<OverdriveHUD>();
+            if (hud != null)
+            {
+                hud.SetOverdriveAbility(this);
+                Debug.Log("[OverdriveAbility] Registered with OverdriveHUD");
             }
         }
         

@@ -7,8 +7,8 @@
     <list default="true" id="ab354f86-6b88-42df-8f93-2e8adb1d51b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_ArenaDemo.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_ArenaDemo.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Overdrive/OverdriveAbility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Overdrive/OverdriveAbility.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Overdrive/OverdriveHUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Overdrive/OverdriveHUD.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +52,8 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/MatchLogic/MatchStarter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/MatchLogic/PlayerMatchStats.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/MatchLogic/PlayerRanking.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/sacho/Desktop/Resonance/Assets/Scripts/Overdrive/OverdriveHUD.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Overdrive/OverdriveHUD.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/TargetDummy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Crosshair.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/MatchUIManager.cs" root0="FORCE_HIGHLIGHTING" />
@@ -203,8 +205,17 @@
       <workItem from="1770143902769" duration="43000" />
       <workItem from="1770144289115" duration="83000" />
       <workItem from="1770164747974" duration="758000" />
-      <workItem from="1770253290801" duration="3518000" />
+      <workItem from="1770253290801" duration="8750000" />
     </task>
+    <task id="LOCAL-00001" summary="Added HUD elements and initial overdriveHUD script">
+      <option name="closed" value="true" />
+      <created>1770257341642</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1770257341642</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -231,6 +242,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Added HUD elements and initial overdriveHUD script" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added HUD elements and initial overdriveHUD script" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
