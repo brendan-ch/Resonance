@@ -51,15 +51,27 @@ namespace Resonance.Assemblies.Match
 
             CleanupOldDamage(victimId);
 
+            // Aggregate total damage per attacker
+            var damageByAttacker = new Dictionary<ulong, float>();
+
             foreach (var contribution in recentDamage[victimId])
             {
                 // Skip if the contributor is the killer
                 if (contribution.attackerId == killerId) continue;
 
-                // Check if damage meets threshold
-                if (contribution.damageAmount >= assistDamageThreshold)
+                if (!damageByAttacker.ContainsKey(contribution.attackerId))
                 {
-                    assisters.Add(contribution.attackerId);
+                    damageByAttacker[contribution.attackerId] = 0;
+                }
+                damageByAttacker[contribution.attackerId] += contribution.damageAmount;
+            }
+
+            // Check aggregated totals against threshold
+            foreach (var kvp in damageByAttacker)
+            {
+                if (kvp.Value >= assistDamageThreshold)
+                {
+                    assisters.Add(kvp.Key);
                 }
             }
 
