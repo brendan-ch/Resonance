@@ -22,6 +22,7 @@ namespace Resonance.PlayerController
         
         public float SpeedMultiplier => overdriveSpeedMultiplier;
         public float CooldownDuration => overdriveCooldown;
+        public float OverdriveDuration => overdriveDuration;
 
         private PlayerState _playerState;
         private PlayerStats _playerStats;
