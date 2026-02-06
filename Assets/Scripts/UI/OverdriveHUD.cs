@@ -33,7 +33,8 @@ public class OverdriveHUD : MonoBehaviour
     [SerializeField] private Outline readyGlow;
     [SerializeField] private float glowPulseSpeed = 2f;
     [SerializeField] private float glowMaxAlpha = 1f;
-
+    
+    private bool animateReady = false;
     private Vector3 originalScale;
 
     private void Awake()
@@ -46,20 +47,10 @@ public class OverdriveHUD : MonoBehaviour
 
     private void Update()
     {
-        if (overdrive == null) return;
+        if (!animateReady) return;
 
-        switch (overdrive.CurrentState)
-        {
-            case OverdriveAbility.OverdriveState.Ready:
-                ShowReady();
-                break;
-            case OverdriveAbility.OverdriveState.Active:
-                ShowActive();
-                break;
-            case OverdriveAbility.OverdriveState.Cooldown:
-                ShowCooldown();
-                break;
-        }
+        PulseIcon();
+        AnimateReadyGlow();
     }
 
     #region Display States
@@ -72,8 +63,7 @@ public class OverdriveHUD : MonoBehaviour
         timerText.text = "";
         timerText.color = readyTextColor;
 
-        PulseIcon();
-        AnimateReadyGlow();
+        animateReady = true;
     }
 
     private void ShowCooldown()
@@ -87,34 +77,18 @@ public class OverdriveHUD : MonoBehaviour
         timerText.text = $"{overdrive.CooldownTimeRemaining:F1}s";
         timerText.color = cooldownTextColor;
 
+        animateReady = false;
         ResetIconScale();
         DisableGlow();
     }
 
     private void ShowActive()
     {
-        // turns red at low time
-        if (overdrive.DurationTimeRemaining <= lowTimeWarningThreshold)
-        {
-            icon.color = lowTimeColor;
-        }
-        else
-        {
-            icon.color = activeColor;
-        }
-        
-        // //  OR Smooth blend from activeColor → lowTimeColor
-        // float normalizedTime =
-        //     1f - (overdrive.DurationTimeRemaining / overdrive.OverdriveDuration);
-        //
-        // icon.color = Color.Lerp(activeColor, lowTimeColor, normalizedTime);
-        //
-
         SetAlpha(cooldownFill, 0f);
 
-        timerText.text = $"{overdrive.DurationTimeRemaining:F1}s";
         timerText.color = activeTextColor;
 
+        animateReady = false;
         ResetIconScale();
         DisableGlow();
     }
@@ -164,6 +138,67 @@ public class OverdriveHUD : MonoBehaviour
     public void SetOverdriveAbility(OverdriveAbility ability)
     {
         overdrive = ability;
+        
+        ability.State.ChangeEvent += OnStateChanged;
+        ability.CooldownRemaining.ChangeEvent += OnCooldownChanged;
+        ability.DurationRemaining.ChangeEvent += OnDurationChanged;
+        ability.CooldownFill.ChangeEvent += OnCooldownFillChanged;
     }
     #endregion
+    
+    #region View Handlers (MVVM Bindings)
+
+    private void OnStateChanged(OverdriveAbility.OverdriveState state)
+    {
+        switch (state)
+        {
+            case OverdriveAbility.OverdriveState.Ready:
+                ShowReady();
+                break;
+
+            case OverdriveAbility.OverdriveState.Active:
+                ShowActive();
+                break;
+
+            case OverdriveAbility.OverdriveState.Cooldown:
+                ShowCooldown();
+                break;
+        }
+    }
+
+    private void OnCooldownChanged(float time)
+    {
+        if (overdrive.CurrentState != OverdriveAbility.OverdriveState.Cooldown)
+            return;
+        
+        timerText.text = $"{time:F1}s";
+    }
+
+    private void OnDurationChanged(float time)
+    {
+        if (overdrive.CurrentState != OverdriveAbility.OverdriveState.Active)
+            return;
+
+        timerText.text = $"{time:F1}s";
+
+        if (time <= lowTimeWarningThreshold)
+            icon.color = lowTimeColor;
+        else
+            icon.color = activeColor;
+        
+        // //  OR Smooth blend from activeColor → lowTimeColor
+        // float normalizedTime =
+        //     1f - (overdrive.DurationTimeRemaining / overdrive.OverdriveDuration);
+        //
+        // icon.color = Color.Lerp(activeColor, lowTimeColor, normalizedTime);
+        //
+    }
+
+    private void OnCooldownFillChanged(float fill)
+    {
+        cooldownFill.fillAmount = fill;
+    }
+
+    #endregion
+
 }
