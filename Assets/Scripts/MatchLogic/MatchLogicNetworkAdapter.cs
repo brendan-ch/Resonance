@@ -21,6 +21,8 @@ namespace Resonance.Match
         #region Modules
         private MatchStatNetworkAdapter _matchStatAdapter;
         public MatchStatNetworkAdapter MatchStats => _matchStatAdapter;
+
+        private ArenaRoundManagerNetworkAdapter _arenaRoundManagerNetworkAdapter;
         #endregion
 
         #region Lifecycle
@@ -28,6 +30,7 @@ namespace Resonance.Match
         {
             InstanceHandler.RegisterInstance(this);
             _matchStatAdapter = new MatchStatNetworkAdapter(assistTimeWindow, assistDamageThreshold);
+            _arenaRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter);
         }
 
         private void OnDestroy()

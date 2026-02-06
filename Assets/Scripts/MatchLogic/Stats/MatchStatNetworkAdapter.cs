@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using PurrNet;
 using Resonance.Assemblies.Match;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Resonance.Match
 {
@@ -27,6 +28,9 @@ namespace Resonance.Match
 
         #region Server State
         private MatchStatTracker _tracker;
+        public MatchStatTracker Tracker_Server => _tracker;
+
+        public UnityEvent<MatchStatTracker> OnMatchStatTrackerCreated = new();
         #endregion
 
         #region Constructor
@@ -47,6 +51,7 @@ namespace Resonance.Match
                 _tracker = new MatchStatTracker(_assistTimeWindow, _assistDamageThreshold);
                 _tracker.OnAllStatsUpdated += OnTrackerStatsUpdated;
                 _tracker.OnPlayerKill += OnTrackerPlayerKill;
+                OnMatchStatTrackerCreated?.Invoke(_tracker);
             }
         }
 
