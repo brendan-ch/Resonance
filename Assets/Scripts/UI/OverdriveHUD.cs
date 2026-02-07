@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -10,6 +11,7 @@ public class OverdriveHUD : MonoBehaviour
     [SerializeField] private Image icon;
     [SerializeField] private Image cooldownFill;
     [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI keybindText;
 
     [Header("Colors")]
     [SerializeField] private Color readyColor = Color.white;
@@ -35,6 +37,7 @@ public class OverdriveHUD : MonoBehaviour
     [SerializeField] private float glowMaxAlpha = 1f;
     
     private bool animateReady = false;
+    private bool animateActive = false;
     private Vector3 originalScale;
 
     private void Awake()
@@ -47,10 +50,12 @@ public class OverdriveHUD : MonoBehaviour
 
     private void Update()
     {
-        if (!animateReady) return;
+        if (animateReady)
+            PulseIcon();
 
-        PulseIcon();
-        AnimateReadyGlow();
+        if (animateReady || animateActive)
+            AnimateReadyGlow();
+
     }
 
     #region Display States
@@ -64,6 +69,10 @@ public class OverdriveHUD : MonoBehaviour
         timerText.color = readyTextColor;
 
         animateReady = true;
+        animateActive = false;
+
+        ResetIconScale();
+        EnableGlow(readyColor);
     }
 
     private void ShowCooldown()
@@ -78,10 +87,12 @@ public class OverdriveHUD : MonoBehaviour
         timerText.color = cooldownTextColor;
 
         animateReady = false;
+        animateActive = false;
+
         ResetIconScale();
         DisableGlow();
     }
-
+    
     private void ShowActive()
     {
         SetAlpha(cooldownFill, 0f);
@@ -89,9 +100,14 @@ public class OverdriveHUD : MonoBehaviour
         timerText.color = activeTextColor;
 
         animateReady = false;
+        animateActive = true;
+
         ResetIconScale();
-        DisableGlow();
+        icon.color = activeColor;
+
+        EnableGlow(activeColor);
     }
+    
     #endregion
 
     #region Helper Methods
@@ -124,6 +140,15 @@ public class OverdriveHUD : MonoBehaviour
         readyGlow.effectColor = c;
     }
     
+    private void EnableGlow(Color glowColor)
+    {
+        if (readyGlow == null) return;
+
+        Color c = glowColor;
+        c.a = readyGlow.effectColor.a;
+        readyGlow.effectColor = c;
+    }
+
     private void DisableGlow()
     {
         if (readyGlow == null) return;
@@ -182,16 +207,15 @@ public class OverdriveHUD : MonoBehaviour
         timerText.text = $"{time:F1}s";
 
         if (time <= lowTimeWarningThreshold)
+        {
             icon.color = lowTimeColor;
+            EnableGlow(lowTimeColor);
+        }
         else
+        {
             icon.color = activeColor;
-        
-        // //  OR Smooth blend from activeColor → lowTimeColor
-        // float normalizedTime =
-        //     1f - (overdrive.DurationTimeRemaining / overdrive.OverdriveDuration);
-        //
-        // icon.color = Color.Lerp(activeColor, lowTimeColor, normalizedTime);
-        //
+            EnableGlow(activeColor);
+        }
     }
 
     private void OnCooldownFillChanged(float fill)

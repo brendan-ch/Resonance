@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ab354f86-6b88-42df-8f93-2e8adb1d51b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Resonance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Overdrive/OverdriveAbility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Overdrive/OverdriveAbility.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_ArenaDemo.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Testbeds/TB_ArenaDemo.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/OverdriveHUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/OverdriveHUD.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,6 +56,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/MatchUIManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Weapons/Gun.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Weapons/GunData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@be6c4fd0abf5/InputSystem/Actions/InputActionReference.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@ba467ec059b9/Shaders/Lit.shader" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -205,7 +206,7 @@
       <workItem from="1770321814114" duration="1530000" />
       <workItem from="1770336994008" duration="7818000" />
       <workItem from="1770358051288" duration="540000" />
-      <workItem from="1770418665611" duration="1154000" />
+      <workItem from="1770418665611" duration="4734000" />
     </task>
     <task id="LOCAL-00001" summary="Added HUD elements and initial overdriveHUD script">
       <option name="closed" value="true" />
@@ -231,7 +232,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770353454754</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Updated overdriveHUD for MVVM">
+      <option name="closed" value="true" />
+      <created>1770420086173</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1770420086173</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,7 +270,8 @@
     <MESSAGE value="Added HUD elements and initial overdriveHUD script" />
     <MESSAGE value="Feature to display when overdrive is ready/cooldown/duration" />
     <MESSAGE value="Soft glow and pulse effect, color warning at low duration" />
-    <option name="LAST_COMMIT_MESSAGE" value="Soft glow and pulse effect, color warning at low duration" />
+    <MESSAGE value="Updated overdriveHUD for MVVM" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated overdriveHUD for MVVM" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
