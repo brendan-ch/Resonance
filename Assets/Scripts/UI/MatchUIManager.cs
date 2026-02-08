@@ -60,7 +60,7 @@ namespace Resonance.UI
         {
             if (ArenaRoundManager.Instance != null)
             {
-                ArenaRoundManager.Instance.OnMatchEnd += OnMatchEnd;
+                // ArenaRoundManager.Instance.OnMatchEnd += OnMatchEnd;
             }
 
             if (MatchStatBridge.Instance != null)
@@ -73,7 +73,7 @@ namespace Resonance.UI
         {
             if (ArenaRoundManager.Instance != null)
             {
-                ArenaRoundManager.Instance.OnMatchEnd -= OnMatchEnd;
+                // ArenaRoundManager.Instance.OnMatchEnd -= OnMatchEnd;
             }
 
             if (MatchStatBridge.Instance != null)

@@ -1,4 +1,3 @@
-using PurrNet;
 using Resonance.Assemblies.Match;
 
 namespace Resonance.Match
@@ -6,7 +5,7 @@ namespace Resonance.Match
     [System.Serializable]
     public class PlayerRanking
     {
-        public PlayerID player;
+        public ulong player;
         public PlayerMatchStats stats;
         public int rank;
         

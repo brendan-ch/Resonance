@@ -21,6 +21,8 @@ namespace Resonance.Match
         {
             matchStatNetworkAdapter = adapter;
             matchStatNetworkAdapter.OnMatchStatTrackerCreated.AddListener(OnMatchStatTrackerCreated);
+
+            
         }
 
         public override void OnSpawn(bool asServer)
@@ -33,6 +35,8 @@ namespace Resonance.Match
             Debug.Log("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received, attaching subscribers");
 
             // TODO: attach subscribers
+
+            arenaRoundManager = new ArenaRoundManager(tracker);
         }
     }
 }
