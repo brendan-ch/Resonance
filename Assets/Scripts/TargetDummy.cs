@@ -1,9 +1,10 @@
+using Resonance.Helper;
 using UnityEngine;
 using Resonance.Match;
 
 namespace Resonance.Entities
 {
-    public class TargetDummy : MonoBehaviour
+    public class TargetDummy : MonoBehaviour, IDamageable
     {
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private float respawnDelay = 3f;

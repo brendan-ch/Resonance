@@ -1,160 +1,182 @@
-using Resonance.PlayerController;
-using Resonance.UI;
-using Resonance.Match;
-using UnityEngine;
 using System.Collections;
+using Resonance.Match;
+using Resonance.UI;
+using UnityEngine;
+using Resonance.Helper;
+using Resonance.PlayerController;
 
 namespace Resonance.Player
 {
-    public class PlayerStats : MonoBehaviour
+    public class PlayerStats : MonoBehaviour, IDamageable
     {
-        #region Inspector Fields
-        [SerializeField] private float maxHealth = 100f;
-        [SerializeField] private bool respawnOnDeath = true;
-        
-        public HealthBar healthBar;
-        #endregion
-        
-        #region Properties
-        public float CurrentHealth { get; private set; }
-        public float MaxHealth => maxHealth;
+        [SerializeField] float maxHealth = 100f;
+        [SerializeField] bool respawnOnDeath = true;
+        [SerializeField] HealthBar healthBar;
+
+        public ObservableValue<float> CurrentHealth { get; private set; }
+        public float MaxHealth
+        {
+            get { return maxHealth; }
+        }
+
         public bool IsDead { get; private set; }
-        #endregion
-        
-        #region Events
+
         public event System.Action OnPlayerDeath;
         public event System.Action OnPlayerRespawn;
-        #endregion
-        
-        #region Component References
-        private PlayerState _playerState;
-        private CharacterController _characterController;
-        private PlayerController.PlayerController _playerController;
-        private Animator _animator;
-        #endregion
-        
-        #region Damage Tracking
-        private GameObject lastAttacker;
-        private float lastDamageTime;
-        #endregion
 
-        #region Startup
+        PlayerState playerState;
+        CharacterController characterController;
+        PlayerController.PlayerController playerController;
+        Animator animator;
 
-        public void Awake()
+        GameObject lastAttacker;
+        float lastDamageTime;
+
+        Coroutine respawnCoroutine;
+
+        void Awake()
         {
-            _playerState = GetComponent<PlayerState>();
-            _characterController = GetComponent<CharacterController>();
-            _playerController = GetComponent<PlayerController.PlayerController>();
-            _animator = GetComponent<Animator>();
+            playerState = GetComponent<PlayerState>();
+            characterController = GetComponent<CharacterController>();
+            playerController = GetComponent<PlayerController.PlayerController>();
+            animator = GetComponent<Animator>();
+
+            CurrentHealth = new ObservableValue<float>(maxHealth);
         }
-        
-        private void Start()
-        {
-            CurrentHealth = maxHealth;
 
-            if (healthBar != null)
-            {
-                healthBar.SetSliderMax(maxHealth);
-            }
-            
-            // Register with match stat tracker
+        void OnEnable()
+        {
             if (MatchStatTracker.Instance != null)
             {
                 MatchStatTracker.Instance.RegisterPlayer(gameObject);
             }
+
+            if (healthBar != null)
+            {
+                healthBar.SetSliderMax(maxHealth);
+                CurrentHealth.ChangeEvent += OnHealthChanged;
+            }
         }
-        
-        private void OnDestroy()
+
+        void OnDisable()
         {
-            // Unregister from match stat tracker
             if (MatchStatTracker.Instance != null)
             {
                 MatchStatTracker.Instance.UnregisterPlayer(gameObject);
             }
-        }
-        #endregion
 
-        #region Health Management
-        public void TakeDamage(float amount)
-        {
-            TakeDamage(amount, null);
+            if (healthBar != null)
+            {
+                CurrentHealth.ChangeEvent -= OnHealthChanged;
+            }
         }
-        
+
+        void Start()
+        {
+            
+        }
+
+        void OnHealthChanged(float newHealth)
+        {
+            if (healthBar != null)
+            {
+                healthBar.SetSlider(newHealth);
+            }
+        }
+
         public void TakeDamage(float amount, GameObject attacker)
         {
-            if (IsDead) return;
-            
-            // Track damage for assists
-            if (attacker != null && attacker != gameObject && MatchStatTracker.Instance != null)
+            if (IsDead)
             {
-                MatchStatTracker.Instance.RecordDamage(attacker, gameObject, amount);
+                return;
+            }
+
+            if (amount <= 0f)
+            {
+                return;
+            }
+
+            if (attacker != null && attacker != gameObject)
+            {
+                if (MatchStatTracker.Instance != null)
+                {
+                    MatchStatTracker.Instance.RecordDamage(attacker, gameObject, amount);
+                }
+
                 lastAttacker = attacker;
                 lastDamageTime = Time.time;
             }
-            
-            CurrentHealth -= amount;
-            CurrentHealth = Mathf.Max(0, CurrentHealth);
-            
-            if (healthBar != null)
+
+            float newHealth = CurrentHealth.Value - amount;
+            if (newHealth < 0f)
             {
-                healthBar.SetSlider(CurrentHealth);
+                newHealth = 0f;
             }
-            
-            if (CurrentHealth <= 0)
+
+            CurrentHealth.Value = newHealth;
+
+            if (CurrentHealth.Value <= 0f)
             {
                 Die(attacker);
             }
         }
         
+        public void TakeDamage(float amount)
+        {
+            TakeDamage(amount, null);
+        }
+
         public void Heal(float amount)
         {
-            if (IsDead) return;
-            
-            CurrentHealth += amount;
-            CurrentHealth = Mathf.Min(CurrentHealth, maxHealth);
-            
-            if (healthBar != null)
+            if (IsDead)
             {
-                healthBar.SetSlider(CurrentHealth);
+                return;
             }
-        }
-        #endregion
 
-        #region Death & Respawn
-        private void Die(GameObject killer = null)
+            if (amount <= 0f)
+            {
+                return;
+            }
+
+            float newHealth = CurrentHealth.Value + amount;
+            if (newHealth > maxHealth)
+            {
+                newHealth = maxHealth;
+            }
+
+            CurrentHealth.Value = newHealth;
+        }
+
+        void Die(GameObject killer)
         {
-            if (IsDead) return;
+            if (IsDead)
+            {
+                return;
+            }
 
             IsDead = true;
 
-            if (_playerController != null)
+            if (playerController != null)
             {
-                _playerController.IsPlayerDead = true;
+                playerController.IsPlayerDead = true;
+                playerController.enabled = false;
             }
 
-            if (_playerState != null)
+            if (playerState != null)
             {
-                _playerState.SetPlayerMovementState(PlayerMovementState.Dead);
+                playerState.SetPlayerMovementState(PlayerMovementState.Dead);
             }
 
-            if (_playerController != null)
+            if (characterController != null)
             {
-                _playerController.enabled = false;
+                characterController.enabled = false;
             }
 
-            if (_characterController != null)
+            if (animator != null)
             {
-                _characterController.enabled = false;
+                animator.enabled = false;
             }
 
-            if (_animator != null)
-            {
-                _animator.enabled = false;
-            }
-
-            Debug.Log($"[PlayerStats] {gameObject.name} died!");
-            
-            // Record kill/death in match stats
             if (MatchStatTracker.Instance != null)
             {
                 if (killer != null && killer != gameObject)
@@ -163,96 +185,109 @@ namespace Resonance.Player
                 }
                 else
                 {
-                    // Suicide or environmental death
                     MatchStatTracker.Instance.RecordDeath(gameObject);
                 }
             }
-            
+
             OnPlayerDeath?.Invoke();
 
             if (respawnOnDeath)
             {
-                StartCoroutine(RespawnCoroutine());
+                if (respawnCoroutine != null)
+                {
+                    StopCoroutine(respawnCoroutine);
+                }
+
+                respawnCoroutine = StartCoroutine(RespawnCoroutine());
             }
         }
 
-        private IEnumerator RespawnCoroutine()
+        IEnumerator RespawnCoroutine()
         {
-            float respawnDelay = Resonance.Player.Respawn.Instance != null ? 
-                                 Resonance.Player.Respawn.Instance.RespawnDelay : 3f;
-            
-            Debug.Log($"[PlayerStats] {gameObject.name} respawning in {respawnDelay}s");
+            float respawnDelay = 3f;
+            if (Resonance.Player.Respawn.Instance != null)
+            {
+                respawnDelay = Resonance.Player.Respawn.Instance.RespawnDelay;
+            }
+
             yield return new WaitForSeconds(respawnDelay);
-            Respawn();
+
+            RespawnInternal();
+            respawnCoroutine = null;
         }
 
         public void Respawn()
         {
-            StartCoroutine(RespawnSequence());
+            if (respawnCoroutine != null)
+            {
+                StopCoroutine(respawnCoroutine);
+                respawnCoroutine = null;
+            }
+
+            RespawnInternal();
         }
-        
-        private IEnumerator RespawnSequence()
+
+        void RespawnInternal()
         {
             IsDead = false;
-            
-            // Clear damage tracking
             lastAttacker = null;
-            
-            if (_playerState != null)
-            {
-                _playerState.SetPlayerMovementState(PlayerMovementState.Idling);
-            }
-            
-            if (_playerController != null)
-            {
-                _playerController.ResetState();
-            }
-            
-            Transform spawnPoint = Resonance.Player.Respawn.Instance?.GetSpawnPoint();
 
-            if (spawnPoint != null && _characterController != null)
+            if (playerState != null)
+            {
+                playerState.SetPlayerMovementState(PlayerMovementState.Idling);
+            }
+
+            if (playerController != null)
+            {
+                playerController.ResetState();
+            }
+
+            Transform spawnPoint = null;
+            if (Resonance.Player.Respawn.Instance != null)
+            {
+                spawnPoint = Resonance.Player.Respawn.Instance.GetSpawnPoint();
+            }
+
+            if (spawnPoint != null)
             {
                 transform.position = spawnPoint.position;
                 transform.rotation = spawnPoint.rotation;
             }
-            
-            if (_characterController != null)
+
+            if (characterController != null)
             {
-                if (_characterController.stepOffset <= 0)
+                if (characterController.stepOffset <= 0f)
                 {
-                    _characterController.stepOffset = 0.3f;
+                    characterController.stepOffset = 0.3f;
                 }
-                
-                _characterController.enabled = true;
+
+                characterController.enabled = true;
             }
-            
-            if (_playerController != null)
+
+            if (playerController != null)
             {
-                _playerController.enabled = true;
+                playerController.enabled = true;
+                playerController.IsPlayerDead = false;
             }
-            
-            if (_animator != null)
+
+            if (animator != null)
             {
-                _animator.enabled = true;
+                animator.enabled = true;
             }
-            
-            yield return null;
-            
-            if (_playerController != null)
-            {
-                _playerController.IsPlayerDead = false;
-            }
-            
-            CurrentHealth = maxHealth;
-            if (healthBar != null)
-            {
-                healthBar.SetSlider(CurrentHealth);
-            }
-            
-            Debug.Log($"[PlayerStats] {gameObject.name} respawned!");
-            
+
+            CurrentHealth.Value = maxHealth;
+
             OnPlayerRespawn?.Invoke();
         }
-        #endregion
+        
+        public GameObject GetLastAttacker()
+        {
+            return lastAttacker;
+        }
+
+        public float GetLastDamageTime()
+        {
+            return lastDamageTime;
+        }
     }
 }

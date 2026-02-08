@@ -1121,6 +1121,7 @@ Transform:
   - {fileID: 2881488753949666111}
   - {fileID: 4921056583975618137}
   - {fileID: 2544791039562883972}
+  - {fileID: 5985765096305719791}
   m_Father: {fileID: 1276517681134762612}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3712680273230900386
@@ -1330,6 +1331,37 @@ Transform:
   - {fileID: 7270153117110562829}
   m_Father: {fileID: 5567114807000778733}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4368379395362792413
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5985765096305719791}
+  m_Layer: 6
+  m_Name: AttachPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5985765096305719791
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4368379395362792413}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5, y: 0, z: 0, w: 0.8660254}
+  m_LocalPosition: {x: -0.2, y: 0.134, z: 0.035}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5567114807000778733}
+  m_LocalEulerAnglesHint: {x: -60, y: 0, z: 0}
 --- !u!1 &4546299355487968379
 GameObject:
   m_ObjectHideFlags: 0
@@ -2000,6 +2032,9 @@ GameObject:
   - component: {fileID: 6663562861641907931}
   - component: {fileID: 442510756705436988}
   - component: {fileID: 5378828892324781899}
+  - component: {fileID: 1718657095635896926}
+  - component: {fileID: 8015443433931062580}
+  - component: {fileID: 392479520750870743}
   m_Layer: 6
   m_Name: FirstPersonController
   m_TagString: Player
@@ -2390,6 +2425,55 @@ MonoBehaviour:
   _ownerAuth: 1
   _autoSyncParameters: 0
   _dontSyncParameters: []
+--- !u!114 &1718657095635896926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9f65672025fa5d4abac8993a47b6afd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.PlayerEquip
+  playerInventory: {fileID: 8015443433931062580}
+  equipSlot: {fileID: 5985765096305719791}
+  playerActionsInput: {fileID: 3887967411063251530}
+  currentWeaponView: {fileID: 0}
+--- !u!114 &8015443433931062580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2551c363f8a16b948b7ff20b467041d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Inventory.PlayerInventory
+  weaponInventory:
+  - {fileID: 11400000, guid: 5b3c96565628d1d498ddc4376703e2f6, type: 2}
+  - {fileID: 0}
+  startingWeapon: {fileID: 11400000, guid: 28cadf78b26d3a1489c2a936a55f1575, type: 2}
+--- !u!114 &392479520750870743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ea97cdb3e312945afe919a15f3110b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.ProjectileShooter
+  playerEquip: {fileID: 1718657095635896926}
+  playerActionsInput: {fileID: 3887967411063251530}
+  playerCamera: {fileID: 0}
+  debugAimRays: 1
+  debugAmmoLogs: 1
 --- !u!1 &6886534224098021164
 GameObject:
   m_ObjectHideFlags: 0
