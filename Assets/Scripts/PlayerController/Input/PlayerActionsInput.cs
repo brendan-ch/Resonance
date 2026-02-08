@@ -122,14 +122,15 @@ namespace Resonance.PlayerController
             if (_playerState != null && _playerState.IsDead())
                 return;
 
+            if (MatchStatsViewModel.Instance == null)
+                return;
+
             if (context.started)
             {
-                ShowStatsHeld = true;
                 MatchStatsViewModel.Instance.Show();
             }
             else if (context.canceled)
             {
-                ShowStatsHeld = false;
                 MatchStatsViewModel.Instance.Hide();
             }
         }

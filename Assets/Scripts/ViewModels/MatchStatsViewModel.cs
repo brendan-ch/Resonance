@@ -17,8 +17,9 @@ public class MatchStatsViewModel : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        
+
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public async void Show()

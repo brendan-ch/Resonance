@@ -12,6 +12,12 @@ public class MatchStatsView : MonoBehaviour
     {
         var vm = MatchStatsViewModel.Instance;
 
+        if (vm == null)
+        {
+            Debug.LogError("MatchStatsViewModel not found in scene");
+            return;
+        }
+        
         vm.IsVisible.ChangeEvent += OnVisibilityChanged;
         vm.Rankings.ChangeEvent += OnRankingsChanged;
     }
