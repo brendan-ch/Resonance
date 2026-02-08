@@ -1,3 +1,4 @@
+using Resonance.Assemblies.Arena;
 using UnityEngine;
 
 namespace Resonance.Match

@@ -1,6 +1,6 @@
 using Resonance.Assemblies.Match;
 
-namespace Resonance.Match
+namespace Resonance.Assemblies.Arena
 {
     [System.Serializable]
     public class PlayerRanking

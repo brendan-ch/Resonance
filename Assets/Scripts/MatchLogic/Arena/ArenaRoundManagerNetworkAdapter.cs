@@ -1,5 +1,6 @@
 using System;
 using PurrNet;
+using Resonance.Assemblies.Arena;
 using Resonance.Assemblies.Match;
 using UnityEngine;
 

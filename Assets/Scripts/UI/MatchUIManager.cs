@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Resonance.Match;
-using System.Collections.Generic;
 using Resonance.Assemblies.Match;
 using PurrNet;
+using Resonance.Assemblies.Arena;
 
 namespace Resonance.UI
 {

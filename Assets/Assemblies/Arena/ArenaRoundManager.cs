@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Resonance.Assemblies.Match;
 
-namespace Resonance.Match
+namespace Resonance.Assemblies.Arena
 {
     public class ArenaRoundManager
     {
