@@ -23,6 +23,7 @@ namespace Resonance.Match
         public MatchStatNetworkAdapter MatchStats => _matchStatAdapter;
 
         private ArenaRoundManagerNetworkAdapter _arenaRoundManagerNetworkAdapter;
+        public ArenaRoundManagerNetworkAdapter ArenaRoundManager => _arenaRoundManagerNetworkAdapter;
         #endregion
 
         #region Lifecycle
