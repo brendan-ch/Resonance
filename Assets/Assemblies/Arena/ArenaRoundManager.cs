@@ -86,13 +86,6 @@ namespace Resonance.Assemblies.Arena
                 // Invoke(nameof(StartMatch), matchEndDelaySeconds);
             }
         }
-
-        public void ReloadLevel()
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(
-                UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
-            );
-        }
         #endregion
 
         #region Kill Event Handling
