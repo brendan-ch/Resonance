@@ -1,6 +1,7 @@
 using Resonance.Helper;
 using UnityEngine;
 using Resonance.Match;
+using Resonance.Assemblies.Match;
 
 namespace Resonance.Entities
 {
@@ -37,9 +38,9 @@ namespace Resonance.Entities
             if (IsDead) return;
             
             // Track damage for assists
-            if (attacker != null && MatchStatTracker.Instance != null && countsAsKill)
+            if (attacker != null && MatchStatBridge.Instance != null && countsAsKill)
             {
-                MatchStatTracker.Instance.RecordDamage(attacker, gameObject, amount);
+                MatchStatBridge.Instance.RecordDamage(attacker, gameObject, amount);
                 _lastAttacker = attacker;
             }
             
@@ -57,9 +58,9 @@ namespace Resonance.Entities
             IsDead = true;
             
             // Record kill in match stats
-            if (_lastAttacker != null && MatchStatTracker.Instance != null && countsAsKill)
+            if (_lastAttacker != null && MatchStatBridge.Instance != null && countsAsKill)
             {
-                MatchStatTracker.Instance.RecordKill(_lastAttacker, gameObject);
+                MatchStatBridge.Instance.RecordKill(_lastAttacker, gameObject);
                 Debug.Log($"[TargetDummy] {gameObject.name} killed by {_lastAttacker.name}");
             }
             
