@@ -35,9 +35,10 @@ namespace Resonance.Assemblies.Arena
 
         private MatchStatTracker matchStatTracker;
 
-        public ArenaRoundManager(MatchStatTracker tracker)
+        public ArenaRoundManager(MatchStatTracker tracker, bool autoStartNextRound = false)
         {
             matchStatTracker = tracker;
+            this.autoStartNextRound = autoStartNextRound;
             SubscribeToEvents();
         }
 
@@ -82,8 +83,7 @@ namespace Resonance.Assemblies.Arena
 
             if (autoStartNextRound)
             {
-                // TODO
-                // Invoke(nameof(StartMatch), matchEndDelaySeconds);
+                StartMatch();
             }
         }
         #endregion
@@ -141,8 +141,7 @@ namespace Resonance.Assemblies.Arena
                 rankings.Add(new PlayerRanking
                 {
                     player = kvp.Key,
-                    stats = kvp.Value,
-                    rank = 0 // Will be set after sorting
+                    stats = kvp.Value
                 });
             }
 
@@ -151,12 +150,6 @@ namespace Resonance.Assemblies.Arena
                               .ThenByDescending(r => r.stats.KDA)
                               .ThenBy(r => r.stats.deaths)
                               .ToList();
-
-            // Assign ranks
-            for (int i = 0; i < rankings.Count; i++)
-            {
-                rankings[i].rank = i + 1;
-            }
 
             return rankings;
         }
@@ -175,9 +168,10 @@ namespace Resonance.Assemblies.Arena
             var leaderboard = GetLeaderboard();
             string result = "=== LEADERBOARD ===\n";
 
-            foreach (var ranking in leaderboard)
+            for (int i = 0; i < leaderboard.Count; i++)
             {
-                result += $"#{ranking.rank} {ranking.player}: {ranking.stats}\n";
+                var ranking = leaderboard[i];
+                result += $"#{i + 1} {ranking.player}: {ranking.stats}\n";
             }
 
             return result;
