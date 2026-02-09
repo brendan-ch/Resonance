@@ -116,7 +116,8 @@ namespace Resonance.UI
 
             if (ArenaRoundManager.Instance != null)
             {
-                ArenaRoundManager.Instance.ReloadLevel();
+                // TODO: replace this method call
+                // ArenaRoundManager.Instance.ReloadLevel();
             }
         }
 
