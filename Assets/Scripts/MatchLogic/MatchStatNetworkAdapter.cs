@@ -87,7 +87,7 @@ namespace Resonance.Match
             Debug.Log($"[MatchStatNetworkAdapter] Stats: {serializedPlayerData}");
 
             var allStats = JsonConvert.DeserializeObject<Dictionary<ulong, PlayerMatchStats>>(serializedPlayerData);
-            var toPropagate = UlongDictionaryToPlayerIDDictionary(allStats);
+            var toPropagate = OwnerIDExtractor.UlongDictionaryToPlayerIDDictionary(allStats);
             OnAllStatsUpdate?.Invoke(toPropagate);
         }
 
@@ -209,21 +209,9 @@ namespace Resonance.Match
         [ServerRpc]
         public async Task<Dictionary<PlayerID, PlayerMatchStats>> GetAllStats()
         {
-            return UlongDictionaryToPlayerIDDictionary(_tracker.GetAllStats());
+            return OwnerIDExtractor.UlongDictionaryToPlayerIDDictionary(_tracker.GetAllStats());
         }
         #endregion
 
-        #region Conversion Helpers
-        private Dictionary<PlayerID, PlayerMatchStats> UlongDictionaryToPlayerIDDictionary(
-            Dictionary<ulong, PlayerMatchStats> allStats)
-        {
-            var result = new Dictionary<PlayerID, PlayerMatchStats>();
-            foreach (var (id, stats) in allStats)
-            {
-                result.Add(OwnerIDExtractor.UlongToPlayerId(id), stats);
-            }
-            return result;
-        }
-        #endregion
     }
 }
