@@ -1,43 +1,46 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Resonance.Assemblies.Match;
+using System.Threading.Tasks;
+using PurrNet;
 
 namespace Resonance.Match
 {
     public class ArenaRoundManager : MonoBehaviour
     {
         public static ArenaRoundManager Instance { get; private set; }
-        
+
         #region Inspector Fields
         [Header("Win Condition")]
         [SerializeField] private int eliminationsToWin = 10;
-        
+
         [Header("Match Settings")]
         [SerializeField] private float matchEndDelay = 3f;
         [SerializeField] private bool autoStartNextRound = false;
         #endregion
-        
+
         #region State
         private bool matchActive = false;
         private bool matchEnded = false;
-        private GameObject currentLeader = null;
+        private PlayerID? currentLeader = null;
         private int highestEliminations = 0;
         #endregion
-        
+
         #region Events
         public event System.Action OnMatchStart;
-        public event System.Action<GameObject> OnMatchEnd; // Winner
-        public event System.Action<GameObject, int> OnLeaderChanged; // New leader, their eliminations
+        public event System.Action<PlayerID?> OnMatchEnd; // Winner
+        public event System.Action<PlayerID, int> OnLeaderChanged; // New leader, their eliminations
         #endregion
-        
+
         #region Properties
         public bool IsMatchActive => matchActive;
         public bool IsMatchEnded => matchEnded;
         public int EliminationsToWin => eliminationsToWin;
-        public GameObject CurrentLeader => currentLeader;
+        public PlayerID? CurrentLeader => currentLeader;
         public int HighestEliminations => highestEliminations;
         #endregion
-        
+
         #region Startup
         private void Awake()
         {
@@ -48,36 +51,36 @@ namespace Resonance.Match
             }
             Instance = this;
         }
-        
+
         private void Start()
         {
             SubscribeToEvents();
         }
-        
+
         private void OnDestroy()
         {
             UnsubscribeFromEvents();
         }
         #endregion
-        
+
         #region Event Subscriptions
         private void SubscribeToEvents()
         {
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.OnPlayerKill += OnPlayerKilled;
+                MatchStatBridge.Instance.OnPlayerKill.AddListener(OnPlayerKilled);
             }
         }
-        
+
         private void UnsubscribeFromEvents()
         {
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.OnPlayerKill -= OnPlayerKilled;
+                // MatchStatBridge.Instance.OnPlayerKill -= OnPlayerKilled;
             }
         }
         #endregion
-        
+
         #region Match Control
         public void StartMatch()
         {
@@ -86,48 +89,48 @@ namespace Resonance.Match
                 Debug.LogWarning("[ArenaRoundManager] Match is already active!");
                 return;
             }
-            
+
             matchActive = true;
             matchEnded = false;
             currentLeader = null;
             highestEliminations = 0;
-            
+
             // Reset all player stats
-            if (MatchStatTracker.Instance != null)
+            if (MatchStatBridge.Instance != null)
             {
-                MatchStatTracker.Instance.ResetAllStats();
+                MatchStatBridge.Instance.ResetAllStats();
             }
-            
+
             Debug.Log($"[ArenaRoundManager] Match started! First to {eliminationsToWin} eliminations wins!");
             OnMatchStart?.Invoke();
         }
-        
-        public void EndMatch(GameObject winner)
+
+        public async void EndMatch(PlayerID? winner)
         {
             if (!matchActive || matchEnded) return;
-            
+
             matchActive = false;
             matchEnded = true;
-            
-            if (winner != null)
+
+            if (winner is PlayerID id)
             {
-                PlayerMatchStats stats = MatchStatTracker.Instance?.GetStats(winner);
-                Debug.Log($"[ArenaRoundManager] Match ended! Winner: {winner.name} with {stats?.kills ?? 0} eliminations!");
-                Debug.Log($"[ArenaRoundManager] Final Stats: {stats?.ToString()}");
+                PlayerMatchStats? stats = await MatchStatBridge.Instance.GetStats(id);
+                Debug.Log($"[ArenaRoundManager] Match ended! Winner: {id} with {stats?.kills} eliminations!");
+                Debug.Log($"[ArenaRoundManager] Final Stats: {stats}");
             }
             else
             {
                 Debug.Log("[ArenaRoundManager] Match ended with no winner.");
             }
-            
+
             OnMatchEnd?.Invoke(winner);
-            
+
             if (autoStartNextRound)
             {
                 Invoke(nameof(StartMatch), matchEndDelay);
             }
         }
-        
+
         public void ReloadLevel()
         {
             Debug.Log("[ArenaRoundManager] Reloading level...");
@@ -136,47 +139,51 @@ namespace Resonance.Match
             );
         }
         #endregion
-        
+
         #region Kill Event Handling
-        private void OnPlayerKilled(GameObject killer, GameObject victim)
+        private async void OnPlayerKilled(PlayerID killer, PlayerID victim)
         {
             if (!matchActive || matchEnded) return;
-            
-            if (killer == null || MatchStatTracker.Instance == null) return;
-            
-            PlayerMatchStats killerStats = MatchStatTracker.Instance.GetStats(killer);
-            int currentEliminations = killerStats.kills;
-            
-            // Update leader tracking
-            if (currentEliminations > highestEliminations)
+
+            if (killer == null || MatchStatBridge.Instance == null) return;
+
+            PlayerMatchStats? killerStats = await MatchStatBridge.Instance.GetStats(killer);
+            if (killerStats is PlayerMatchStats stats)
             {
-                highestEliminations = currentEliminations;
-                GameObject previousLeader = currentLeader;
-                currentLeader = killer;
-                
-                if (previousLeader != killer)
+                int currentEliminations = stats.kills;
+
+                // Update leader tracking
+                if (currentEliminations > highestEliminations)
                 {
-                    Debug.Log($"[ArenaRoundManager] New leader: {killer.name} with {currentEliminations} eliminations!");
-                    OnLeaderChanged?.Invoke(killer, currentEliminations);
+                    highestEliminations = currentEliminations;
+                    var previousLeader = currentLeader;
+                    currentLeader = killer;
+
+                    if (previousLeader != killer)
+                    {
+                        Debug.Log($"[ArenaRoundManager] New leader: {killer} with {currentEliminations} eliminations!");
+                        OnLeaderChanged?.Invoke(killer, currentEliminations);
+                    }
+                }
+
+                // Check win condition
+                if (currentEliminations >= eliminationsToWin)
+                {
+                    EndMatch(killer);
                 }
             }
-            
-            // Check win condition
-            if (currentEliminations >= eliminationsToWin)
-            {
-                EndMatch(killer);
-            }
+
         }
         #endregion
-        
+
         #region Leaderboard Queries
-        public List<PlayerRanking> GetLeaderboard()
+        public async Task<List<PlayerRanking>> GetLeaderboard()
         {
-            if (MatchStatTracker.Instance == null) return new List<PlayerRanking>();
-            
-            var allStats = MatchStatTracker.Instance.GetAllStats();
+            if (MatchStatBridge.Instance == null) return new List<PlayerRanking>();
+
+            var allStats = await MatchStatBridge.Instance.GetAllStats();
             var rankings = new List<PlayerRanking>();
-            
+
             foreach (var kvp in allStats)
             {
                 rankings.Add(new PlayerRanking
@@ -186,56 +193,58 @@ namespace Resonance.Match
                     rank = 0 // Will be set after sorting
                 });
             }
-            
+
             // Sort by kills (descending), then by KDA (descending), then by deaths (ascending)
             rankings = rankings.OrderByDescending(r => r.stats.kills)
                               .ThenByDescending(r => r.stats.KDA)
                               .ThenBy(r => r.stats.deaths)
                               .ToList();
-            
+
             // Assign ranks
             for (int i = 0; i < rankings.Count; i++)
             {
                 rankings[i].rank = i + 1;
             }
-            
+
             return rankings;
         }
-        
-        public int GetPlayerRank(GameObject player)
+
+        public async Task<int> GetPlayerRank(GameObject player)
         {
-            var leaderboard = GetLeaderboard();
-            var playerRanking = leaderboard.FirstOrDefault(r => r.player == player);
+            var leaderboard = await GetLeaderboard();
+
+            var didExtractPlayerId = OwnerIDExtractor.TryExtractPlayerIds(player, out ulong id);
+            var playerRanking = leaderboard.FirstOrDefault(r => r.player.id.value == id);
             return playerRanking?.rank ?? -1;
         }
-        
-        public string GetLeaderboardString()
+
+        public async Task<string> GetLeaderboardString()
         {
-            var leaderboard = GetLeaderboard();
+            var leaderboard = await GetLeaderboard();
             string result = "=== LEADERBOARD ===\n";
-            
+
             foreach (var ranking in leaderboard)
             {
-                result += $"#{ranking.rank} {ranking.player.name}: {ranking.stats.ToString()}\n";
+                result += $"#{ranking.rank} {ranking.player}: {ranking.stats}\n";
             }
-            
+
             return result;
         }
         #endregion
-        
+
         #region Debug
         [ContextMenu("Start Match")]
         private void DebugStartMatch()
         {
             StartMatch();
         }
-        
+
         [ContextMenu("End Match")]
         private void DebugEndMatch()
         {
             EndMatch(currentLeader);
         }
-        
+
         [ContextMenu("Print Leaderboard")]
         private void DebugPrintLeaderboard()
         {
