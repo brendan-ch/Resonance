@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Resonance.Match;
-using Resonance.Assemblies.Match;
+using Resonance.Assemblies.MatchStat;
 using PurrNet;
 using Resonance.Assemblies.Arena;
 

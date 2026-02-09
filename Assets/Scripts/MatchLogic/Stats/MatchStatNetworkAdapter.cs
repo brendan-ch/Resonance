@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PurrNet;
-using Resonance.Assemblies.Match;
+using Resonance.Assemblies.MatchStat;
 using UnityEngine;
 using UnityEngine.Events;
 

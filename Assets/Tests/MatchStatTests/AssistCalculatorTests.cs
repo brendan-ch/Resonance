@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Resonance.Assemblies.Match;
+using Resonance.Assemblies.MatchStat;
 
 public class AssistCalculatorTests
 {

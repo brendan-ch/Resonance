@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Resonance.Assemblies.Match
+namespace Resonance.Assemblies.MatchStat
 {
     public class MatchStatTracker
     {

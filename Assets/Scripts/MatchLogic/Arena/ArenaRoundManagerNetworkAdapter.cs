@@ -1,7 +1,7 @@
 using System;
 using PurrNet;
 using Resonance.Assemblies.Arena;
-using Resonance.Assemblies.Match;
+using Resonance.Assemblies.MatchStat;
 using UnityEngine;
 
 namespace Resonance.Match

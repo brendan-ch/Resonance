@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Resonance.Assemblies.Match;
+using Resonance.Assemblies.MatchStat;
 
 namespace Resonance.Assemblies.Arena
 {

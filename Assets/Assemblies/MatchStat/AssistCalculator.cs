@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Resonance.Assemblies.Match
+namespace Resonance.Assemblies.MatchStat
 {
     /// <summary>
     /// Tracks recent damage by all players to calculate who should receive assists.

@@ -4,8 +4,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "MatchLogic",
-        "PurrNet.Runtime"
+        "PurrNet.Runtime",
+        "MatchStat"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
