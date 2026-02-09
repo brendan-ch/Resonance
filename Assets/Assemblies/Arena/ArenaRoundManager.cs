@@ -6,8 +6,6 @@ namespace Resonance.Assemblies.Arena
 {
     public class ArenaRoundManager
     {
-        public static ArenaRoundManager Instance { get; private set; }
-
         private int eliminationsToWin = 10;
         private float matchEndDelaySeconds = 3f;
         private bool autoStartNextRound = false;
