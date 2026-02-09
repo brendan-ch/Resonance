@@ -54,4 +54,69 @@ public class ArenaRoundManagerTests
         Assert.AreEqual(true, roundManager.IsMatchEnded);
     }
     #endregion
+
+    #region EndMatch
+    [Test]
+    public void EndMatch_FiresOnMatchEndEvent()
+    {
+
+    }
+
+    [Test]
+    public void EndMatch_UpdatesTheMatchStatus()
+    {
+
+    }
+
+
+    [Test]
+    public void EndMatch_AutoStartsNextRoundIfConfigured()
+    {
+
+    }
+
+    [Test]
+    public void EndMatch_DoesNothingIfMatchNotActive()
+    {
+
+    }
+    #endregion
+
+    #region StartMatch
+    [Test]
+    public void StartMatch_UpdatesTheMatchStatus()
+    {
+
+    }
+
+
+    [Test]
+    public void StartMatch_FiresOnMatchStartEvent()
+    {
+
+    }
+
+    [Test]
+    public void StartMatch_DoesNothingIfMatchAlreadyActive()
+    {
+
+    }
+
+    [Test]
+    public void StartMatch_ResetsMatchStatTracker()
+    {
+
+    }
+
+
+    #endregion
+
+
+    #region GetLeaderboard
+    [Test]
+    public void GetLeaderboard_GetsAllPlayerRankingsDependentOnStats()
+    {
+
+    }
+    #endregion
 }
