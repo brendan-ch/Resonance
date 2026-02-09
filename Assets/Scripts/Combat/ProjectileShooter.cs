@@ -113,7 +113,6 @@ namespace Resonance.Combat
                     return;
                 }
 
-
                 currentAmmo -= 1;
 
                 if (debugAmmoLogs)
