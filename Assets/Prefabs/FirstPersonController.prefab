@@ -1991,7 +1991,7 @@ GameObject:
   - component: {fileID: 6986822269938596396}
   - component: {fileID: 1227219239304027150}
   - component: {fileID: 3887967411063251530}
-  - component: {fileID: 8987506614788257680}
+  - component: {fileID: -3400458708190070123}
   - component: {fileID: 7288220896636920470}
   - component: {fileID: 6396442435144648702}
   - component: {fileID: 566397693469419020}
@@ -2000,6 +2000,8 @@ GameObject:
   - component: {fileID: 6663562861641907931}
   - component: {fileID: 442510756705436988}
   - component: {fileID: 5378828892324781899}
+  - component: {fileID: -7842585778944990973}
+  - component: {fileID: 8953151137814889512}
   m_Layer: 6
   m_Name: FirstPersonController
   m_TagString: Player
@@ -2178,7 +2180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9013b3fa3d70ab04c93dacdd173ebf4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.PlayerActionsInput
---- !u!114 &8987506614788257680
+--- !u!114 &-3400458708190070123
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2187,21 +2189,96 @@ MonoBehaviour:
   m_GameObject: {fileID: 6809321870534573542}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02372b49c7f35af4caecfab755da37c7, type: 3}
+  m_Script: {fileID: 11500000, guid: c91b8c40e13cd144a8d5c2cf42abcec3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: AK.Wwise.Unity.MonoBehaviour::AkGameObj
-  m_listeners:
-    initialListenerList: []
-    useDefaultListeners: 1
-  isEnvironmentAware: 1
-  isStaticObject: 0
-  usePositionOffsetData: 0
-  m_positionOffsetData:
-    KeepMe: 0
-    positionOffset: {x: 0, y: 0, z: 0}
-  scalingFactor: 1
-  m_posOffsetData: {fileID: 0}
-  listenerMask: 1
+  m_EditorClassIdentifier: Assembly-CSharp::WwiseSmartReverb
+  isGlobal: 1
+  targetGameObject: {fileID: 0}
+  enclosureRTPCName: Enclosure
+  roomSizeRTPCName: RoomSize
+  reverbSendRTPCName: ReverbSend
+  rayCount: 30
+  maxRayDistance: 50
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  scanRate: 5
+  smoothingSpeed: 3
+  enclosureCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  roomSizeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 5
+      inSlope: 0
+      outSlope: 1.9
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 50
+      value: 100
+      inSlope: 1.9
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbSendCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 80
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  drawDebugRays: 1
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  missColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &7288220896636920470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2390,6 +2467,46 @@ MonoBehaviour:
   _ownerAuth: 1
   _autoSyncParameters: 0
   _dontSyncParameters: []
+--- !u!114 &-7842585778944990973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02372b49c7f35af4caecfab755da37c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AK.Wwise.Unity.MonoBehaviour::AkGameObj
+  m_listeners:
+    initialListenerList: []
+    useDefaultListeners: 1
+  isEnvironmentAware: 1
+  isStaticObject: 0
+  usePositionOffsetData: 0
+  m_positionOffsetData:
+    KeepMe: 0
+    positionOffset: {x: 0, y: 0, z: 0}
+  scalingFactor: 1
+  m_posOffsetData: {fileID: 0}
+  listenerMask: 1
+--- !u!114 &8953151137814889512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e325349b27c78b84c8ac5656b66ad2a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AK.Wwise.Unity.MonoBehaviour::AkAudioListener
+  isDefaultListener: 1
+  bOverrideScalingFactor: 0
+  scalingFactor: -1
+  listenerId: 0
 --- !u!1 &6886534224098021164
 GameObject:
   m_ObjectHideFlags: 0
