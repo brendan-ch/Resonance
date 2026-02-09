@@ -4,7 +4,6 @@ using TMPro;
 using Resonance.Match;
 using Resonance.Assemblies.MatchStat;
 using PurrNet;
-using Resonance.Assemblies.Arena;
 
 namespace Resonance.UI
 {
@@ -58,27 +57,17 @@ namespace Resonance.UI
         #region Event Subscriptions
         private void SubscribeToEvents()
         {
-            if (ArenaRoundManager.Instance != null)
+            if (ArenaRoundManagerBridge.Instance != null)
             {
-                // ArenaRoundManager.Instance.OnMatchEnd += OnMatchEnd;
-            }
-
-            if (MatchStatBridge.Instance != null)
-            {
-                // MatchStatBridge.Instance.OnPlayerKill.AddListener(OnPlayerKill);
+                ArenaRoundManagerBridge.Instance.OnMatchEnd += OnMatchEnd;
             }
         }
 
         private void UnsubscribeFromEvents()
         {
-            if (ArenaRoundManager.Instance != null)
+            if (ArenaRoundManagerBridge.Instance != null)
             {
-                // ArenaRoundManager.Instance.OnMatchEnd -= OnMatchEnd;
-            }
-
-            if (MatchStatBridge.Instance != null)
-            {
-                // MatchStatBridge.Instance.OnPlayerKill.RemoveListener(OnPlayerKill);
+                ArenaRoundManagerBridge.Instance.OnMatchEnd -= OnMatchEnd;
             }
         }
         #endregion
@@ -114,10 +103,9 @@ namespace Resonance.UI
             // Reset time scale in case it was paused
             Time.timeScale = 1f;
 
-            if (ArenaRoundManager.Instance != null)
+            if (ArenaRoundManagerBridge.Instance != null)
             {
-                // TODO: replace this method call
-                // ArenaRoundManager.Instance.ReloadLevel();
+                ArenaRoundManagerBridge.Instance.StartMatch();
             }
         }
 
@@ -155,9 +143,9 @@ namespace Resonance.UI
             }
 
             // Update eliminations progress
-            if (eliminationsText != null && ArenaRoundManager.Instance != null)
+            if (eliminationsText != null && ArenaRoundManagerBridge.Instance != null)
             {
-                int target = ArenaRoundManager.Instance.EliminationsToWin;
+                int target = ArenaRoundManagerBridge.Instance.EliminationsToWin;
                 eliminationsText.text = $"Eliminations: {stats?.kills}/{target}";
             }
         }

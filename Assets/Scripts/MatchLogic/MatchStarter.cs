@@ -1,4 +1,3 @@
-using Resonance.Assemblies.Arena;
 using UnityEngine;
 
 namespace Resonance.Match
@@ -8,7 +7,7 @@ namespace Resonance.Match
         [Header("Auto Start Settings")]
         [SerializeField] private bool autoStartOnSceneLoad = true;
         [SerializeField] private float startDelay = 0.5f; // Small delay to ensure everything is initialized
-        
+
         private void Start()
         {
             if (autoStartOnSceneLoad)
@@ -16,20 +15,20 @@ namespace Resonance.Match
                 Invoke(nameof(StartMatch), startDelay);
             }
         }
-        
+
         private void StartMatch()
         {
-            if (ArenaRoundManager.Instance != null)
+            if (ArenaRoundManagerBridge.Instance != null)
             {
-                ArenaRoundManager.Instance.StartMatch();
+                ArenaRoundManagerBridge.Instance.StartMatch();
                 Debug.Log("[MatchStarter] Match started automatically!");
             }
             else
             {
-                Debug.LogError("[MatchStarter] ArenaRoundManager.Instance is null! Make sure ArenaRoundManager is in the scene.");
+                Debug.LogError("[MatchStarter] ArenaRoundManagerBridge.Instance is null! Make sure MatchLogicNetworkAdapter is in the scene.");
             }
         }
-        
+
         // Manual start method you can call from a button or inspector
         [ContextMenu("Start Match Now")]
         public void StartMatchManually()
