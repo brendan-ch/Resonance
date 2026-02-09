@@ -39,5 +39,19 @@ public class ArenaRoundManagerTests
 
         Assert.IsNull(roundManager.CurrentLeader);
     }
+
+    [Test]
+    public void OnPlayerKilled_EndMatchIfEliminationThresholdPassed()
+    {
+        roundManager.StartMatch();
+        ulong killerId = 1;
+
+        for (int i = 0; i < roundManager.EliminationsToWin; i++)
+        {
+            statTracker.RecordKill(killerId, 2);
+        }
+
+        Assert.AreEqual(true, roundManager.IsMatchEnded);
+    }
     #endregion
 }

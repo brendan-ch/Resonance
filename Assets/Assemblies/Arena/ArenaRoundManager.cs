@@ -78,14 +78,6 @@ namespace Resonance.Assemblies.Arena
             matchActive = false;
             matchEnded = true;
 
-            if (winner is ulong id)
-            {
-                PlayerMatchStats? stats = matchStatTracker.GetStats(id);
-            }
-            else
-            {
-            }
-
             OnMatchEnd?.Invoke(winner);
 
             if (autoStartNextRound)
