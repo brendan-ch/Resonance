@@ -1,23 +1,43 @@
 using System.Collections;
 using NUnit.Framework;
-using UnityEngine.TestTools;
+using Resonance.Assemblies.MatchStat;
+using Resonance.Assemblies.Arena;
 
 public class ArenaRoundManagerTests
 {
-    // A Test behaves as an ordinary method
-    [Test]
-    public void ArenaRoundManagerTestsSimplePasses()
+    private MatchStatTracker statTracker;
+    private ArenaRoundManager roundManager;
+
+    [SetUp]
+    public void Setup()
     {
-        // Use the Assert class to test conditions
+        statTracker = new();
+        roundManager = new(statTracker);
     }
 
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
-    [UnityTest]
-    public IEnumerator ArenaRoundManagerTestsWithEnumeratorPasses()
+    #region OnPlayerKilled
+    [Test]
+    public void OnPlayerKilled_UpdatesLeaderIfRoundStarted()
     {
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-        yield return null;
+        roundManager.StartMatch();
+
+        ulong killerId = 1;
+
+        statTracker.RecordKill(killerId, 2);
+        statTracker.RecordKill(killerId, 3);
+
+        Assert.AreEqual(killerId, roundManager.CurrentLeader);
     }
+
+    [Test]
+    public void OnPlayerKilled_DoesNotUpdateLeaderIfRoundNotActive()
+    {
+        ulong killerId = 1;
+
+        statTracker.RecordKill(killerId, 2);
+        statTracker.RecordKill(killerId, 3);
+
+        Assert.IsNull(roundManager.CurrentLeader);
+    }
+    #endregion
 }

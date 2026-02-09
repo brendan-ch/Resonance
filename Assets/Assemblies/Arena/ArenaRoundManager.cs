@@ -111,28 +111,35 @@ namespace Resonance.Assemblies.Arena
             PlayerMatchStats? killerStats = matchStatTracker.GetStats(killer);
             if (killerStats is PlayerMatchStats stats)
             {
+                ConditionallyUpdateLeader(killer, stats);
+
                 int currentEliminations = stats.kills;
-
-                // Update leader tracking
-                if (currentEliminations > highestEliminations)
-                {
-                    highestEliminations = currentEliminations;
-                    var previousLeader = currentLeader;
-                    currentLeader = killer;
-
-                    if (previousLeader != killer)
-                    {
-                        OnLeaderChanged?.Invoke(killer, currentEliminations);
-                    }
-                }
-
-                // Check win condition
                 if (currentEliminations >= eliminationsToWin)
                 {
                     EndMatch(killer);
                 }
             }
 
+        }
+
+        private int ConditionallyUpdateLeader(ulong killer, PlayerMatchStats stats)
+        {
+            int currentEliminations = stats.kills;
+
+            // Update leader tracking
+            if (currentEliminations > highestEliminations)
+            {
+                highestEliminations = currentEliminations;
+                var previousLeader = currentLeader;
+                currentLeader = killer;
+
+                if (previousLeader != killer)
+                {
+                    OnLeaderChanged?.Invoke(killer, currentEliminations);
+                }
+            }
+
+            return currentEliminations;
         }
         #endregion
 
