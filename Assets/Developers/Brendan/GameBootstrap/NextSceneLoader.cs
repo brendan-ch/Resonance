@@ -1,13 +1,13 @@
 using PurrNet;
 using Resonance.LobbySystem;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class NextSceneLoader : MonoBehaviour
 {
     [SerializeField] private NetworkManager networkManager;
 
     private LobbyDataHolder lobbyDataHolder;
+
     private void Awake()
     {
         lobbyDataHolder = FindFirstObjectByType<LobbyDataHolder>();
@@ -15,6 +15,7 @@ public class NextSceneLoader : MonoBehaviour
         {
             Debug.LogError($"Unable to find {nameof(LobbyDataHolder)} component");
         }
+
     }
 
     private void Start()
@@ -27,8 +28,8 @@ public class NextSceneLoader : MonoBehaviour
         var numPlayersInLobby = lobbyDataHolder.CurrentLobby.Members.Count;
         if (networkManager.playerCount == numPlayersInLobby)
         {
-            var sceneToLoad = lobbyDataHolder.CurrentLobby.SceneName;
-            SceneManager.LoadScene(sceneToLoad);
+            var sceneToSwitchTo = lobbyDataHolder.CurrentLobby.SceneName;
+            networkManager.sceneModule.LoadSceneAsync(sceneToSwitchTo);
         }
     }
 }
