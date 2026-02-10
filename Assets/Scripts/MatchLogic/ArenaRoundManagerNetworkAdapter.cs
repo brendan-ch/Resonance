@@ -68,12 +68,18 @@ namespace Resonance.Match
         #region Server Initialization
         private void OnMatchStatTrackerCreated(MatchStatTracker tracker)
         {
-            Debug.Log("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received, creating ArenaRoundManager and attaching subscribers");
-            arenaRoundManager = new ArenaRoundManager(tracker);
+            if (arenaRoundManager == null)
+            {
+                Debug.Log("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received, creating ArenaRoundManager and attaching subscribers");
+                arenaRoundManager = new ArenaRoundManager(tracker);
 
-            arenaRoundManager.OnMatchStart += OnArenaMatchStart;
-            arenaRoundManager.OnMatchEnd += OnArenaMatchEnd;
-            arenaRoundManager.OnLeaderChanged += OnArenaLeaderChanged;
+                arenaRoundManager.OnMatchStart += OnArenaMatchStart;
+                arenaRoundManager.OnMatchEnd += OnArenaMatchEnd;
+                arenaRoundManager.OnLeaderChanged += OnArenaLeaderChanged;
+            } else
+            {
+                Debug.LogWarning("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received, but ArenaRoundManager instance already exists");
+            }
         }
         #endregion
 
