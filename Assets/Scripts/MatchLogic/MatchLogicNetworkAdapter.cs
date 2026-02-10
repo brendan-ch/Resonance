@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using PurrNet;
 using UnityEngine;
 
@@ -38,6 +39,16 @@ namespace Resonance.Match
         {
             InstanceHandler.UnregisterInstance<MatchLogicNetworkAdapter>();
         }
+        #endregion
+
+        #region Debugging
+        [ContextMenu("Log match active status")]
+        public async void LogIsMatchActive()
+        {
+            var activeStatus = await _arenaRoundManagerNetworkAdapter.GetIsMatchActive();
+            Debug.Log($"Is match active: {activeStatus}");
+        }
+
         #endregion
     }
 }
