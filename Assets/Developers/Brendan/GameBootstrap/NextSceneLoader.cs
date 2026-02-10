@@ -2,24 +2,22 @@ using PurrNet;
 using Resonance.LobbySystem;
 using UnityEngine;
 
-public class NextSceneLoader : MonoBehaviour
+public class NextSceneLoader : NetworkBehaviour
 {
-    [SerializeField] private NetworkManager networkManager;
+    // [SerializeField] private NetworkManager networkManager;
 
     private LobbyDataHolder lobbyDataHolder;
 
-    private void Awake()
+    protected override void OnSpawned()
     {
+        base.OnSpawned();
+
         lobbyDataHolder = FindFirstObjectByType<LobbyDataHolder>();
         if (!lobbyDataHolder)
         {
             Debug.LogError($"Unable to find {nameof(LobbyDataHolder)} component");
         }
 
-    }
-
-    private void Start()
-    {
         networkManager.onPlayerJoined += ConditionallyLoadNextScene;
     }
 
