@@ -14,12 +14,13 @@ public class GameBootstrapGameModeDisplay : MonoBehaviour
     private void Awake()
     {
         lobbyDataHolder = FindFirstObjectByType<LobbyDataHolder>();
-        if (!lobbyDataHolder)
+        if (lobbyDataHolder == null)
         {
             Debug.LogError($"Unable to find {nameof(LobbyDataHolder)} component");
+            return;
         }
 
-        var gameMode = lobbyDataHolder.CurrentLobby.GameMode;
+        var gameMode = lobbyDataHolder.CurrentLobby?.GameMode;
         text.text = $"Selected game mode: {gameMode}";
     }
 

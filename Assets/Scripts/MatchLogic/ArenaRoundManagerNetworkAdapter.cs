@@ -147,7 +147,7 @@ namespace Resonance.Match
 
         /// <summary>
         /// Ends the match with a winner. Note that in most scenarios, this won't
-        /// need to be called directly; the class 
+        /// need to be called directly.
         /// </summary>
         /// <param name="winner"></param>
         public void EndMatch(PlayerID? winner)

@@ -35,7 +35,6 @@ namespace Resonance.Match
         {
             playerId = 0;
             
-            // Get anything that is a NetworkBehaviour, I presume?
             if (!gameObject.TryGetComponent(out NetworkBehaviour controller))
                 return false;
 

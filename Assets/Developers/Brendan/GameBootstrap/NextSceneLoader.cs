@@ -1,7 +1,5 @@
-using Mono.Cecil.Cil;
 using PurrNet;
 using Resonance.LobbySystem;
-using Resonance.Match;
 using UnityEngine;
 
 public class NextSceneLoader : NetworkBehaviour
@@ -24,7 +22,7 @@ public class NextSceneLoader : NetworkBehaviour
 
     public void LoadNextScene()
     {
-        var sceneToSwitchTo = lobbyDataHolder.CurrentLobby.SceneName;
+        var sceneToSwitchTo = lobbyDataHolder.CurrentLobby?.SceneName;
         networkManager.sceneModule.LoadSceneAsync(sceneToSwitchTo);
     }
 }

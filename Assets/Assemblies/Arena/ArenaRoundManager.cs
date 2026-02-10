@@ -45,7 +45,6 @@ namespace Resonance.Assemblies.Arena
         {
             if (matchStatTracker != null)
             {
-                // matchStatTracker.OnPlayerKill += OnPlayerKilled;
                 matchStatTracker.OnPlayerKill += OnPlayerKilled;
             }
         }
@@ -151,15 +150,6 @@ namespace Resonance.Assemblies.Arena
 
             return rankings;
         }
-
-        // public async Task<int> GetPlayerRank(GameObject player)
-        // {
-        //     var leaderboard = await GetLeaderboard();
-
-        //     var didExtractulong = OwnerIDExtractor.TryExtractPlayerIds(player, out ulong id);
-        //     var playerRanking = leaderboard.FirstOrDefault(r => r.player.id.value == id);
-        //     return playerRanking?.rank ?? -1;
-        // }
 
         public string GetLeaderboardString()
         {

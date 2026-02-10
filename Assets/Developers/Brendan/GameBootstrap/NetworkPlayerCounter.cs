@@ -1,6 +1,4 @@
-using System;
 using PurrNet;
-using PurrNet.Modules;
 using Resonance.LobbySystem;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,7 +7,7 @@ public class NetworkPlayerCounter : NetworkBehaviour
 {
     public UnityEvent OnAllPlayersJoined = new();
     private LobbyDataHolder lobbyDataHolder;
-    private int MemberCount => lobbyDataHolder.CurrentLobby.Members.Count;
+    private int MemberCount => lobbyDataHolder.CurrentLobby?.Members.Count ?? 0;
 
     protected override void OnSpawned(bool asServer)
     {
@@ -23,8 +21,24 @@ public class NetworkPlayerCounter : NetworkBehaviour
 
         if (asServer)
         {
-            networkManager.onPlayerJoined += (_, _, _) => ConditionallyFireAllPlayersEvent();
+            networkManager.onPlayerJoined += OnPlayerJoined;
         }
+    }
+
+
+    protected override void OnDespawned(bool asServer)
+    {
+        base.OnDespawned(asServer);
+        if (asServer)
+        {
+            networkManager.onPlayerJoined -= OnPlayerJoined;
+        }
+    }
+
+
+    private void OnPlayerJoined(PlayerID player, bool isReconnect, bool asServer)
+    {
+        ConditionallyFireAllPlayersEvent();
     }
 
     private void ConditionallyFireAllPlayersEvent()
