@@ -10,10 +10,6 @@ public class NextSceneLoader : NetworkBehaviour
 
     private LobbyDataHolder lobbyDataHolder;
 
-    private int playerJoinedCount = 0;
-    private bool matchLogicSpawned = false;
-
-    private bool shouldLoadNextScene => matchLogicSpawned && playerJoinedCount == lobbyDataHolder.CurrentLobby.Members.Count;
 
     protected override void OnSpawned()
     {
@@ -24,35 +20,11 @@ public class NextSceneLoader : NetworkBehaviour
         {
             Debug.LogError($"Unable to find {nameof(LobbyDataHolder)} component; scene switching will not work.");
         }
-
-        networkManager.onPlayerJoined += (playerId, isReconnect, isServer) =>
-        {
-            UpdatePlayerJoinedCount();
-            ConditionallyLoadNextScene();
-        };
     }
 
-    private void UpdatePlayerJoinedCount()
+    public void LoadNextScene()
     {
-        playerJoinedCount = networkManager.playerCount;
-    }
-
-    public void UpdateMatchLogicSpawnStatus()
-    {
-        var matchLogicAdapter = FindFirstObjectByType<MatchLogicNetworkAdapter>();
-        if (matchLogicAdapter)
-        {
-            matchLogicSpawned = true;
-        }
-        ConditionallyLoadNextScene();
-    }
-
-    private void ConditionallyLoadNextScene()
-    {
-        if (shouldLoadNextScene)
-        {
-            var sceneToSwitchTo = lobbyDataHolder.CurrentLobby.SceneName;
-            networkManager.sceneModule.LoadSceneAsync(sceneToSwitchTo);
-        }
+        var sceneToSwitchTo = lobbyDataHolder.CurrentLobby.SceneName;
+        networkManager.sceneModule.LoadSceneAsync(sceneToSwitchTo);
     }
 }

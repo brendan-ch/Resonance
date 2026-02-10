@@ -11,6 +11,11 @@ public class MatchLogicSpawner : NetworkBehaviour
     protected override void OnSpawned()
     {
         base.OnSpawned();
+    }
+
+    public void SpawnMatchLogic()
+    {
+        // must be spawned on all clients to access RPC
         GameObject instance = Instantiate(matchLogicPrefab);
         DontDestroyOnLoad(instance);
 
