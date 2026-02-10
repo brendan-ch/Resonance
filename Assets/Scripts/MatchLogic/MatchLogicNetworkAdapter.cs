@@ -33,6 +33,8 @@ namespace Resonance.Match
             InstanceHandler.RegisterInstance(this);
             _matchStatAdapter = new MatchStatNetworkAdapter(assistTimeWindow, assistDamageThreshold);
             _arenaRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter);
+
+            DontDestroyOnLoad(this);
         }
 
         private void OnDestroy()

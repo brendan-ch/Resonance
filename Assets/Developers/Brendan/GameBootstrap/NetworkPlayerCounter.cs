@@ -24,7 +24,6 @@ public class NetworkPlayerCounter : NetworkBehaviour
         if (asServer)
         {
             networkManager.onPlayerJoined += (_, _, _) => ConditionallyFireAllPlayersEvent();
-            networkManager.onPlayerLeft += (_, _) => ConditionallyFireAllPlayersEvent();
         }
     }
 
@@ -33,9 +32,8 @@ public class NetworkPlayerCounter : NetworkBehaviour
         var playerJoinedCount = networkManager.playerCount;
         if (playerJoinedCount == MemberCount)
         {
+            Debug.Log("[NetworkPlayerCounter] All players joined");
             OnAllPlayersJoined.Invoke();
         }
     }
-
-
 }
