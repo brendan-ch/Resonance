@@ -7,7 +7,7 @@ public class NetworkPlayerCounter : NetworkBehaviour
 {
     public UnityEvent OnAllPlayersJoined = new();
     private LobbyDataHolder lobbyDataHolder;
-    private int MemberCount => lobbyDataHolder.CurrentLobby?.Members.Count ?? 0;
+    private int MemberCount => lobbyDataHolder.CurrentLobby.Members.Count;
 
     protected override void OnSpawned(bool asServer)
     {

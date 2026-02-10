@@ -19,7 +19,7 @@ public class GameBootstrapOwnerStateDisplay : MonoBehaviour
             Debug.LogError($"Unable to find {nameof(LobbyDataHolder)} component");
         }
 
-        var gameMode = lobbyDataHolder.CurrentLobby?.IsOwner;
+        var gameMode = lobbyDataHolder.CurrentLobby.IsOwner;
         text.text = $"Is owner: {gameMode}";
     }
 

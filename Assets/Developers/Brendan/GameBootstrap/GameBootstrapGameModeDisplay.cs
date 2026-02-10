@@ -20,7 +20,7 @@ public class GameBootstrapGameModeDisplay : MonoBehaviour
             return;
         }
 
-        var gameMode = lobbyDataHolder.CurrentLobby?.GameMode;
+        var gameMode = lobbyDataHolder.CurrentLobby.GameMode;
         text.text = $"Selected game mode: {gameMode}";
     }
 

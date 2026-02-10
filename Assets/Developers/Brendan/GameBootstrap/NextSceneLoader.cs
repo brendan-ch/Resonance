@@ -22,7 +22,7 @@ public class NextSceneLoader : NetworkBehaviour
 
     public void LoadNextScene()
     {
-        var sceneToSwitchTo = lobbyDataHolder.CurrentLobby?.SceneName;
+        var sceneToSwitchTo = lobbyDataHolder.CurrentLobby.SceneName;
         networkManager.sceneModule.LoadSceneAsync(sceneToSwitchTo);
     }
 }
