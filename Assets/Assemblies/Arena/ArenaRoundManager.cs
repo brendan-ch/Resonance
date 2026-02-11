@@ -33,10 +33,18 @@ namespace Resonance.Assemblies.Arena
 
         private MatchStatTracker matchStatTracker;
 
-        public ArenaRoundManager(MatchStatTracker tracker, bool autoStartNextRound = false)
+        public ArenaRoundManager(
+            MatchStatTracker tracker,
+            int eliminationsToWin = 10,
+            bool autoStartNextRound = false,
+            float matchEndDelaySeconds = 3f
+        )
         {
             matchStatTracker = tracker;
             this.autoStartNextRound = autoStartNextRound;
+            this.eliminationsToWin = eliminationsToWin;
+            this.matchEndDelaySeconds = matchEndDelaySeconds;
+
             SubscribeToEvents();
         }
 
