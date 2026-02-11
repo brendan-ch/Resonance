@@ -2,6 +2,7 @@ using System.Collections;
 using NUnit.Framework;
 using Resonance.Assemblies.MatchStat;
 using Resonance.Assemblies.Arena;
+using System.Threading.Tasks;
 
 public class ArenaRoundManagerTests
 {
@@ -57,7 +58,7 @@ public class ArenaRoundManagerTests
 
     #region EndMatch
     [Test]
-    public void EndMatch_FiresOnMatchEndEvent()
+    public async Task EndMatch_FiresOnMatchEndEvent()
     {
         roundManager.StartMatch();
 
@@ -71,17 +72,17 @@ public class ArenaRoundManagerTests
         };
 
         ulong expectedWinner = 1;
-        roundManager.EndMatch(expectedWinner);
+        await roundManager.EndMatch(expectedWinner);
 
         Assert.AreEqual(1, eventCallCount);
         Assert.AreEqual(expectedWinner, capturedWinner);
     }
 
     [Test]
-    public void EndMatch_UpdatesTheMatchStatus()
+    public async Task EndMatch_UpdatesTheMatchStatus()
     {
         roundManager.StartMatch();
-        roundManager.EndMatch(1);
+        await roundManager.EndMatch(1);
 
         Assert.AreEqual(false, roundManager.IsMatchActive);
         Assert.AreEqual(true, roundManager.IsMatchEnded);
@@ -89,23 +90,23 @@ public class ArenaRoundManagerTests
 
 
     [Test]
-    public void EndMatch_AutoStartsNextRoundIfConfigured()
+    public async Task EndMatch_AutoStartsNextRoundIfConfigured()
     {
-        var autoStartManager = new ArenaRoundManager(statTracker, autoStartNextRound: true);
+        var autoStartManager = new ArenaRoundManager(statTracker, autoStartNextRound: true, matchEndDelaySeconds: 1);
         autoStartManager.StartMatch();
-        autoStartManager.EndMatch(1);
+        await autoStartManager.EndMatch(1);
 
         Assert.AreEqual(true, autoStartManager.IsMatchActive);
         Assert.AreEqual(false, autoStartManager.IsMatchEnded);
     }
 
     [Test]
-    public void EndMatch_DoesNothingIfMatchNotActive()
+    public async Task EndMatch_DoesNothingIfMatchNotActive()
     {
         int eventCallCount = 0;
         roundManager.OnMatchEnd += (_) => eventCallCount++;
 
-        roundManager.EndMatch(1);
+        await roundManager.EndMatch(1);
 
         Assert.AreEqual(0, eventCallCount);
         Assert.AreEqual(false, roundManager.IsMatchActive);

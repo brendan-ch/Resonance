@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Resonance.Assemblies.MatchStat;
 
 namespace Resonance.Assemblies.Arena
@@ -7,7 +8,7 @@ namespace Resonance.Assemblies.Arena
     public class ArenaRoundManager
     {
         private int eliminationsToWin = 10;
-        private float matchEndDelaySeconds = 3f;
+        private float autoStartDelaySeconds = 3f;
         private bool autoStartNextRound = false;
 
         #region State
@@ -16,7 +17,7 @@ namespace Resonance.Assemblies.Arena
         private ulong? currentLeader = null;
         private int highestEliminations = 0;
         #endregion
-        
+
         #region Events
         public event System.Action OnMatchStart;
         public event System.Action<ulong?> OnMatchEnd; // Winner
@@ -43,7 +44,7 @@ namespace Resonance.Assemblies.Arena
             matchStatTracker = tracker;
             this.autoStartNextRound = autoStartNextRound;
             this.eliminationsToWin = eliminationsToWin;
-            this.matchEndDelaySeconds = matchEndDelaySeconds;
+            this.autoStartDelaySeconds = matchEndDelaySeconds;
 
             SubscribeToEvents();
         }
@@ -77,7 +78,12 @@ namespace Resonance.Assemblies.Arena
             OnMatchStart?.Invoke();
         }
 
-        public void EndMatch(ulong? winner)
+        /// <summary>
+        /// Ends the match, auto-starting the next round if configured.
+        /// </summary>
+        /// <param name="winner"></param>
+        /// <returns></returns>
+        public async Task EndMatch(ulong? winner)
         {
             if (!matchActive || matchEnded) return;
 
@@ -88,8 +94,14 @@ namespace Resonance.Assemblies.Arena
 
             if (autoStartNextRound)
             {
-                StartMatch();
+                await QueueNextMatchStart();
             }
+        }
+
+        private async Task QueueNextMatchStart()
+        {
+            await Task.Delay((int)autoStartDelaySeconds * 1000);
+            StartMatch();
         }
         #endregion
 
@@ -106,10 +118,9 @@ namespace Resonance.Assemblies.Arena
                 int currentEliminations = stats.kills;
                 if (currentEliminations >= eliminationsToWin)
                 {
-                    EndMatch(killer);
+                    _ = EndMatch(killer);
                 }
             }
-
         }
 
         private int ConditionallyUpdateLeader(ulong killer, PlayerMatchStats stats)
