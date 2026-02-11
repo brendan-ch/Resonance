@@ -1,4 +1,4 @@
-namespace Resonance.Assemblies.Match
+namespace Resonance.Assemblies.MatchStat
 {
     internal struct DamageContribution
     {

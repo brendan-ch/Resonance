@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using Resonance.Assemblies.Match;
+using Resonance.Assemblies.MatchStat;
 
 public class MatchStatTrackerTests
 {
