@@ -4,10 +4,11 @@ using Resonance.Match;
 using UnityEngine;
 using System.Collections;
 using PurrNet;
+using Resonance.Helper;
 
 namespace Resonance.Player
 {
-    public class PlayerStats : NetworkBehaviour
+    public class PlayerStats : NetworkBehaviour, IDamageable
     {
         #region Inspector Fields
         [SerializeField] private float maxHealth = 100f;
