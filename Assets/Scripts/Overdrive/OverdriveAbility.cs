@@ -12,6 +12,11 @@ namespace Resonance.PlayerController
         [SerializeField] private float overdriveSpeedMultiplier = 2f;
         [SerializeField] private float overdriveHealAmount = 50f;
         
+        public ObservableValue<OverdriveState> State { get; private set; }
+        public ObservableValue<float> CooldownRemaining { get; private set; }
+        public ObservableValue<float> DurationRemaining { get; private set; }
+        public ObservableValue<float> CooldownFill { get; private set; }
+        
         public bool IsInOverdrive { get; private set; } = false;
         public bool IsOnCooldown { get; private set; } = false;
         public bool IsReady => !IsInOverdrive && !IsOnCooldown;
@@ -21,6 +26,7 @@ namespace Resonance.PlayerController
         public float CooldownTimeRemaining { get; private set; } = 0f;
         
         public float SpeedMultiplier => overdriveSpeedMultiplier;
+        public float CooldownDuration => overdriveCooldown;
 
         private PlayerState _playerState;
         private PlayerStats _playerStats;
@@ -31,6 +37,11 @@ namespace Resonance.PlayerController
         {
             _playerState = GetComponent<PlayerState>();
             _playerStats = GetComponent<PlayerStats>();
+            
+            State = new ObservableValue<OverdriveState>(OverdriveState.Ready);
+            CooldownRemaining = new ObservableValue<float>(0f);
+            DurationRemaining = new ObservableValue<float>(0f);
+            CooldownFill = new ObservableValue<float>(0f);
         }
         
         private void Start()
@@ -39,6 +50,13 @@ namespace Resonance.PlayerController
             {
                 _playerStats.OnPlayerDeath += HandlePlayerDeath;
                 _playerStats.OnPlayerRespawn += HandlePlayerRespawn;
+            }
+            
+            OverdriveHUD hud = FindObjectOfType<OverdriveHUD>();
+            if (hud != null)
+            {
+                hud.SetOverdriveAbility(this);
+                Debug.Log("[OverdriveAbility] Registered with OverdriveHUD");
             }
         }
         
@@ -72,6 +90,8 @@ namespace Resonance.PlayerController
                     IsOnCooldown = false;
                     
                     DurationTimeRemaining -= Time.deltaTime;
+                    
+                    DurationRemaining.Value = DurationTimeRemaining;
 
                     if (DurationTimeRemaining <= 0f)
                     {
@@ -84,6 +104,9 @@ namespace Resonance.PlayerController
                     IsOnCooldown = true;
                     
                     CooldownTimeRemaining -= Time.deltaTime;
+                    
+                    CooldownRemaining.Value = CooldownTimeRemaining;
+                    CooldownFill.Value = CooldownTimeRemaining / overdriveCooldown;
 
                     if (CooldownTimeRemaining <= 0f)
                     {
@@ -138,6 +161,7 @@ namespace Resonance.PlayerController
             if (CurrentState == newState) return;
 
             CurrentState = newState;
+            State.Value = newState;
 
             IsInOverdrive = (newState == OverdriveState.Active);
             IsOnCooldown = (newState == OverdriveState.Cooldown);
