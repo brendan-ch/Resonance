@@ -105,7 +105,7 @@ namespace Resonance.UI
 
             if (ArenaRoundManagerBridge.Instance != null)
             {
-                ArenaRoundManagerBridge.Instance.StartMatch();
+                ArenaRoundManagerBridge.Instance.StartMatchCountdown();
             }
         }
 

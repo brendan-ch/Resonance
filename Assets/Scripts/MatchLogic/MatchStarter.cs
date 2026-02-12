@@ -20,7 +20,7 @@ namespace Resonance.Match
         {
             if (ArenaRoundManagerBridge.Instance != null)
             {
-                ArenaRoundManagerBridge.Instance.StartMatch();
+                ArenaRoundManagerBridge.Instance.StartMatchCountdown();
                 Debug.Log("[MatchStarter] Match started automatically!");
             }
             else

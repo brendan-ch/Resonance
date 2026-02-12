@@ -32,6 +32,7 @@ namespace Resonance.Match
         #endregion
 
         #region Events
+        public event Action<float> OnMatchCountdownStart;
         public event Action OnMatchStart;
         public event Action<PlayerID?> OnMatchEnd;
         public event Action<PlayerID, int> OnLeaderChanged;
@@ -96,6 +97,7 @@ namespace Resonance.Match
                 arenaRoundManager.OnMatchStart -= OnArenaMatchStart;
                 arenaRoundManager.OnMatchEnd -= OnArenaMatchEnd;
                 arenaRoundManager.OnLeaderChanged -= OnArenaLeaderChanged;
+                arenaRoundManager.OnMatchCountdownStart -= OnArenaMatchCountdownStart;
                 arenaRoundManager = null;
             }
         }
@@ -108,10 +110,16 @@ namespace Resonance.Match
             arenaRoundManager.OnMatchStart += OnArenaMatchStart;
             arenaRoundManager.OnMatchEnd += OnArenaMatchEnd;
             arenaRoundManager.OnLeaderChanged += OnArenaLeaderChanged;
+            arenaRoundManager.OnMatchCountdownStart += OnArenaMatchCountdownStart;
         }
         #endregion
 
         #region Server Event Handlers
+        private void OnArenaMatchCountdownStart(float countdownSeconds)
+        {
+            FireMatchCountdownStartObservers(countdownSeconds);
+        }
+
         private void OnArenaMatchStart()
         {
             FireMatchStartObservers(arenaRoundManager.EliminationsToWin);
@@ -126,9 +134,17 @@ namespace Resonance.Match
         {
             FireLeaderChangedObservers(newLeader, eliminations);
         }
+
         #endregion
 
         #region Server to Client RPCs
+        [ObserversRpc]
+        private void FireMatchCountdownStartObservers(float countdownSeconds)
+        {
+            Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match countdown of {countdownSeconds}s started");
+            OnMatchCountdownStart?.Invoke(countdownSeconds);
+        }
+
         [ObserversRpc]
         private void FireMatchStartObservers(int eliminationsToWin)
         {
@@ -161,16 +177,16 @@ namespace Resonance.Match
         #endregion
 
         #region Client to Server Actions (Public API)
-        public void StartMatch()
+        public void StartMatchCountdown()
         {
-            Debug.Log("[ArenaRoundManagerNetworkAdapter] StartMatch requested");
-            StartMatch_Server();
+            Debug.Log("[ArenaRoundManagerNetworkAdapter] StartMatchCountdown requested");
+            StartMatchCountdown_Server();
         }
 
         [ServerRpc]
-        private void StartMatch_Server()
+        private void StartMatchCountdown_Server()
         {
-            arenaRoundManager?.StartMatchWithoutCountdown();
+            arenaRoundManager?.StartMatchCountdown();
         }
 
         /// <summary>
