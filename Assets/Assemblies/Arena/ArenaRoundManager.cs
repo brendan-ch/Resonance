@@ -28,8 +28,8 @@ namespace Resonance.Assemblies.Arena
         private bool autoStartNextMatch = false;
 
         #region State
-        private bool matchActive = false;
-        private bool matchEnded = false;
+        private ArenaMatchState matchState = ArenaMatchState.Waiting;
+
         private ulong? currentLeader = null;
         private int highestEliminations = 0;
         #endregion
@@ -41,8 +41,8 @@ namespace Resonance.Assemblies.Arena
         #endregion
 
         #region Properties
-        public bool IsMatchActive => matchActive;
-        public bool IsMatchEnded => matchEnded;
+        public bool IsMatchActive => matchState == ArenaMatchState.MatchActive;
+        public bool IsMatchEnded => matchState == ArenaMatchState.MatchEnded;
         public int EliminationsToWin => eliminationsToWin;
         public ulong? CurrentLeader => currentLeader;
         public int HighestEliminations => highestEliminations;
@@ -78,13 +78,12 @@ namespace Resonance.Assemblies.Arena
         #region Match Control
         public void StartMatch()
         {
-            if (matchActive)
+            if (IsMatchActive)
             {
                 return;
             }
 
-            matchActive = true;
-            matchEnded = false;
+            matchState = ArenaMatchState.MatchActive;
             currentLeader = null;
             highestEliminations = 0;
 
@@ -101,11 +100,9 @@ namespace Resonance.Assemblies.Arena
         /// <returns></returns>
         public async Task EndMatch(ulong? winner)
         {
-            if (!matchActive || matchEnded) return;
+            if (!IsMatchActive || IsMatchEnded) return;
 
-            matchActive = false;
-            matchEnded = true;
-
+            matchState = ArenaMatchState.MatchEnded;
             OnMatchEnd?.Invoke(winner);
 
             if (autoStartNextMatch)
@@ -124,7 +121,7 @@ namespace Resonance.Assemblies.Arena
         #region Kill Event Handling
         private void OnPlayerKilled(ulong killer, ulong victim)
         {
-            if (!matchActive || matchEnded) return;
+            if (!IsMatchActive || IsMatchEnded) return;
 
             PlayerMatchStats? killerStats = matchStatTracker.GetStats(killer);
             if (killerStats is PlayerMatchStats stats)
