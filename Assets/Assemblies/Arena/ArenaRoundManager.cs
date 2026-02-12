@@ -87,7 +87,7 @@ namespace Resonance.Assemblies.Arena
         #region Match Control
         public async Task StartMatchCountdown()
         {
-            if (matchState == ArenaMatchState.MatchActive)
+            if (matchState == ArenaMatchState.MatchActive || matchState == ArenaMatchState.Countdown)
             {
                 return;
             }
