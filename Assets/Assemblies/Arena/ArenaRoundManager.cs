@@ -113,7 +113,7 @@ namespace Resonance.Assemblies.Arena
 
         private async Task QueueNextMatchStart()
         {
-            await Task.Delay((int)autoStartDelaySeconds * 1000);
+            await Task.Delay((int)(autoStartDelaySeconds * 1000));
             StartMatch();
         }
         #endregion
