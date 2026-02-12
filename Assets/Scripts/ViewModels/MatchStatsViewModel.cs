@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Resonance.Match;
+using Resonance.Assemblies.Arena;
 
 public class MatchStatsViewModel : MonoBehaviour
 {
@@ -26,10 +27,11 @@ public class MatchStatsViewModel : MonoBehaviour
     {
         IsVisible.Value = true;
 
-        if (ArenaRoundManager.Instance == null)
+        if (ArenaRoundManagerBridge.Instance == null)
             return;
 
-        Rankings.Value = await ArenaRoundManager.Instance.GetLeaderboard();
+        var leaderboard = await ArenaRoundManagerBridge.Instance.GetLeaderboard();
+        Rankings.Value = leaderboard;
     }
 
     public void Hide()

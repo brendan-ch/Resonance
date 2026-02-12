@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using Resonance.Match;
+using Resonance.Assemblies.Arena;
 
 public class MatchStatsView : MonoBehaviour
 {
@@ -31,10 +32,11 @@ public class MatchStatsView : MonoBehaviour
     {
         leaderboardText.text = "";
 
-        foreach (var ranking in rankings)
+        for (int i = 0; i < rankings.Count; i++)
         {
+            var ranking = rankings[i];
             leaderboardText.text +=
-                $"#{ranking.rank} {ranking.player}  " +
+                $"#{i + 1} {ranking.player}" +
                 $"K:{ranking.stats.kills} D:{ranking.stats.deaths}\n";
         }
     }
