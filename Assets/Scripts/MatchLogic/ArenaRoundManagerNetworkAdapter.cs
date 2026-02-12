@@ -23,12 +23,11 @@ namespace Resonance.Match
 
         #region Cached Client-Side State
         private int _cachedEliminationsToWin;
-        private bool _cachedIsMatchActive;
-        private bool _cachedIsMatchEnded;
+        private ArenaMatchState cachedMatchState;
 
         public int EliminationsToWin => _cachedEliminationsToWin;
-        public bool IsMatchActive => _cachedIsMatchActive;
-        public bool IsMatchEnded => _cachedIsMatchEnded;
+        public bool IsMatchActive => cachedMatchState == ArenaMatchState.MatchActive;
+        public bool IsMatchEnded => cachedMatchState == ArenaMatchState.MatchEnded;
         #endregion
 
         #region Events
@@ -159,8 +158,6 @@ namespace Resonance.Match
         {
             Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match started, eliminationsToWin: {eliminationsToWin}");
             _cachedEliminationsToWin = eliminationsToWin;
-            _cachedIsMatchActive = true;
-            _cachedIsMatchEnded = false;
             OnMatchStart?.Invoke();
         }
 
@@ -168,8 +165,6 @@ namespace Resonance.Match
         private void FireMatchEndObservers(ulong? winner)
         {
             Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match ended, winner: {winner}");
-            _cachedIsMatchActive = false;
-            _cachedIsMatchEnded = true;
             PlayerID? winnerPlayerId = OwnerIDExtractor.UlongNullableToPlayerIdNullable(winner);
             OnMatchEnd?.Invoke(winnerPlayerId);
         }
@@ -188,7 +183,7 @@ namespace Resonance.Match
         private void FireMatchStateChangeObservers(int oldState, int newState)
         {
             Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match state changed from {oldState} to {newState}");
-
+            cachedMatchState = (ArenaMatchState) newState;
             OnMatchStateChange?.Invoke((ArenaMatchState) oldState, (ArenaMatchState) newState);
         }
         #endregion
