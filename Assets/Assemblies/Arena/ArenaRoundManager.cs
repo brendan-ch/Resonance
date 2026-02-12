@@ -39,12 +39,14 @@ namespace Resonance.Assemblies.Arena
         #endregion
 
         #region Events
+        public event System.Action<float> OnMatchCountdownStart;  // Seconds
         public event System.Action OnMatchStart;
         public event System.Action<ulong?> OnMatchEnd; // Winner
         public event System.Action<ulong, int> OnLeaderChanged; // New leader, their eliminations
         #endregion
 
         #region Properties
+        public ArenaMatchState MatchState => matchState;
         public bool IsMatchActive => matchState == ArenaMatchState.MatchActive;
         public bool IsMatchEnded => matchState == ArenaMatchState.MatchEnded;
         public int EliminationsToWin => eliminationsToWin;
@@ -90,7 +92,7 @@ namespace Resonance.Assemblies.Arena
             }
 
             matchState = ArenaMatchState.Countdown;
-            // TODO: fire an event and propagate it down
+            OnMatchCountdownStart?.Invoke(matchStartCountdownSeconds);
 
             await Task.Delay((int)(matchStartCountdownSeconds * 1000));
             StartMatchWithoutCountdown();

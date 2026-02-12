@@ -120,7 +120,46 @@ public class ArenaRoundManagerTests
     }
     #endregion
 
+    #region StartMatchCountdown
+    [Test]
+    public async Task StartMatchCountdown_UpdatesMatchStateDuringCountdown()
+    {
+        _ = roundManager.StartMatchCountdown();
+        await Task.Delay(1000);
+        Assert.AreEqual(ArenaMatchState.Countdown, roundManager.MatchState);
+    }
 
+    [Test]
+    public async Task StartMatchCountdown_FiresEventWithCountdownSeconds()
+    {
+        float capturedSeconds = 0;
+        int eventCallCount = 0;
+        roundManager.OnMatchCountdownStart += (seconds) =>
+        {
+            capturedSeconds = seconds;
+            eventCallCount++;;
+        };
+
+        _ = roundManager.StartMatchCountdown();
+        await Task.Delay(1000);
+
+        Assert.AreEqual(roundManager.MatchStartCountdownSeconds, capturedSeconds);
+        Assert.AreEqual(1, eventCallCount);
+    }
+
+    [Test]
+    public async Task StartMatchCountdown_ActuallyStartsTheMatch()
+    {
+        roundManager = new(statTracker, new()
+        {
+            matchStartCountdownSeconds = 0.5f,
+        });
+
+        await roundManager.StartMatchCountdown();
+        Assert.AreEqual(ArenaMatchState.MatchActive, roundManager.MatchState);
+    }
+
+    #endregion
 
     #region StartMatchWithoutCountdown
     [Test]
