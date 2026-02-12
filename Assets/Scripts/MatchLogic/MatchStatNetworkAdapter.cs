@@ -17,8 +17,7 @@ namespace Resonance.Match
     public class MatchStatNetworkAdapter : NetworkModule
     {
         #region Configuration
-        private readonly float _assistTimeWindow;
-        private readonly float _assistDamageThreshold;
+        private readonly MatchStatTracker.MatchStatTrackerConfig _config;
         #endregion
 
         #region Events
@@ -34,10 +33,9 @@ namespace Resonance.Match
         #endregion
 
         #region Constructor
-        public MatchStatNetworkAdapter(float assistTimeWindow = 5f, float assistDamageThreshold = 20f)
+        public MatchStatNetworkAdapter(MatchStatTracker.MatchStatTrackerConfig config)
         {
-            _assistTimeWindow = assistTimeWindow;
-            _assistDamageThreshold = assistDamageThreshold;
+            _config = config;
         }
         #endregion
 
@@ -48,7 +46,7 @@ namespace Resonance.Match
 
             if (asServer)
             {
-                _tracker = new MatchStatTracker(_assistTimeWindow, _assistDamageThreshold);
+                _tracker = new MatchStatTracker(_config);
                 _tracker.OnAllStatsUpdated += OnTrackerStatsUpdated;
                 _tracker.OnPlayerKill += OnTrackerPlayerKill;
                 OnMatchStatTrackerCreated?.Invoke(_tracker);

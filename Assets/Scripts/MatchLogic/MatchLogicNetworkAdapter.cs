@@ -1,4 +1,5 @@
 using PurrNet;
+using Resonance.Assemblies.MatchStat;
 using UnityEngine;
 
 namespace Resonance.Match
@@ -30,7 +31,12 @@ namespace Resonance.Match
         private void Awake()
         {
             InstanceHandler.RegisterInstance(this);
-            _matchStatAdapter = new MatchStatNetworkAdapter(assistTimeWindow, assistDamageThreshold);
+            var config = new MatchStatTracker.MatchStatTrackerConfig
+            {
+                assistTimeWindowMs = assistTimeWindow,
+                assistDamageThreshold = assistDamageThreshold
+            };
+            _matchStatAdapter = new MatchStatNetworkAdapter(config);
             _arenaRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter);
 
             DontDestroyOnLoad(this);
