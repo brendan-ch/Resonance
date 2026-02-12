@@ -74,7 +74,7 @@ namespace Resonance.Match
             }
             else
             {
-                Debug.LogWarning("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance ArenaRoundManager instance already exists; re-creating with new match stat tracker");
+                Debug.LogWarning("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received but ArenaRoundManager instance already exists; re-creating with new match stat tracker");
                 DestroyArenaRoundManager();
                 CreateArenaRoundManagerWithMatchStatTracker(tracker);
             }
