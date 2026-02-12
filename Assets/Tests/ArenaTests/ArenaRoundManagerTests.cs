@@ -95,7 +95,7 @@ public class ArenaRoundManagerTests
         var config = new ArenaRoundManager.ArenaRoundManagerConfig
         {
             eliminationsToWin = 10,
-            autoStartNextRound = true,
+            autoStartNextMatch = true,
             matchEndDelaySeconds = 1
         };
         var autoStartManager = new ArenaRoundManager(statTracker, config);

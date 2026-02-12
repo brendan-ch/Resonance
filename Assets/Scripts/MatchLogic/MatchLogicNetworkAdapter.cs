@@ -48,7 +48,7 @@ namespace Resonance.Match
             var arenaConfig = new ArenaRoundManager.ArenaRoundManagerConfig
             {
                 eliminationsToWin = eliminationsToWin,
-                autoStartNextRound = autoStartNextRound,
+                autoStartNextMatch = autoStartNextRound,
                 matchEndDelaySeconds = autoStartDelaySeconds
             };
             _arenaRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter, arenaConfig);
