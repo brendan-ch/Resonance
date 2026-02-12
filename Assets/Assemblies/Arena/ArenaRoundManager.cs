@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PlasticGui.Help.Actions;
 using Resonance.Assemblies.MatchStat;
 
 namespace Resonance.Assemblies.Arena
@@ -13,18 +14,21 @@ namespace Resonance.Assemblies.Arena
             public int eliminationsToWin;
             public bool autoStartNextMatch;
             public float matchEndDelaySeconds;
+            public float matchStartCountdownSeconds;
 
             public static ArenaRoundManagerConfig Default => new ArenaRoundManagerConfig
             {
                 eliminationsToWin = 10,
                 autoStartNextMatch = false,
-                matchEndDelaySeconds = 3f
+                matchEndDelaySeconds = 5f,
+                matchStartCountdownSeconds = 5f,
             };
         }
         #endregion
 
         private int eliminationsToWin = 10;
         private float autoStartDelaySeconds = 3f;
+        private float matchStartCountdownSeconds = 5f;
         private bool autoStartNextMatch = false;
 
         #region State
@@ -46,6 +50,7 @@ namespace Resonance.Assemblies.Arena
         public int EliminationsToWin => eliminationsToWin;
         public ulong? CurrentLeader => currentLeader;
         public int HighestEliminations => highestEliminations;
+        public float MatchStartCountdownSeconds => matchStartCountdownSeconds;
         #endregion
 
         private MatchStatTracker matchStatTracker;
@@ -58,9 +63,10 @@ namespace Resonance.Assemblies.Arena
         public ArenaRoundManager(MatchStatTracker tracker, ArenaRoundManagerConfig config)
         {
             matchStatTracker = tracker;
-            this.autoStartNextMatch = config.autoStartNextMatch;
-            this.eliminationsToWin = config.eliminationsToWin;
-            this.autoStartDelaySeconds = config.matchEndDelaySeconds;
+            autoStartNextMatch = config.autoStartNextMatch;
+            eliminationsToWin = config.eliminationsToWin;
+            autoStartDelaySeconds = config.matchEndDelaySeconds;
+            matchStartCountdownSeconds = config.matchStartCountdownSeconds;
 
             SubscribeToEvents();
         }
@@ -76,7 +82,21 @@ namespace Resonance.Assemblies.Arena
         #endregion
 
         #region Match Control
-        public void StartMatch()
+        public async Task StartMatchCountdown()
+        {
+            if (matchState == ArenaMatchState.MatchActive)
+            {
+                return;
+            }
+
+            matchState = ArenaMatchState.Countdown;
+            // TODO: fire an event and propagate it down
+
+            await Task.Delay((int)(matchStartCountdownSeconds * 1000));
+            StartMatchWithoutCountdown();
+        }
+
+        public void StartMatchWithoutCountdown()
         {
             if (IsMatchActive)
             {
@@ -114,7 +134,7 @@ namespace Resonance.Assemblies.Arena
         private async Task QueueNextMatchStart()
         {
             await Task.Delay((int)(autoStartDelaySeconds * 1000));
-            StartMatch();
+            StartMatchWithoutCountdown();
         }
         #endregion
 

@@ -21,8 +21,9 @@ namespace Resonance.Match
 
         [Header("Arena Settings")]
         [SerializeField] private int eliminationsToWin = 10;
-        [SerializeField] private float autoStartDelaySeconds = 3f;
-        [SerializeField] private bool autoStartNextRound = false;
+        [SerializeField] private float matchEndDelaySeconds = 5f;
+        [SerializeField] private bool autoStartNextMatch = false;
+        [SerializeField] private float matchStartCountdownSeconds = 5f;
         #endregion
 
         #region Modules
@@ -48,8 +49,9 @@ namespace Resonance.Match
             var arenaConfig = new ArenaRoundManager.ArenaRoundManagerConfig
             {
                 eliminationsToWin = eliminationsToWin,
-                autoStartNextMatch = autoStartNextRound,
-                matchEndDelaySeconds = autoStartDelaySeconds
+                autoStartNextMatch = autoStartNextMatch,
+                matchEndDelaySeconds = matchEndDelaySeconds,
+                matchStartCountdownSeconds = matchStartCountdownSeconds,
             };
             _arenaRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter, arenaConfig);
 

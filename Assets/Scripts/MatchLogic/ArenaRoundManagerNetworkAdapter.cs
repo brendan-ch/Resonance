@@ -170,7 +170,7 @@ namespace Resonance.Match
         [ServerRpc]
         private void StartMatch_Server()
         {
-            arenaRoundManager?.StartMatch();
+            arenaRoundManager?.StartMatchWithoutCountdown();
         }
 
         /// <summary>

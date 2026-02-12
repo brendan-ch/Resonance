@@ -20,7 +20,7 @@ public class ArenaRoundManagerTests
     [Test]
     public void OnPlayerKilled_UpdatesLeaderIfRoundStarted()
     {
-        roundManager.StartMatch();
+        roundManager.StartMatchWithoutCountdown();
 
         ulong killerId = 1;
 
@@ -44,7 +44,7 @@ public class ArenaRoundManagerTests
     [Test]
     public void OnPlayerKilled_EndMatchIfEliminationThresholdPassed()
     {
-        roundManager.StartMatch();
+        roundManager.StartMatchWithoutCountdown();
         ulong killerId = 1;
 
         for (int i = 0; i < roundManager.EliminationsToWin; i++)
@@ -60,7 +60,7 @@ public class ArenaRoundManagerTests
     [Test]
     public async Task EndMatch_FiresOnMatchEndEvent()
     {
-        roundManager.StartMatch();
+        roundManager.StartMatchWithoutCountdown();
 
         ulong? capturedWinner = null;
         int eventCallCount = 0;
@@ -81,7 +81,7 @@ public class ArenaRoundManagerTests
     [Test]
     public async Task EndMatch_UpdatesTheMatchStatus()
     {
-        roundManager.StartMatch();
+        roundManager.StartMatchWithoutCountdown();
         await roundManager.EndMatch(1);
 
         Assert.AreEqual(false, roundManager.IsMatchActive);
@@ -99,7 +99,7 @@ public class ArenaRoundManagerTests
             matchEndDelaySeconds = 1
         };
         var autoStartManager = new ArenaRoundManager(statTracker, config);
-        autoStartManager.StartMatch();
+        autoStartManager.StartMatchWithoutCountdown();
         await autoStartManager.EndMatch(1);
 
         Assert.AreEqual(true, autoStartManager.IsMatchActive);
@@ -120,11 +120,13 @@ public class ArenaRoundManagerTests
     }
     #endregion
 
-    #region StartMatch
+
+
+    #region StartMatchWithoutCountdown
     [Test]
-    public void StartMatch_UpdatesTheMatchStatus()
+    public void StartMatchWithoutCountdown_UpdatesTheMatchStatus()
     {
-        roundManager.StartMatch();
+        roundManager.StartMatchWithoutCountdown();
 
         Assert.AreEqual(true, roundManager.IsMatchActive);
         Assert.AreEqual(false, roundManager.IsMatchEnded);
@@ -132,37 +134,37 @@ public class ArenaRoundManagerTests
 
 
     [Test]
-    public void StartMatch_FiresOnMatchStartEvent()
+    public void StartMatchWithoutCountdown_FiresOnMatchStartEvent()
     {
         int eventCallCount = 0;
         roundManager.OnMatchStart += () => eventCallCount++;
 
-        roundManager.StartMatch();
+        roundManager.StartMatchWithoutCountdown();
 
         Assert.AreEqual(1, eventCallCount);
     }
 
     [Test]
-    public void StartMatch_DoesNothingIfMatchAlreadyActive()
+    public void StartMatchWithoutCountdown_DoesNothingIfMatchAlreadyActive()
     {
-        roundManager.StartMatch();
+        roundManager.StartMatchWithoutCountdown();
 
         int eventCallCount = 0;
         roundManager.OnMatchStart += () => eventCallCount++;
 
-        roundManager.StartMatch();
+        roundManager.StartMatchWithoutCountdown();
 
         Assert.AreEqual(0, eventCallCount);
         Assert.AreEqual(true, roundManager.IsMatchActive);
     }
 
     [Test]
-    public void StartMatch_ResetsMatchStatTracker()
+    public void StartMatchWithoutCountdown_ResetsMatchStatTracker()
     {
         statTracker.RecordKill(1, 2);
         statTracker.RecordKill(3, 4);
 
-        roundManager.StartMatch();
+        roundManager.StartMatchWithoutCountdown();
 
         var allStats = statTracker.GetAllStats();
         foreach (var kvp in allStats)
