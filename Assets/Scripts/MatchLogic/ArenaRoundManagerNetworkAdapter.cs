@@ -32,6 +32,7 @@ namespace Resonance.Match
         #endregion
 
         #region Events
+        public event Action<ArenaMatchState, ArenaMatchState> OnMatchStateChange;  // old state, new state
         public event Action<float> OnMatchCountdownStart;
         public event Action OnMatchStart;
         public event Action<PlayerID?> OnMatchEnd;
@@ -98,6 +99,7 @@ namespace Resonance.Match
                 arenaRoundManager.OnMatchEnd -= OnArenaMatchEnd;
                 arenaRoundManager.OnLeaderChanged -= OnArenaLeaderChanged;
                 arenaRoundManager.OnMatchCountdownStart -= OnArenaMatchCountdownStart;
+                arenaRoundManager.OnMatchStateChange -= OnArenaMatchStateChange;
                 arenaRoundManager = null;
             }
         }
@@ -111,7 +113,9 @@ namespace Resonance.Match
             arenaRoundManager.OnMatchEnd += OnArenaMatchEnd;
             arenaRoundManager.OnLeaderChanged += OnArenaLeaderChanged;
             arenaRoundManager.OnMatchCountdownStart += OnArenaMatchCountdownStart;
+            arenaRoundManager.OnMatchStateChange += OnArenaMatchStateChange;
         }
+
         #endregion
 
         #region Server Event Handlers
@@ -133,6 +137,11 @@ namespace Resonance.Match
         private void OnArenaLeaderChanged(ulong newLeader, int eliminations)
         {
             FireLeaderChangedObservers(newLeader, eliminations);
+        }
+
+        private void OnArenaMatchStateChange(ArenaMatchState oldState, ArenaMatchState newState)
+        {
+            FireMatchStateChangeObservers((int) oldState, (int) newState);
         }
 
         #endregion
@@ -173,6 +182,14 @@ namespace Resonance.Match
                 OwnerIDExtractor.UlongToPlayerId(newLeader),
                 eliminations
             );
+        }
+
+        [ObserversRpc]
+        private void FireMatchStateChangeObservers(int oldState, int newState)
+        {
+            Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match state changed from {oldState} to {newState}");
+
+            OnMatchStateChange?.Invoke((ArenaMatchState) oldState, (ArenaMatchState) newState);
         }
         #endregion
 

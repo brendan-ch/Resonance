@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PlasticGui.Help.Actions;
 using Resonance.Assemblies.MatchStat;
 
 namespace Resonance.Assemblies.Arena
@@ -39,10 +39,11 @@ namespace Resonance.Assemblies.Arena
         #endregion
 
         #region Events
-        public event System.Action<float> OnMatchCountdownStart;  // Seconds
-        public event System.Action OnMatchStart;
-        public event System.Action<ulong?> OnMatchEnd; // Winner
-        public event System.Action<ulong, int> OnLeaderChanged; // New leader, their eliminations
+        public event Action<ArenaMatchState, ArenaMatchState> OnMatchStateChange;  // Old state, new state
+        public event Action<float> OnMatchCountdownStart;  // Seconds
+        public event Action OnMatchStart;
+        public event Action<ulong?> OnMatchEnd; // Winner
+        public event Action<ulong, int> OnLeaderChanged; // New leader, their eliminations
         #endregion
 
         #region Properties
@@ -91,8 +92,12 @@ namespace Resonance.Assemblies.Arena
                 return;
             }
 
+            var oldMatchState = matchState;
+
             matchState = ArenaMatchState.Countdown;
+
             OnMatchCountdownStart?.Invoke(matchStartCountdownSeconds);
+            OnMatchStateChange?.Invoke(oldMatchState, matchState);
 
             await Task.Delay((int)(matchStartCountdownSeconds * 1000));
             StartMatchWithoutCountdown();
@@ -105,7 +110,9 @@ namespace Resonance.Assemblies.Arena
                 return;
             }
 
+            var oldMatchState = matchState;
             matchState = ArenaMatchState.MatchActive;
+
             currentLeader = null;
             highestEliminations = 0;
 
@@ -113,6 +120,7 @@ namespace Resonance.Assemblies.Arena
             matchStatTracker?.ResetAllStats();
 
             OnMatchStart?.Invoke();
+            OnMatchStateChange?.Invoke(oldMatchState, matchState);
         }
 
         /// <summary>
@@ -122,9 +130,11 @@ namespace Resonance.Assemblies.Arena
         /// <returns></returns>
         public async Task EndMatch(ulong? winner)
         {
-            if (!IsMatchActive || IsMatchEnded) return;
+            if (matchState != ArenaMatchState.MatchActive) return;
 
             matchState = ArenaMatchState.MatchEnded;
+            OnMatchStateChange?.Invoke(ArenaMatchState.MatchActive, matchState);
+
             OnMatchEnd?.Invoke(winner);
 
             if (autoStartNextMatch)
