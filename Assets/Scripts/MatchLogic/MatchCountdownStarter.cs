@@ -7,10 +7,10 @@ using UnityEngine.SceneManagement;
 namespace Resonance.Match
 {
     /// <summary>
-    /// NetworkBehaviour which starts a match on the server side,
+    /// NetworkBehaviour which starts a match countdown on the server side,
     /// once all players have joined.
     /// </summary>
-    public class MatchStarter : NetworkBehaviour
+    public class MatchCountdownStarter : NetworkBehaviour
     {
         [Header("Auto Start Settings")]
         [SerializeField] private bool autoStartAfterPlayersLoadedIn = true;
@@ -30,7 +30,6 @@ namespace Resonance.Match
 
             if (asServer && autoStartAfterPlayersLoadedIn)
             {
-                Debug.Log("Subscribing to players loaded");
                 networkManager.onPlayerLoadedScene += OnPlayerLoadedScene;
             }
         }
