@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using PurrNet;
 using Resonance.Assemblies.Arena;
 using Resonance.Assemblies.MatchStat;
@@ -39,11 +40,14 @@ namespace Resonance.Match
         public ArenaRoundManagerNetworkAdapter(MatchStatNetworkAdapter adapter)
         {
             matchStatNetworkAdapter = adapter;
+
+            // because ArenaRoundManager depends on MatchStatTracker, we must wait for
+            // matchStatNetworkAdapter to create the relevant instance
             matchStatNetworkAdapter.OnMatchStatTrackerCreated.AddListener(OnMatchStatTrackerCreated);
         }
         #endregion
 
-        #region NetworkModule Lifecycle
+        #region Initialization 
         public override void OnSpawn(bool asServer)
         {
             base.OnSpawn(asServer);
@@ -57,29 +61,44 @@ namespace Resonance.Match
 
             if (asServer && arenaRoundManager != null)
             {
+                DestroyArenaRoundManager();
+            }
+        }
+
+
+        private void OnMatchStatTrackerCreated(MatchStatTracker tracker)
+        {
+            if (arenaRoundManager == null)
+            {
+                CreateArenaRoundManagerWithMatchStatTracker(tracker);
+            }
+            else
+            {
+                Debug.LogWarning("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received but ArenaRoundManager instance already exists; re-creating with new match stat tracker");
+                DestroyArenaRoundManager();
+                CreateArenaRoundManagerWithMatchStatTracker(tracker);
+            }
+        }
+
+        private void DestroyArenaRoundManager()
+        {
+            if (arenaRoundManager != null)
+            {
                 arenaRoundManager.OnMatchStart -= OnArenaMatchStart;
                 arenaRoundManager.OnMatchEnd -= OnArenaMatchEnd;
                 arenaRoundManager.OnLeaderChanged -= OnArenaLeaderChanged;
                 arenaRoundManager = null;
             }
         }
-        #endregion
 
-        #region Server Initialization
-        private void OnMatchStatTrackerCreated(MatchStatTracker tracker)
+        private void CreateArenaRoundManagerWithMatchStatTracker(MatchStatTracker tracker)
         {
-            if (arenaRoundManager == null)
-            {
-                Debug.Log("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received, creating ArenaRoundManager and attaching subscribers");
-                arenaRoundManager = new ArenaRoundManager(tracker);
+            Debug.Log("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received, creating ArenaRoundManager and attaching subscribers");
+            arenaRoundManager = new ArenaRoundManager(tracker);
 
-                arenaRoundManager.OnMatchStart += OnArenaMatchStart;
-                arenaRoundManager.OnMatchEnd += OnArenaMatchEnd;
-                arenaRoundManager.OnLeaderChanged += OnArenaLeaderChanged;
-            } else
-            {
-                Debug.LogWarning("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received, but ArenaRoundManager instance already exists");
-            }
+            arenaRoundManager.OnMatchStart += OnArenaMatchStart;
+            arenaRoundManager.OnMatchEnd += OnArenaMatchEnd;
+            arenaRoundManager.OnLeaderChanged += OnArenaLeaderChanged;
         }
         #endregion
 
@@ -195,11 +214,17 @@ namespace Resonance.Match
             return arenaRoundManager?.HighestEliminations ?? 0;
         }
 
-        [ServerRpc]
         public async Task<List<PlayerRanking>> GetLeaderboard()
         {
-            if (arenaRoundManager == null) return new List<PlayerRanking>();
-            return arenaRoundManager.GetLeaderboard();
+            var leaderboardJson = await GetLeaderboard_Server();
+            return JsonConvert.DeserializeObject<List<PlayerRanking>>(leaderboardJson);
+        }
+
+        [ServerRpc]
+        private async Task<string> GetLeaderboard_Server()
+        {
+            var leaderboard = arenaRoundManager?.GetLeaderboard() ?? new List<PlayerRanking>();
+            return JsonConvert.SerializeObject(leaderboard);
         }
 
         [ServerRpc]
