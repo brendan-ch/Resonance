@@ -1,4 +1,5 @@
 using PurrNet;
+using Resonance.Assemblies.Arena;
 using Resonance.Assemblies.MatchStat;
 using UnityEngine;
 
@@ -17,6 +18,11 @@ namespace Resonance.Match
         [Header("Match Stats Settings")]
         [SerializeField] private float assistTimeWindow = 5f;
         [SerializeField] private float assistDamageThreshold = 20f;
+
+        [Header("Arena Settings")]
+        [SerializeField] private int eliminationsToWin = 10;
+        [SerializeField] private float autoStartDelaySeconds = 3f;
+        [SerializeField] private bool autoStartNextRound = false;
         #endregion
 
         #region Modules
@@ -31,13 +37,21 @@ namespace Resonance.Match
         private void Awake()
         {
             InstanceHandler.RegisterInstance(this);
-            var config = new MatchStatTracker.MatchStatTrackerConfig
+
+            var matchStatConfig = new MatchStatTracker.MatchStatTrackerConfig
             {
                 assistTimeWindowMs = assistTimeWindow,
                 assistDamageThreshold = assistDamageThreshold
             };
-            _matchStatAdapter = new MatchStatNetworkAdapter(config);
-            _arenaRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter);
+            _matchStatAdapter = new MatchStatNetworkAdapter(matchStatConfig);
+
+            var arenaConfig = new ArenaRoundManager.ArenaRoundManagerConfig
+            {
+                eliminationsToWin = eliminationsToWin,
+                autoStartNextRound = autoStartNextRound,
+                matchEndDelaySeconds = autoStartDelaySeconds
+            };
+            _arenaRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter, arenaConfig);
 
             DontDestroyOnLoad(this);
         }

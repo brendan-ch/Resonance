@@ -92,7 +92,13 @@ public class ArenaRoundManagerTests
     [Test]
     public async Task EndMatch_AutoStartsNextRoundIfConfigured()
     {
-        var autoStartManager = new ArenaRoundManager(statTracker, autoStartNextRound: true, matchEndDelaySeconds: 1);
+        var config = new ArenaRoundManager.ArenaRoundManagerConfig
+        {
+            eliminationsToWin = 10,
+            autoStartNextRound = true,
+            matchEndDelaySeconds = 1
+        };
+        var autoStartManager = new ArenaRoundManager(statTracker, config);
         autoStartManager.StartMatch();
         await autoStartManager.EndMatch(1);
 
