@@ -93,7 +93,7 @@ public class ArenaRoundManagerTests
         };
 
         await roundManager.EndMatch(null);
-        
+
         Assert.AreEqual(ArenaMatchState.MatchActive, capturedOldState);
         Assert.AreEqual(ArenaMatchState.MatchEnded, capturedNewState);
         Assert.AreEqual(1, eventCallCount);
@@ -125,6 +125,28 @@ public class ArenaRoundManagerTests
 
         Assert.AreEqual(true, autoStartManager.IsMatchActive);
         Assert.AreEqual(false, autoStartManager.IsMatchEnded);
+    }
+
+    [Test]
+    public async Task EndMatch_FiresMatchCountdownEventIfAutoStart()
+    {
+        var config = new ArenaRoundManager.ArenaRoundManagerConfig
+        {
+            eliminationsToWin = 10,
+            autoStartNextMatch = true,
+            matchEndDelaySeconds = 1
+        };
+
+        var autoStartManager = new ArenaRoundManager(statTracker, config);
+        var eventCallCount = 0;
+        autoStartManager.OnMatchCountdownStart += (seconds) => {
+            eventCallCount++;
+        };
+
+        autoStartManager.StartMatchWithoutCountdown();
+        await autoStartManager.EndMatch(1);
+
+        Assert.AreEqual(1, eventCallCount);
     }
 
     [Test]
