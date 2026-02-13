@@ -60,7 +60,7 @@ namespace Resonance.Match
                 {
                     if (players.Count == lobbyDataHolder.CurrentLobby.Members.Count)
                     {
-                        Debug.Log($"[MatchStarter] All players loaded into scene {targetScene} (sceneId={sceneId}), queuing match countdown");
+                        Debug.Log($"[MatchStarter] All players loaded into scene {targetScene} (sceneId={sceneId}), queuing match countdown of {autoStartDelaySeconds}s");
                         QueueMatchCountdown();
                     }
                 }

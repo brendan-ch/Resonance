@@ -58,4 +58,4 @@ MonoBehaviour:
   eliminationsToWin: 10
   matchEndDelaySeconds: 5
   autoStartNextMatch: 0
-  matchStartCountdownSeconds: 2
+  matchStartCountdownSeconds: 5
