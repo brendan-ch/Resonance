@@ -5388,7 +5388,7 @@ GameObject:
   - component: {fileID: 2070937843}
   - component: {fileID: 2070937846}
   m_Layer: 0
-  m_Name: MatchManager
+  m_Name: MatchCountdownStarter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5421,8 +5421,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3635d8503a8e57448df711b10ce7bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Match.MatchStarter
-  autoStartOnSceneLoad: 1
-  startDelay: 0.5
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  autoStartAfterPlayersLoadedIn: 1
+  autoStartDelaySeconds: 5
 --- !u!1 &2075370078
 GameObject:
   m_ObjectHideFlags: 0
@@ -5550,12 +5559,12 @@ SceneRoots:
   - {fileID: 994304094}
   - {fileID: 502865093}
   - {fileID: 219283412}
+  - {fileID: 2070937843}
   - {fileID: 1525116693}
   - {fileID: 1721008065}
   - {fileID: 1243948345}
   - {fileID: 661005726}
   - {fileID: 1985560575}
-  - {fileID: 2070937843}
   - {fileID: 1103156710}
   - {fileID: 421837962}
   - {fileID: 83836304}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,44 +8,68 @@ namespace Resonance.Assemblies.Arena
 {
     public class ArenaRoundManager
     {
+        #region Configuration
+        public struct ArenaRoundManagerConfig
+        {
+            public int eliminationsToWin;
+            public bool autoStartNextMatch;
+            public float matchEndDelaySeconds;
+            public float matchStartCountdownSeconds;
+
+            public static ArenaRoundManagerConfig Default => new ArenaRoundManagerConfig
+            {
+                eliminationsToWin = 10,
+                autoStartNextMatch = false,
+                matchEndDelaySeconds = 5f,
+                matchStartCountdownSeconds = 5f,
+            };
+        }
+        #endregion
+
         private int eliminationsToWin = 10;
         private float autoStartDelaySeconds = 3f;
-        private bool autoStartNextRound = false;
+        private float matchStartCountdownSeconds = 5f;
+        private bool autoStartNextMatch = false;
 
         #region State
-        private bool matchActive = false;
-        private bool matchEnded = false;
+        private ArenaMatchState matchState = ArenaMatchState.Waiting;
+
         private ulong? currentLeader = null;
         private int highestEliminations = 0;
         #endregion
 
         #region Events
-        public event System.Action OnMatchStart;
-        public event System.Action<ulong?> OnMatchEnd; // Winner
-        public event System.Action<ulong, int> OnLeaderChanged; // New leader, their eliminations
+        public event Action<ArenaMatchState, ArenaMatchState> OnMatchStateChange;  // Old state, new state
+        public event Action<float> OnMatchCountdownStart;  // Seconds
+        public event Action OnMatchStart;
+        public event Action<ulong?> OnMatchEnd; // Winner
+        public event Action<ulong, int> OnLeaderChanged; // New leader, their eliminations
         #endregion
 
         #region Properties
-        public bool IsMatchActive => matchActive;
-        public bool IsMatchEnded => matchEnded;
+        public ArenaMatchState MatchState => matchState;
+        public bool IsMatchActive => matchState == ArenaMatchState.MatchActive;
+        public bool IsMatchEnded => matchState == ArenaMatchState.MatchEnded;
         public int EliminationsToWin => eliminationsToWin;
         public ulong? CurrentLeader => currentLeader;
         public int HighestEliminations => highestEliminations;
+        public float MatchStartCountdownSeconds => matchStartCountdownSeconds;
         #endregion
 
         private MatchStatTracker matchStatTracker;
 
-        public ArenaRoundManager(
-            MatchStatTracker tracker,
-            int eliminationsToWin = 10,
-            bool autoStartNextRound = false,
-            float matchEndDelaySeconds = 3f
-        )
+        public ArenaRoundManager(MatchStatTracker tracker)
+            : this(tracker, ArenaRoundManagerConfig.Default)
+        {
+        }
+
+        public ArenaRoundManager(MatchStatTracker tracker, ArenaRoundManagerConfig config)
         {
             matchStatTracker = tracker;
-            this.autoStartNextRound = autoStartNextRound;
-            this.eliminationsToWin = eliminationsToWin;
-            this.autoStartDelaySeconds = matchEndDelaySeconds;
+            autoStartNextMatch = config.autoStartNextMatch;
+            eliminationsToWin = config.eliminationsToWin;
+            autoStartDelaySeconds = config.matchEndDelaySeconds;
+            matchStartCountdownSeconds = config.matchStartCountdownSeconds;
 
             SubscribeToEvents();
         }
@@ -60,15 +85,34 @@ namespace Resonance.Assemblies.Arena
         #endregion
 
         #region Match Control
-        public void StartMatch()
+        public async Task StartMatchCountdown()
         {
-            if (matchActive)
+            if (matchState == ArenaMatchState.MatchActive || matchState == ArenaMatchState.Countdown)
             {
                 return;
             }
 
-            matchActive = true;
-            matchEnded = false;
+            var oldMatchState = matchState;
+
+            matchState = ArenaMatchState.Countdown;
+
+            OnMatchCountdownStart?.Invoke(matchStartCountdownSeconds);
+            OnMatchStateChange?.Invoke(oldMatchState, matchState);
+
+            await Task.Delay((int)(matchStartCountdownSeconds * 1000));
+            StartMatchWithoutCountdown();
+        }
+
+        public void StartMatchWithoutCountdown()
+        {
+            if (IsMatchActive)
+            {
+                return;
+            }
+
+            var oldMatchState = matchState;
+            matchState = ArenaMatchState.MatchActive;
+
             currentLeader = null;
             highestEliminations = 0;
 
@@ -76,6 +120,7 @@ namespace Resonance.Assemblies.Arena
             matchStatTracker?.ResetAllStats();
 
             OnMatchStart?.Invoke();
+            OnMatchStateChange?.Invoke(oldMatchState, matchState);
         }
 
         /// <summary>
@@ -85,14 +130,14 @@ namespace Resonance.Assemblies.Arena
         /// <returns></returns>
         public async Task EndMatch(ulong? winner)
         {
-            if (!matchActive || matchEnded) return;
+            if (matchState != ArenaMatchState.MatchActive) return;
 
-            matchActive = false;
-            matchEnded = true;
+            matchState = ArenaMatchState.MatchEnded;
+            OnMatchStateChange?.Invoke(ArenaMatchState.MatchActive, matchState);
 
             OnMatchEnd?.Invoke(winner);
 
-            if (autoStartNextRound)
+            if (autoStartNextMatch)
             {
                 await QueueNextMatchStart();
             }
@@ -100,15 +145,15 @@ namespace Resonance.Assemblies.Arena
 
         private async Task QueueNextMatchStart()
         {
-            await Task.Delay((int)autoStartDelaySeconds * 1000);
-            StartMatch();
+            await Task.Delay((int)(autoStartDelaySeconds * 1000));
+            await StartMatchCountdown();
         }
         #endregion
 
         #region Kill Event Handling
         private void OnPlayerKilled(ulong killer, ulong victim)
         {
-            if (!matchActive || matchEnded) return;
+            if (!IsMatchActive || IsMatchEnded) return;
 
             PlayerMatchStats? killerStats = matchStatTracker.GetStats(killer);
             if (killerStats is PlayerMatchStats stats)
