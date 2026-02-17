@@ -1,13 +1,15 @@
 using UnityEngine;
-using TMPro;
 using System.Collections.Generic;
-using Resonance.Match;
 using Resonance.Assemblies.Arena;
+using Resonance.Match;
 
 public class MatchStatsView : MonoBehaviour
 {
     [SerializeField] private GameObject root;
-    [SerializeField] private TextMeshProUGUI leaderboardText;
+    [SerializeField] private Transform contentRoot;
+    [SerializeField] private LeaderboardRow rowPrefab;
+
+    private readonly List<LeaderboardRow> _spawnedRows = new();
 
     private void Awake()
     {
@@ -18,9 +20,21 @@ public class MatchStatsView : MonoBehaviour
             Debug.LogError("MatchStatsViewModel not found in scene");
             return;
         }
-        
+
         vm.IsVisible.ChangeEvent += OnVisibilityChanged;
         vm.Rankings.ChangeEvent += OnRankingsChanged;
+
+        // Apply initial visibility state
+        OnVisibilityChanged(vm.IsVisible.Value);
+    }
+
+    private void OnDestroy()
+    {
+        if (MatchStatsViewModel.Instance == null)
+            return;
+
+        MatchStatsViewModel.Instance.IsVisible.ChangeEvent -= OnVisibilityChanged;
+        MatchStatsViewModel.Instance.Rankings.ChangeEvent -= OnRankingsChanged;
     }
 
     private void OnVisibilityChanged(bool visible)
@@ -30,14 +44,16 @@ public class MatchStatsView : MonoBehaviour
 
     private void OnRankingsChanged(List<PlayerRanking> rankings)
     {
-        leaderboardText.text = "";
+        foreach (var row in _spawnedRows)
+            Destroy(row.gameObject);
+
+        _spawnedRows.Clear();
 
         for (int i = 0; i < rankings.Count; i++)
         {
-            var ranking = rankings[i];
-            leaderboardText.text +=
-                $"#{i + 1} {ranking.player}" +
-                $"K:{ranking.stats.kills} D:{ranking.stats.deaths}\n";
+            var row = Instantiate(rowPrefab, contentRoot);
+            row.Setup(i + 1, rankings[i]);
+            _spawnedRows.Add(row);
         }
     }
 }
