@@ -369,6 +369,15 @@ namespace Resonance.PlayerController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShowMatchStats"",
+                    ""type"": ""Button"",
+                    ""id"": ""3875ddaa-b670-4ff8-a208-1e9d13e45300"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -415,6 +424,17 @@ namespace Resonance.PlayerController
                     ""action"": ""Overdrive"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3a0f2d32-a7f4-422d-a564-b1d7da0b12f7"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowMatchStats"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -434,6 +454,7 @@ namespace Resonance.PlayerController
             m_PlayerActionMap_Reload = m_PlayerActionMap.FindAction("Reload", throwIfNotFound: true);
             m_PlayerActionMap_Escape = m_PlayerActionMap.FindAction("Escape", throwIfNotFound: true);
             m_PlayerActionMap_Overdrive = m_PlayerActionMap.FindAction("Overdrive", throwIfNotFound: true);
+            m_PlayerActionMap_ShowMatchStats = m_PlayerActionMap.FindAction("ShowMatchStats", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -659,6 +680,7 @@ namespace Resonance.PlayerController
         private readonly InputAction m_PlayerActionMap_Reload;
         private readonly InputAction m_PlayerActionMap_Escape;
         private readonly InputAction m_PlayerActionMap_Overdrive;
+        private readonly InputAction m_PlayerActionMap_ShowMatchStats;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerActionMap".
         /// </summary>
@@ -686,6 +708,10 @@ namespace Resonance.PlayerController
             /// Provides access to the underlying input action "PlayerActionMap/Overdrive".
             /// </summary>
             public InputAction @Overdrive => m_Wrapper.m_PlayerActionMap_Overdrive;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerActionMap/ShowMatchStats".
+            /// </summary>
+            public InputAction @ShowMatchStats => m_Wrapper.m_PlayerActionMap_ShowMatchStats;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -724,6 +750,9 @@ namespace Resonance.PlayerController
                 @Overdrive.started += instance.OnOverdrive;
                 @Overdrive.performed += instance.OnOverdrive;
                 @Overdrive.canceled += instance.OnOverdrive;
+                @ShowMatchStats.started += instance.OnShowMatchStats;
+                @ShowMatchStats.performed += instance.OnShowMatchStats;
+                @ShowMatchStats.canceled += instance.OnShowMatchStats;
             }
 
             /// <summary>
@@ -747,6 +776,9 @@ namespace Resonance.PlayerController
                 @Overdrive.started -= instance.OnOverdrive;
                 @Overdrive.performed -= instance.OnOverdrive;
                 @Overdrive.canceled -= instance.OnOverdrive;
+                @ShowMatchStats.started -= instance.OnShowMatchStats;
+                @ShowMatchStats.performed -= instance.OnShowMatchStats;
+                @ShowMatchStats.canceled -= instance.OnShowMatchStats;
             }
 
             /// <summary>
@@ -858,6 +890,13 @@ namespace Resonance.PlayerController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnOverdrive(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ShowMatchStats" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnShowMatchStats(InputAction.CallbackContext context);
         }
     }
 }

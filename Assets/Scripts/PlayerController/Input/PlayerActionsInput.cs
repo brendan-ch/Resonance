@@ -9,6 +9,7 @@ namespace Resonance.PlayerController
         #region Class Variables
         public bool AttackPressed  { get; private set; }
         public bool ReloadPressed { get; private set; }
+        public bool ShowStatsHeld { get; private set; }
         
         private PlayerLocomotionInput _playerLocomotionInput;
         private OverdriveAbility _overdriveAbility;
@@ -113,6 +114,24 @@ namespace Resonance.PlayerController
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+            }
+        }
+        
+        public void OnShowMatchStats(InputAction.CallbackContext context)
+        {
+            if (_playerState != null && _playerState.IsDead())
+                return;
+
+            if (MatchStatsViewModel.Instance == null)
+                return;
+
+            if (context.started)
+            {
+                MatchStatsViewModel.Instance.Show();
+            }
+            else if (context.canceled)
+            {
+                MatchStatsViewModel.Instance.Hide();
             }
         }
         #endregion
