@@ -22,12 +22,14 @@ namespace Resonance.Match
         private ArenaRoundManager arenaRoundManager;
 
         #region Cached Client-Side State
-        private int _cachedEliminationsToWin;
+        private int cachedEliminationsToWin;
         private ArenaMatchState cachedMatchState;
+        private float cachedSecondsRemainingForMatch;
 
-        public int EliminationsToWin => _cachedEliminationsToWin;
+        public int EliminationsToWin => cachedEliminationsToWin;
         public bool IsMatchActive => cachedMatchState == ArenaMatchState.MatchActive;
         public bool IsMatchEnded => cachedMatchState == ArenaMatchState.MatchEnded;
+        public float SecondsRemainingForMatch => cachedSecondsRemainingForMatch;
         #endregion
 
         #region Events
@@ -36,6 +38,7 @@ namespace Resonance.Match
         public event Action OnMatchStart;
         public event Action<PlayerID?> OnMatchEnd;
         public event Action<PlayerID, int> OnLeaderChanged;
+        public event Action<float> OnMatchTimerElapsed;  // seconds remaining
         #endregion
 
         #region Constructor
@@ -140,8 +143,14 @@ namespace Resonance.Match
 
         private void OnArenaMatchStateChange(ArenaMatchState oldState, ArenaMatchState newState)
         {
-            FireMatchStateChangeObservers((int) oldState, (int) newState);
+            FireMatchStateChangeObservers((int)oldState, (int)newState);
         }
+
+        private void OnArenaMatchTimerElapsed(float secondsRemaining)
+        {
+            FireMatchTimerElapsedObservers(secondsRemaining);
+        }
+
 
         #endregion
 
@@ -157,7 +166,7 @@ namespace Resonance.Match
         private void FireMatchStartObservers(int eliminationsToWin)
         {
             Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match started, eliminationsToWin: {eliminationsToWin}");
-            _cachedEliminationsToWin = eliminationsToWin;
+            cachedEliminationsToWin = eliminationsToWin;
             OnMatchStart?.Invoke();
         }
 
@@ -183,9 +192,17 @@ namespace Resonance.Match
         private void FireMatchStateChangeObservers(int oldState, int newState)
         {
             Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match state changed from {oldState} to {newState}");
-            cachedMatchState = (ArenaMatchState) newState;
-            OnMatchStateChange?.Invoke((ArenaMatchState) oldState, (ArenaMatchState) newState);
+            cachedMatchState = (ArenaMatchState)newState;
+            OnMatchStateChange?.Invoke((ArenaMatchState)oldState, (ArenaMatchState)newState);
         }
+
+        [ObserversRpc]
+        private void FireMatchTimerElapsedObservers(float secondsRemaining)
+        {
+            cachedSecondsRemainingForMatch = secondsRemaining;
+            OnMatchTimerElapsed?.Invoke(secondsRemaining);
+        }
+
         #endregion
 
         #region Client to Server Actions (Public API)
