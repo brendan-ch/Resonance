@@ -15,6 +15,7 @@ namespace Resonance.Assemblies.Arena
             public bool autoStartNextMatch;
             public float matchEndDelaySeconds;
             public float matchStartCountdownSeconds;
+            public float matchDurationSeconds;
 
             public static ArenaRoundManagerConfig Default => new ArenaRoundManagerConfig
             {
@@ -22,6 +23,7 @@ namespace Resonance.Assemblies.Arena
                 autoStartNextMatch = false,
                 matchEndDelaySeconds = 5f,
                 matchStartCountdownSeconds = 5f,
+                matchDurationSeconds = 300f,
             };
         }
         #endregion
@@ -30,6 +32,7 @@ namespace Resonance.Assemblies.Arena
         private float autoStartDelaySeconds = 3f;
         private float matchStartCountdownSeconds = 5f;
         private bool autoStartNextMatch = false;
+        private float matchDurationSeconds = 300f;
 
         #region State
         private ArenaMatchState matchState = ArenaMatchState.Waiting;

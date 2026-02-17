@@ -24,6 +24,7 @@ namespace Resonance.Match
         [SerializeField] private float matchEndDelaySeconds = 5f;
         [SerializeField] private bool autoStartNextMatch = false;
         [SerializeField] private float matchStartCountdownSeconds = 5f;
+        [SerializeField] private float matchDurationSeconds = 300f;
         #endregion
 
         #region Modules
@@ -52,6 +53,7 @@ namespace Resonance.Match
                 autoStartNextMatch = autoStartNextMatch,
                 matchEndDelaySeconds = matchEndDelaySeconds,
                 matchStartCountdownSeconds = matchStartCountdownSeconds,
+                matchDurationSeconds = matchDurationSeconds,
             };
             _arenaRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter, arenaConfig);
 
