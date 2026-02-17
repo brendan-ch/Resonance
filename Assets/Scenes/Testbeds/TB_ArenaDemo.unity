@@ -1120,7 +1120,7 @@ GameObject:
   - component: {fileID: 418821054}
   - component: {fileID: 418821053}
   m_Layer: 5
-  m_Name: HeaderRow
+  m_Name: HeaderText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
