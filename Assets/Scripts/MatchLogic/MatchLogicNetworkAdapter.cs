@@ -21,7 +21,7 @@ namespace Resonance.Match
 
         [Header("Arena Settings")]
         [SerializeField] private int eliminationsToWin = 10;
-        [SerializeField] private float matchEndDelaySeconds = 5f;
+        [SerializeField] private float autoStartDelaySeconds = 5f;
         [SerializeField] private bool autoStartNextMatch = false;
         [SerializeField] private float matchStartCountdownSeconds = 5f;
         [SerializeField] private float matchDurationSeconds = 300f;
@@ -51,7 +51,7 @@ namespace Resonance.Match
             {
                 eliminationsToWin = eliminationsToWin,
                 autoStartNextMatch = autoStartNextMatch,
-                matchEndDelaySeconds = matchEndDelaySeconds,
+                autoStartDelaySeconds = autoStartDelaySeconds,
                 matchStartCountdownSeconds = matchStartCountdownSeconds,
                 matchDurationSeconds = matchDurationSeconds,
             };

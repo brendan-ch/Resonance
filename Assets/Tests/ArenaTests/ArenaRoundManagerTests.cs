@@ -117,7 +117,9 @@ public class ArenaRoundManagerTests
         {
             eliminationsToWin = 10,
             autoStartNextMatch = true,
-            matchEndDelaySeconds = 1
+            autoStartDelaySeconds = 1,
+            matchStartCountdownSeconds = 5f,
+            matchDurationSeconds = 300f,
         };
         var autoStartManager = new ArenaRoundManager(statTracker, config);
         autoStartManager.StartMatchWithoutCountdown();
@@ -134,12 +136,15 @@ public class ArenaRoundManagerTests
         {
             eliminationsToWin = 10,
             autoStartNextMatch = true,
-            matchEndDelaySeconds = 1
+            autoStartDelaySeconds = 1,
+            matchStartCountdownSeconds = 5f,
+            matchDurationSeconds = 300f,
         };
 
         var autoStartManager = new ArenaRoundManager(statTracker, config);
         var eventCallCount = 0;
-        autoStartManager.OnMatchCountdownStart += (seconds) => {
+        autoStartManager.OnMatchCountdownStart += (seconds) =>
+        {
             eventCallCount++;
         };
 

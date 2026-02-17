@@ -13,21 +13,19 @@ namespace Resonance.Assemblies.Arena
         {
             public int eliminationsToWin;
             public bool autoStartNextMatch;
-            public float matchEndDelaySeconds;
+            public float autoStartDelaySeconds;
             public float matchStartCountdownSeconds;
             public float matchDurationSeconds;
 
-            public static ArenaRoundManagerConfig Default => new ArenaRoundManagerConfig
+            public static ArenaRoundManagerConfig Default => new()
             {
                 eliminationsToWin = 10,
                 autoStartNextMatch = false,
-                matchEndDelaySeconds = 5f,
+                autoStartDelaySeconds = 5f,
                 matchStartCountdownSeconds = 5f,
                 matchDurationSeconds = 300f,
             };
         }
-        #endregion
-
         private int eliminationsToWin = 10;
         private float autoStartDelaySeconds = 3f;
         private float matchStartCountdownSeconds = 5f;
@@ -71,7 +69,7 @@ namespace Resonance.Assemblies.Arena
             matchStatTracker = tracker;
             autoStartNextMatch = config.autoStartNextMatch;
             eliminationsToWin = config.eliminationsToWin;
-            autoStartDelaySeconds = config.matchEndDelaySeconds;
+            autoStartDelaySeconds = config.autoStartDelaySeconds;
             matchStartCountdownSeconds = config.matchStartCountdownSeconds;
 
             SubscribeToEvents();
