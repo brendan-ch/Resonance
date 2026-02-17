@@ -26,12 +26,12 @@ public class ArenaRoundManagerTests
     public void SecondsRemainingForMatch_ReturnsCalculatedTimeIfMatchRunning()
     {
         var config = ArenaRoundManager.ArenaRoundManagerConfig.Default;
-        config.matchDurationSeconds = 60f;
+        config.matchDurationSeconds = 120f;
         var roundManager = new ArenaRoundManager(statTracker, config);
 
         roundManager.StartMatchWithoutCountdown();
 
-        Assert.GreaterOrEqual(roundManager.SecondsRemainingForMatch, 58f);
+        Assert.GreaterOrEqual(roundManager.SecondsRemainingForMatch, 118f);
     }
     #endregion
 
@@ -333,7 +333,7 @@ public class ArenaRoundManagerTests
             matchDurationSeconds = 0.5f,
         });
 
-        var capturedSecondsRemaining = 0f;
+        double capturedSecondsRemaining = 0;
         var eventCallCount = 0;
         roundManager.OnMatchTimerElapsed += (secondsRemaining) =>
         {

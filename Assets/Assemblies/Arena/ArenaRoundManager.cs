@@ -48,7 +48,7 @@ namespace Resonance.Assemblies.Arena
         public event Action OnMatchStart;
         public event Action<ulong?> OnMatchEnd; // Winner
         public event Action<ulong, int> OnLeaderChanged; // New leader, their eliminations
-        public event Action<float> OnMatchTimerElapsed; // Seconds remaining
+        public event Action<double> OnMatchTimerElapsed; // Total seconds remaining
         #endregion
 
         #region Properties
@@ -60,11 +60,11 @@ namespace Resonance.Assemblies.Arena
         public int HighestEliminations => highestEliminations;
         public float MatchStartCountdownSeconds => matchStartCountdownSeconds;
         public DateTime TimeOfMatchEnd => timeOfLastMatchStart.AddSeconds(matchDurationSeconds);
-        public int SecondsRemainingForMatch
+        public double SecondsRemainingForMatch
         {
             get
             {
-                var calculatedTimeRemaining = (TimeOfMatchEnd - DateTime.Now).Seconds;
+                var calculatedTimeRemaining = (TimeOfMatchEnd - DateTime.Now).TotalSeconds;
                 if (calculatedTimeRemaining > 0)
                 {
                     return calculatedTimeRemaining;

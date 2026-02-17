@@ -24,21 +24,21 @@ namespace Resonance.Match
         #region Cached Client-Side State
         private int cachedEliminationsToWin;
         private ArenaMatchState cachedMatchState;
-        private float cachedSecondsRemainingForMatch;
+        private double cachedSecondsRemainingForMatch;
 
         public int EliminationsToWin => cachedEliminationsToWin;
         public bool IsMatchActive => cachedMatchState == ArenaMatchState.MatchActive;
         public bool IsMatchEnded => cachedMatchState == ArenaMatchState.MatchEnded;
-        public float SecondsRemainingForMatch => cachedSecondsRemainingForMatch;
+        public double SecondsRemainingForMatch => cachedSecondsRemainingForMatch;
         #endregion
 
         #region Events
-        public event Action<ArenaMatchState, ArenaMatchState> OnMatchStateChange;  // old state, new state
+        public event Action<ArenaMatchState, ArenaMatchState> OnMatchStateChange;  // Old state, new state
         public event Action<float> OnMatchCountdownStart;
         public event Action OnMatchStart;
         public event Action<PlayerID?> OnMatchEnd;
         public event Action<PlayerID, int> OnLeaderChanged;
-        public event Action<float> OnMatchTimerElapsed;  // seconds remaining
+        public event Action<double> OnMatchTimerElapsed;  // Total seconds remaining
         #endregion
 
         #region Constructor
@@ -148,7 +148,7 @@ namespace Resonance.Match
             FireMatchStateChangeObservers((int)oldState, (int)newState);
         }
 
-        private void OnArenaMatchTimerElapsed(float secondsRemaining)
+        private void OnArenaMatchTimerElapsed(double secondsRemaining)
         {
             FireMatchTimerElapsedObservers(secondsRemaining);
         }
@@ -199,7 +199,7 @@ namespace Resonance.Match
         }
 
         [ObserversRpc]
-        private void FireMatchTimerElapsedObservers(float secondsRemaining)
+        private void FireMatchTimerElapsedObservers(double secondsRemaining)
         {
             cachedSecondsRemainingForMatch = secondsRemaining;
             OnMatchTimerElapsed?.Invoke(secondsRemaining);
@@ -290,7 +290,7 @@ namespace Resonance.Match
         }
 
         [ServerRpc]
-        public async Task<float> GetSecondsRemaining()
+        public async Task<double> GetSecondsRemaining()
         {
             return arenaRoundManager?.SecondsRemainingForMatch ?? 0;
         }
