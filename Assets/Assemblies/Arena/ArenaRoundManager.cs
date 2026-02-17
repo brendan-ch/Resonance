@@ -60,7 +60,18 @@ namespace Resonance.Assemblies.Arena
         public int HighestEliminations => highestEliminations;
         public float MatchStartCountdownSeconds => matchStartCountdownSeconds;
         public DateTime TimeOfMatchEnd => timeOfLastMatchStart.AddSeconds(matchDurationSeconds);
-        public int SecondsRemainingForMatch => (TimeOfMatchEnd - DateTime.Now).Seconds;
+        public int SecondsRemainingForMatch
+        {
+            get
+            {
+                var calculatedTimeRemaining = (TimeOfMatchEnd - DateTime.Now).Seconds;
+                if (calculatedTimeRemaining > 0)
+                {
+                    return calculatedTimeRemaining;
+                }
+                return 0;
+            }
+        }
         #endregion
 
         private MatchStatTracker matchStatTracker;

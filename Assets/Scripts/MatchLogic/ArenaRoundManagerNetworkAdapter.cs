@@ -269,6 +269,12 @@ namespace Resonance.Match
         {
             return arenaRoundManager?.GetLeaderboardString() ?? "";
         }
+
+        [ServerRpc]
+        public async Task<float> GetSecondsRemaining()
+        {
+            return arenaRoundManager?.SecondsRemainingForMatch ?? 0;
+        }
         #endregion
     }
 }

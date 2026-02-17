@@ -15,6 +15,26 @@ public class ArenaRoundManagerTests
         roundManager = new(statTracker);
     }
 
+    #region Properties
+    [Test]
+    public void SecondsRemainingForMatch_ReturnsZeroIfUnknownMatchStartTime()
+    {
+        Assert.AreEqual(0, roundManager.SecondsRemainingForMatch);
+    }
+
+    [Test]
+    public void SecondsRemainingForMatch_ReturnsCalculatedTimeIfMatchRunning()
+    {
+        var config = ArenaRoundManager.ArenaRoundManagerConfig.Default;
+        config.matchDurationSeconds = 60f;
+        var roundManager = new ArenaRoundManager(statTracker, config);
+
+        roundManager.StartMatchWithoutCountdown();
+
+        Assert.GreaterOrEqual(roundManager.SecondsRemainingForMatch, 58f);
+    }
+    #endregion
+
     #region OnPlayerKilled
     [Test]
     public void OnPlayerKilled_UpdatesLeaderIfRoundStarted()
