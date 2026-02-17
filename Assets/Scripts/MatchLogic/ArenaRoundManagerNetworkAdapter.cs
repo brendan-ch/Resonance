@@ -102,6 +102,7 @@ namespace Resonance.Match
                 arenaRoundManager.OnLeaderChanged -= OnArenaLeaderChanged;
                 arenaRoundManager.OnMatchCountdownStart -= OnArenaMatchCountdownStart;
                 arenaRoundManager.OnMatchStateChange -= OnArenaMatchStateChange;
+                arenaRoundManager.OnMatchTimerElapsed -= OnArenaMatchTimerElapsed;
                 arenaRoundManager = null;
             }
         }
@@ -116,6 +117,7 @@ namespace Resonance.Match
             arenaRoundManager.OnLeaderChanged += OnArenaLeaderChanged;
             arenaRoundManager.OnMatchCountdownStart += OnArenaMatchCountdownStart;
             arenaRoundManager.OnMatchStateChange += OnArenaMatchStateChange;
+            arenaRoundManager.OnMatchTimerElapsed += OnArenaMatchTimerElapsed;
         }
 
         #endregion
