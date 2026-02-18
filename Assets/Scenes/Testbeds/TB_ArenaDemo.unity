@@ -1982,7 +1982,6 @@ MonoBehaviour:
   readyGlow: {fileID: 1820379098}
   glowPulseSpeed: 2
   glowMaxAlpha: 1
-  flashDuration: 0.15
 --- !u!1 &770051476
 GameObject:
   m_ObjectHideFlags: 0
@@ -2773,7 +2772,7 @@ GameObject:
   - component: {fileID: 1067128359}
   - component: {fileID: 1067128358}
   - component: {fileID: 1067128357}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BigWall3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3239,7 +3238,7 @@ GameObject:
   - component: {fileID: 1254070296}
   - component: {fileID: 1254070295}
   - component: {fileID: 1254070294}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BigWall4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3553,7 +3552,7 @@ GameObject:
   - component: {fileID: 1285368182}
   - component: {fileID: 1285368181}
   - component: {fileID: 1285368180}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BigWall2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5482,7 +5481,7 @@ GameObject:
   - component: {fileID: 2075370082}
   - component: {fileID: 2075370081}
   - component: {fileID: 2075370080}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BigWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

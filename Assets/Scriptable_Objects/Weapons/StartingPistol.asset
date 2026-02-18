@@ -17,13 +17,14 @@ MonoBehaviour:
   description: If you can believe it this thing can shoot people but not as good
     as other stuff.
   slot: 1
-  type: 5
+  weaponClass: 5
+  firingType: 1
   icon: {fileID: 0}
   weaponPrefab: {fileID: 1737148184329554707, guid: a04aeb84fa5fcff41a60c568eea597ad, type: 3}
   damage: 10
   fireRate: 3
   projectilesPerShot: 1
-  range: 0
+  range: 100
   accuracy: 0
   control: 0
   spread: 0
@@ -31,5 +32,5 @@ MonoBehaviour:
   mobility: 0
   handling: 0
   magazineSize: 12
-  reloadTime: 1
+  reloadTime: 3.3
   bulletProperties: {fileID: 11400000, guid: efa6dd70ff966ac409b9d07883c05ff2, type: 2}

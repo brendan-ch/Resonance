@@ -1,10 +1,12 @@
 using Resonance.Combat.Weapons;
+using Resonance.Combat.Weapons.Enums;
+using Resonance.Helper;
 using Resonance.PlayerController;
 using UnityEngine;
 
 namespace Resonance.Combat
 {
-    public class ProjectileShooter : MonoBehaviour
+    public class PlayerProjectileShooter : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] PlayerEquip playerEquip;
@@ -22,12 +24,16 @@ namespace Resonance.Combat
 
         WeaponProperties lastWeapon;
 
+        [SerializeField] private LayerMask hitscanLayerMask;
+
         void Awake()
         {
             if (playerCamera == null)
             {
                 playerCamera = Camera.main;
             }
+            
+            hitscanLayerMask = (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Environment"));
         }
 
         void Start()
@@ -66,45 +72,24 @@ namespace Resonance.Combat
 
         void TryShoot()
         {
-            if (isReloading)
-            {
-                return;
-            }
-
-            if (playerEquip == null)
-            {
-                return;
-            }
+            if (isReloading) return;
+            if (playerEquip == null) return;
 
             WeaponProperties weapon = playerEquip.EquippedWeapon;
-            if (weapon == null)
-            {
-                return;
-            }
+            if (weapon == null) return;
 
             WeaponView view = playerEquip.CurrentWeaponView;
-            if (view == null || view.Muzzle == null)
-            {
-                return;
-            }
+            if (view == null || view.Muzzle == null) return;
 
-            BulletProperties bullet = weapon.BulletProperties;
-            if (bullet == null || bullet.BulletPrefab == null)
-            {
-                return;
-            }
-
+            // Fire rate gate
             float fireRate = weapon.FireRate;
             if (fireRate > 0f)
             {
-                if (Time.time < nextFireTime)
-                {
-                    return;
-                }
-
+                if (Time.time < nextFireTime) return;
                 nextFireTime = Time.time + (1f / fireRate);
             }
 
+            // Ammo gate
             if (weapon.MagazineSize > 0)
             {
                 if (currentAmmo <= 0)
@@ -121,44 +106,112 @@ namespace Resonance.Combat
                 }
             }
 
+            // Universal: direction, spread, pellets, payload base
             Vector3 baseDirection = GetAimDirection(view.Muzzle);
 
+            int count = weapon.ProjectilesPerShot;
+            if (count < 1) count = 1;
+
+            WeaponPayload payload = BuildBasePayload(weapon);
+            
+            if (weapon.FiringType == WeaponFiringType.Hitscan)
+            {
+                FireHitscan(weapon, view, payload, baseDirection, count);
+            }
+            else
+            {
+                FireProjectile(weapon, view, payload, baseDirection, count);
+            }
+        }
+
+        private WeaponPayload BuildBasePayload(WeaponProperties weapon)
+        {
             WeaponPayload payload = new WeaponPayload();
             payload.Shooter = gameObject;
             payload.Damage = weapon.Damage;
+            return payload;
+        }
 
-            // Using your current model: bullet archetype speed * weapon multiplier
+        private void FireProjectile(WeaponProperties weapon, WeaponView view, WeaponPayload payload, Vector3 baseDirection, int count)
+        {
+            BulletProperties bullet = weapon.BulletProperties;
+            if (bullet == null || bullet.BulletPrefab == null) return;
+
             float speedMultiplier = weapon.MuzzleVelocity;
             float finalBulletSpeed = bullet.BulletBaseSpeed * speedMultiplier;
+
             payload.BulletSpeed = finalBulletSpeed;
-
             payload.BulletGravity = bullet.BulletGravity;
-
             payload.DamageOverTime = bullet.DamageOverTime;
             payload.SpeedReduction = bullet.SpeedReduction;
             payload.Lifesteal = bullet.Lifesteal;
-
-            int count = weapon.ProjectilesPerShot;
-            if (count < 1)
-            {
-                count = 1;
-            }
-
-            if (debugAimRays)
-            {
-                Debug.DrawRay(view.Muzzle.position, baseDirection * 5f, Color.red, 1f);
-                Debug.DrawRay(view.Muzzle.position, view.Muzzle.forward * 5f, Color.blue, 1f);
-                Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 5f, Color.green, 1f);
-            }
 
             for (int i = 0; i < count; i++)
             {
                 Vector3 direction = ApplySpread(baseDirection, weapon.Spread);
                 SpawnProjectile(bullet.BulletPrefab, view.Muzzle, payload, direction);
             }
-
-            // TODO implement: recoil, accuracy, control
         }
+
+        void FireHitscan(WeaponProperties weapon, WeaponView view, WeaponPayload payload, Vector3 baseDirection, int count)
+        {
+            if (playerCamera == null) return;
+
+            Vector3 rayOrigin = playerCamera.transform.position;
+            float hitscanMaxDistance = weapon.Range;
+
+            for (int i = 0; i < count; i++)
+            {
+                Vector3 dir = ApplySpread(baseDirection, weapon.Spread);
+
+                if (Physics.Raycast(rayOrigin, dir, out RaycastHit hit, hitscanMaxDistance, hitscanLayerMask, QueryTriggerInteraction.Ignore))
+                {
+                    float distance = hit.distance;
+
+                    float finalDamage = ComputeDamageWithFalloff(payload.Damage, distance, weapon);
+                    
+                    if (hit.collider.TryGetComponent<IDamageable>(out var damageable) ||
+                        hit.collider.GetComponentInParent<IDamageable>() != null)
+                    {
+                        IDamageable target = hit.collider.GetComponent<IDamageable>() ?? hit.collider.GetComponentInParent<IDamageable>();
+
+                        target.TakeDamage(finalDamage, payload.Shooter);
+                    }
+                    else
+                    {
+                        SpawnImpactDecal(hit);
+                    }
+
+                    if (debugAimRays)
+                    {
+                        Debug.DrawLine(rayOrigin, hit.point, Color.yellow, 0.5f);
+                        Debug.DrawRay(hit.point, hit.normal * 0.3f, Color.cyan, 0.5f);
+                    }
+                }
+            }
+        }
+
+        private void SpawnImpactDecal(RaycastHit hitInfo)
+        {
+            Debug.Log($"Spawn decal at {hitInfo.point}");
+        }
+
+
+        void TryApplyDamage(Collider hitCollider, WeaponPayload payload)
+        {
+            if (hitCollider == null) return;
+
+            IDamageable damageable = hitCollider.GetComponentInParent<IDamageable>();
+            if (damageable == null) return;
+
+            damageable.TakeDamage(payload.Damage, payload.Shooter);
+        }
+
+        private float ComputeDamageWithFalloff(float payloadDamage, float distance, WeaponProperties weapon)
+        {
+            return payloadDamage;
+        }
+
 
         void TickReload()
         {

@@ -23,8 +23,11 @@ namespace Resonance.Combat.Weapons
         [SerializeField] private WeaponSlot slot;
         public WeaponSlot Slot => slot;
 
-        [SerializeField] private WeaponType type;
-        public WeaponType Type => type;
+        [SerializeField] private WeaponClass weaponClass;
+        public WeaponClass Class => weaponClass;
+        
+        [SerializeField] private WeaponFiringType firingType;
+        public WeaponFiringType FiringType => firingType;
         
         [Header("Weapon Visuals")]
         [SerializeField] private Sprite icon;
@@ -84,7 +87,8 @@ namespace Resonance.Combat.Weapons
             clone.weaponName = weaponName;
             clone.description = description;
             clone.slot = slot;
-            clone.type = type;
+            clone.weaponClass = weaponClass;
+            clone.firingType = firingType;
             clone.icon = icon;
             clone.weaponPrefab = weaponPrefab;
             clone.damage = damage;

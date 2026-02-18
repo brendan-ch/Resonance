@@ -1,10 +1,14 @@
+using System;
 using Resonance.PlayerController;
 using Resonance.UI;
 using Resonance.Match;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using PurrNet;
 using Resonance.Helper;
+using UnityEngine.Serialization;
 
 namespace Resonance.Player
 {
@@ -12,6 +16,13 @@ namespace Resonance.Player
     {
         #region Inspector Fields
         [SerializeField] private float maxHealth = 100f;
+        [SerializeField] private float baseHealthRegen = 0f;
+        
+        [SerializeField] private float maxDamageReduction = 0.75f;
+        [SerializeField] private float baseDamageReduction = 0f;
+        
+        [SerializeField] private float playerBaseSpeed = 1f;
+        
         [SerializeField] private bool respawnOnDeath = true;
 
         public HealthBar healthBar;
@@ -20,7 +31,17 @@ namespace Resonance.Player
         #region Properties
         public float CurrentHealth { get; private set; }
         public float MaxHealth => maxHealth;
+
+        public float BaseHealthRegen {get => baseHealthRegen; set => baseHealthRegen = value; } 
+        //Damage Reduction
+        public float DamageReduction {get => currentDamageReduction;}
+        public float BaseDamageReduction { get => baseDamageReduction; set => baseDamageReduction = Mathf.Clamp(value, 0f, maxDamageReduction); }
+        
+        //Speed
+        public float PlayerSpeed => (currentSpeed);
+        public float BaseSpeed { get => playerBaseSpeed; set => playerBaseSpeed = value; }
         public bool IsDead { get; private set; }
+        
         #endregion
 
         #region Events
@@ -72,6 +93,11 @@ namespace Resonance.Player
             {
                 MatchStatBridge.Instance.RegisterPlayer(gameObject);
             }
+            
+            //Stats
+            CalculateSpeed();
+            CalculateDamageReduction();
+            CalculateRegen();
         }
 
         private void OnDestroy()
@@ -85,6 +111,17 @@ namespace Resonance.Player
         #endregion
 
         #region Health Management
+
+        private List<float> regenModifiers = new List<float>();
+        private float currentHealthRegen;
+        
+        private void Update()
+        {
+            if (currentHealthRegen > 0)
+            {
+                Heal(currentHealthRegen * Time.deltaTime);
+            }
+        }
         public void TakeDamage(float amount)
         {
             TakeDamage(amount, null);
@@ -101,8 +138,10 @@ namespace Resonance.Player
                 lastAttacker = attacker;
                 lastDamageTime = Time.time;
             }
-
-            CurrentHealth -= amount;
+            
+            float finalAmount = amount * (1f - Mathf.Min(currentDamageReduction, maxDamageReduction));
+            
+            CurrentHealth -= finalAmount;
             CurrentHealth = Mathf.Max(0, CurrentHealth);
 
             if (healthBar != null)
@@ -127,6 +166,23 @@ namespace Resonance.Player
             {
                 healthBar.SetSlider(CurrentHealth);
             }
+        }
+        
+        public void AddRegenModifier(float modifier)
+        {
+            regenModifiers.Add(modifier);
+            CalculateRegen();
+        }
+
+        public void RemoveRegenModifier(float modifier)
+        {
+            regenModifiers.Remove(modifier);
+            CalculateRegen();
+        }
+        
+        private void CalculateRegen()
+        {
+            currentHealthRegen = baseHealthRegen + regenModifiers.Sum();
         }
         #endregion
 
@@ -263,6 +319,54 @@ namespace Resonance.Player
 
             OnPlayerRespawn?.Invoke();
         }
+        #endregion
+
+        #region Speed Management
+        //Speed Properties
+        private List<float> speedModifiers = new List<float>();
+        private float currentSpeed;
+        
+        public void AddSpeedModifier(float modifier)
+        {
+            speedModifiers.Add(modifier);
+            CalculateSpeed();
+        }
+
+        public void RemoveSpeedModifier(float modifier)
+        {
+            speedModifiers.Remove(modifier);
+            CalculateSpeed();
+        }
+
+        private void CalculateSpeed()
+        {
+           currentSpeed = (playerBaseSpeed * speedModifiers.Aggregate(1f, (combinedModifier, nextModifier) => combinedModifier * nextModifier));
+        }
+
+        #endregion
+        
+        #region Damage Reduction Management
+
+        private List<float> damageReductionModifiers = new List<float>();
+        private float currentDamageReduction;
+        
+        public void AddDamageReductionModifier(float modifier)
+        {
+            damageReductionModifiers.Add(modifier);
+            CalculateDamageReduction();
+        }
+
+        public void RemoveDamageReductionModifier(float modifier)
+        {
+            damageReductionModifiers.Remove(modifier);
+            CalculateDamageReduction();
+        }
+        
+        private void CalculateDamageReduction()
+        {
+            currentDamageReduction = Mathf.Clamp(baseDamageReduction * damageReductionModifiers.Aggregate(1f, (combined, next) => combined * next), 0f, maxDamageReduction);
+        }
+        
         #endregion
     }
 }

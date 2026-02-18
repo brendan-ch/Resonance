@@ -1,6 +1,6 @@
 namespace Resonance.Combat.Weapons.Enums
 {
-    public enum WeaponType
+    public enum WeaponClass
     {
         Sniper,
         Shotgun,
