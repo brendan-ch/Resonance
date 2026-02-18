@@ -19,7 +19,8 @@ namespace Resonance.UI
         [SerializeField] private TextMeshProUGUI winnerText;
         [SerializeField] private TextMeshProUGUI finalStatsText;
         [SerializeField] private Button playAgainButton;
-        [SerializeField] private Button quitButton;
+        [SerializeField] private Button returnToLobbyButton;
+        [SerializeField] private NetworkDespawnerSceneLoader despawnerSceneLoader;
 
         [Header("Settings")]
         [SerializeField] private GameObject playerObject; // Assign the player to track
@@ -85,9 +86,9 @@ namespace Resonance.UI
                 Debug.LogWarning("[MatchUI] Play Again button is null!");
             }
 
-            if (quitButton != null)
+            if (returnToLobbyButton != null)
             {
-                quitButton.onClick.AddListener(OnQuitClicked);
+                returnToLobbyButton.onClick.AddListener(OnReturnToLobbyClicked);
                 Debug.Log("[MatchUI] Quit button listener added");
             }
             else
@@ -109,15 +110,10 @@ namespace Resonance.UI
             }
         }
 
-        private void OnQuitClicked()
+        private void OnReturnToLobbyClicked()
         {
-            Debug.Log("[MatchUI] Quit clicked!");
-
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-                Application.Quit();
-#endif
+            Debug.Log("[MatchUI] Return to lobby clicked!");
+            despawnerSceneLoader.LoadNetworkDespawnerSceneForEveryone();
         }
         #endregion
 
