@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Resonance.Match;
 using Resonance.Assemblies.Arena;
+using Resonance.Helper;
 
 public class MatchStatsViewModel : MonoBehaviour
 {

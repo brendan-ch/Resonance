@@ -8,7 +8,12 @@ namespace Resonance.PlayerController
     {
         #region Class Variables
         public bool AttackPressed  { get; private set; }
+        public bool AttackHeld { get; private set; }
         public bool ReloadPressed { get; private set; }
+        public bool SwapSlotOnePressed  { get; private set; }
+        public bool SwapSlotTwoPressed  { get; private set; }
+        public bool SwapWeaponPressed  { get; private set; }
+        
         public bool ShowStatsHeld { get; private set; }
         
         private PlayerLocomotionInput _playerLocomotionInput;
@@ -70,16 +75,46 @@ namespace Resonance.PlayerController
         {
             ReloadPressed = false;
         }
+        
+        public void SetSlotOnePressedFalse()
+        {
+            SwapSlotOnePressed = false;
+        }
+        
+        public void SetSlotTwoPressedFalse()
+        {
+            SwapSlotTwoPressed = false;
+        }
+        
+        public void SetSwapWeaponPressedFalse()
+        {
+            SwapWeaponPressed = false;
+        }
+
         #endregion
         
         #region Input Callbacks
         public void OnAttack(InputAction.CallbackContext context)
         {
-            if (!context.performed || _playerState.IsDead())
+            if (_playerState.IsDead())
                 return;
 
-            AttackPressed = true;
+            if (context.started)
+            {
+                AttackHeld = true;
+                AttackPressed = true;
+            }
+            else if (context.canceled)
+            {
+                AttackHeld = false;
+            }
+            else if (context.performed)
+            {
+                AttackHeld = true;
+                AttackPressed = true;
+            }
         }
+
         
         public void OnReload(InputAction.CallbackContext context)
         {
@@ -99,6 +134,36 @@ namespace Resonance.PlayerController
                 _overdriveAbility.TryActivateOverdrive();
             }
         }
+        
+        public void OnSwapSlotOne(InputAction.CallbackContext context)
+        {
+            if (!context.performed || _playerState.IsDead())
+                return;
+
+            SwapSlotOnePressed = true;
+        }
+        
+        public void OnSwapSlotTwo(InputAction.CallbackContext context)
+        {
+            if (!context.performed || _playerState.IsDead())
+                return;
+
+            SwapSlotTwoPressed = true;
+        }
+
+        public void OnSwapWeapon(InputAction.CallbackContext context)
+        {
+            if (_playerState.IsDead())
+                return;
+
+            Vector2 scroll = context.ReadValue<Vector2>();
+            if (Mathf.Abs(scroll.y) < 0.01f)
+                return;
+
+            SwapWeaponPressed = true;
+        }
+
+
 
         public void OnEscape(InputAction.CallbackContext context)
         {
@@ -135,5 +200,12 @@ namespace Resonance.PlayerController
             }
         }
         #endregion
+        public void RequestReload()
+        {
+            if (_playerState != null && _playerState.IsDead())
+                return;
+
+            ReloadPressed = true;
+        }
     }
 }
