@@ -4,6 +4,7 @@ using TMPro;
 using Resonance.Match;
 using Resonance.Assemblies.MatchStat;
 using PurrNet;
+using Resonance.NetworkDespawner;
 
 namespace Resonance.UI
 {
