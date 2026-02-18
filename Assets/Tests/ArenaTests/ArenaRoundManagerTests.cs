@@ -15,6 +15,26 @@ public class ArenaRoundManagerTests
         roundManager = new(statTracker);
     }
 
+    #region Properties
+    [Test]
+    public void SecondsRemainingForMatch_ReturnsZeroIfUnknownMatchStartTime()
+    {
+        Assert.AreEqual(0, roundManager.SecondsRemainingForMatch);
+    }
+
+    [Test]
+    public void SecondsRemainingForMatch_ReturnsCalculatedTimeIfMatchRunning()
+    {
+        var config = ArenaRoundManager.ArenaRoundManagerConfig.Default;
+        config.matchDurationSeconds = 120f;
+        var roundManager = new ArenaRoundManager(statTracker, config);
+
+        roundManager.StartMatchWithoutCountdown();
+
+        Assert.GreaterOrEqual(roundManager.SecondsRemainingForMatch, 118f);
+    }
+    #endregion
+
     #region OnPlayerKilled
     [Test]
     public void OnPlayerKilled_UpdatesLeaderIfRoundStarted()
@@ -117,7 +137,9 @@ public class ArenaRoundManagerTests
         {
             eliminationsToWin = 10,
             autoStartNextMatch = true,
-            matchEndDelaySeconds = 1
+            autoStartDelaySeconds = 1,
+            matchStartCountdownSeconds = 5f,
+            matchDurationSeconds = 300f,
         };
         var autoStartManager = new ArenaRoundManager(statTracker, config);
         autoStartManager.StartMatchWithoutCountdown();
@@ -134,12 +156,15 @@ public class ArenaRoundManagerTests
         {
             eliminationsToWin = 10,
             autoStartNextMatch = true,
-            matchEndDelaySeconds = 1
+            autoStartDelaySeconds = 1,
+            matchStartCountdownSeconds = 5f,
+            matchDurationSeconds = 300f,
         };
 
         var autoStartManager = new ArenaRoundManager(statTracker, config);
         var eventCallCount = 0;
-        autoStartManager.OnMatchCountdownStart += (seconds) => {
+        autoStartManager.OnMatchCountdownStart += (seconds) =>
+        {
             eventCallCount++;
         };
 
@@ -294,6 +319,34 @@ public class ArenaRoundManagerTests
         {
             Assert.AreEqual(new PlayerMatchStats(), kvp.Value);
         }
+    }
+
+    [Test]
+    public async Task StartMatchWithoutCountdown_LoopsMatchEndCheck()
+    {
+        var roundManager = new ArenaRoundManager(statTracker, new()
+        {
+            autoStartNextMatch = false,
+            eliminationsToWin = 10,
+            autoStartDelaySeconds = 1f,
+            matchStartCountdownSeconds = 1f,
+            matchDurationSeconds = 0.5f,
+        });
+
+        double capturedSecondsRemaining = 0;
+        var eventCallCount = 0;
+        roundManager.OnMatchTimerElapsed += (secondsRemaining) =>
+        {
+            capturedSecondsRemaining = secondsRemaining;
+            eventCallCount++;
+        };
+
+        roundManager.StartMatchWithoutCountdown();
+
+        await Task.Delay(2000);
+
+        Assert.AreEqual(ArenaMatchState.MatchEnded, roundManager.MatchState);
+        Assert.LessOrEqual(eventCallCount, 1);
     }
 
     #endregion

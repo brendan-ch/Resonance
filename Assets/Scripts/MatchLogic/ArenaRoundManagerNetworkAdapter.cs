@@ -22,20 +22,23 @@ namespace Resonance.Match
         private ArenaRoundManager arenaRoundManager;
 
         #region Cached Client-Side State
-        private int _cachedEliminationsToWin;
+        private int cachedEliminationsToWin;
         private ArenaMatchState cachedMatchState;
+        private double cachedSecondsRemainingForMatch;
 
-        public int EliminationsToWin => _cachedEliminationsToWin;
+        public int EliminationsToWin => cachedEliminationsToWin;
         public bool IsMatchActive => cachedMatchState == ArenaMatchState.MatchActive;
         public bool IsMatchEnded => cachedMatchState == ArenaMatchState.MatchEnded;
+        public double SecondsRemainingForMatch => cachedSecondsRemainingForMatch;
         #endregion
 
         #region Events
-        public event Action<ArenaMatchState, ArenaMatchState> OnMatchStateChange;  // old state, new state
+        public event Action<ArenaMatchState, ArenaMatchState> OnMatchStateChange;  // Old state, new state
         public event Action<float> OnMatchCountdownStart;
         public event Action OnMatchStart;
         public event Action<PlayerID?> OnMatchEnd;
         public event Action<PlayerID, int> OnLeaderChanged;
+        public event Action<double> OnMatchTimerElapsed;  // Total seconds remaining
         #endregion
 
         #region Constructor
@@ -99,6 +102,7 @@ namespace Resonance.Match
                 arenaRoundManager.OnLeaderChanged -= OnArenaLeaderChanged;
                 arenaRoundManager.OnMatchCountdownStart -= OnArenaMatchCountdownStart;
                 arenaRoundManager.OnMatchStateChange -= OnArenaMatchStateChange;
+                arenaRoundManager.OnMatchTimerElapsed -= OnArenaMatchTimerElapsed;
                 arenaRoundManager = null;
             }
         }
@@ -113,6 +117,7 @@ namespace Resonance.Match
             arenaRoundManager.OnLeaderChanged += OnArenaLeaderChanged;
             arenaRoundManager.OnMatchCountdownStart += OnArenaMatchCountdownStart;
             arenaRoundManager.OnMatchStateChange += OnArenaMatchStateChange;
+            arenaRoundManager.OnMatchTimerElapsed += OnArenaMatchTimerElapsed;
         }
 
         #endregion
@@ -140,8 +145,14 @@ namespace Resonance.Match
 
         private void OnArenaMatchStateChange(ArenaMatchState oldState, ArenaMatchState newState)
         {
-            FireMatchStateChangeObservers((int) oldState, (int) newState);
+            FireMatchStateChangeObservers((int)oldState, (int)newState);
         }
+
+        private void OnArenaMatchTimerElapsed(double secondsRemaining)
+        {
+            FireMatchTimerElapsedObservers(secondsRemaining);
+        }
+
 
         #endregion
 
@@ -157,7 +168,7 @@ namespace Resonance.Match
         private void FireMatchStartObservers(int eliminationsToWin)
         {
             Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match started, eliminationsToWin: {eliminationsToWin}");
-            _cachedEliminationsToWin = eliminationsToWin;
+            cachedEliminationsToWin = eliminationsToWin;
             OnMatchStart?.Invoke();
         }
 
@@ -183,9 +194,17 @@ namespace Resonance.Match
         private void FireMatchStateChangeObservers(int oldState, int newState)
         {
             Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match state changed from {oldState} to {newState}");
-            cachedMatchState = (ArenaMatchState) newState;
-            OnMatchStateChange?.Invoke((ArenaMatchState) oldState, (ArenaMatchState) newState);
+            cachedMatchState = (ArenaMatchState)newState;
+            OnMatchStateChange?.Invoke((ArenaMatchState)oldState, (ArenaMatchState)newState);
         }
+
+        [ObserversRpc]
+        private void FireMatchTimerElapsedObservers(double secondsRemaining)
+        {
+            cachedSecondsRemainingForMatch = secondsRemaining;
+            OnMatchTimerElapsed?.Invoke(secondsRemaining);
+        }
+
         #endregion
 
         #region Client to Server Actions (Public API)
@@ -268,6 +287,12 @@ namespace Resonance.Match
         public async Task<string> GetLeaderboardString()
         {
             return arenaRoundManager?.GetLeaderboardString() ?? "";
+        }
+
+        [ServerRpc]
+        public async Task<double> GetSecondsRemaining()
+        {
+            return arenaRoundManager?.SecondsRemainingForMatch ?? 0;
         }
         #endregion
     }
