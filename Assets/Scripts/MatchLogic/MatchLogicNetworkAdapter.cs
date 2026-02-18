@@ -12,7 +12,17 @@ namespace Resonance.Match
     [DefaultExecutionOrder(-10)]
     public class MatchLogicNetworkAdapter : NetworkBehaviour
     {
-        public static MatchLogicNetworkAdapter Instance => InstanceHandler.GetInstance<MatchLogicNetworkAdapter>();
+        public static MatchLogicNetworkAdapter Instance
+        {
+            get
+            {
+                if (InstanceHandler.TryGetInstance<MatchLogicNetworkAdapter>(out var instance))
+                {
+                    return instance;
+                }
+                return null;
+            }
+        }
 
         #region Inspector Fields
         [Header("Match Stats Settings")]
