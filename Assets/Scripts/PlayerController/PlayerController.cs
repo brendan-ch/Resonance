@@ -19,6 +19,7 @@ namespace Resonance.PlayerController
         
         public float RotationMismatch { get; private set; } = 0f;
         public bool IsRotatingToTarget { get; private set; } = false;
+        public static PlayerController LocalPlayer { get; private set; }
 
         [Header("Base Movement")] 
         public float baseCrouchAcceleration = 25f;
@@ -102,6 +103,11 @@ namespace Resonance.PlayerController
         {
             base.OnSpawned();
             
+            if (isOwner)
+            {
+                LocalPlayer = this;
+            }
+
             enabled = isOwner;
             _virtualCamera.gameObject.SetActive(isOwner);
 

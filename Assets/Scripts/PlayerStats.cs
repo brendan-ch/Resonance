@@ -91,7 +91,7 @@ namespace Resonance.Player
             // Register with match stat tracker
             if (MatchStatBridge.Instance != null)
             {
-                MatchStatBridge.Instance.RegisterPlayer(gameObject);
+                MatchLogicNetworkAdapter.Instance.MatchStats.RegisterPlayer(gameObject);
             }
             
             //Stats
@@ -105,7 +105,7 @@ namespace Resonance.Player
             // Unregister from match stat tracker
             if (MatchStatBridge.Instance != null)
             {
-                MatchStatBridge.Instance.UnregisterPlayer(gameObject);
+                MatchLogicNetworkAdapter.Instance.MatchStats.UnregisterPlayer(gameObject);
             }
         }
         #endregion

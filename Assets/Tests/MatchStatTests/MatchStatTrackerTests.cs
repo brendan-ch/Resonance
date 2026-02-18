@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using Resonance.Assemblies.Match;
+using Resonance.Assemblies.MatchStat;
 
 public class MatchStatTrackerTests
 {
@@ -103,7 +103,12 @@ public class MatchStatTrackerTests
     [Test]
     public void RecordKill_ProcessesAssistsIfAboveDamageThreshold()
     {
-        tracker = new MatchStatTracker(assistTimeWindowMs: 100f, assistDamageThreshold: 20f);
+        var config = new MatchStatTracker.MatchStatTrackerConfig
+        {
+            assistTimeWindowMs = 100f,
+            assistDamageThreshold = 20f
+        };
+        tracker = new MatchStatTracker(config);
         ulong[] expectedAssistIds = { 3, 4 };
 
         foreach (var id in expectedAssistIds)

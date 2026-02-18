@@ -1,11 +1,11 @@
 {
-    "name": "MatchLogicTests",
+    "name": "ArenaTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "MatchLogic",
-        "PurrNet.Runtime"
+        "MatchStat",
+        "Arena"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

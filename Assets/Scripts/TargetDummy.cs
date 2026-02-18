@@ -1,7 +1,7 @@
 using Resonance.Helper;
 using UnityEngine;
 using Resonance.Match;
-using Resonance.Assemblies.Match;
+using Resonance.Assemblies.MatchStat;
 
 namespace Resonance.Entities
 {

@@ -1,10 +1,24 @@
 using System;
 using System.Collections.Generic;
 
-namespace Resonance.Assemblies.Match
+namespace Resonance.Assemblies.MatchStat
 {
     public class MatchStatTracker
     {
+        #region Configuration
+        public struct MatchStatTrackerConfig
+        {
+            public float assistTimeWindowMs;
+            public float assistDamageThreshold;
+
+            public static MatchStatTrackerConfig Default => new()
+            {
+                assistTimeWindowMs = 5f,
+                assistDamageThreshold = 20f
+            };
+        }
+        #endregion
+
         #region Player Stats Data
         private Dictionary<ulong, PlayerMatchStats> playerStats = new();
         private AssistCalculator assistCalculator;
@@ -18,14 +32,13 @@ namespace Resonance.Assemblies.Match
         #endregion
 
         #region Startup
-        public MatchStatTracker()
+        public MatchStatTracker() : this(MatchStatTrackerConfig.Default)
         {
-            assistCalculator = new AssistCalculator(5f, 20f);
         }
 
-        public MatchStatTracker(float assistTimeWindowMs, float assistDamageThreshold)
+        public MatchStatTracker(MatchStatTrackerConfig config)
         {
-            assistCalculator = new AssistCalculator(assistTimeWindowMs, assistDamageThreshold);
+            assistCalculator = new AssistCalculator(config.assistTimeWindowMs, config.assistDamageThreshold);
         }
         #endregion
 
