@@ -1061,7 +1061,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7fd9fe118e8f42088a4905fa219f4a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkPlayerCounter
-  networkManager: {fileID: 104676488}
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
   OnAllPlayersJoined:
     m_PersistentCalls:
       m_Calls:
@@ -1096,7 +1104,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1603122535
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1562,6 +1570,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 832fe654858b748b4a7a10b5158644e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MatchLogicSpawner
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
   matchLogicPrefab: {fileID: 3554544901488903259, guid: 311cf1b46c5504d2ba94e30722177803, type: 3}
   OnMatchLogicSpawned:
     m_PersistentCalls:
