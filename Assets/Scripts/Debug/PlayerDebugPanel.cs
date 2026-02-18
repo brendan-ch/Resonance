@@ -194,7 +194,7 @@ namespace Resonance.DebugTools
 
             GUILayout.BeginVertical("box");
 
-            GUILayout.Label($"Current Health: {_playerStats.CurrentHealth.Value:F0} / {_playerStats.MaxHealth:F0}");
+            GUILayout.Label($"Current Health: {_playerStats.CurrentHealth.value:F0} / {_playerStats.MaxHealth:F0}");
             GUILayout.Label($"Health Regen: {_playerStats.BaseHealthRegen:F1}/s base");
             GUILayout.Label($"Damage Reduction: {_playerStats.DamageReduction * 100f:F1}%");
 
