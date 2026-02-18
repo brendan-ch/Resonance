@@ -533,7 +533,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1218637418635006289}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000059604645, y: -0.00000017881395, z: -0.0000001192093, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.00000012820418, y: 0.27614462, z: 0.0000000023361064}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1121,6 +1121,7 @@ Transform:
   - {fileID: 2881488753949666111}
   - {fileID: 4921056583975618137}
   - {fileID: 2544791039562883972}
+  - {fileID: 2091957962440695400}
   m_Father: {fileID: 1276517681134762612}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3712680273230900386
@@ -1642,6 +1643,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineHardLockToTarget
   Damping: 0
+--- !u!1 &5720758895870925462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2091957962440695400}
+  m_Layer: 6
+  m_Name: AttachPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2091957962440695400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5720758895870925462}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5, y: 0, z: 0, w: 0.8660254}
+  m_LocalPosition: {x: -0.09, y: 0.12, z: 0.05}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5567114807000778733}
+  m_LocalEulerAnglesHint: {x: -60, y: 0, z: 0}
 --- !u!1 &5841297930193264550
 GameObject:
   m_ObjectHideFlags: 0
@@ -2002,6 +2034,10 @@ GameObject:
   - component: {fileID: 5378828892324781899}
   - component: {fileID: -7842585778944990973}
   - component: {fileID: 8953151137814889512}
+  - component: {fileID: 3601999263526900247}
+  - component: {fileID: 4363601593636969602}
+  - component: {fileID: 7304100629892152196}
+  - component: {fileID: 8505458450555133255}
   m_Layer: 6
   m_Name: FirstPersonController
   m_TagString: Player
@@ -2049,22 +2085,22 @@ MonoBehaviour:
   _visitiblityRules: {fileID: 0}
   _characterController: {fileID: 3494420511587806199}
   _virtualCamera: {fileID: 3024070534968682805}
-  crouchAcceleration: 25
-  crouchSpeed: 2
-  runAcceleration: 35
-  runSpeed: 4
-  sprintAcceleration: 50
-  sprintSpeed: 7
-  inAirAcceleration: 25
+  baseCrouchAcceleration: 25
+  baseCrouchSpeed: 2
+  baseRunAcceleration: 35
+  baseRunSpeed: 4
+  baseSprintAcceleration: 50
+  baseSprintSpeed: 7
+  baseInAirAcceleration: 25
   drag: 20
   gravity: 25
   terminalVelocity: 50
   jumpSpeed: 1
   movingThreshold: 0.01
-  slideSpeed: 8
+  baseSlideSpeed: 8
+  baseMinSlideSpeed: 2
   slideDuration: 1
   slideDeceleration: 8
-  minSlideSpeed: 2
   slopeAngleThreshold: 15
   uphillSlideDecelerationMultiplier: 2
   downhillSlideSpeedBoost: 1.2
@@ -2193,17 +2229,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WwiseSmartReverb
   isGlobal: 1
-  targetGameObject: {fileID: 0}
-  enclosureRTPCName: Enclosure
-  roomSizeRTPCName: RoomSize
-  reverbSendRTPCName: ReverbSend
-  rayCount: 30
-  maxRayDistance: 50
+  targetEmitter: {fileID: 0}
+  enclosureParameter: Enclosure
+  roomSizeParameter: RoomSize
+  raysCount: 30
+  maxDistance: 50
   environmentLayer:
     serializedVersion: 2
     m_Bits: 256
   scanRate: 5
-  smoothingSpeed: 3
   enclosureCurve:
     serializedVersion: 2
     m_Curve:
@@ -2252,31 +2286,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  reverbSendCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 80
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  drawDebugRays: 1
+  drawRays: 0
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   missColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &7288220896636920470
@@ -2295,6 +2305,7 @@ MonoBehaviour:
   overdriveCooldown: 30
   overdriveSpeedMultiplier: 1.5
   overdriveHealAmount: 50
+  overdriveRegenAmount: 5
 --- !u!114 &6396442435144648702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2388,7 +2399,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 306b386571bb40847b079fec30bc047a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
   maxHealth: 100
+  baseHealthRegen: 0
+  maxDamageReduction: 0.75
+  baseDamageReduction: 0
+  playerBaseSpeed: 1
   respawnOnDeath: 1
   healthBar: {fileID: 0}
 --- !u!114 &6663562861641907931
@@ -2507,6 +2531,70 @@ MonoBehaviour:
   bOverrideScalingFactor: 0
   scalingFactor: -1
   listenerId: 0
+--- !u!114 &3601999263526900247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9f65672025fa5d4abac8993a47b6afd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.PlayerEquip
+  playerInventory: {fileID: 7304100629892152196}
+  equipSlot: {fileID: 2091957962440695400}
+  playerActionsInput: {fileID: 3887967411063251530}
+  currentWeaponView: {fileID: 0}
+--- !u!114 &4363601593636969602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ea97cdb3e312945afe919a15f3110b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.ProjectileShooter
+  playerEquip: {fileID: 3601999263526900247}
+  playerActionsInput: {fileID: 3887967411063251530}
+  playerCamera: {fileID: 0}
+  debugAimRays: 1
+  debugAmmoLogs: 1
+  hitscanLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &7304100629892152196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2551c363f8a16b948b7ff20b467041d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Inventory.PlayerInventory
+  weaponInventory:
+  - {fileID: 11400000, guid: 5b3c96565628d1d498ddc4376703e2f6, type: 2}
+  - {fileID: 0}
+  startingWeapon: {fileID: 11400000, guid: 28cadf78b26d3a1489c2a936a55f1575, type: 2}
+--- !u!114 &8505458450555133255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6710b10f117684b4aa0755fed0bea3e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CursorState
 --- !u!1 &6886534224098021164
 GameObject:
   m_ObjectHideFlags: 0

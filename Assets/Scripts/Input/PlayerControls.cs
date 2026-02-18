@@ -371,9 +371,36 @@ namespace Resonance.PlayerController
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""SwapSlotOne"",
+                    ""type"": ""Button"",
+                    ""id"": ""87301078-3863-4764-958b-85010e1eae2e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwapSlotTwo"",
+                    ""type"": ""Button"",
+                    ""id"": ""a1674bcb-2f09-4a4a-ab55-ef8acca2b355"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwapWeapon"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""5a04080f-7899-456f-bd8a-96c56435fdb6"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""ShowMatchStats"",
                     ""type"": ""Button"",
-                    ""id"": ""3875ddaa-b670-4ff8-a208-1e9d13e45300"",
+                    ""id"": ""b777c606-255f-45d9-a4e5-fcca609899a7"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -427,7 +454,40 @@ namespace Resonance.PlayerController
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3a0f2d32-a7f4-422d-a564-b1d7da0b12f7"",
+                    ""id"": ""32c8178c-dbdb-436e-b79d-1fca3c7a8952"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapSlotOne"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""219edac8-1a72-403a-9628-d47888ded638"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapSlotTwo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0efacf1-03ea-4528-a6c7-5d2cb985a5eb"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98d5d5d9-9384-424d-a6b2-52088596d83b"",
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -454,6 +514,9 @@ namespace Resonance.PlayerController
             m_PlayerActionMap_Reload = m_PlayerActionMap.FindAction("Reload", throwIfNotFound: true);
             m_PlayerActionMap_Escape = m_PlayerActionMap.FindAction("Escape", throwIfNotFound: true);
             m_PlayerActionMap_Overdrive = m_PlayerActionMap.FindAction("Overdrive", throwIfNotFound: true);
+            m_PlayerActionMap_SwapSlotOne = m_PlayerActionMap.FindAction("SwapSlotOne", throwIfNotFound: true);
+            m_PlayerActionMap_SwapSlotTwo = m_PlayerActionMap.FindAction("SwapSlotTwo", throwIfNotFound: true);
+            m_PlayerActionMap_SwapWeapon = m_PlayerActionMap.FindAction("SwapWeapon", throwIfNotFound: true);
             m_PlayerActionMap_ShowMatchStats = m_PlayerActionMap.FindAction("ShowMatchStats", throwIfNotFound: true);
         }
 
@@ -680,6 +743,9 @@ namespace Resonance.PlayerController
         private readonly InputAction m_PlayerActionMap_Reload;
         private readonly InputAction m_PlayerActionMap_Escape;
         private readonly InputAction m_PlayerActionMap_Overdrive;
+        private readonly InputAction m_PlayerActionMap_SwapSlotOne;
+        private readonly InputAction m_PlayerActionMap_SwapSlotTwo;
+        private readonly InputAction m_PlayerActionMap_SwapWeapon;
         private readonly InputAction m_PlayerActionMap_ShowMatchStats;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerActionMap".
@@ -708,6 +774,18 @@ namespace Resonance.PlayerController
             /// Provides access to the underlying input action "PlayerActionMap/Overdrive".
             /// </summary>
             public InputAction @Overdrive => m_Wrapper.m_PlayerActionMap_Overdrive;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerActionMap/SwapSlotOne".
+            /// </summary>
+            public InputAction @SwapSlotOne => m_Wrapper.m_PlayerActionMap_SwapSlotOne;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerActionMap/SwapSlotTwo".
+            /// </summary>
+            public InputAction @SwapSlotTwo => m_Wrapper.m_PlayerActionMap_SwapSlotTwo;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerActionMap/SwapWeapon".
+            /// </summary>
+            public InputAction @SwapWeapon => m_Wrapper.m_PlayerActionMap_SwapWeapon;
             /// <summary>
             /// Provides access to the underlying input action "PlayerActionMap/ShowMatchStats".
             /// </summary>
@@ -750,6 +828,15 @@ namespace Resonance.PlayerController
                 @Overdrive.started += instance.OnOverdrive;
                 @Overdrive.performed += instance.OnOverdrive;
                 @Overdrive.canceled += instance.OnOverdrive;
+                @SwapSlotOne.started += instance.OnSwapSlotOne;
+                @SwapSlotOne.performed += instance.OnSwapSlotOne;
+                @SwapSlotOne.canceled += instance.OnSwapSlotOne;
+                @SwapSlotTwo.started += instance.OnSwapSlotTwo;
+                @SwapSlotTwo.performed += instance.OnSwapSlotTwo;
+                @SwapSlotTwo.canceled += instance.OnSwapSlotTwo;
+                @SwapWeapon.started += instance.OnSwapWeapon;
+                @SwapWeapon.performed += instance.OnSwapWeapon;
+                @SwapWeapon.canceled += instance.OnSwapWeapon;
                 @ShowMatchStats.started += instance.OnShowMatchStats;
                 @ShowMatchStats.performed += instance.OnShowMatchStats;
                 @ShowMatchStats.canceled += instance.OnShowMatchStats;
@@ -776,6 +863,15 @@ namespace Resonance.PlayerController
                 @Overdrive.started -= instance.OnOverdrive;
                 @Overdrive.performed -= instance.OnOverdrive;
                 @Overdrive.canceled -= instance.OnOverdrive;
+                @SwapSlotOne.started -= instance.OnSwapSlotOne;
+                @SwapSlotOne.performed -= instance.OnSwapSlotOne;
+                @SwapSlotOne.canceled -= instance.OnSwapSlotOne;
+                @SwapSlotTwo.started -= instance.OnSwapSlotTwo;
+                @SwapSlotTwo.performed -= instance.OnSwapSlotTwo;
+                @SwapSlotTwo.canceled -= instance.OnSwapSlotTwo;
+                @SwapWeapon.started -= instance.OnSwapWeapon;
+                @SwapWeapon.performed -= instance.OnSwapWeapon;
+                @SwapWeapon.canceled -= instance.OnSwapWeapon;
                 @ShowMatchStats.started -= instance.OnShowMatchStats;
                 @ShowMatchStats.performed -= instance.OnShowMatchStats;
                 @ShowMatchStats.canceled -= instance.OnShowMatchStats;
@@ -890,6 +986,27 @@ namespace Resonance.PlayerController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnOverdrive(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SwapSlotOne" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSwapSlotOne(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SwapSlotTwo" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSwapSlotTwo(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SwapWeapon" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSwapWeapon(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "ShowMatchStats" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
