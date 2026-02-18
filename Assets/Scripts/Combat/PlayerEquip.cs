@@ -2,6 +2,7 @@ using Resonance.Combat.Weapons;
 using Resonance.Combat.Weapons.Enums;
 using Resonance.Helper;
 using Resonance.Inventory;
+using Resonance.Player;
 using Resonance.PlayerController;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Resonance.Combat
     {
         public WeaponProperties EquippedWeapon { get; private set; }
         
-        [SerializeField] ObservableValue<WeaponProperties> equippedWeaponObservable;
+        private ObservableValue<WeaponProperties> equippedWeaponObservable = new ObservableValue<WeaponProperties>();
         public ObservableValue<WeaponProperties> EquippedWeaponObservable => equippedWeaponObservable;
         
         [SerializeField] PlayerInventory playerInventory;
@@ -26,13 +27,17 @@ namespace Resonance.Combat
         public WeaponView CurrentWeaponView => currentWeaponView;
         
 
-        GameObject currentWeaponInstance;
-        
+        private GameObject currentWeaponInstance;
+        private PlayerStats playerStats;
         
         void Start()
         {
+            playerStats = GetComponent<PlayerStats>();
+            
             StartCoroutine(EquipStartingWeaponNextFrame());
         }
+        
+        private WeaponProperties previousWeapon;
 
         System.Collections.IEnumerator EquipStartingWeaponNextFrame()
         {
@@ -118,14 +123,23 @@ namespace Resonance.Combat
 
         void Equip(WeaponProperties weapon)
         {
+            Debug.Log($"Equip called with: {weapon?.name ?? "null"}");
+            
             if (weapon == null)
             {
                 return;
             }
             
+            Debug.Log($"EquippedWeapon is currently: {EquippedWeapon?.name ?? "null"}");
+            
             if (EquippedWeapon == weapon)
             {
                 return;
+            }
+
+            if (EquippedWeapon != null && playerStats != null)
+            {
+                playerStats.RemoveSpeedModifier(EquippedWeapon.Mobility);
             }
 
             EquippedWeapon = weapon;
@@ -135,11 +149,18 @@ namespace Resonance.Combat
                 equippedWeaponObservable.Value = weapon;
             }
 
+            if (playerStats != null)
+            {
+                playerStats.AddSpeedModifier(weapon.Mobility);
+            }
+            
+            Debug.Log("About to call RefreshWeaponView");
             RefreshWeaponView(weapon);
         }
         
         void RefreshWeaponView(WeaponProperties weapon)
         {
+            
             if (currentWeaponInstance != null)
             {
                 Destroy(currentWeaponInstance);

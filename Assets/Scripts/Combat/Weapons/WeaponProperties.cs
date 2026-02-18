@@ -63,7 +63,7 @@ namespace Resonance.Combat.Weapons
         public float MuzzleVelocity => muzzleVelocity;
         
         [Header("Action Stats")]
-        [SerializeField] private float mobility;
+        [SerializeField] private float mobility = 1f;
         public float Mobility => mobility;
         
         [SerializeField] private float handling;
@@ -73,7 +73,7 @@ namespace Resonance.Combat.Weapons
         [SerializeField] private int magazineSize;
         public int MagazineSize => magazineSize;
         
-        [SerializeField] private float reloadTime;
+        [SerializeField] private float reloadTime = 3.3f;
         public float ReloadTime => reloadTime;
         
         [SerializeField] private BulletProperties bulletProperties;

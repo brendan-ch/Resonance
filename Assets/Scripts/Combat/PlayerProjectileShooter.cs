@@ -209,6 +209,11 @@ namespace Resonance.Combat
 
         private float ComputeDamageWithFalloff(float payloadDamage, float distance, WeaponProperties weapon)
         {
+            if (distance > (weapon.Range/2))
+            {
+                return (payloadDamage/2);
+            } 
+            
             return payloadDamage;
         }
 

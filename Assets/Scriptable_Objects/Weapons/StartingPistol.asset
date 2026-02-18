@@ -29,7 +29,7 @@ MonoBehaviour:
   control: 0
   spread: 0
   muzzleVelocity: 5
-  mobility: 0
+  mobility: 1
   handling: 0
   magazineSize: 12
   reloadTime: 3.3

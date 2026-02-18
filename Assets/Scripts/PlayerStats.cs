@@ -86,7 +86,6 @@ namespace Resonance.Player
             if (healthBar != null)
             {
                 healthBar.SetSliderMax(maxHealth);
-                CurrentHealth.ChangeEvent += value => healthBar.SetSlider(value);
             }
 
             // Register with match stat tracker
