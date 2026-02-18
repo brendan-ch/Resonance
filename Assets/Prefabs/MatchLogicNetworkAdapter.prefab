@@ -59,4 +59,4 @@ MonoBehaviour:
   autoStartDelaySeconds: 5
   autoStartNextMatch: 0
   matchStartCountdownSeconds: 5
-  matchDurationSeconds: 5
+  matchDurationSeconds: 300
