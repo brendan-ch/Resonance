@@ -396,6 +396,15 @@ namespace Resonance.PlayerController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ShowMatchStats"",
+                    ""type"": ""Button"",
+                    ""id"": ""b777c606-255f-45d9-a4e5-fcca609899a7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -475,6 +484,17 @@ namespace Resonance.PlayerController
                     ""action"": ""SwapWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98d5d5d9-9384-424d-a6b2-52088596d83b"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowMatchStats"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -497,6 +517,7 @@ namespace Resonance.PlayerController
             m_PlayerActionMap_SwapSlotOne = m_PlayerActionMap.FindAction("SwapSlotOne", throwIfNotFound: true);
             m_PlayerActionMap_SwapSlotTwo = m_PlayerActionMap.FindAction("SwapSlotTwo", throwIfNotFound: true);
             m_PlayerActionMap_SwapWeapon = m_PlayerActionMap.FindAction("SwapWeapon", throwIfNotFound: true);
+            m_PlayerActionMap_ShowMatchStats = m_PlayerActionMap.FindAction("ShowMatchStats", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -725,6 +746,7 @@ namespace Resonance.PlayerController
         private readonly InputAction m_PlayerActionMap_SwapSlotOne;
         private readonly InputAction m_PlayerActionMap_SwapSlotTwo;
         private readonly InputAction m_PlayerActionMap_SwapWeapon;
+        private readonly InputAction m_PlayerActionMap_ShowMatchStats;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerActionMap".
         /// </summary>
@@ -764,6 +786,10 @@ namespace Resonance.PlayerController
             /// Provides access to the underlying input action "PlayerActionMap/SwapWeapon".
             /// </summary>
             public InputAction @SwapWeapon => m_Wrapper.m_PlayerActionMap_SwapWeapon;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerActionMap/ShowMatchStats".
+            /// </summary>
+            public InputAction @ShowMatchStats => m_Wrapper.m_PlayerActionMap_ShowMatchStats;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -811,6 +837,9 @@ namespace Resonance.PlayerController
                 @SwapWeapon.started += instance.OnSwapWeapon;
                 @SwapWeapon.performed += instance.OnSwapWeapon;
                 @SwapWeapon.canceled += instance.OnSwapWeapon;
+                @ShowMatchStats.started += instance.OnShowMatchStats;
+                @ShowMatchStats.performed += instance.OnShowMatchStats;
+                @ShowMatchStats.canceled += instance.OnShowMatchStats;
             }
 
             /// <summary>
@@ -843,6 +872,9 @@ namespace Resonance.PlayerController
                 @SwapWeapon.started -= instance.OnSwapWeapon;
                 @SwapWeapon.performed -= instance.OnSwapWeapon;
                 @SwapWeapon.canceled -= instance.OnSwapWeapon;
+                @ShowMatchStats.started -= instance.OnShowMatchStats;
+                @ShowMatchStats.performed -= instance.OnShowMatchStats;
+                @ShowMatchStats.canceled -= instance.OnShowMatchStats;
             }
 
             /// <summary>
@@ -975,6 +1007,13 @@ namespace Resonance.PlayerController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnSwapWeapon(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ShowMatchStats" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnShowMatchStats(InputAction.CallbackContext context);
         }
     }
 }
