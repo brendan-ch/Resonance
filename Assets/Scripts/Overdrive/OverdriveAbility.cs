@@ -14,6 +14,7 @@ namespace Resonance.PlayerController
         [SerializeField] private float overdriveHealAmount = 50f;
         [SerializeField] private float overdriveRegenAmount = 5f;
         
+        
         public ObservableValue<OverdriveState> State { get; private set; }
         public ObservableValue<float> CooldownRemaining { get; private set; }
         public ObservableValue<float> DurationRemaining { get; private set; }
