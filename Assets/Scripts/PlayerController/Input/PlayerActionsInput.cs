@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,9 +35,6 @@ namespace Resonance.PlayerController
                 Debug.LogError("Player controls is not initialized - cannot enable");
                 return;
             }
-            
-            PlayerInputManager.Instance.PlayerControls.PlayerActionMap.Enable();
-            PlayerInputManager.Instance.PlayerControls.PlayerActionMap.SetCallbacks(this);
         }
         
         private void OnDisable()
