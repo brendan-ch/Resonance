@@ -26,6 +26,7 @@ namespace Resonance.Player
         [SerializeField] private bool respawnOnDeath = true;
 
         private HealthBar healthBar;
+        private PlayerViewModel playerViewModel;
         #endregion
 
         #region Properties
@@ -67,7 +68,6 @@ namespace Resonance.Player
         protected override void OnSpawned()
         {
             base.OnSpawned();
-            // enabled = isOwner;
             if (isServer)
             {
                 CurrentHealth.value = maxHealth;
@@ -79,11 +79,18 @@ namespace Resonance.Player
             {
                 healthBar = FindObjectOfType<HealthBar>();
                 Debug.Log("HealthBar Found: " + (healthBar != null));
-                
+
                 if (healthBar != null)
                 {
-                    healthBar.SetSliderMax(maxHealth);
-                    healthBar.SetSlider(CurrentHealth.value);
+                    playerViewModel = gameObject.GetComponent<PlayerViewModel>();
+                    if (playerViewModel == null)
+                    {
+                        playerViewModel = gameObject.AddComponent<PlayerViewModel>();
+                    }
+
+                    playerViewModel.Initialize(maxHealth);
+
+                    healthBar.Bind(playerViewModel);
                 }
             }
 
@@ -138,12 +145,11 @@ namespace Resonance.Player
             
             if (!isOwner) return;
 
-            // Detect health change
             if (Mathf.Abs(CurrentHealth.value - lastHealth) > 0.01f)
             {
-                if (healthBar != null)
+                if (playerViewModel != null)
                 {
-                    healthBar.SetSlider(CurrentHealth.value);
+                    playerViewModel.Health.Value = CurrentHealth.value;
                 }
 
                 lastHealth = CurrentHealth.value;
@@ -170,6 +176,11 @@ namespace Resonance.Player
 
             CurrentHealth.value = Mathf.Max(0, CurrentHealth.value - finalAmount);
 
+            if (playerViewModel != null)
+            {
+                playerViewModel.Health.Value = CurrentHealth.value;
+            }
+            
             if (CurrentHealth.value <= 0)
                 Die(attacker);
         }
@@ -178,6 +189,11 @@ namespace Resonance.Player
         {
             if (IsDead) return;
             CurrentHealth.value = Mathf.Min(CurrentHealth.value + amount, maxHealth);
+            
+            if (playerViewModel != null)
+            {
+                playerViewModel.Health.Value = CurrentHealth.value;
+            }
         }
 
         public void AddRegenModifier(float modifier)

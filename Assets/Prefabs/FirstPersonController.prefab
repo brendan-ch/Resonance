@@ -2038,6 +2038,7 @@ GameObject:
   - component: {fileID: 4363601593636969602}
   - component: {fileID: 7304100629892152196}
   - component: {fileID: 8505458450555133255}
+  - component: {fileID: 884933758777301057}
   m_Layer: 6
   m_Name: FirstPersonController
   m_TagString: Player
@@ -2414,7 +2415,10 @@ MonoBehaviour:
   baseDamageReduction: 0
   playerBaseSpeed: 1
   respawnOnDeath: 1
-  healthBar: {fileID: 0}
+  CurrentHealth:
+    _value: 0
+    _ownerAuth: 0
+    _sendIntervalInSeconds: 0
 --- !u!114 &6663562861641907931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2559,6 +2563,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ea97cdb3e312945afe919a15f3110b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.ProjectileShooter
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
   playerEquip: {fileID: 3601999263526900247}
   playerActionsInput: {fileID: 3887967411063251530}
   playerCamera: {fileID: 0}
@@ -2595,6 +2608,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6710b10f117684b4aa0755fed0bea3e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorState
+--- !u!114 &884933758777301057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56327ccb6bff56942bc369710b03ec1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerViewModel
 --- !u!1 &6886534224098021164
 GameObject:
   m_ObjectHideFlags: 0

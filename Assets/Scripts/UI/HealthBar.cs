@@ -2,14 +2,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using Resonance.Helper;
 
 namespace Resonance.UI
 {
     public class HealthBar : MonoBehaviour
     {
         [Header("UI References")]
-        public Image healthFill;        // Front bar
-        public Image damageFill;        // Delayed damage bar
+        public Image healthFill;
+        public Image damageFill;
         public TextMeshProUGUI healthText;
 
         [Header("Animation")]
@@ -20,24 +21,28 @@ namespace Resonance.UI
         [SerializeField] Color damageFlashColor = Color.red;
         [SerializeField] float flashDuration = 0.2f;
 
-        float maxHealth;
-        float targetHealth;
-        float displayedHealth;
-        float displayedDamageBar;
+        private float maxHealth;
+        private float displayedHealth;
+        private float displayedDamageBar;
+        private float targetHealth;
 
-        Coroutine flashRoutine;
+        private Coroutine flashRoutine;
 
-        public void SetSliderMax(float max)
+        private PlayerViewModel viewModel;
+
+        public void Bind(PlayerViewModel vm)
         {
-            maxHealth = max;
-            targetHealth = max;
-            displayedHealth = max;
-            displayedDamageBar = max;
+            viewModel = vm;
+            maxHealth = vm.MaxHealth;
+            targetHealth = displayedHealth = displayedDamageBar = maxHealth;
+
+            // Subscribe to changes
+            vm.Health.ChangeEvent += OnHealthChanged;
 
             UpdateUIInstant();
         }
 
-        public void SetSlider(float newHealth)
+        private void OnHealthChanged(float newHealth)
         {
             if (newHealth < targetHealth)
             {
@@ -52,15 +57,13 @@ namespace Resonance.UI
 
             targetHealth = newHealth;
         }
-        
+
         void Update()
         {
             if (maxHealth <= 0) return;
 
-            // Front bar moves immediately
+            // Smooth health bar animation
             displayedHealth = Mathf.Lerp(displayedHealth, targetHealth, Time.deltaTime * 15f);
-
-            // Damage bar lags behind
             displayedDamageBar = Mathf.Lerp(displayedDamageBar, targetHealth, Time.deltaTime * damageLerpSpeed);
 
             UpdateUI();
@@ -74,7 +77,6 @@ namespace Resonance.UI
             healthFill.fillAmount = healthPercent;
             damageFill.fillAmount = damagePercent;
 
-            // Update text to match displayed health
             healthText.text = $"{Mathf.RoundToInt(displayedHealth)} / {Mathf.RoundToInt(maxHealth)}";
         }
 
@@ -88,10 +90,16 @@ namespace Resonance.UI
         IEnumerator FlashNumbers()
         {
             healthText.color = damageFlashColor;
-
             yield return new WaitForSeconds(flashDuration);
-
             healthText.color = Color.white;
+        }
+
+        private void OnDestroy()
+        {
+            if (viewModel != null)
+            {
+                viewModel.Health.ChangeEvent -= OnHealthChanged;
+            }
         }
     }
 }
