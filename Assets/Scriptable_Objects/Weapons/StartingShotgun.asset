@@ -18,7 +18,7 @@ MonoBehaviour:
     as other stuff.
   slot: 0
   weaponClass: 1
-  firingType: 1
+  firingType: 0
   icon: {fileID: 0}
   weaponPrefab: {fileID: 1737148184329554707, guid: a9a8aed849c03db4e8722bf54fb9d010, type: 3}
   damage: 5
