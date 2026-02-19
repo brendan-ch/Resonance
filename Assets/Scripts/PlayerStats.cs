@@ -127,6 +127,7 @@ namespace Resonance.Player
             TakeDamage(amount, null);
         }
 
+        [ServerRpc(requireOwnership: false)]
         public void TakeDamage(float amount, GameObject attacker)
         {
             if (IsDead) return;
