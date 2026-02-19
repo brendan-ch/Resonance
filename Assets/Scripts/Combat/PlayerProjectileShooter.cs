@@ -27,6 +27,12 @@ namespace Resonance.Combat
         WeaponProperties lastWeapon;
 
         [SerializeField] private LayerMask hitscanLayerMask;
+        
+        public int CurrentAmmo => currentAmmo;
+        public bool IsReloading => isReloading;
+        
+        public System.Action<int, int> OnAmmoChanged;
+        public System.Action<bool> OnReloadStateChanged;
 
         protected override void OnSpawned()
         {
@@ -127,6 +133,7 @@ namespace Resonance.Combat
                 }
 
                 currentAmmo -= 1;
+                OnAmmoChanged?.Invoke(currentAmmo, weapon.MagazineSize);
 
                 if (debugAmmoLogs)
                 {
@@ -294,6 +301,8 @@ namespace Resonance.Combat
             if (reloadTime <= 0f)
             {
                 currentAmmo = weapon.MagazineSize;
+                OnReloadStateChanged?.Invoke(false);
+                OnAmmoChanged?.Invoke(currentAmmo, weapon.MagazineSize);
 
                 if (debugAmmoLogs)
                 {
@@ -304,6 +313,7 @@ namespace Resonance.Combat
             }
 
             isReloading = true;
+            OnReloadStateChanged?.Invoke(true);
             reloadEndTime = Time.time + reloadTime;
 
             if (debugAmmoLogs)
@@ -328,6 +338,8 @@ namespace Resonance.Combat
             }
 
             currentAmmo = weapon.MagazineSize;
+            OnReloadStateChanged?.Invoke(false);
+            OnAmmoChanged?.Invoke(currentAmmo, weapon.MagazineSize);
 
             if (debugAmmoLogs)
             {
@@ -359,10 +371,13 @@ namespace Resonance.Combat
             if (weapon.MagazineSize > 0)
             {
                 currentAmmo = weapon.MagazineSize;
+                OnReloadStateChanged?.Invoke(false);
+                OnAmmoChanged?.Invoke(currentAmmo, weapon.MagazineSize);
             }
             else
             {
                 currentAmmo = 0;
+                OnAmmoChanged?.Invoke(currentAmmo, weapon.MagazineSize);
             }
 
             if (debugAmmoLogs && weapon.MagazineSize > 0)
@@ -412,6 +427,38 @@ namespace Resonance.Combat
             }
 
             projectile.Initialize(payload, direction);
+        }
+        
+        public int MagazineSize
+        {
+            get
+            {
+                if (playerEquip == null) return 0;
+                if (playerEquip.EquippedWeapon == null) return 0;
+                return playerEquip.EquippedWeapon.MagazineSize;
+            }
+        }
+    
+        public float ReloadProgress01
+        {
+            get
+            {
+                if (!isReloading) return 0f;
+
+                float reloadDuration = playerEquip.EquippedWeapon.ReloadTime;
+                float timeRemaining = reloadEndTime - Time.time;
+                return Mathf.Clamp01(1f - (timeRemaining / reloadDuration));
+            }
+        }
+        
+        public float ReloadDuration
+        {
+            get
+            {
+                if (playerEquip == null) return 0f;
+                if (playerEquip.EquippedWeapon == null) return 0f;
+                return playerEquip.EquippedWeapon.ReloadTime;
+            }
         }
     }
 }
