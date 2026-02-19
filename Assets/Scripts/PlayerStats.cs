@@ -25,7 +25,7 @@ namespace Resonance.Player
 
         [SerializeField] private bool respawnOnDeath = true;
 
-        public HealthBar healthBar;
+        private HealthBar healthBar;
         #endregion
 
         #region Properties
@@ -59,6 +59,7 @@ namespace Resonance.Player
         #region Damage Tracking
         private GameObject lastAttacker;
         private float lastDamageTime;
+        private float lastHealth;
         #endregion
 
         #region Startup
@@ -66,18 +67,30 @@ namespace Resonance.Player
         protected override void OnSpawned()
         {
             base.OnSpawned();
-            enabled = isOwner;
-            CurrentHealth.value = maxHealth;
+            // enabled = isOwner;
+            if (isServer)
+            {
+                CurrentHealth.value = maxHealth;
+            }
+            
+            lastHealth = CurrentHealth.value;
+
+            if (isOwner)
+            {
+                healthBar = FindObjectOfType<HealthBar>();
+                Debug.Log("HealthBar Found: " + (healthBar != null));
+                
+                if (healthBar != null)
+                {
+                    healthBar.SetSliderMax(maxHealth);
+                    healthBar.SetSlider(CurrentHealth.value);
+                }
+            }
 
             // Register with match stat tracker
             if (MatchStatBridge.Instance != null)
             {
                 MatchLogicNetworkAdapter.Instance.MatchStats.RegisterPlayer(gameObject);
-            }
-
-            if (healthBar != null)
-            {
-                healthBar.SetSliderMax(maxHealth);
             }
 
             //Stats
@@ -117,9 +130,23 @@ namespace Resonance.Player
 
         private void Update()
         {
-            if (currentHealthRegen > 0)
+            // Regen only on server
+            if (isServer && currentHealthRegen > 0)
             {
                 Heal(currentHealthRegen * Time.deltaTime);
+            }
+            
+            if (!isOwner) return;
+
+            // Detect health change
+            if (Mathf.Abs(CurrentHealth.value - lastHealth) > 0.01f)
+            {
+                if (healthBar != null)
+                {
+                    healthBar.SetSlider(CurrentHealth.value);
+                }
+
+                lastHealth = CurrentHealth.value;
             }
         }
         public void TakeDamage(float amount)
