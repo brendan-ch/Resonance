@@ -227,7 +227,7 @@ namespace Resonance.Player
 
             OnPlayerDeath?.Invoke();
 
-            if (shouldRespawn)
+            if (isServer && shouldRespawn)
             {
                 StartCoroutine(RespawnCoroutine());
             }
@@ -238,7 +238,7 @@ namespace Resonance.Player
             float respawnDelay = Resonance.Player.Respawn.Instance != null ?
                                  Resonance.Player.Respawn.Instance.RespawnDelay : 3f;
 
-            Debug.Log($"[PlayerStats] {gameObject.name} respawning in {respawnDelay}s");
+            Debug.Log($"[PlayerStats] {owner} respawning in {respawnDelay}s");
             yield return new WaitForSeconds(respawnDelay);
 
             if (isServer)
