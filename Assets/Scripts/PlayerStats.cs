@@ -293,7 +293,7 @@ namespace Resonance.Player
 
             if (_playerController != null)
             {
-                _playerController.enabled = true;
+                _playerController.enabled = isOwner;
             }
 
             if (_animator != null)
