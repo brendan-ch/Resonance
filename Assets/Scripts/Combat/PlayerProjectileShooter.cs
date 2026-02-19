@@ -28,11 +28,10 @@ namespace Resonance.Combat
 
         [SerializeField] private LayerMask hitscanLayerMask;
         
+        private PlayerViewModel viewModel;
+        
         public int CurrentAmmo => currentAmmo;
         public bool IsReloading => isReloading;
-        
-        public System.Action<int, int> OnAmmoChanged;
-        public System.Action<bool> OnReloadStateChanged;
 
         protected override void OnSpawned()
         {
@@ -62,6 +61,8 @@ namespace Resonance.Combat
 
         private void Awake()
         {
+            viewModel = GetComponent<PlayerViewModel>();
+
             if (playerCamera == null)
             {
                 playerCamera = Camera.main;
@@ -73,6 +74,7 @@ namespace Resonance.Combat
         void Start()
         {
             RefreshAmmoFromEquippedWeapon(force: true);
+            viewModel.InitializeAmmo(MagazineSize);
         }
 
         void Update()
@@ -133,7 +135,7 @@ namespace Resonance.Combat
                 }
 
                 currentAmmo -= 1;
-                OnAmmoChanged?.Invoke(currentAmmo, weapon.MagazineSize);
+                viewModel.SetAmmo(currentAmmo, MagazineSize);
 
                 if (debugAmmoLogs)
                 {
@@ -257,16 +259,21 @@ namespace Resonance.Combat
         void TickReload()
         {
             if (!isReloading)
-            {
                 return;
+
+            float reloadDuration = playerEquip.EquippedWeapon.ReloadTime;
+            float timeRemaining = reloadEndTime - Time.time;
+
+            if (reloadDuration > 0f)
+            {
+                float progress = 1f - (timeRemaining / reloadDuration);
+                viewModel.SetReloadProgress(Mathf.Clamp01(progress));
             }
 
-            if (Time.time < reloadEndTime)
+            if (Time.time >= reloadEndTime)
             {
-                return;
+                FinishReload();
             }
-
-            FinishReload();
         }
 
         void TryStartReload()
@@ -301,9 +308,11 @@ namespace Resonance.Combat
             if (reloadTime <= 0f)
             {
                 currentAmmo = weapon.MagazineSize;
-                OnReloadStateChanged?.Invoke(false);
-                OnAmmoChanged?.Invoke(currentAmmo, weapon.MagazineSize);
 
+                viewModel.SetReloadState(false);
+                viewModel.SetReloadProgress(1f);
+                viewModel.SetAmmo(currentAmmo, MagazineSize);
+                
                 if (debugAmmoLogs)
                 {
                     Debug.Log($"[Shooter] Reload complete (instant). Ammo: {currentAmmo}/{weapon.MagazineSize}", this);
@@ -313,8 +322,10 @@ namespace Resonance.Combat
             }
 
             isReloading = true;
-            OnReloadStateChanged?.Invoke(true);
             reloadEndTime = Time.time + reloadTime;
+
+            viewModel.SetReloadState(true);
+            viewModel.SetReloadProgress(0f);
 
             if (debugAmmoLogs)
             {
@@ -338,9 +349,11 @@ namespace Resonance.Combat
             }
 
             currentAmmo = weapon.MagazineSize;
-            OnReloadStateChanged?.Invoke(false);
-            OnAmmoChanged?.Invoke(currentAmmo, weapon.MagazineSize);
 
+            viewModel.SetReloadState(false);
+            viewModel.SetReloadProgress(1f);
+            viewModel.SetAmmo(currentAmmo, MagazineSize);
+            
             if (debugAmmoLogs)
             {
                 Debug.Log($"[Shooter] Reload complete. Ammo: {currentAmmo}/{weapon.MagazineSize}", this);
@@ -368,17 +381,19 @@ namespace Resonance.Combat
             lastWeapon = weapon;
             isReloading = false;
 
+            viewModel.SetReloadState(false);
+            viewModel.SetReloadProgress(0f);
+
             if (weapon.MagazineSize > 0)
             {
                 currentAmmo = weapon.MagazineSize;
-                OnReloadStateChanged?.Invoke(false);
-                OnAmmoChanged?.Invoke(currentAmmo, weapon.MagazineSize);
             }
             else
             {
                 currentAmmo = 0;
-                OnAmmoChanged?.Invoke(currentAmmo, weapon.MagazineSize);
             }
+
+            viewModel.SetAmmo(currentAmmo, MagazineSize);
 
             if (debugAmmoLogs && weapon.MagazineSize > 0)
             {

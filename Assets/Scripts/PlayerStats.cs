@@ -88,7 +88,7 @@ namespace Resonance.Player
                         playerViewModel = gameObject.AddComponent<PlayerViewModel>();
                     }
 
-                    playerViewModel.Initialize(maxHealth);
+                    playerViewModel.InitializeHealth(maxHealth);
 
                     healthBar.Bind(playerViewModel);
                 }

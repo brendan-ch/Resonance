@@ -1,64 +1,53 @@
-using Resonance.Combat;
 using UnityEngine;
 using TMPro;
 
 public class AmmoUI : MonoBehaviour
 {
-    private PlayerProjectileShooter shooter;
-    
-    private Coroutine reloadRoutine;
-    private Coroutine flashRoutine;
+    private PlayerViewModel viewModel;
 
     [SerializeField] private TextMeshProUGUI ammoText;
 
     [Header("Colors")]
     [SerializeField] private Color normalColor = Color.white;
-    [SerializeField] private Color halfColor = new Color(1f, 0.6f, 0f); // orange
+    [SerializeField] private Color halfColor = new Color(1f, 0.6f, 0f);
     [SerializeField] private Color lowColor = Color.red;
-    
+
+    private Coroutine flashRoutine;
+
     private void Start()
     {
-        StartCoroutine(WaitForPlayer());
+        StartCoroutine(WaitForViewModel());
     }
 
-    private System.Collections.IEnumerator WaitForPlayer()
+    private System.Collections.IEnumerator WaitForViewModel()
     {
-        while (shooter == null)
+        while (viewModel == null)
         {
-            shooter = FindObjectOfType<PlayerProjectileShooter>();
+            viewModel = FindObjectOfType<PlayerViewModel>();
             yield return null;
         }
 
-        shooter.OnAmmoChanged += UpdateAmmo;
-        shooter.OnReloadStateChanged += HandleReloadState;
-
-        UpdateAmmo(shooter.CurrentAmmo, shooter.MagazineSize);
-    }
-    
-    private void OnEnable()
-    {
-        if (shooter == null)
-        {
-            Debug.LogError("AmmoUI: Shooter reference missing.", this);
-            return;
-        }
-
-        shooter.OnAmmoChanged += UpdateAmmo;
-        shooter.OnReloadStateChanged += HandleReloadState;
-
-        UpdateAmmo(shooter.CurrentAmmo, shooter.MagazineSize);
+        viewModel.CurrentAmmo.ChangeEvent += OnAmmoChanged;
+        viewModel.MagazineSize.ChangeEvent += OnAmmoChanged;
+        viewModel.IsReloading.ChangeEvent += OnReloadStateChanged;
+        viewModel.ReloadProgress.ChangeEvent += OnReloadProgressChanged;
     }
 
     private void OnDisable()
     {
-        if (shooter == null) return;
+        if (viewModel == null) return;
 
-        shooter.OnAmmoChanged -= UpdateAmmo;
-        shooter.OnReloadStateChanged -= HandleReloadState;
+        viewModel.CurrentAmmo.ChangeEvent -= OnAmmoChanged;
+        viewModel.MagazineSize.ChangeEvent -= OnAmmoChanged;
+        viewModel.IsReloading.ChangeEvent -= OnReloadStateChanged;
+        viewModel.ReloadProgress.ChangeEvent -= OnReloadProgressChanged;
     }
-    
-    void UpdateAmmo(int current, int max)
+
+    void OnAmmoChanged(int _)
     {
+        int current = viewModel.CurrentAmmo.Value;
+        int max = viewModel.MagazineSize.Value;
+
         ammoText.text = $"{current}/{max}";
 
         if (max == 0) return;
@@ -83,61 +72,30 @@ public class AmmoUI : MonoBehaviour
 
             ammoText.color = percent <= 0.5f ? halfColor : normalColor;
         }
-
     }
 
-    void HandleReloadState(bool isReloading)
+    void OnReloadStateChanged(bool isReloading)
     {
-        if (isReloading)
-        {
-            if (reloadRoutine != null)
-                StopCoroutine(reloadRoutine);
-
-            reloadRoutine = StartCoroutine(ReloadAnimation());
-        }
-        else
-        {
-            if (reloadRoutine != null)
-            {
-                StopCoroutine(reloadRoutine);
-                reloadRoutine = null;
-            }
-        }
+        if (!isReloading)
+            ammoText.color = normalColor;
     }
-    
-    System.Collections.IEnumerator ReloadAnimation()
+
+    void OnReloadProgressChanged(float progress)
     {
-        int startAmmo = shooter.CurrentAmmo;
-        int maxAmmo = shooter.MagazineSize;
+        if (!viewModel.IsReloading.Value) return;
 
-        float reloadTime = shooter.ReloadDuration;
-        
-        if (reloadTime <= 0f)
-        {
-            ammoText.text = $"{maxAmmo}/{maxAmmo}";
-            yield break;
-        }
-        
-        float elapsed = 0f;
+        int max = viewModel.MagazineSize.Value;
+        int startAmmo = viewModel.CurrentAmmo.Value;
 
-        while (elapsed < reloadTime)
-        {
-            elapsed += Time.deltaTime;
-            
-            float t = elapsed / reloadTime;
-
-            int displayedAmmo = Mathf.RoundToInt(Mathf.Lerp(startAmmo, maxAmmo, t));
-            ammoText.text = $"{displayedAmmo}/{maxAmmo}";
-            ammoText.color = Color.grey;
-
-            yield return null;
-        }
+        int displayedAmmo = Mathf.RoundToInt(Mathf.Lerp(startAmmo, max, progress));
+        ammoText.text = $"{displayedAmmo}/{max}";
+        ammoText.color = Color.grey;
     }
-    
+
     System.Collections.IEnumerator FlashText()
     {
-        while (shooter.CurrentAmmo > 0 &&
-               (float)shooter.CurrentAmmo / shooter.MagazineSize <= 0.1f)
+        while (viewModel.CurrentAmmo.Value > 0 &&
+               (float)viewModel.CurrentAmmo.Value / viewModel.MagazineSize.Value <= 0.1f)
         {
             ammoText.enabled = !ammoText.enabled;
             yield return new WaitForSeconds(0.2f);
@@ -146,5 +104,4 @@ public class AmmoUI : MonoBehaviour
         ammoText.enabled = true;
         flashRoutine = null;
     }
-
 }
