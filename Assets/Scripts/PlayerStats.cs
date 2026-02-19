@@ -178,6 +178,28 @@ namespace Resonance.Player
 
             IsDead = true;
 
+            Debug.Log($"[PlayerStats] {owner} died!");
+
+            // Record kill/death in match stats (server-only, runs once here)
+            if (MatchStatBridge.Instance != null)
+            {
+                if (killer != null && killer != gameObject)
+                {
+                    MatchStatBridge.Instance.RecordKill(killer, gameObject);
+                }
+                else
+                {
+                    // Suicide or environmental death
+                    MatchStatBridge.Instance.RecordDeath(gameObject);
+                }
+            }
+
+            ApplyDeathEffectsRpc(respawnOnDeath);
+        }
+
+        [ObserversRpc]
+        private void ApplyDeathEffectsRpc(bool shouldRespawn)
+        {
             if (_playerController != null)
             {
                 _playerController.IsPlayerDead = true;
@@ -203,25 +225,9 @@ namespace Resonance.Player
                 _animator.enabled = false;
             }
 
-            Debug.Log($"[PlayerStats] {owner} died!");
-
-            // Record kill/death in match stats
-            if (MatchStatBridge.Instance != null)
-            {
-                if (killer != null && killer != gameObject)
-                {
-                    MatchStatBridge.Instance.RecordKill(killer, gameObject);
-                }
-                else
-                {
-                    // Suicide or environmental death
-                    MatchStatBridge.Instance.RecordDeath(gameObject);
-                }
-            }
-
             OnPlayerDeath?.Invoke();
 
-            if (respawnOnDeath)
+            if (shouldRespawn)
             {
                 StartCoroutine(RespawnCoroutine());
             }
@@ -234,15 +240,23 @@ namespace Resonance.Player
 
             Debug.Log($"[PlayerStats] {gameObject.name} respawning in {respawnDelay}s");
             yield return new WaitForSeconds(respawnDelay);
-            Respawn();
+
+            if (isServer)
+            {
+                ApplyRespawnEffectsRpc();
+            }
         }
 
         public void Respawn()
         {
-            StartCoroutine(RespawnSequence());
+            if (isServer)
+            {
+                ApplyRespawnEffectsRpc();
+            }
         }
 
-        private IEnumerator RespawnSequence()
+        [ObserversRpc]
+        private void ApplyRespawnEffectsRpc()
         {
             IsDead = false;
 
@@ -287,6 +301,16 @@ namespace Resonance.Player
                 _animator.enabled = true;
             }
 
+            if (isServer)
+            {
+                CurrentHealth.value = maxHealth;
+            }
+
+            StartCoroutine(FinishRespawn());
+        }
+
+        private IEnumerator FinishRespawn()
+        {
             yield return null;
 
             if (_playerController != null)
@@ -294,9 +318,7 @@ namespace Resonance.Player
                 _playerController.IsPlayerDead = false;
             }
 
-            CurrentHealth.value = maxHealth;
-
-            Debug.Log($"[PlayerStats] {gameObject.name} respawned!");
+            Debug.Log($"[PlayerStats] {owner} respawned!");
 
             OnPlayerRespawn?.Invoke();
         }
