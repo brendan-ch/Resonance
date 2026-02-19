@@ -1,3 +1,4 @@
+using PurrNet;
 using Resonance.Combat.Weapons;
 using Resonance.Combat.Weapons.Enums;
 using Resonance.Helper;
@@ -6,7 +7,8 @@ using UnityEngine;
 
 namespace Resonance.Combat
 {
-    public class PlayerProjectileShooter : MonoBehaviour
+    [RequireComponent(typeof(PlayerActionsInput))]
+    public class PlayerProjectileShooter : NetworkBehaviour
     {
         [Header("References")]
         [SerializeField] PlayerEquip playerEquip;
@@ -26,13 +28,39 @@ namespace Resonance.Combat
 
         [SerializeField] private LayerMask hitscanLayerMask;
 
-        void Awake()
+        protected override void OnSpawned()
+        {
+            base.OnSpawned();
+            enabled = isOwner;
+
+            var behaviour = GetComponent<NetworkBehaviour>();
+            GiveOwnership(behaviour.owner);
+
+            if (isOwner)
+            {
+                PlayerInputManager.Instance.PlayerControls.PlayerActionMap.Enable();
+                PlayerInputManager.Instance.PlayerControls.PlayerActionMap.SetCallbacks(playerActionsInput);
+            }
+        }
+
+        protected override void OnDespawned()
+        {
+            base.OnDespawned();
+
+            if (isOwner)
+            {
+                PlayerInputManager.Instance.PlayerControls.PlayerActionMap.Disable();
+                PlayerInputManager.Instance.PlayerControls.PlayerActionMap.RemoveCallbacks(playerActionsInput);
+            }
+        }
+
+        private void Awake()
         {
             if (playerCamera == null)
             {
                 playerCamera = Camera.main;
             }
-            
+
             hitscanLayerMask = (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Environment"));
         }
 
@@ -56,13 +84,13 @@ namespace Resonance.Combat
                 TryStartReload();
                 playerActionsInput.SetReloadPressedFalse();
             }
-            
+
             if (playerActionsInput.AttackPressed)
             {
                 TryShoot();
                 playerActionsInput.SetAttackPressedFalse();
             }
-            
+
             if (playerActionsInput.AttackHeld)
             {
                 TryShoot();
@@ -113,7 +141,7 @@ namespace Resonance.Combat
             if (count < 1) count = 1;
 
             WeaponPayload payload = BuildBasePayload(weapon);
-            
+
             if (weapon.FiringType == WeaponFiringType.Hitscan)
             {
                 FireHitscan(weapon, view, payload, baseDirection, count);
@@ -126,6 +154,7 @@ namespace Resonance.Combat
 
         private WeaponPayload BuildBasePayload(WeaponProperties weapon)
         {
+            Debug.Log($"[PlayerProjectileShooter] Constructing base payload with owner {gameObject.GetComponent<NetworkBehaviour>().owner}");
             WeaponPayload payload = new WeaponPayload();
             payload.Shooter = gameObject;
             payload.Damage = weapon.Damage;
@@ -169,7 +198,7 @@ namespace Resonance.Combat
                     float distance = hit.distance;
 
                     float finalDamage = ComputeDamageWithFalloff(payload.Damage, distance, weapon);
-                    
+
                     if (hit.collider.TryGetComponent<IDamageable>(out var damageable) ||
                         hit.collider.GetComponentInParent<IDamageable>() != null)
                     {
@@ -209,11 +238,11 @@ namespace Resonance.Combat
 
         private float ComputeDamageWithFalloff(float payloadDamage, float distance, WeaponProperties weapon)
         {
-            if (distance > (weapon.Range/2))
+            if (distance > (weapon.Range / 2))
             {
-                return (payloadDamage/2);
-            } 
-            
+                return (payloadDamage / 2);
+            }
+
             return payloadDamage;
         }
 
