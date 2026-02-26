@@ -2039,6 +2039,7 @@ GameObject:
   - component: {fileID: 7304100629892152196}
   - component: {fileID: 8505458450555133255}
   - component: {fileID: 884933758777301057}
+  - component: {fileID: 2586775687131189364}
   m_Layer: 6
   m_Name: FirstPersonController
   m_TagString: Player
@@ -2620,6 +2621,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56327ccb6bff56942bc369710b03ec1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerViewModel
+--- !u!114 &2586775687131189364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19a917e9c7c544d59a5c1b09bc598baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.PlayerMeshRenderer
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  renderers:
+  - {fileID: 5469293229860543344}
+  - {fileID: 1961295532528376932}
 --- !u!1 &6886534224098021164
 GameObject:
   m_ObjectHideFlags: 0
