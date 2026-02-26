@@ -369,15 +369,6 @@ namespace Resonance.PlayerController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Interact"",
-                    ""type"": ""Button"",
-                    ""id"": ""54707955-d7d7-437b-8aa3-c2a9dab91794"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -424,17 +415,6 @@ namespace Resonance.PlayerController
                     ""action"": ""Overdrive"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""da70440f-855c-4bce-a890-36ea41631434"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -454,7 +434,6 @@ namespace Resonance.PlayerController
             m_PlayerActionMap_Reload = m_PlayerActionMap.FindAction("Reload", throwIfNotFound: true);
             m_PlayerActionMap_Escape = m_PlayerActionMap.FindAction("Escape", throwIfNotFound: true);
             m_PlayerActionMap_Overdrive = m_PlayerActionMap.FindAction("Overdrive", throwIfNotFound: true);
-            m_PlayerActionMap_Interact = m_PlayerActionMap.FindAction("Interact", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -680,7 +659,6 @@ namespace Resonance.PlayerController
         private readonly InputAction m_PlayerActionMap_Reload;
         private readonly InputAction m_PlayerActionMap_Escape;
         private readonly InputAction m_PlayerActionMap_Overdrive;
-        private readonly InputAction m_PlayerActionMap_Interact;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerActionMap".
         /// </summary>
@@ -708,10 +686,6 @@ namespace Resonance.PlayerController
             /// Provides access to the underlying input action "PlayerActionMap/Overdrive".
             /// </summary>
             public InputAction @Overdrive => m_Wrapper.m_PlayerActionMap_Overdrive;
-            /// <summary>
-            /// Provides access to the underlying input action "PlayerActionMap/Interact".
-            /// </summary>
-            public InputAction @Interact => m_Wrapper.m_PlayerActionMap_Interact;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -750,9 +724,6 @@ namespace Resonance.PlayerController
                 @Overdrive.started += instance.OnOverdrive;
                 @Overdrive.performed += instance.OnOverdrive;
                 @Overdrive.canceled += instance.OnOverdrive;
-                @Interact.started += instance.OnInteract;
-                @Interact.performed += instance.OnInteract;
-                @Interact.canceled += instance.OnInteract;
             }
 
             /// <summary>
@@ -776,9 +747,6 @@ namespace Resonance.PlayerController
                 @Overdrive.started -= instance.OnOverdrive;
                 @Overdrive.performed -= instance.OnOverdrive;
                 @Overdrive.canceled -= instance.OnOverdrive;
-                @Interact.started -= instance.OnInteract;
-                @Interact.performed -= instance.OnInteract;
-                @Interact.canceled -= instance.OnInteract;
             }
 
             /// <summary>
@@ -890,13 +858,6 @@ namespace Resonance.PlayerController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnOverdrive(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnInteract(InputAction.CallbackContext context);
         }
     }
 }
