@@ -9,6 +9,7 @@ namespace Resonance.PlayerController
         #region Class Variables
         public bool AttackPressed  { get; private set; }
         public bool ReloadPressed { get; private set; }
+        public bool InteractPressed { get; private set; }
         
         private PlayerLocomotionInput _playerLocomotionInput;
         private OverdriveAbility _overdriveAbility;
@@ -69,6 +70,11 @@ namespace Resonance.PlayerController
         {
             ReloadPressed = false;
         }
+        
+        public void SetInteractPressedFalse()
+        {
+            InteractPressed = false;
+        }
         #endregion
         
         #region Input Callbacks
@@ -86,6 +92,14 @@ namespace Resonance.PlayerController
                 return;
 
             ReloadPressed = true;
+        }
+        
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            if (!context.performed || _playerState.IsDead())
+                return;
+
+            InteractPressed = true;
         }
 
         public void OnOverdrive(InputAction.CallbackContext context)
