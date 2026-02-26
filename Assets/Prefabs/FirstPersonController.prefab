@@ -2645,6 +2645,11 @@ MonoBehaviour:
   renderers:
   - {fileID: 5469293229860543344}
   - {fileID: 1961295532528376932}
+  skinCatalog: {fileID: 11400000, guid: 8ae0f4c6a27d046fca8c89e7e0b26426, type: 2}
+  skinIndex:
+    _value: 0
+    _ownerAuth: 0
+    _sendIntervalInSeconds: 0
 --- !u!1 &6886534224098021164
 GameObject:
   m_ObjectHideFlags: 0
