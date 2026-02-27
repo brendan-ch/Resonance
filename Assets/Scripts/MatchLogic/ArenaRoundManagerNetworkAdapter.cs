@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using PurrNet;
 using Resonance.Assemblies.Arena;
 using Resonance.Assemblies.MatchStat;
@@ -270,17 +269,10 @@ namespace Resonance.Match
             return arenaRoundManager?.HighestEliminations ?? 0;
         }
 
+        [ServerRpc]
         public async Task<List<PlayerRanking>> GetLeaderboard()
         {
-            var leaderboardJson = await GetLeaderboard_Server();
-            return JsonConvert.DeserializeObject<List<PlayerRanking>>(leaderboardJson);
-        }
-
-        [ServerRpc]
-        private async Task<string> GetLeaderboard_Server()
-        {
-            var leaderboard = arenaRoundManager?.GetLeaderboard() ?? new List<PlayerRanking>();
-            return JsonConvert.SerializeObject(leaderboard);
+            return arenaRoundManager?.GetLeaderboard() ?? new List<PlayerRanking>();
         }
 
         [ServerRpc]

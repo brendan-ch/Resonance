@@ -8,7 +8,7 @@ using Resonance.NetworkDespawner;
 
 namespace Resonance.UI
 {
-    public class MatchUIManager : MonoBehaviour
+    public class MatchUIManager : NetworkBehaviour
     {
         [Header("HUD Elements")]
         [SerializeField] private TextMeshProUGUI kdaText;
@@ -19,6 +19,7 @@ namespace Resonance.UI
         [SerializeField] private GameObject matchEndPanel;
         [SerializeField] private TextMeshProUGUI winnerText;
         [SerializeField] private TextMeshProUGUI finalStatsText;
+        [SerializeField] private TextMeshProUGUI waitingForHostText;
         [SerializeField] private Button playAgainButton;
         [SerializeField] private Button returnToLobbyButton;
         [SerializeField] private NetworkDespawnerSceneLoader despawnerSceneLoader;
@@ -192,6 +193,26 @@ namespace Resonance.UI
                 if (stats != null && finalStatsText != null)
                 {
                     finalStatsText.text = $"Final Score: {stats?.kills} Kills";
+                }
+            }
+
+            if (waitingForHostText != null)
+            {
+                if (isServer)
+                {
+                    waitingForHostText.text = "";
+                }
+                else
+                {
+                    waitingForHostText.text = "Waiting for host...";
+                }
+            }
+
+            if (returnToLobbyButton != null)
+            {
+                if (!isServer)
+                {
+                    returnToLobbyButton.gameObject.SetActive(false);
                 }
             }
         }
