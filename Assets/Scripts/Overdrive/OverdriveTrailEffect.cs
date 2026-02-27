@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using PurrNet;
 using UnityEngine;
 
 namespace Resonance.PlayerController
 {
-    public class OverdriveTrailEffect : MonoBehaviour
+    public class OverdriveTrailEffect : NetworkBehaviour
     {
         #region Class Variables
         [Header("References")]
@@ -119,6 +120,7 @@ namespace Resonance.PlayerController
         #endregion
 
         #region Ghost Management
+        [ObserversRpc]
         private void SpawnGhost()
         {
             GhostInstance ghost = GetGhostFromPool();
