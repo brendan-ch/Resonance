@@ -1,9 +1,10 @@
 using Resonance.Assemblies.SharedGameLogic;
 
-namespace Resonance.Assemblies.Arena
+namespace Resonance.Assemblies.Polarity
 {
-    public enum ArenaMatchState
+    public enum PolarityMatchState
     {
+        // add additional possible match states specific to Polarity later
         Waiting = BaseMatchState.Waiting,
         Countdown = BaseMatchState.Countdown,
         MatchActive = BaseMatchState.MatchActive,
