@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 namespace Resonance.PlayerController
 {
-    public class PlayerMeshRenderer : NetworkBehaviour
+    public class PlayerSkinRenderer : NetworkBehaviour
     {
         [SerializeField] private List<SkinnedMeshRenderer> renderers = new();
         [SerializeField] private SkinCatalog skinCatalog;
