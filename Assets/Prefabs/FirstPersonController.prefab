@@ -2651,10 +2651,8 @@ MonoBehaviour:
   _directChildren: []
   _networkRules: {fileID: 0}
   _visitiblityRules: {fileID: 0}
-  renderers:
-  - {fileID: 5469293229860543344}
-  - {fileID: 1961295532528376932}
   skinCatalog: {fileID: 11400000, guid: 8ae0f4c6a27d046fca8c89e7e0b26426, type: 2}
+  animator: {fileID: 186030322157751487}
   skinIndex:
     _value: 0
     _ownerAuth: 0
@@ -2675,7 +2673,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2565091282769753070
 Transform:
   m_ObjectHideFlags: 0

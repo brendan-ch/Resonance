@@ -10,13 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9f1998742cb84d5eb17318adbbb40ce, type: 3}
-  m_Name: Default
+  m_Name: Adidas
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.SkinData
-  skinName: Default
-  slots:
-  - mesh: {fileID: 4777371684598551356, guid: d6feed7c5390d524a903d6adc14054d2, type: 3}
-    materials:
-    - {fileID: -4565884009001823619, guid: d6feed7c5390d524a903d6adc14054d2, type: 3}
-  - mesh: {fileID: -1525253381413818895, guid: d6feed7c5390d524a903d6adc14054d2, type: 3}
-    materials:
-    - {fileID: -840037777384891287, guid: d6feed7c5390d524a903d6adc14054d2, type: 3}
+  skinName: Adidas
+  meshPrefab: {fileID: 132596493798814269, guid: 6d745e02db873456a9187061b84a1ccb, type: 3}

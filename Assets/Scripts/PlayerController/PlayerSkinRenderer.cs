@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using PurrNet;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -7,12 +6,14 @@ namespace Resonance.PlayerController
 {
     public class PlayerSkinRenderer : NetworkBehaviour
     {
-        [SerializeField] private List<SkinnedMeshRenderer> renderers = new();
         [SerializeField] private SkinCatalog skinCatalog;
+        [SerializeField] private Animator animator;
 
         public SyncVar<int> skinIndex = new SyncVar<int>();
 
         [SerializeField] private int testSkinIndexToRequest = 0;
+
+        private GameObject currentMeshInstance;
 
         protected override void OnSpawned()
         {
@@ -37,44 +38,34 @@ namespace Resonance.PlayerController
         private void ApplySkin(int index)
         {
             if (skinCatalog == null || skinCatalog.Count == 0)
-            {
-                ShowShadowsOnlyIfOwner();
                 return;
-            }
 
             var skinData = skinCatalog.Get(index);
-            if (skinData == null)
-            {
-                ShowShadowsOnlyIfOwner();
+            if (skinData == null || skinData.meshPrefab == null)
                 return;
-            }
 
-            for (int i = 0; i < renderers.Count && i < skinData.slots.Count; i++)
+            if (currentMeshInstance != null)
             {
-                var slot = skinData.slots[i];
-
-                if (slot.mesh != null)
-                {
-                    renderers[i].sharedMesh = slot.mesh;
-                }
-
-                if (slot.materials != null && slot.materials.Length > 0)
-                {
-                    renderers[i].sharedMaterials = slot.materials;
-                }
+                Destroy(currentMeshInstance);
             }
+
+            currentMeshInstance = Instantiate(skinData.meshPrefab, transform);
+
+            animator.Rebind();
 
             ShowShadowsOnlyIfOwner();
         }
 
         private void ShowShadowsOnlyIfOwner()
         {
-            if (isOwner)
+            if (!isOwner)
             {
-                foreach (var renderer in renderers)
-                {
-                    renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-                }
+                return;
+            }
+
+            foreach (var renderer in currentMeshInstance.GetComponentsInChildren<Renderer>())
+            {
+                renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
             }
         }
 

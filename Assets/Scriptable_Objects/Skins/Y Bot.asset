@@ -10,13 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9f1998742cb84d5eb17318adbbb40ce, type: 3}
-  m_Name: Custom
+  m_Name: Y Bot
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.SkinData
-  skinName: Custom
-  slots:
-  - mesh: {fileID: 4777371684598551356, guid: d6feed7c5390d524a903d6adc14054d2, type: 3}
-    materials:
-    - {fileID: 2100000, guid: ba6a88886a2b7fb4ebb718ff2ada080e, type: 2}
-  - mesh: {fileID: -1525253381413818895, guid: d6feed7c5390d524a903d6adc14054d2, type: 3}
-    materials:
-    - {fileID: 2100000, guid: f8b0bddf654b6214a89cd151db9be1d5, type: 2}
+  skinName: Y Bot
+  meshPrefab: {fileID: 7564018027673088218, guid: 74413a5886e9e4ff5a5d118df15d305c, type: 3}
