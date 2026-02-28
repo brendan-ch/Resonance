@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.SkinData
   skinName: Adidas
   meshPrefab: {fileID: 132596493798814269, guid: 6d745e02db873456a9187061b84a1ccb, type: 3}
+  avatar: {fileID: 9000000, guid: 3d1a4c18f8f56418791267507e284a67, type: 3}

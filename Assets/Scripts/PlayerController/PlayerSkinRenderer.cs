@@ -51,6 +51,11 @@ namespace Resonance.PlayerController
 
             currentMeshInstance = Instantiate(skinData.meshPrefab, transform);
 
+            if (skinData.avatar != null)
+            {
+                animator.avatar = skinData.avatar;
+            }
+
             animator.Rebind();
 
             ShowShadowsOnlyIfOwner();
