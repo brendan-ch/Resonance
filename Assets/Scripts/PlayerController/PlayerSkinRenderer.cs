@@ -38,11 +38,15 @@ namespace Resonance.PlayerController
         private void ApplySkin(int index)
         {
             if (skinCatalog == null || skinCatalog.Count == 0)
+            {
                 return;
+            }
 
             var skinData = skinCatalog.Get(index);
             if (skinData == null || skinData.meshPrefab == null)
+            {
                 return;
+            }
 
             if (currentMeshInstance != null)
             {
@@ -50,6 +54,8 @@ namespace Resonance.PlayerController
             }
 
             currentMeshInstance = Instantiate(skinData.meshPrefab, transform);
+            var innerAnimator = currentMeshInstance.GetComponent<Animator>();
+            Destroy(innerAnimator);
 
             if (skinData.avatar != null)
             {
