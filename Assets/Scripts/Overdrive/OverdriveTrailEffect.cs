@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using PurrNet;
 using UnityEngine;
 
@@ -7,9 +8,6 @@ namespace Resonance.PlayerController
     public class OverdriveTrailEffect : NetworkBehaviour
     {
         #region Class Variables
-        [Header("References")]
-        [SerializeField] private SkinnedMeshRenderer[] _meshesToCopy;
-        
         [Header("Trail Settings")]
         [SerializeField] private Material _overdriveTrailMaterial;
         [SerializeField] private float spawnInterval = 0.1f;
@@ -20,6 +18,8 @@ namespace Resonance.PlayerController
         [SerializeField] private Gradient colorGradient;
         [SerializeField] private bool useGradientOverLifetime = true;
         
+        private SkinnedMeshRenderer[] _meshesToCopy;
+        private PlayerSkinRenderer _playerSkinRenderer;
         private OverdriveAbility _overdriveAbility;
         private float _spawnTimer = 0f;
         private Queue<GhostInstance> _ghostPool = new Queue<GhostInstance>();
@@ -51,6 +51,9 @@ namespace Resonance.PlayerController
                 
                 colorGradient.SetKeys(colorKeys, alphaKeys);
             }
+
+            _playerSkinRenderer = GetComponent<PlayerSkinRenderer>();
+            _playerSkinRenderer.OnNewSkinSpawned += UpdateMeshesToRender;
         }
 
         private void Start()
@@ -120,6 +123,12 @@ namespace Resonance.PlayerController
         #endregion
 
         #region Ghost Management
+        public void UpdateMeshesToRender(GameObject root)
+        {
+            _meshesToCopy = root.GetComponentsInChildren<SkinnedMeshRenderer>();
+            Debug.Log("[OverdriveTrailEffect] Updating trail effect based on new skin");
+        }
+
         [ObserversRpc]
         private void SpawnGhost()
         {

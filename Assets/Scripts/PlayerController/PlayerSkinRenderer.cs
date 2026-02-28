@@ -1,3 +1,4 @@
+using System;
 using PurrNet;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -8,6 +9,7 @@ namespace Resonance.PlayerController
     {
         [SerializeField] private SkinCatalog skinCatalog;
         [SerializeField] private Animator animator;
+        public Action<GameObject> OnNewSkinSpawned;
 
         public SyncVar<int> skinIndex = new SyncVar<int>();
 
@@ -64,6 +66,7 @@ namespace Resonance.PlayerController
 
             animator.Rebind();
 
+            OnNewSkinSpawned.Invoke(currentMeshInstance);
             ShowShadowsOnlyIfOwner();
         }
 
