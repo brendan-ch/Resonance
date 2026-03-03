@@ -10,29 +10,20 @@ using UnityEngine;
 namespace Resonance.Match
 {
     [Serializable]
-    public class PolarityRoundManagerNetworkAdapter : NetworkModule
+    public class PolarityRoundManagerNetworkAdapter : BaseRoundManagerNetworkAdapter
     {
-        private MatchStatNetworkAdapter matchStatNetworkAdapter;
         private PolarityRoundManager.PolarityRoundManagerConfig config;
+        private PolarityRoundManager polarityRoundManager;
 
         #region Cached Client-Side State
         private int cachedTeamEliminationsToWin;
-        private BaseMatchState cachedMatchState;
         private double cachedSecondsUntilRoleSwitch;
 
         public int TeamEliminationsToWin => cachedTeamEliminationsToWin;
-        public bool IsMatchActive => cachedMatchState == BaseMatchState.MatchActive;
-        public bool IsMatchEnded => cachedMatchState == BaseMatchState.MatchEnded;
         public double SecondsRemainingUntilRoleSwitch => cachedSecondsUntilRoleSwitch;
         #endregion
 
-        private PolarityRoundManager polarityRoundManager;
-
-        // TODO: unify shared events with base class
         #region Events
-        public event Action<BaseMatchState, BaseMatchState> OnMatchStateChange;
-        public event Action<float> OnMatchCountdownStart;
-        public event Action OnMatchStart;
         public event Action<TeamId> OnMatchEnd;
         public event Action OnRoleSwitch;
         public event Action<double> OnRoleSwitchTimerElapsed;
@@ -42,10 +33,9 @@ namespace Resonance.Match
         public PolarityRoundManagerNetworkAdapter(
             MatchStatNetworkAdapter adapter,
             PolarityRoundManager.PolarityRoundManagerConfig config)
+            : base(adapter)
         {
-            matchStatNetworkAdapter = adapter;
             this.config = config;
-            matchStatNetworkAdapter.OnMatchStatTrackerCreated.AddListener(OnMatchStatTrackerCreated);
         }
 
         public PolarityRoundManagerNetworkAdapter(MatchStatNetworkAdapter adapter)
@@ -55,71 +45,44 @@ namespace Resonance.Match
         #endregion
 
         #region Initialization
-        public override void OnSpawn(bool asServer)
-        {
-            base.OnSpawn(asServer);
-        }
+        protected override bool HasRoundManager() => polarityRoundManager != null;
 
-        public override void OnDespawned(bool asServer)
-        {
-            base.OnDespawned(asServer);
-
-            matchStatNetworkAdapter?.OnMatchStatTrackerCreated.RemoveListener(OnMatchStatTrackerCreated);
-
-            if (asServer && polarityRoundManager != null)
-            {
-                DestroyPolarityRoundManager();
-            }
-        }
-
-        private void OnMatchStatTrackerCreated(MatchStatTracker tracker)
-        {
-            if (polarityRoundManager == null)
-            {
-                CreatePolarityRoundManagerWithMatchStatTracker(tracker);
-            }
-            else
-            {
-                Debug.LogWarning("[PolarityRoundManagerNetworkAdapter] MatchStatTracker instance received but PolarityRoundManager instance already exists; re-creating with new match stat tracker");
-                DestroyPolarityRoundManager();
-                CreatePolarityRoundManagerWithMatchStatTracker(tracker);
-            }
-        }
-
-        private void DestroyPolarityRoundManager()
-        {
-            if (polarityRoundManager != null)
-            {
-                polarityRoundManager.OnMatchStart -= OnPolarityMatchStart;
-                polarityRoundManager.OnMatchEnd -= OnPolarityMatchEnd;
-                polarityRoundManager.OnMatchCountdownStart -= OnPolarityMatchCountdownStart;
-                polarityRoundManager.OnMatchStateChange -= OnPolarityMatchStateChange;
-                polarityRoundManager.OnRoleSwitch -= OnPolarityRoleSwitch;
-                polarityRoundManager.OnRoleSwitchTimerElapsed -= OnPolarityRoleSwitchTimerElapsed;
-                polarityRoundManager = null;
-            }
-        }
-
-        private void CreatePolarityRoundManagerWithMatchStatTracker(MatchStatTracker tracker)
+        protected override void CreateRoundManager(MatchStatTracker tracker)
         {
             Debug.Log("[PolarityRoundManagerNetworkAdapter] MatchStatTracker instance received, creating PolarityRoundManager and attaching subscribers");
             polarityRoundManager = new PolarityRoundManager(tracker, config);
 
             polarityRoundManager.OnMatchStart += OnPolarityMatchStart;
             polarityRoundManager.OnMatchEnd += OnPolarityMatchEnd;
-            polarityRoundManager.OnMatchCountdownStart += OnPolarityMatchCountdownStart;
-            polarityRoundManager.OnMatchStateChange += OnPolarityMatchStateChange;
+            polarityRoundManager.OnMatchCountdownStart += HandleMatchCountdownStart;
+            polarityRoundManager.OnMatchStateChange += HandleMatchStateChange;
             polarityRoundManager.OnRoleSwitch += OnPolarityRoleSwitch;
             polarityRoundManager.OnRoleSwitchTimerElapsed += OnPolarityRoleSwitchTimerElapsed;
         }
+
+        protected override void DestroyRoundManager()
+        {
+            if (polarityRoundManager != null)
+            {
+                polarityRoundManager.OnMatchStart -= OnPolarityMatchStart;
+                polarityRoundManager.OnMatchEnd -= OnPolarityMatchEnd;
+                polarityRoundManager.OnMatchCountdownStart -= HandleMatchCountdownStart;
+                polarityRoundManager.OnMatchStateChange -= HandleMatchStateChange;
+                polarityRoundManager.OnRoleSwitch -= OnPolarityRoleSwitch;
+                polarityRoundManager.OnRoleSwitchTimerElapsed -= OnPolarityRoleSwitchTimerElapsed;
+                polarityRoundManager = null;
+            }
+        }
+        #endregion
+
+        #region Base Class Abstract Implementations
+        protected override void CacheMatchStartParam(int param) => cachedTeamEliminationsToWin = param;
+        protected override void CallStartMatchCountdown() => polarityRoundManager?.StartMatchCountdown();
+        protected override bool GetRoundManagerIsMatchActive() => polarityRoundManager?.IsMatchActive ?? false;
+        protected override bool GetRoundManagerIsMatchEnded() => polarityRoundManager?.IsMatchEnded ?? false;
         #endregion
 
         #region Server Event Handlers
-        private void OnPolarityMatchCountdownStart(float countdownSeconds)
-        {
-            FireMatchCountdownStartObservers(countdownSeconds);
-        }
-
         private void OnPolarityMatchStart()
         {
             FireMatchStartObservers(polarityRoundManager.TeamEliminationsToWin);
@@ -128,11 +91,6 @@ namespace Resonance.Match
         private void OnPolarityMatchEnd(TeamId winningTeamId)
         {
             FireMatchEndObservers((int)winningTeamId);
-        }
-
-        private void OnPolarityMatchStateChange(BaseMatchState oldState, BaseMatchState newState)
-        {
-            FireMatchStateChangeObservers((int)oldState, (int)newState);
         }
 
         private void OnPolarityRoleSwitch()
@@ -148,33 +106,10 @@ namespace Resonance.Match
 
         #region Server to Client RPCs
         [ObserversRpc]
-        private void FireMatchCountdownStartObservers(float countdownSeconds)
-        {
-            Debug.Log($"[PolarityRoundManagerNetworkAdapter] Match countdown of {countdownSeconds}s started");
-            OnMatchCountdownStart?.Invoke(countdownSeconds);
-        }
-
-        [ObserversRpc]
-        private void FireMatchStartObservers(int teamEliminationsToWin)
-        {
-            Debug.Log($"[PolarityRoundManagerNetworkAdapter] Match started, teamEliminationsToWin: {teamEliminationsToWin}");
-            cachedTeamEliminationsToWin = teamEliminationsToWin;
-            OnMatchStart?.Invoke();
-        }
-
-        [ObserversRpc]
         private void FireMatchEndObservers(int winningTeamId)
         {
             Debug.Log($"[PolarityRoundManagerNetworkAdapter] Match ended, winning team: {winningTeamId}");
             OnMatchEnd?.Invoke((TeamId)winningTeamId);
-        }
-
-        [ObserversRpc]
-        private void FireMatchStateChangeObservers(int oldState, int newState)
-        {
-            Debug.Log($"[PolarityRoundManagerNetworkAdapter] Match state changed from {oldState} to {newState}");
-            cachedMatchState = (BaseMatchState)newState;
-            OnMatchStateChange?.Invoke((BaseMatchState)oldState, (BaseMatchState)newState);
         }
 
         [ObserversRpc]
@@ -192,7 +127,7 @@ namespace Resonance.Match
         }
         #endregion
 
-        #region Client to Server Actions (Public API)
+        #region Client to Server Actions (Polarity-Specific Public API)
         public void RegisterPlayersForTeamA(List<PlayerID> players)
         {
             RegisterPlayersForTeamA_Server(OwnerIDExtractor.PlayerIdListToUlongList(players));
@@ -213,18 +148,6 @@ namespace Resonance.Match
         private void RegisterPlayersForTeamB_Server(List<ulong> players)
         {
             polarityRoundManager?.RegisterPlayersForTeamB(new HashSet<ulong>(players));
-        }
-
-        public void StartMatchCountdown()
-        {
-            Debug.Log("[PolarityRoundManagerNetworkAdapter] StartMatchCountdown requested");
-            StartMatchCountdown_Server();
-        }
-
-        [ServerRpc]
-        private void StartMatchCountdown_Server()
-        {
-            polarityRoundManager?.StartMatchCountdown();
         }
 
         public void EndMatch(TeamId winningTeamId)
@@ -301,6 +224,5 @@ namespace Resonance.Match
             return polarityRoundManager?.SecondsUntilNextRoleSwitch ?? 0;
         }
         #endregion
-
     }
 }

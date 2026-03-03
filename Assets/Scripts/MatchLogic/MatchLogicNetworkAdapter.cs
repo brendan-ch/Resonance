@@ -1,6 +1,8 @@
 using PurrNet;
 using Resonance.Assemblies.Arena;
 using Resonance.Assemblies.MatchStat;
+using Resonance.Assemblies.Polarity;
+using Resonance.LobbySystem;
 using UnityEngine;
 
 namespace Resonance.Match
@@ -29,43 +31,33 @@ namespace Resonance.Match
         [SerializeField] private float assistTimeWindow = 5f;
         [SerializeField] private float assistDamageThreshold = 20f;
 
+        [Header("General Gameplay Settings")]
+        [SerializeField] private float matchStartCountdownSeconds = 5f;
+
         [Header("Arena Settings")]
         [SerializeField] private int eliminationsToWin = 10;
         [SerializeField] private float autoStartDelaySeconds = 5f;
         [SerializeField] private bool autoStartNextMatch = false;
-        [SerializeField] private float matchStartCountdownSeconds = 5f;
         [SerializeField] private float matchDurationSeconds = 300f;
+
+
+        [Header("Polarity Settings")]
+        [SerializeField] private int teamEliminationsToWin = 10;
+        [SerializeField] private int timeBetweenRoleSwitchSeconds = 90;
         #endregion
 
         #region Modules
         private MatchStatNetworkAdapter _matchStatAdapter;
         public MatchStatNetworkAdapter MatchStats => _matchStatAdapter;
 
-        private ArenaRoundManagerNetworkAdapter currentRoundManagerNetworkAdapter;
-        public ArenaRoundManagerNetworkAdapter ActiveRoundManager => currentRoundManagerNetworkAdapter;
+        private BaseRoundManagerNetworkAdapter currentRoundManagerNetworkAdapter;
+        public BaseRoundManagerNetworkAdapter ActiveRoundManager => currentRoundManagerNetworkAdapter;
         #endregion
 
         #region Lifecycle
         private void Awake()
         {
             InstanceHandler.RegisterInstance(this);
-
-            var matchStatConfig = new MatchStatTracker.MatchStatTrackerConfig
-            {
-                assistTimeWindowMs = assistTimeWindow,
-                assistDamageThreshold = assistDamageThreshold
-            };
-            _matchStatAdapter = new MatchStatNetworkAdapter(matchStatConfig);
-
-            var arenaConfig = new ArenaRoundManager.ArenaRoundManagerConfig
-            {
-                eliminationsToWin = eliminationsToWin,
-                autoStartNextMatch = autoStartNextMatch,
-                autoStartDelaySeconds = autoStartDelaySeconds,
-                matchStartCountdownSeconds = matchStartCountdownSeconds,
-                matchDurationSeconds = matchDurationSeconds,
-            };
-            currentRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter, arenaConfig);
 
             DontDestroyOnLoad(this);
         }
@@ -74,6 +66,41 @@ namespace Resonance.Match
         {
             InstanceHandler.UnregisterInstance<MatchLogicNetworkAdapter>();
         }
+        #endregion
+
+        #region Setup
+        public void Configure(GameMode gameMode)
+        {
+            var matchStatConfig = new MatchStatTracker.MatchStatTrackerConfig
+            {
+                assistTimeWindowMs = assistTimeWindow,
+                assistDamageThreshold = assistDamageThreshold
+            };
+            _matchStatAdapter = new MatchStatNetworkAdapter(matchStatConfig);
+
+            if (gameMode == GameMode.Arena)
+            {
+                var arenaConfig = new ArenaRoundManager.ArenaRoundManagerConfig
+                {
+                    eliminationsToWin = eliminationsToWin,
+                    autoStartNextMatch = autoStartNextMatch,
+                    autoStartDelaySeconds = autoStartDelaySeconds,
+                    matchStartCountdownSeconds = matchStartCountdownSeconds,
+                    matchDurationSeconds = matchDurationSeconds,
+                };
+                currentRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter, arenaConfig);
+            } else if (gameMode == GameMode.Polarity)
+            {
+                var polarityConfig = new PolarityRoundManager.PolarityRoundManagerConfig
+                {
+                    teamEliminationsToWin = teamEliminationsToWin,
+                    timeBetweenRoleSwitchSeconds = timeBetweenRoleSwitchSeconds,
+                    matchStartCountdownSeconds = matchStartCountdownSeconds,
+                };
+                currentRoundManagerNetworkAdapter = new PolarityRoundManagerNetworkAdapter(_matchStatAdapter, polarityConfig);
+            }
+        }
+
         #endregion
 
         #region Debugging

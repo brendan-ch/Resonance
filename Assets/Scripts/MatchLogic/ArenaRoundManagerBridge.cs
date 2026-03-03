@@ -6,6 +6,6 @@ namespace Resonance.Match
     public static class ArenaRoundManagerBridge
     {
         public static ArenaRoundManagerNetworkAdapter Instance =>
-            MatchLogicNetworkAdapter.Instance?.ActiveRoundManager;
+            MatchLogicNetworkAdapter.Instance?.ActiveRoundManager as ArenaRoundManagerNetworkAdapter;
     }
 }

@@ -15,43 +15,32 @@ namespace Resonance.Match
     /// to the creation of MatchStatTracker to receive match stat events.
     /// </summary>
     [Serializable]
-    public class ArenaRoundManagerNetworkAdapter : NetworkModule
+    public class ArenaRoundManagerNetworkAdapter : BaseRoundManagerNetworkAdapter
     {
-        private MatchStatNetworkAdapter matchStatNetworkAdapter;
         private ArenaRoundManager.ArenaRoundManagerConfig config;
         private ArenaRoundManager arenaRoundManager;
 
         #region Cached Client-Side State
         private int cachedEliminationsToWin;
-        private BaseMatchState cachedMatchState;
         private double cachedSecondsRemainingForMatch;
 
         public int EliminationsToWin => cachedEliminationsToWin;
-        public bool IsMatchActive => cachedMatchState == BaseMatchState.MatchActive;
-        public bool IsMatchEnded => cachedMatchState == BaseMatchState.MatchEnded;
         public double SecondsRemainingForMatch => cachedSecondsRemainingForMatch;
         #endregion
 
         #region Events
-        public event Action<BaseMatchState, BaseMatchState> OnMatchStateChange;  // Old state, new state
-        public event Action<float> OnMatchCountdownStart;
-        public event Action OnMatchStart;
         public event Action<PlayerID?> OnMatchEnd;
         public event Action<PlayerID, int> OnLeaderChanged;
-        public event Action<double> OnMatchTimerElapsed;  // Total seconds remaining
+        public event Action<double> OnMatchTimerElapsed;
         #endregion
 
         #region Constructor
         public ArenaRoundManagerNetworkAdapter(
             MatchStatNetworkAdapter adapter,
             ArenaRoundManager.ArenaRoundManagerConfig config)
+            : base(adapter)
         {
-            matchStatNetworkAdapter = adapter;
             this.config = config;
-
-            // because ArenaRoundManager depends on MatchStatTracker, we must wait for
-            // matchStatNetworkAdapter to create the relevant instance
-            matchStatNetworkAdapter.OnMatchStatTrackerCreated.AddListener(OnMatchStatTrackerCreated);
         }
 
         public ArenaRoundManagerNetworkAdapter(MatchStatNetworkAdapter adapter)
@@ -60,54 +49,10 @@ namespace Resonance.Match
         }
         #endregion
 
-        #region Initialization 
-        public override void OnSpawn(bool asServer)
-        {
-            base.OnSpawn(asServer);
-        }
+        #region Initialization
+        protected override bool HasRoundManager() => arenaRoundManager != null;
 
-        public override void OnDespawned(bool asServer)
-        {
-            base.OnDespawned(asServer);
-
-            matchStatNetworkAdapter?.OnMatchStatTrackerCreated.RemoveListener(OnMatchStatTrackerCreated);
-
-            if (asServer && arenaRoundManager != null)
-            {
-                DestroyArenaRoundManager();
-            }
-        }
-
-
-        private void OnMatchStatTrackerCreated(MatchStatTracker tracker)
-        {
-            if (arenaRoundManager == null)
-            {
-                CreateArenaRoundManagerWithMatchStatTracker(tracker);
-            }
-            else
-            {
-                Debug.LogWarning("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received but ArenaRoundManager instance already exists; re-creating with new match stat tracker");
-                DestroyArenaRoundManager();
-                CreateArenaRoundManagerWithMatchStatTracker(tracker);
-            }
-        }
-
-        private void DestroyArenaRoundManager()
-        {
-            if (arenaRoundManager != null)
-            {
-                arenaRoundManager.OnMatchStart -= OnArenaMatchStart;
-                arenaRoundManager.OnMatchEnd -= OnArenaMatchEnd;
-                arenaRoundManager.OnLeaderChanged -= OnArenaLeaderChanged;
-                arenaRoundManager.OnMatchCountdownStart -= OnArenaMatchCountdownStart;
-                arenaRoundManager.OnMatchStateChange -= OnArenaMatchStateChange;
-                arenaRoundManager.OnMatchTimerElapsed -= OnArenaMatchTimerElapsed;
-                arenaRoundManager = null;
-            }
-        }
-
-        private void CreateArenaRoundManagerWithMatchStatTracker(MatchStatTracker tracker)
+        protected override void CreateRoundManager(MatchStatTracker tracker)
         {
             Debug.Log("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received, creating ArenaRoundManager and attaching subscribers");
             arenaRoundManager = new ArenaRoundManager(tracker, config);
@@ -115,19 +60,34 @@ namespace Resonance.Match
             arenaRoundManager.OnMatchStart += OnArenaMatchStart;
             arenaRoundManager.OnMatchEnd += OnArenaMatchEnd;
             arenaRoundManager.OnLeaderChanged += OnArenaLeaderChanged;
-            arenaRoundManager.OnMatchCountdownStart += OnArenaMatchCountdownStart;
-            arenaRoundManager.OnMatchStateChange += OnArenaMatchStateChange;
+            arenaRoundManager.OnMatchCountdownStart += HandleMatchCountdownStart;
+            arenaRoundManager.OnMatchStateChange += HandleMatchStateChange;
             arenaRoundManager.OnMatchTimerElapsed += OnArenaMatchTimerElapsed;
         }
 
+        protected override void DestroyRoundManager()
+        {
+            if (arenaRoundManager != null)
+            {
+                arenaRoundManager.OnMatchStart -= OnArenaMatchStart;
+                arenaRoundManager.OnMatchEnd -= OnArenaMatchEnd;
+                arenaRoundManager.OnLeaderChanged -= OnArenaLeaderChanged;
+                arenaRoundManager.OnMatchCountdownStart -= HandleMatchCountdownStart;
+                arenaRoundManager.OnMatchStateChange -= HandleMatchStateChange;
+                arenaRoundManager.OnMatchTimerElapsed -= OnArenaMatchTimerElapsed;
+                arenaRoundManager = null;
+            }
+        }
+        #endregion
+
+        #region Base Class Abstract Implementations
+        protected override void CacheMatchStartParam(int param) => cachedEliminationsToWin = param;
+        protected override void CallStartMatchCountdown() => arenaRoundManager?.StartMatchCountdown();
+        protected override bool GetRoundManagerIsMatchActive() => arenaRoundManager?.IsMatchActive ?? false;
+        protected override bool GetRoundManagerIsMatchEnded() => arenaRoundManager?.IsMatchEnded ?? false;
         #endregion
 
         #region Server Event Handlers
-        private void OnArenaMatchCountdownStart(float countdownSeconds)
-        {
-            FireMatchCountdownStartObservers(countdownSeconds);
-        }
-
         private void OnArenaMatchStart()
         {
             FireMatchStartObservers(arenaRoundManager.EliminationsToWin);
@@ -143,35 +103,13 @@ namespace Resonance.Match
             FireLeaderChangedObservers(newLeader, eliminations);
         }
 
-        private void OnArenaMatchStateChange(BaseMatchState oldState, BaseMatchState newState)
-        {
-            FireMatchStateChangeObservers((int)oldState, (int)newState);
-        }
-
         private void OnArenaMatchTimerElapsed(double secondsRemaining)
         {
             FireMatchTimerElapsedObservers(secondsRemaining);
         }
-
-
         #endregion
 
         #region Server to Client RPCs
-        [ObserversRpc]
-        private void FireMatchCountdownStartObservers(float countdownSeconds)
-        {
-            Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match countdown of {countdownSeconds}s started");
-            OnMatchCountdownStart?.Invoke(countdownSeconds);
-        }
-
-        [ObserversRpc]
-        private void FireMatchStartObservers(int eliminationsToWin)
-        {
-            Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match started, eliminationsToWin: {eliminationsToWin}");
-            cachedEliminationsToWin = eliminationsToWin;
-            OnMatchStart?.Invoke();
-        }
-
         [ObserversRpc]
         private void FireMatchEndObservers(ulong? winner)
         {
@@ -191,40 +129,18 @@ namespace Resonance.Match
         }
 
         [ObserversRpc]
-        private void FireMatchStateChangeObservers(int oldState, int newState)
-        {
-            Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match state changed from {oldState} to {newState}");
-            cachedMatchState = (BaseMatchState)newState;
-            OnMatchStateChange?.Invoke((BaseMatchState)oldState, (BaseMatchState)newState);
-        }
-
-        [ObserversRpc]
         private void FireMatchTimerElapsedObservers(double secondsRemaining)
         {
             cachedSecondsRemainingForMatch = secondsRemaining;
             OnMatchTimerElapsed?.Invoke(secondsRemaining);
         }
-
         #endregion
 
-        #region Client to Server Actions (Public API)
-        public void StartMatchCountdown()
-        {
-            Debug.Log("[ArenaRoundManagerNetworkAdapter] StartMatchCountdown requested");
-            StartMatchCountdown_Server();
-        }
-
-        [ServerRpc]
-        private void StartMatchCountdown_Server()
-        {
-            arenaRoundManager?.StartMatchCountdown();
-        }
-
+        #region Client to Server Actions (Arena-Specific Public API)
         /// <summary>
         /// Ends the match with a winner. Note that in most scenarios, this won't
         /// need to be called directly.
         /// </summary>
-        /// <param name="winner"></param>
         public void EndMatch(PlayerID? winner)
         {
             ulong? winnerUlong = winner?.id.value;
@@ -240,18 +156,6 @@ namespace Resonance.Match
         #endregion
 
         #region Getters (Client Callable)
-        [ServerRpc]
-        public async Task<bool> GetIsMatchActive()
-        {
-            return arenaRoundManager?.IsMatchActive ?? false;
-        }
-
-        [ServerRpc]
-        public async Task<bool> GetIsMatchEnded()
-        {
-            return arenaRoundManager?.IsMatchEnded ?? false;
-        }
-
         [ServerRpc]
         public async Task<int> GetEliminationsToWin()
         {
