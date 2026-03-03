@@ -1,3 +1,4 @@
+using System;
 using Resonance.Combat.Weapons;
 using Resonance.Combat.Weapons.Enums;
 using Resonance.Helper;
@@ -11,32 +12,37 @@ namespace Resonance.Combat
     public class PlayerEquip : MonoBehaviour
     {
         public WeaponProperties EquippedWeapon { get; private set; }
-        
+
         private ObservableValue<WeaponProperties> equippedWeaponObservable = new ObservableValue<WeaponProperties>();
         public ObservableValue<WeaponProperties> EquippedWeaponObservable => equippedWeaponObservable;
-        
+
         [SerializeField] PlayerInventory playerInventory;
         public PlayerInventory PlayerInventory => playerInventory;
-        
+
         [SerializeField] Transform equipSlot;
         public Transform EquipSlot => equipSlot;
-        
+
         [SerializeField] private PlayerActionsInput playerActionsInput;
 
         [SerializeField] private WeaponView currentWeaponView;
         public WeaponView CurrentWeaponView => currentWeaponView;
-        
 
         private GameObject currentWeaponInstance;
         private PlayerStats playerStats;
-        
-        void Start()
+        private PlayerSkinRenderer playerSkinRenderer;
+
+        void Awake()
         {
             playerStats = GetComponent<PlayerStats>();
-            
+            playerSkinRenderer = GetComponent<PlayerSkinRenderer>();
+            playerSkinRenderer.OnNewSkinDataLoaded += UpdateEquipSlotBasedOnSkinData;
+        }
+
+        void Start()
+        {
             StartCoroutine(EquipStartingWeaponNextFrame());
         }
-        
+
         private WeaponProperties previousWeapon;
 
         System.Collections.IEnumerator EquipStartingWeaponNextFrame()
@@ -60,7 +66,7 @@ namespace Resonance.Combat
             }
         }
 
-        
+
         void Update()
         {
             if (playerActionsInput == null || playerInventory == null)
@@ -86,7 +92,18 @@ namespace Resonance.Combat
                 playerActionsInput.SetSlotTwoPressedFalse();
             }
         }
-        
+
+        private void UpdateEquipSlotBasedOnSkinData(SkinData data)
+        {
+            var equipSlotVector = data.equipSlot;
+
+            var equipSlotGameObject = new GameObject("Equip Slot");
+            equipSlot = equipSlotGameObject.transform;
+            equipSlot.SetParent(gameObject.transform, worldPositionStays: false);
+            equipSlot.position = equipSlotVector;
+            RefreshWeaponView(EquippedWeapon);
+        }
+
         void SwapWeapon()
         {
             if (EquippedWeapon == null)
@@ -124,14 +141,14 @@ namespace Resonance.Combat
         void Equip(WeaponProperties weapon)
         {
             Debug.Log($"Equip called with: {weapon?.name ?? "null"}");
-            
+
             if (weapon == null)
             {
                 return;
             }
-            
+
             Debug.Log($"EquippedWeapon is currently: {EquippedWeapon?.name ?? "null"}");
-            
+
             if (EquippedWeapon == weapon)
             {
                 return;
@@ -153,14 +170,14 @@ namespace Resonance.Combat
             {
                 playerStats.AddSpeedModifier(weapon.Mobility);
             }
-            
+
             Debug.Log("About to call RefreshWeaponView");
             RefreshWeaponView(weapon);
         }
-        
+
         void RefreshWeaponView(WeaponProperties weapon)
         {
-            
+
             if (currentWeaponInstance != null)
             {
                 Destroy(currentWeaponInstance);

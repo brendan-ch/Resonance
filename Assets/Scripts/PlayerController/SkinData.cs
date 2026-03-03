@@ -8,5 +8,6 @@ namespace Resonance.PlayerController
         public string skinName;
         public GameObject meshPrefab;
         public Avatar avatar;
+        public Vector3 equipSlot;
     }
 }

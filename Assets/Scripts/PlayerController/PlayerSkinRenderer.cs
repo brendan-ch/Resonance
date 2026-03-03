@@ -5,24 +5,26 @@ using UnityEngine.Rendering;
 
 namespace Resonance.PlayerController
 {
+    [DefaultExecutionOrder(-1)]
     public class PlayerSkinRenderer : NetworkBehaviour
     {
         [SerializeField] private SkinCatalog skinCatalog;
         [SerializeField] private Animator animator;
         public Action<GameObject> OnNewSkinSpawned;
+        public Action<SkinData> OnNewSkinDataLoaded;
 
         public SyncVar<int> skinIndex = new SyncVar<int>();
 
         [SerializeField] private int testSkinIndexToRequest = 0;
 
-        private GameObject currentMeshInstance;
+        public GameObject CurrentMeshInstance { get; private set; }
+        public SkinData CurrentlyLoadedSkinData { get; private set; }
 
         protected override void OnSpawned()
         {
             base.OnSpawned();
 
             skinIndex.onChanged += OnSkinChanged;
-
             ApplySkin(skinIndex.value);
         }
 
@@ -50,13 +52,15 @@ namespace Resonance.PlayerController
                 return;
             }
 
-            if (currentMeshInstance != null)
+            if (CurrentMeshInstance != null)
             {
-                Destroy(currentMeshInstance);
+                Destroy(CurrentMeshInstance);
             }
 
-            currentMeshInstance = Instantiate(skinData.meshPrefab, transform);
-            var innerAnimator = currentMeshInstance.GetComponent<Animator>();
+            CurrentMeshInstance = Instantiate(skinData.meshPrefab, transform);
+            CurrentlyLoadedSkinData = skinData;
+
+            var innerAnimator = CurrentMeshInstance.GetComponent<Animator>();
             Destroy(innerAnimator);
 
             if (skinData.avatar != null)
@@ -66,7 +70,8 @@ namespace Resonance.PlayerController
 
             animator.Rebind();
 
-            OnNewSkinSpawned.Invoke(currentMeshInstance);
+            OnNewSkinSpawned.Invoke(CurrentMeshInstance);
+            OnNewSkinDataLoaded.Invoke(skinData);
             ShowShadowsOnlyIfOwner();
         }
 
@@ -77,7 +82,7 @@ namespace Resonance.PlayerController
                 return;
             }
 
-            foreach (var renderer in currentMeshInstance.GetComponentsInChildren<Renderer>())
+            foreach (var renderer in CurrentMeshInstance.GetComponentsInChildren<Renderer>())
             {
                 renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
             }
