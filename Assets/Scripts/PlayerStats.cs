@@ -185,11 +185,19 @@ namespace Resonance.Player
                 Die(attacker);
         }
 
+        [ServerRpc(requireOwnership: false)]
         public void Heal(float amount)
         {
             if (IsDead) return;
             CurrentHealth.value = Mathf.Min(CurrentHealth.value + amount, maxHealth);
-            
+
+            PropagateHealthToLocal();
+        }
+
+        [ObserversRpc]
+        private void PropagateHealthToLocal()
+        {
+
             if (playerViewModel != null)
             {
                 playerViewModel.Health.Value = CurrentHealth.value;

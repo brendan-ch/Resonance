@@ -119,6 +119,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &29351274
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 29351275}
+  - component: {fileID: 29351276}
+  m_Layer: 0
+  m_Name: DefaultSceneNameSetter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &29351275
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29351274}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.41865, y: 0.87675, z: -9.83799}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &29351276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29351274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3a8945cb7ef34ba3a9aa3b1343482a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.LobbySystem.DefaultSceneNameSetter
+  lobbyManager: {fileID: 1097043115}
+  sceneName: TB_ArenaDemo
 --- !u!1 &32129099
 GameObject:
   m_ObjectHideFlags: 0
@@ -3700,10 +3746,8 @@ MonoBehaviour:
   createRoomArgs:
     maxPlayers: 5
     roomProperties:
-      keys:
-      - PurrNet
-      values:
-      - IsTheBest
+      keys: []
+      values: []
       stringKeys: []
       stringValues: []
   searchRoomArgs:
@@ -6378,3 +6422,4 @@ SceneRoots:
   - {fileID: 271333300}
   - {fileID: 685434700}
   - {fileID: 1663544553}
+  - {fileID: 29351275}
