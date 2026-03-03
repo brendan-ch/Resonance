@@ -183,6 +183,10 @@ namespace Resonance.Combat
 
         void RefreshWeaponView(WeaponProperties weapon)
         {
+            if (weapon == null)
+            {
+                return;
+            }
 
             if (currentWeaponInstance != null)
             {
