@@ -114,7 +114,7 @@ namespace Resonance.Audio
 
         void OnDrawGizmosSelected()
         {
-            if (!Application.IsPlaying || characterController == null) return;
+            if (!Application.isPlaying || characterController == null) return;
             
             Vector3 origin = transform.position + characterController.center;
             float distance = (characterController.height / 2f) + raycastDistance;
