@@ -681,11 +681,11 @@ MonoBehaviour:
   footstepEvent:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: a35941d3b3e47f048b1b2a2d11e05fbe, type: 2}
   landingEvent:
     idInternal: 0
     valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 983da4f4ba31b1f45bb4611e79967bb3, type: 2}
   raycastDistance: 0.5
   groundLayers:
     serializedVersion: 2
@@ -695,25 +695,25 @@ MonoBehaviour:
     valueGuidInternal: 
     groupIdInternal: 0
     groupGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: b02dcbcb01ee8794291510e72fc898ea, type: 2}
   metalSurface:
     idInternal: 0
     valueGuidInternal: 
     groupIdInternal: 0
     groupGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: c5bce7335af06af42983090c80ca090c, type: 2}
   woodSurface:
     idInternal: 0
     valueGuidInternal: 
     groupIdInternal: 0
     groupGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: f4dbeccf60488634fb04ff38ac9d299a, type: 2}
   gravelSurface:
     idInternal: 0
     valueGuidInternal: 
     groupIdInternal: 0
     groupGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
+    WwiseObjectReference: {fileID: 11400000, guid: 34e918b5320f2394486160c7307a58ef, type: 2}
 --- !u!1 &1832940604356293491
 GameObject:
   m_ObjectHideFlags: 0
