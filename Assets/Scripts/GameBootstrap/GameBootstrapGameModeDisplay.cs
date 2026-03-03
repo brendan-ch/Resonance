@@ -18,7 +18,7 @@ namespace Resonance.GameBootstrap
             lobbyDataHolder = FindFirstObjectByType<LobbyDataHolder>();
             if (lobbyDataHolder == null)
             {
-                Debug.LogError($"Unable to find {nameof(LobbyDataHolder)} component");
+                Debug.LogError($"[{GetType()}] Unable to find {nameof(LobbyDataHolder)} component");
                 return;
             }
 

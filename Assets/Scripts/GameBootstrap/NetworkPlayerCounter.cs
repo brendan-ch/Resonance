@@ -18,7 +18,7 @@ namespace Resonance.GameBootstrap
             lobbyDataHolder = FindFirstObjectByType<LobbyDataHolder>();
             if (!lobbyDataHolder)
             {
-                Debug.LogError($"{GetType()} Unable to find {nameof(LobbyDataHolder)} component; scene switching will not work.");
+                Debug.LogError($"[{GetType()}] Unable to find {nameof(LobbyDataHolder)} component; scene switching will not work.");
             }
 
             if (asServer)

@@ -22,7 +22,7 @@ namespace Resonance.GameBootstrap
             lobbyDataHolder = FindFirstObjectByType<LobbyDataHolder>();
             if (!lobbyDataHolder)
             {
-                Debug.LogError($"{GetType()} Unable to find {nameof(LobbyDataHolder)} component; match logic spawning will not work");
+                Debug.LogError($"[{GetType()}] Unable to find {nameof(LobbyDataHolder)} component; match logic spawning will not work");
             }
         }
 
@@ -30,14 +30,14 @@ namespace Resonance.GameBootstrap
         {
             if (matchLogicSpawned)
             {
-                Debug.Log($"{GetType()} Match logic already spawned for object {id}");
+                Debug.Log($"[{GetType()}] Match logic already spawned for object {id}");
                 return;
             }
 
             // spawn the object, disable it, set the game mode, then make it active,
             // running the Awake method
             var gameMode = lobbyDataHolder.CurrentLobby.GameMode;
-            Debug.Log($"{GetType()} Spawning match logic for object {id} and gamemode {gameMode}");
+            Debug.Log($"[{GetType()}] Spawning match logic for object {id} and gamemode {gameMode}");
 
             // must be spawned on all clients to access RPC
             var matchLogicGameObject = Instantiate(matchLogicPrefab);
