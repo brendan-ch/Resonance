@@ -69,8 +69,8 @@ namespace Resonance.PlayerController
 
             animator.Rebind();
 
-            OnNewSkinSpawned.Invoke(CurrentMeshInstance);
             ShowShadowsOnlyIfOwner();
+            OnNewSkinSpawned.Invoke(CurrentMeshInstance);
         }
 
         private void ShowShadowsOnlyIfOwner()
@@ -82,7 +82,10 @@ namespace Resonance.PlayerController
 
             foreach (var renderer in CurrentMeshInstance.GetComponentsInChildren<Renderer>())
             {
-                renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+                if (!renderer.CompareTag("Gun Equip"))
+                {
+                    renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+                }
             }
         }
 
