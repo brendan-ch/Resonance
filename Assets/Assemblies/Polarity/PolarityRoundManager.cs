@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using System.Timers;
 using PurrNet.Packing;
 using Resonance.Assemblies.MatchStat;
+using Resonance.Assemblies.SharedGameLogic;
 
 namespace Resonance.Assemblies.Polarity
 {
     public enum TeamId { TeamA, TeamB }
 
-    public class PolarityRoundManager
+    public class PolarityRoundManager : BaseRoundManager
     {
         #region Custom data types
         [System.Serializable]
@@ -44,11 +45,9 @@ namespace Resonance.Assemblies.Polarity
         }
         private int timeBetweenRoleSwitchSeconds = 90;
         private int teamEliminationsToWin = 10;
-        private float matchStartCountdownSeconds = 5f;
         #endregion
 
         #region State
-        private PolarityMatchState matchState = PolarityMatchState.Waiting;
         private DateTime? timeOfLastRoleSwitch = null;
         private Timer roleSwitchCheckTimer = null;
         private Dictionary<TeamId, Team> teams;
@@ -56,11 +55,7 @@ namespace Resonance.Assemblies.Polarity
         #endregion
 
         #region Properties
-        public PolarityMatchState MatchState => matchState;
-        public bool IsMatchActive => matchState == PolarityMatchState.MatchActive;
-        public bool IsMatchEnded => matchState == PolarityMatchState.MatchEnded;
         public int TeamEliminationsToWin => teamEliminationsToWin;
-        public float MatchStartCountdownSeconds => matchStartCountdownSeconds;
         public IReadOnlyDictionary<TeamId, Team> Teams => teams;
         public Team GetTeam(TeamId teamId) => teams[teamId];
         public HashSet<ulong> GetPlayersForTeam(TeamId teamId) => teamPlayers[teamId];
@@ -69,7 +64,7 @@ namespace Resonance.Assemblies.Polarity
         {
             get
             {
-                if (!IsMatchActive || timeOfLastRoleSwitch == null) return 0;
+                if (!IsMatchActive || timeOfLastRoleSwitch == null) { return 0; }
                 var elapsed = (DateTime.Now - timeOfLastRoleSwitch.Value).TotalSeconds;
                 var remaining = timeBetweenRoleSwitchSeconds - elapsed;
                 return remaining > 0 ? remaining : 0;
@@ -77,8 +72,11 @@ namespace Resonance.Assemblies.Polarity
         }
         #endregion
 
-        private MatchStatTracker matchStatTracker;
-
+        #region Events
+        public event Action<TeamId> OnMatchEnd;
+        public event Action OnRoleSwitch;
+        public event Action<double> OnRoleSwitchTimerElapsed;
+        #endregion
 
         #region Startup
         public PolarityRoundManager(MatchStatTracker tracker)
@@ -87,11 +85,10 @@ namespace Resonance.Assemblies.Polarity
         }
 
         public PolarityRoundManager(MatchStatTracker tracker, PolarityRoundManagerConfig config)
+            : base(tracker, config.matchStartCountdownSeconds)
         {
-            matchStatTracker = tracker;
             timeBetweenRoleSwitchSeconds = config.timeBetweenRoleSwitchSeconds;
             teamEliminationsToWin = config.teamEliminationsToWin;
-            matchStartCountdownSeconds = config.matchStartCountdownSeconds;
 
             teams = new()
             {
@@ -116,16 +113,6 @@ namespace Resonance.Assemblies.Polarity
                 matchStatTracker.OnPlayerKill += OnPlayerKilled;
             }
         }
-
-        #endregion
-
-        #region Events
-        public event Action<PolarityMatchState, PolarityMatchState> OnMatchStateChange;
-        public event Action<float> OnMatchCountdownStart;
-        public event Action OnMatchStart;
-        public event Action<TeamId> OnMatchEnd;
-        public event Action OnRoleSwitch;
-        public event Action<double> OnRoleSwitchTimerElapsed;
         #endregion
 
         #region Player Registration
@@ -134,27 +121,12 @@ namespace Resonance.Assemblies.Polarity
         #endregion
 
         #region Match Control
-        public async Task StartMatchCountdown()
+        public override void StartMatchWithoutCountdown()
         {
-            if (matchState == PolarityMatchState.MatchActive || matchState == PolarityMatchState.Countdown)
-                return;
+            if (IsMatchActive) { return; }
 
             var oldMatchState = matchState;
-            matchState = PolarityMatchState.Countdown;
-
-            OnMatchCountdownStart?.Invoke(matchStartCountdownSeconds);
-            OnMatchStateChange?.Invoke(oldMatchState, matchState);
-
-            await Task.Delay((int)(matchStartCountdownSeconds * 1000));
-            StartMatchWithoutCountdown();
-        }
-
-        public void StartMatchWithoutCountdown()
-        {
-            if (IsMatchActive) return;
-
-            var oldMatchState = matchState;
-            matchState = PolarityMatchState.MatchActive;
+            matchState = BaseMatchState.MatchActive;
 
             teams[TeamId.TeamA] = new Team { currentRole = PolarityTeamRole.Taggers, eliminations = 0 };
             teams[TeamId.TeamB] = new Team { currentRole = PolarityTeamRole.Runners, eliminations = 0 };
@@ -162,8 +134,8 @@ namespace Resonance.Assemblies.Polarity
 
             matchStatTracker?.ResetAllStats();
 
-            OnMatchStart?.Invoke();
-            OnMatchStateChange?.Invoke(oldMatchState, matchState);
+            RaiseMatchStart();
+            RaiseMatchStateChange(oldMatchState, matchState);
 
             SetRoleSwitchCheckTimer();
         }
@@ -185,7 +157,7 @@ namespace Resonance.Assemblies.Polarity
 
         public void SwitchRoles()
         {
-            if (!IsMatchActive) return;
+            if (!IsMatchActive) { return; }
 
             var roleA = teams[TeamId.TeamA].currentRole;
             var teamAData = teams[TeamId.TeamA];
@@ -203,10 +175,10 @@ namespace Resonance.Assemblies.Polarity
 
         public async Task EndMatch(TeamId winningTeamId)
         {
-            if (matchState != PolarityMatchState.MatchActive) return;
+            if (matchState != BaseMatchState.MatchActive) { return; }
 
-            matchState = PolarityMatchState.MatchEnded;
-            OnMatchStateChange?.Invoke(PolarityMatchState.MatchActive, matchState);
+            matchState = BaseMatchState.MatchEnded;
+            RaiseMatchStateChange(BaseMatchState.MatchActive, matchState);
             OnMatchEnd?.Invoke(winningTeamId);
 
             roleSwitchCheckTimer?.Stop();
@@ -215,7 +187,7 @@ namespace Resonance.Assemblies.Polarity
 
         private void CheckForRoleSwitch()
         {
-            if (!IsMatchActive || timeOfLastRoleSwitch == null) return;
+            if (!IsMatchActive || timeOfLastRoleSwitch == null) { return; }
 
             var elapsed = (DateTime.Now - timeOfLastRoleSwitch.Value).TotalSeconds;
             if (elapsed >= timeBetweenRoleSwitchSeconds)
@@ -239,7 +211,7 @@ namespace Resonance.Assemblies.Polarity
 
         private void OnPlayerKilled(ulong attacker, ulong victim)
         {
-            if (!IsMatchActive || IsMatchEnded) return;
+            if (!IsMatchActive || IsMatchEnded) { return; }
 
             foreach (var kvp in teamPlayers)
             {

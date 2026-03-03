@@ -23,17 +23,17 @@ namespace Resonance.Match
 
         #region Cached Client-Side State
         private int cachedEliminationsToWin;
-        private ArenaMatchState cachedMatchState;
+        private BaseMatchState cachedMatchState;
         private double cachedSecondsRemainingForMatch;
 
         public int EliminationsToWin => cachedEliminationsToWin;
-        public bool IsMatchActive => cachedMatchState == ArenaMatchState.MatchActive;
-        public bool IsMatchEnded => cachedMatchState == ArenaMatchState.MatchEnded;
+        public bool IsMatchActive => cachedMatchState == BaseMatchState.MatchActive;
+        public bool IsMatchEnded => cachedMatchState == BaseMatchState.MatchEnded;
         public double SecondsRemainingForMatch => cachedSecondsRemainingForMatch;
         #endregion
 
         #region Events
-        public event Action<ArenaMatchState, ArenaMatchState> OnMatchStateChange;  // Old state, new state
+        public event Action<BaseMatchState, BaseMatchState> OnMatchStateChange;  // Old state, new state
         public event Action<float> OnMatchCountdownStart;
         public event Action OnMatchStart;
         public event Action<PlayerID?> OnMatchEnd;
@@ -143,7 +143,7 @@ namespace Resonance.Match
             FireLeaderChangedObservers(newLeader, eliminations);
         }
 
-        private void OnArenaMatchStateChange(ArenaMatchState oldState, ArenaMatchState newState)
+        private void OnArenaMatchStateChange(BaseMatchState oldState, BaseMatchState newState)
         {
             FireMatchStateChangeObservers((int)oldState, (int)newState);
         }
@@ -194,8 +194,8 @@ namespace Resonance.Match
         private void FireMatchStateChangeObservers(int oldState, int newState)
         {
             Debug.Log($"[ArenaRoundManagerNetworkAdapter] Match state changed from {oldState} to {newState}");
-            cachedMatchState = (ArenaMatchState)newState;
-            OnMatchStateChange?.Invoke((ArenaMatchState)oldState, (ArenaMatchState)newState);
+            cachedMatchState = (BaseMatchState)newState;
+            OnMatchStateChange?.Invoke((BaseMatchState)oldState, (BaseMatchState)newState);
         }
 
         [ObserversRpc]

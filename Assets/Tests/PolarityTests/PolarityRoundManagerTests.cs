@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Resonance.Assemblies.MatchStat;
 using Resonance.Assemblies.Polarity;
+using Resonance.Assemblies.SharedGameLogic;
 
 public class PolarityRoundManagerTests
 {
@@ -39,7 +40,7 @@ public class PolarityRoundManagerTests
     [Test]
     public void MatchState_DefaultsToWaiting()
     {
-        Assert.AreEqual(PolarityMatchState.Waiting, roundManager.MatchState);
+        Assert.AreEqual(BaseMatchState.Waiting, roundManager.MatchState);
     }
 
     [Test]
@@ -151,8 +152,8 @@ public class PolarityRoundManagerTests
     [Test]
     public void StartMatchWithoutCountdown_FiresMatchStateChangeEvent()
     {
-        PolarityMatchState capturedOldState = default;
-        PolarityMatchState capturedNewState = default;
+        BaseMatchState capturedOldState = default;
+        BaseMatchState capturedNewState = default;
         int eventCallCount = 0;
         roundManager.OnMatchStateChange += (oldState, newState) =>
         {
@@ -163,8 +164,8 @@ public class PolarityRoundManagerTests
 
         roundManager.StartMatchWithoutCountdown();
 
-        Assert.AreEqual(PolarityMatchState.Waiting, capturedOldState);
-        Assert.AreEqual(PolarityMatchState.MatchActive, capturedNewState);
+        Assert.AreEqual(BaseMatchState.Waiting, capturedOldState);
+        Assert.AreEqual(BaseMatchState.MatchActive, capturedNewState);
         Assert.AreEqual(1, eventCallCount);
     }
 
@@ -340,8 +341,8 @@ public class PolarityRoundManagerTests
     {
         roundManager.StartMatchWithoutCountdown();
 
-        PolarityMatchState capturedOldState = default;
-        PolarityMatchState capturedNewState = default;
+        BaseMatchState capturedOldState = default;
+        BaseMatchState capturedNewState = default;
         int eventCallCount = 0;
         roundManager.OnMatchStateChange += (oldState, newState) =>
         {
@@ -352,8 +353,8 @@ public class PolarityRoundManagerTests
 
         await roundManager.EndMatch(TeamId.TeamA);
 
-        Assert.AreEqual(PolarityMatchState.MatchActive, capturedOldState);
-        Assert.AreEqual(PolarityMatchState.MatchEnded, capturedNewState);
+        Assert.AreEqual(BaseMatchState.MatchActive, capturedOldState);
+        Assert.AreEqual(BaseMatchState.MatchEnded, capturedNewState);
         Assert.AreEqual(1, eventCallCount);
     }
 
@@ -390,7 +391,7 @@ public class PolarityRoundManagerTests
     {
         _ = roundManager.StartMatchCountdown();
         await Task.Delay(1000);
-        Assert.AreEqual(PolarityMatchState.Countdown, roundManager.MatchState);
+        Assert.AreEqual(BaseMatchState.Countdown, roundManager.MatchState);
     }
 
     [Test]
@@ -414,8 +415,8 @@ public class PolarityRoundManagerTests
     [Test]
     public async Task StartMatchCountdown_FiresMatchStateChangeEvent()
     {
-        PolarityMatchState capturedOldState = default;
-        PolarityMatchState capturedNewState = default;
+        BaseMatchState capturedOldState = default;
+        BaseMatchState capturedNewState = default;
         int eventCallCount = 0;
         roundManager.OnMatchStateChange += (oldState, newState) =>
         {
@@ -426,8 +427,8 @@ public class PolarityRoundManagerTests
 
         _ = roundManager.StartMatchCountdown();
 
-        Assert.AreEqual(PolarityMatchState.Waiting, capturedOldState);
-        Assert.AreEqual(PolarityMatchState.Countdown, capturedNewState);
+        Assert.AreEqual(BaseMatchState.Waiting, capturedOldState);
+        Assert.AreEqual(BaseMatchState.Countdown, capturedNewState);
         Assert.AreEqual(1, eventCallCount);
     }
 
@@ -437,7 +438,7 @@ public class PolarityRoundManagerTests
         roundManager = CreateManagerWithConfig(matchStartCountdownSeconds: 0.5f);
 
         await roundManager.StartMatchCountdown();
-        Assert.AreEqual(PolarityMatchState.MatchActive, roundManager.MatchState);
+        Assert.AreEqual(BaseMatchState.MatchActive, roundManager.MatchState);
     }
     #endregion
 
