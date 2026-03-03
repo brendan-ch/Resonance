@@ -9,7 +9,7 @@ public class SampleMatchTimerListener : MonoBehaviour
         if (MatchLogicNetworkAdapter.Instance != null)
         {
             Debug.Log("[MatchTimerListener] Subscribing to match timer events");
-            MatchLogicNetworkAdapter.Instance.ArenaRoundManager.OnMatchTimerElapsed += OnMatchTimerElapsed;
+            MatchLogicNetworkAdapter.Instance.ActiveRoundManager.OnMatchTimerElapsed += OnMatchTimerElapsed;
         }
     }
 

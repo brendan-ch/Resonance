@@ -41,8 +41,8 @@ namespace Resonance.Match
         private MatchStatNetworkAdapter _matchStatAdapter;
         public MatchStatNetworkAdapter MatchStats => _matchStatAdapter;
 
-        private ArenaRoundManagerNetworkAdapter _arenaRoundManagerNetworkAdapter;
-        public ArenaRoundManagerNetworkAdapter ArenaRoundManager => _arenaRoundManagerNetworkAdapter;
+        private ArenaRoundManagerNetworkAdapter currentRoundManagerNetworkAdapter;
+        public ArenaRoundManagerNetworkAdapter ActiveRoundManager => currentRoundManagerNetworkAdapter;
         #endregion
 
         #region Lifecycle
@@ -65,7 +65,7 @@ namespace Resonance.Match
                 matchStartCountdownSeconds = matchStartCountdownSeconds,
                 matchDurationSeconds = matchDurationSeconds,
             };
-            _arenaRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter, arenaConfig);
+            currentRoundManagerNetworkAdapter = new ArenaRoundManagerNetworkAdapter(_matchStatAdapter, arenaConfig);
 
             DontDestroyOnLoad(this);
         }
@@ -80,7 +80,7 @@ namespace Resonance.Match
         [ContextMenu("Log match active status")]
         public async void LogIsMatchActive()
         {
-            var activeStatus = await _arenaRoundManagerNetworkAdapter.GetIsMatchActive();
+            var activeStatus = await currentRoundManagerNetworkAdapter.GetIsMatchActive();
             Debug.Log($"Is match active: {activeStatus}");
         }
 

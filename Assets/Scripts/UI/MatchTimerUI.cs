@@ -14,7 +14,7 @@ public class MatchTimerUI : MonoBehaviour
         if (MatchLogicNetworkAdapter.Instance != null)
         {
             MatchLogicNetworkAdapter.Instance
-                .ArenaRoundManager
+                .ActiveRoundManager
                 .OnMatchTimerElapsed += viewModel.SetTime;
         }
     }
@@ -26,7 +26,7 @@ public class MatchTimerUI : MonoBehaviour
         if (MatchLogicNetworkAdapter.Instance != null)
         {
             MatchLogicNetworkAdapter.Instance
-                .ArenaRoundManager
+                .ActiveRoundManager
                 .OnMatchTimerElapsed -= viewModel.SetTime;
         }
     }
