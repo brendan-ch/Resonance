@@ -69,39 +69,39 @@ public class PolarityRoundManagerTests
     [Test]
     public void TeamA_DefaultsToTaggersRole()
     {
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.TeamA.currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.GetTeam(TeamId.TeamA).currentRole);
     }
 
     [Test]
     public void TeamB_DefaultsToRunnersRole()
     {
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, roundManager.TeamB.currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, roundManager.GetTeam(TeamId.TeamB).currentRole);
     }
 
     [Test]
     public void TeamA_HasEmptyPlayersSetByDefault()
     {
-        Assert.IsNotNull(roundManager.TeamA.players);
-        Assert.AreEqual(0, roundManager.TeamA.players.Count);
+        Assert.IsNotNull(roundManager.GetPlayersForTeam(TeamId.TeamA));
+        Assert.AreEqual(0, roundManager.GetPlayersForTeam(TeamId.TeamA).Count);
     }
 
     [Test]
     public void TeamB_HasEmptyPlayersSetByDefault()
     {
-        Assert.IsNotNull(roundManager.TeamB.players);
-        Assert.AreEqual(0, roundManager.TeamB.players.Count);
+        Assert.IsNotNull(roundManager.GetPlayersForTeam(TeamId.TeamB));
+        Assert.AreEqual(0, roundManager.GetPlayersForTeam(TeamId.TeamB).Count);
     }
 
     [Test]
     public void TeamAEliminations_DefaultsToZero()
     {
-        Assert.AreEqual(0, roundManager.TeamAEliminations);
+        Assert.AreEqual(0, roundManager.GetTeam(TeamId.TeamA).eliminations);
     }
 
     [Test]
     public void TeamBEliminations_DefaultsToZero()
     {
-        Assert.AreEqual(0, roundManager.TeamBEliminations);
+        Assert.AreEqual(0, roundManager.GetTeam(TeamId.TeamB).eliminations);
     }
 
     [Test]
@@ -116,14 +116,14 @@ public class PolarityRoundManagerTests
     public void RegisterPlayersForTeamA_UpdatesPlayersSet()
     {
         roundManager.RegisterPlayersForTeamA(new() { 1, 2, 3, 4 });
-        Assert.AreEqual(new HashSet<ulong>() { 1, 2, 3, 4 }, roundManager.TeamA.players);
+        Assert.AreEqual(new HashSet<ulong>() { 1, 2, 3, 4 }, roundManager.GetPlayersForTeam(TeamId.TeamA));
     }
 
     [Test]
     public void RegisterPlayersForTeamB_UpdatesPlayersSet()
     {
         roundManager.RegisterPlayersForTeamB(new() { 1, 2, 3, 4 });
-        Assert.AreEqual(new HashSet<ulong>() { 1, 2, 3, 4 }, roundManager.TeamB.players);
+        Assert.AreEqual(new HashSet<ulong>() { 1, 2, 3, 4 }, roundManager.GetPlayersForTeam(TeamId.TeamB));
     }
     #endregion
 
@@ -202,8 +202,8 @@ public class PolarityRoundManagerTests
     {
         roundManager.StartMatchWithoutCountdown();
 
-        Assert.AreEqual(0, roundManager.TeamAEliminations);
-        Assert.AreEqual(0, roundManager.TeamBEliminations);
+        Assert.AreEqual(0, roundManager.GetTeam(TeamId.TeamA).eliminations);
+        Assert.AreEqual(0, roundManager.GetTeam(TeamId.TeamB).eliminations);
     }
 
     [Test]
@@ -211,8 +211,8 @@ public class PolarityRoundManagerTests
     {
         roundManager.StartMatchWithoutCountdown();
 
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.TeamA.currentRole);
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, roundManager.TeamB.currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.GetTeam(TeamId.TeamA).currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, roundManager.GetTeam(TeamId.TeamB).currentRole);
     }
 
     [Test]
@@ -230,13 +230,13 @@ public class PolarityRoundManagerTests
     {
         roundManager.StartMatchWithoutCountdown();
 
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.TeamA.currentRole);
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, roundManager.TeamB.currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.GetTeam(TeamId.TeamA).currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, roundManager.GetTeam(TeamId.TeamB).currentRole);
 
         roundManager.SwitchRoles();
 
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, roundManager.TeamA.currentRole);
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.TeamB.currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, roundManager.GetTeam(TeamId.TeamA).currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.GetTeam(TeamId.TeamB).currentRole);
     }
 
     [Test]
@@ -261,7 +261,7 @@ public class PolarityRoundManagerTests
         roundManager.SwitchRoles();
 
         Assert.AreEqual(0, eventCallCount);
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.TeamA.currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.GetTeam(TeamId.TeamA).currentRole);
     }
 
     [Test]
@@ -272,8 +272,8 @@ public class PolarityRoundManagerTests
         roundManager.SwitchRoles();
         roundManager.SwitchRoles();
 
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.TeamA.currentRole);
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, roundManager.TeamB.currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, roundManager.GetTeam(TeamId.TeamA).currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, roundManager.GetTeam(TeamId.TeamB).currentRole);
     }
 
     [Test]
@@ -281,12 +281,12 @@ public class PolarityRoundManagerTests
     {
         var manager = CreateManagerWithConfig(timeBetweenRoleSwitchSeconds: 2);
         manager.StartMatchWithoutCountdown();
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, manager.TeamA.currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, manager.GetTeam(TeamId.TeamA).currentRole);
 
         await Task.Delay(3000);
 
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, manager.TeamA.currentRole);
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, manager.TeamB.currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Runners, manager.GetTeam(TeamId.TeamA).currentRole);
+        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, manager.GetTeam(TeamId.TeamB).currentRole);
     }
 
     [Test]
@@ -310,7 +310,7 @@ public class PolarityRoundManagerTests
     public async Task EndMatch_UpdatesMatchState()
     {
         roundManager.StartMatchWithoutCountdown();
-        await roundManager.EndMatch(roundManager.TeamA);
+        await roundManager.EndMatch(TeamId.TeamA);
 
         Assert.AreEqual(false, roundManager.IsMatchActive);
         Assert.AreEqual(true, roundManager.IsMatchEnded);
@@ -321,18 +321,18 @@ public class PolarityRoundManagerTests
     {
         roundManager.StartMatchWithoutCountdown();
 
-        PolarityRoundManager.Team? capturedWinner = null;
+        TeamId? capturedWinnerId = null;
         int eventCallCount = 0;
-        roundManager.OnMatchEnd += (winner) =>
+        roundManager.OnMatchEnd += (winnerId) =>
         {
-            capturedWinner = winner;
+            capturedWinnerId = winnerId;
             eventCallCount++;
         };
 
-        await roundManager.EndMatch(roundManager.TeamA);
+        await roundManager.EndMatch(TeamId.TeamA);
 
         Assert.AreEqual(1, eventCallCount);
-        Assert.AreEqual(PolarityRoundManager.PolarityTeamRole.Taggers, capturedWinner.Value.currentRole);
+        Assert.AreEqual(TeamId.TeamA, capturedWinnerId);
     }
 
     [Test]
@@ -350,7 +350,7 @@ public class PolarityRoundManagerTests
             eventCallCount++;
         };
 
-        await roundManager.EndMatch(roundManager.TeamA);
+        await roundManager.EndMatch(TeamId.TeamA);
 
         Assert.AreEqual(PolarityMatchState.MatchActive, capturedOldState);
         Assert.AreEqual(PolarityMatchState.MatchEnded, capturedNewState);
@@ -362,12 +362,12 @@ public class PolarityRoundManagerTests
     {
         var manager = CreateManagerWithConfig(timeBetweenRoleSwitchSeconds: 1);
         manager.StartMatchWithoutCountdown();
-        await manager.EndMatch(manager.TeamA);
+        await manager.EndMatch(TeamId.TeamA);
 
-        var roleAtEnd = manager.TeamA.currentRole;
+        var roleAtEnd = manager.GetTeam(TeamId.TeamA).currentRole;
         await Task.Delay(1500);
 
-        Assert.AreEqual(roleAtEnd, manager.TeamA.currentRole);
+        Assert.AreEqual(roleAtEnd, manager.GetTeam(TeamId.TeamA).currentRole);
     }
 
     [Test]
@@ -376,7 +376,7 @@ public class PolarityRoundManagerTests
         int eventCallCount = 0;
         roundManager.OnMatchEnd += (_) => eventCallCount++;
 
-        await roundManager.EndMatch(roundManager.TeamA);
+        await roundManager.EndMatch(TeamId.TeamA);
 
         Assert.AreEqual(0, eventCallCount);
         Assert.AreEqual(false, roundManager.IsMatchActive);
@@ -449,8 +449,8 @@ public class PolarityRoundManagerTests
 
         statTracker.RecordKill(1, 2);
 
-        Assert.AreEqual(0, roundManager.TeamAEliminations);
-        Assert.AreEqual(0, roundManager.TeamBEliminations);
+        Assert.AreEqual(0, roundManager.GetTeam(TeamId.TeamA).eliminations);
+        Assert.AreEqual(0, roundManager.GetTeam(TeamId.TeamB).eliminations);
     }
 
     [Test]
@@ -463,8 +463,8 @@ public class PolarityRoundManagerTests
         statTracker.RecordKill(1, 2);
         statTracker.RecordKill(2, 1);
 
-        Assert.AreEqual(2, roundManager.TeamAEliminations);
-        Assert.AreEqual(1, roundManager.TeamBEliminations);
+        Assert.AreEqual(2, roundManager.GetTeam(TeamId.TeamA).eliminations);
+        Assert.AreEqual(1, roundManager.GetTeam(TeamId.TeamB).eliminations);
     }
 
     [Test]
@@ -477,8 +477,8 @@ public class PolarityRoundManagerTests
         statTracker.RecordKill(2, 1);
         statTracker.RecordKill(2, 1);
 
-        Assert.AreEqual(0, roundManager.TeamAEliminations);
-        Assert.AreEqual(2, roundManager.TeamBEliminations);
+        Assert.AreEqual(0, roundManager.GetTeam(TeamId.TeamA).eliminations);
+        Assert.AreEqual(2, roundManager.GetTeam(TeamId.TeamB).eliminations);
     }
 
     [Test]
@@ -502,14 +502,14 @@ public class PolarityRoundManagerTests
         SetupTwoPlayerTeams(manager);
         manager.StartMatchWithoutCountdown();
 
-        PolarityRoundManager.Team? capturedWinner = null;
-        manager.OnMatchEnd += (winner) => capturedWinner = winner;
+        TeamId? capturedWinnerId = null;
+        manager.OnMatchEnd += (winnerId) => capturedWinnerId = winnerId;
 
         statTracker.RecordKill(2, 1);
         statTracker.RecordKill(2, 1);
 
-        Assert.IsNotNull(capturedWinner);
-        Assert.IsTrue(capturedWinner.Value.players.Contains(2ul));
+        Assert.IsNotNull(capturedWinnerId);
+        Assert.AreEqual(TeamId.TeamB, capturedWinnerId);
     }
 
     [Test]
@@ -522,8 +522,83 @@ public class PolarityRoundManagerTests
         statTracker.RecordKill(99, 1);
         statTracker.RecordKill(1, 99);
 
-        Assert.AreEqual(1, roundManager.TeamAEliminations);
-        Assert.AreEqual(0, roundManager.TeamBEliminations);
+        Assert.AreEqual(1, roundManager.GetTeam(TeamId.TeamA).eliminations);
+        Assert.AreEqual(0, roundManager.GetTeam(TeamId.TeamB).eliminations);
+    }
+    #endregion
+
+    #region GetLeaderboard
+    [Test]
+    public void GetLeaderboard_ReturnsEmptyListsIfNoStats()
+    {
+        var leaderboard = roundManager.GetLeaderboard();
+
+        Assert.IsNotNull(leaderboard);
+        Assert.AreEqual(0, leaderboard[TeamId.TeamA].Count);
+        Assert.AreEqual(0, leaderboard[TeamId.TeamB].Count);
+    }
+
+    [Test]
+    public void GetLeaderboard_ReturnsPlayerRankingsForTeamA()
+    {
+        roundManager.RegisterPlayersForTeamA(new() { 1, 2 });
+        roundManager.StartMatchWithoutCountdown();
+        statTracker.RecordKill(1, 3);
+        statTracker.RecordKill(2, 3);
+
+        var leaderboard = roundManager.GetLeaderboard();
+
+        Assert.AreEqual(2, leaderboard[TeamId.TeamA].Count);
+    }
+
+    [Test]
+    public void GetLeaderboard_ReturnsPlayerRankingsForTeamB()
+    {
+        roundManager.RegisterPlayersForTeamB(new() { 3, 4 });
+        roundManager.StartMatchWithoutCountdown();
+        statTracker.RecordKill(3, 1);
+        statTracker.RecordKill(4, 1);
+
+        var leaderboard = roundManager.GetLeaderboard();
+
+        Assert.AreEqual(2, leaderboard[TeamId.TeamB].Count);
+    }
+
+    [Test]
+    public void GetLeaderboard_SortsPlayersByKillsDescending()
+    {
+        roundManager.RegisterPlayersForTeamA(new() { 1, 2, 3 });
+        roundManager.StartMatchWithoutCountdown();
+        statTracker.RecordKill(3, 99);
+        statTracker.RecordKill(3, 99);
+        statTracker.RecordKill(3, 99);
+        statTracker.RecordKill(1, 99);
+        statTracker.RecordKill(2, 99);
+        statTracker.RecordKill(2, 99);
+
+        var rankings = roundManager.GetLeaderboard()[TeamId.TeamA];
+
+        Assert.AreEqual(3ul, rankings[0].player);
+        Assert.AreEqual(2ul, rankings[1].player);
+        Assert.AreEqual(1ul, rankings[2].player);
+    }
+
+    [Test]
+    public void GetLeaderboard_TeamPlayersDoNotAppearInOppositeTeam()
+    {
+        roundManager.RegisterPlayersForTeamA(new() { 1, 2 });
+        roundManager.RegisterPlayersForTeamB(new() { 3, 4 });
+        roundManager.StartMatchWithoutCountdown();
+        statTracker.RecordKill(1, 3);
+        statTracker.RecordKill(3, 1);
+
+        var leaderboard = roundManager.GetLeaderboard();
+        var teamAIds = new HashSet<ulong>();
+        var teamBIds = new HashSet<ulong>();
+        foreach (var r in leaderboard[TeamId.TeamA]) teamAIds.Add(r.player);
+        foreach (var r in leaderboard[TeamId.TeamB]) teamBIds.Add(r.player);
+
+        Assert.IsFalse(teamAIds.Overlaps(teamBIds));
     }
     #endregion
 }

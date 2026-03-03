@@ -6,7 +6,8 @@
         "UnityEditor.TestRunner",
         "Polarity",
         "PurrNet.Runtime",
-        "MatchStat"
+        "MatchStat",
+        "SharedGameLogic"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,7 +1,6 @@
 using PurrNet.Packing;
-using Resonance.Assemblies.MatchStat;
 
-namespace Resonance.Assemblies.Arena
+namespace Resonance.Assemblies.MatchStat
 {
     [System.Serializable]
     public struct PlayerRanking : IPackedAuto

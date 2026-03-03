@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using PurrNet;
 using Resonance.Assemblies.Arena;
 using Resonance.Assemblies.MatchStat;
+using Resonance.Assemblies.SharedGameLogic;
 using UnityEngine;
 
 namespace Resonance.Match

@@ -1,18 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using PurrNet.Packing;
 using Resonance.Assemblies.MatchStat;
 
 namespace Resonance.Assemblies.Polarity
 {
+    public enum TeamId { TeamA, TeamB }
+
     public class PolarityRoundManager
     {
         #region Custom data types
-        public struct Team
+        [System.Serializable]
+        public struct Team : IPackedAuto
         {
             public PolarityTeamRole currentRole;
-            public HashSet<ulong> players;
+            public int eliminations;
         }
 
         public enum PolarityTeamRole
@@ -23,7 +28,8 @@ namespace Resonance.Assemblies.Polarity
         #endregion
 
         #region Configuration
-        public struct PolarityRoundManagerConfig
+        [System.Serializable]
+        public struct PolarityRoundManagerConfig : IPackedAuto
         {
             public int timeBetweenRoleSwitchSeconds;
             public int teamEliminationsToWin;
@@ -45,10 +51,8 @@ namespace Resonance.Assemblies.Polarity
         private PolarityMatchState matchState = PolarityMatchState.Waiting;
         private DateTime? timeOfLastRoleSwitch = null;
         private Timer roleSwitchCheckTimer = null;
-        private Team teamA;
-        private Team teamB;
-        private int teamAEliminations = 0;
-        private int teamBEliminations = 0;
+        private Dictionary<TeamId, Team> teams;
+        private Dictionary<TeamId, HashSet<ulong>> teamPlayers;
         #endregion
 
         #region Properties
@@ -57,10 +61,9 @@ namespace Resonance.Assemblies.Polarity
         public bool IsMatchEnded => matchState == PolarityMatchState.MatchEnded;
         public int TeamEliminationsToWin => teamEliminationsToWin;
         public float MatchStartCountdownSeconds => matchStartCountdownSeconds;
-        public Team TeamA => teamA;
-        public Team TeamB => teamB;
-        public int TeamAEliminations => teamAEliminations;
-        public int TeamBEliminations => teamBEliminations;
+        public IReadOnlyDictionary<TeamId, Team> Teams => teams;
+        public Team GetTeam(TeamId teamId) => teams[teamId];
+        public HashSet<ulong> GetPlayersForTeam(TeamId teamId) => teamPlayers[teamId];
         public DateTime? TimeOfLastRoleSwitch => timeOfLastRoleSwitch;
         public double SecondsUntilNextRoleSwitch
         {
@@ -90,15 +93,15 @@ namespace Resonance.Assemblies.Polarity
             teamEliminationsToWin = config.teamEliminationsToWin;
             matchStartCountdownSeconds = config.matchStartCountdownSeconds;
 
-            teamA = new Team
+            teams = new()
             {
-                currentRole = PolarityTeamRole.Taggers,
-                players = new HashSet<ulong>()
+                [TeamId.TeamA] = new Team { currentRole = PolarityTeamRole.Taggers, eliminations = 0 },
+                [TeamId.TeamB] = new Team { currentRole = PolarityTeamRole.Runners, eliminations = 0 },
             };
-            teamB = new Team
+            teamPlayers = new()
             {
-                currentRole = PolarityTeamRole.Runners,
-                players = new HashSet<ulong>()
+                [TeamId.TeamA] = new HashSet<ulong>(),
+                [TeamId.TeamB] = new HashSet<ulong>(),
             };
 
             SubscribeToEvents();
@@ -120,29 +123,14 @@ namespace Resonance.Assemblies.Polarity
         public event Action<PolarityMatchState, PolarityMatchState> OnMatchStateChange;
         public event Action<float> OnMatchCountdownStart;
         public event Action OnMatchStart;
-        public event Action<Team> OnMatchEnd;
+        public event Action<TeamId> OnMatchEnd;
         public event Action OnRoleSwitch;
         public event Action<double> OnRoleSwitchTimerElapsed;
         #endregion
 
         #region Player Registration
-        public void RegisterPlayersForTeamA(HashSet<ulong> players)
-        {
-            teamA = new()
-            {
-                currentRole = teamA.currentRole,
-                players = players,
-            };
-        }
-
-        public void RegisterPlayersForTeamB(HashSet<ulong> players)
-        {
-            teamB = new()
-            {
-                currentRole = teamB.currentRole,
-                players = players,
-            };
-        }
+        public void RegisterPlayersForTeamA(HashSet<ulong> players) => teamPlayers[TeamId.TeamA] = players;
+        public void RegisterPlayersForTeamB(HashSet<ulong> players) => teamPlayers[TeamId.TeamB] = players;
         #endregion
 
         #region Match Control
@@ -168,10 +156,8 @@ namespace Resonance.Assemblies.Polarity
             var oldMatchState = matchState;
             matchState = PolarityMatchState.MatchActive;
 
-            teamAEliminations = 0;
-            teamBEliminations = 0;
-            teamA.currentRole = PolarityTeamRole.Taggers;
-            teamB.currentRole = PolarityTeamRole.Runners;
+            teams[TeamId.TeamA] = new Team { currentRole = PolarityTeamRole.Taggers, eliminations = 0 };
+            teams[TeamId.TeamB] = new Team { currentRole = PolarityTeamRole.Runners, eliminations = 0 };
             timeOfLastRoleSwitch = DateTime.Now;
 
             matchStatTracker?.ResetAllStats();
@@ -201,20 +187,27 @@ namespace Resonance.Assemblies.Polarity
         {
             if (!IsMatchActive) return;
 
-            (teamA.currentRole, teamB.currentRole) = (teamB.currentRole, teamA.currentRole);
+            var roleA = teams[TeamId.TeamA].currentRole;
+            var teamAData = teams[TeamId.TeamA];
+            teamAData.currentRole = teams[TeamId.TeamB].currentRole;
+            teams[TeamId.TeamA] = teamAData;
+
+            var teamBData = teams[TeamId.TeamB];
+            teamBData.currentRole = roleA;
+            teams[TeamId.TeamB] = teamBData;
 
             timeOfLastRoleSwitch = DateTime.Now;
 
             OnRoleSwitch?.Invoke();
         }
 
-        public async Task EndMatch(Team winningTeam)
+        public async Task EndMatch(TeamId winningTeamId)
         {
             if (matchState != PolarityMatchState.MatchActive) return;
 
             matchState = PolarityMatchState.MatchEnded;
             OnMatchStateChange?.Invoke(PolarityMatchState.MatchActive, matchState);
-            OnMatchEnd?.Invoke(winningTeam);
+            OnMatchEnd?.Invoke(winningTeamId);
 
             roleSwitchCheckTimer?.Stop();
             roleSwitchCheckTimer?.Dispose();
@@ -233,26 +226,58 @@ namespace Resonance.Assemblies.Polarity
         #endregion
 
         #region Kill Event Handling
+        private void IncrementEliminationsAndCheckWin(TeamId teamId)
+        {
+            var team = teams[teamId];
+            team.eliminations++;
+            teams[teamId] = team;
+            if (team.eliminations >= teamEliminationsToWin)
+            {
+                _ = EndMatch(teamId);
+            }
+        }
+
         private void OnPlayerKilled(ulong attacker, ulong victim)
         {
             if (!IsMatchActive || IsMatchEnded) return;
 
-            if (teamA.players.Contains(attacker))
+            foreach (var kvp in teamPlayers)
             {
-                teamAEliminations++;
-                if (teamAEliminations >= teamEliminationsToWin)
+                if (kvp.Value.Contains(attacker))
                 {
-                    _ = EndMatch(teamA);
+                    IncrementEliminationsAndCheckWin(kvp.Key);
+                    return;
                 }
             }
-            else if (teamB.players.Contains(attacker))
+        }
+        #endregion
+
+        #region GetLeaderboard
+        public Dictionary<TeamId, List<PlayerRanking>> GetLeaderboard()
+        {
+            var result = new Dictionary<TeamId, List<PlayerRanking>>();
+            foreach (var teamId in teamPlayers.Keys)
             {
-                teamBEliminations++;
-                if (teamBEliminations >= teamEliminationsToWin)
+                result[teamId] = BuildRankingsForTeam(teamId);
+            }
+            return result;
+        }
+
+        private List<PlayerRanking> BuildRankingsForTeam(TeamId teamId)
+        {
+            var rankings = new List<PlayerRanking>();
+            foreach (var playerId in teamPlayers[teamId])
+            {
+                if (matchStatTracker?.GetStats(playerId) is PlayerMatchStats stats)
                 {
-                    _ = EndMatch(teamB);
+                    rankings.Add(new PlayerRanking { player = playerId, stats = stats });
                 }
             }
+            return rankings
+                .OrderByDescending(r => r.stats.kills)
+                .ThenByDescending(r => r.stats.KDA)
+                .ThenBy(r => r.stats.deaths)
+                .ToList();
         }
         #endregion
     }
