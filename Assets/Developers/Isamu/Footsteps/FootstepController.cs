@@ -37,22 +37,49 @@ namespace Resonance.Audio
 
         void Update()
         {
-            
+            // auto-detect landing
+            bool isInAir = !playerState.InGroundedState();
+
+            if (wasInAir && !isInAir)
+            {
+                PlayLanding();
+            }
+
+            wasInAir = isInAir;
         }
 
         public void PlayFootstep()
         {
-            
+            DetectSurface();
+            SetSurfaceSwitch();
+
+            if (footstepEvent != null && footstepEvent.IsValid())
+            {
+                footstepEvent.Post(gameObject);
+            }
         }
 
         public void PlayLanding()
         {
-            
+            DetectSurface();
+            SetSurfaceSwitch();
+
+            if (landingEvent != null && landingEvent.IsValid())
+            {
+                landingEvent.Post(gameObject);
+            }
         }
 
         void DetectSurface()
         {
+            Vector3 origin = transform.position + characterController.center;
+            float distance = (characterController.height / 2f) + raycastDistance;
             
+            RaycastHit hit;
+            if (Physics.Raycast(origin, Vector3.down, out hit, distance, groundLayers))
+            {
+                currentSurface = GetSurfaceFromTag(hit.collider.tag);
+            }
         }
 
         string GetSurfaceFromTag(string tag)
@@ -87,7 +114,13 @@ namespace Resonance.Audio
 
         void OnDrawGizmosSelected()
         {
+            if (!Application.IsPlaying || characterController == null) return;
             
+            Vector3 origin = transform.position + characterController.center;
+            float distance = (characterController.height / 2f) + raycastDistance;
+
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(origin, origin + Vector3.down * distance);
         }
     }
 }
