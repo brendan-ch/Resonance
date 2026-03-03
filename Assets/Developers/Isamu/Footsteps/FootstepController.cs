@@ -31,8 +31,18 @@ namespace Resonance.Audio
 
         void Awake()
         {
-            characterController = GetComponent<CharacterController>();
-            playerState = GetComponent<PlayerState>();
+            characterController = GetComponentInParent<CharacterController>();
+            playerState = GetComponentInParent<PlayerState>();
+
+            if (characterController == null)
+            {
+                Debug.LogError("[FootstepController] CharacterController not found in parent!");
+            }
+            
+            if (playerState == null)
+            {
+                Debug.LogError("[FootstepController] PlayerState not found in parent!");
+            }
         }
 
         void Update()
