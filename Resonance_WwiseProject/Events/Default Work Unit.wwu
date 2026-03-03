@@ -39,6 +39,28 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Play_Footstep" ID="{9682FA73-32CF-41B9-931F-A41CE6D92E60}">
+					<ChildrenList>
+						<Action Name="" ID="{88FA616B-6DC1-4D8F-B929-BB671F3E19E3}" ShortID="918991617">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Footsteps" ID="{416F31FF-A666-4E03-BD23-644DEC1F7C0F}" WorkUnitID="{A0953ED0-0717-4C8C-B006-DE01ACC1580F}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Landing" ID="{3F483C2B-4AA2-43B3-B2A7-A916FFF59C74}">
+					<ChildrenList>
+						<Action Name="" ID="{CCE88CB8-2F12-4002-87FE-00628106B74C}" ShortID="880465146">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Footsteps" ID="{416F31FF-A666-4E03-BD23-644DEC1F7C0F}" WorkUnitID="{A0953ED0-0717-4C8C-B006-DE01ACC1580F}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

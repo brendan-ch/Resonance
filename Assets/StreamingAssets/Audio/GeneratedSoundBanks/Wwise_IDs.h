@@ -18,6 +18,23 @@ namespace AK
         static const AkUniqueID STOP_REACTIVE_FEEDBACK = 3211783545U;
     } // namespace EVENTS
 
+    namespace SWITCHES
+    {
+        namespace SURFACETYPE
+        {
+            static const AkUniqueID GROUP = 63790334U;
+
+            namespace SWITCH
+            {
+                static const AkUniqueID CONCRETE = 841620460U;
+                static const AkUniqueID GRAVEL = 2185786256U;
+                static const AkUniqueID METAL = 2473969246U;
+                static const AkUniqueID WOOD = 2058049674U;
+            } // namespace SWITCH
+        } // namespace SURFACETYPE
+
+    } // namespace SWITCHES
+
     namespace GAME_PARAMETERS
     {
         static const AkUniqueID AMBIENCEMIX = 142454441U;
