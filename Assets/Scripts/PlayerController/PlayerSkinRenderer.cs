@@ -11,7 +11,6 @@ namespace Resonance.PlayerController
         [SerializeField] private SkinCatalog skinCatalog;
         [SerializeField] private Animator animator;
         public Action<GameObject> OnNewSkinSpawned;
-        public Action<SkinData> OnNewSkinDataLoaded;
 
         public SyncVar<int> skinIndex = new SyncVar<int>();
 
@@ -71,7 +70,6 @@ namespace Resonance.PlayerController
             animator.Rebind();
 
             OnNewSkinSpawned.Invoke(CurrentMeshInstance);
-            OnNewSkinDataLoaded.Invoke(skinData);
             ShowShadowsOnlyIfOwner();
         }
 
