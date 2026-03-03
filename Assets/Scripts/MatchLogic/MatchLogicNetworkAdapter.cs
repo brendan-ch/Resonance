@@ -2,6 +2,7 @@ using PurrNet;
 using Resonance.Assemblies.Arena;
 using Resonance.Assemblies.MatchStat;
 using Resonance.Assemblies.Polarity;
+using Resonance.GameBootstrap;
 using Resonance.LobbySystem;
 using UnityEngine;
 
@@ -32,7 +33,6 @@ namespace Resonance.Match
         [SerializeField] private float assistDamageThreshold = 20f;
 
         [Header("General Gameplay Settings")]
-        [SerializeField] public GameMode gameModeToSpawn = GameMode.Arena;
         [SerializeField] private float matchStartCountdownSeconds = 5f;
 
         [Header("Arena Settings")]
@@ -60,7 +60,9 @@ namespace Resonance.Match
         {
             InstanceHandler.RegisterInstance(this);
             DontDestroyOnLoad(this);
-            Configure(gameModeToSpawn);
+
+            var gameModeProvider = FindFirstObjectByType<GameModeProvider>();
+            Configure(gameModeProvider.gameMode);
         }
 
         private void OnDestroy()

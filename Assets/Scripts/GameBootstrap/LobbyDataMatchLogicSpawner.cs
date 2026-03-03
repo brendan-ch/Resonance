@@ -10,21 +10,9 @@ namespace Resonance.GameBootstrap
     {
         [SerializeField] private GameObject matchLogicPrefab;
 
-        private LobbyDataHolder lobbyDataHolder;
         public UnityEvent OnMatchLogicSpawned = new();
 
         private bool matchLogicSpawned = false;
-
-        protected override void OnSpawned()
-        {
-            base.OnSpawned();
-
-            lobbyDataHolder = FindFirstObjectByType<LobbyDataHolder>();
-            if (!lobbyDataHolder)
-            {
-                Debug.LogError($"[{GetType()}] Unable to find {nameof(LobbyDataHolder)} component; match logic spawning will not work");
-            }
-        }
 
         public void SpawnMatchLogic()
         {
@@ -34,19 +22,10 @@ namespace Resonance.GameBootstrap
                 return;
             }
 
-            // spawn the object, disable it, set the game mode, then make it active,
-            // running the Awake method
-            var gameMode = lobbyDataHolder.CurrentLobby.GameMode;
-            Debug.Log($"[{GetType()}] Spawning match logic for object {id} and gamemode {gameMode}");
+            Debug.Log($"[{GetType()}] Spawning match logic for object {id}");
 
             // must be spawned on all clients to access RPC
-            var matchLogicGameObject = Instantiate(matchLogicPrefab);
-            matchLogicGameObject.SetActive(false);
-
-            var matchLogicAdapter = matchLogicPrefab.GetComponent<MatchLogicNetworkAdapter>();
-            matchLogicAdapter.gameModeToSpawn = gameMode;
-
-            matchLogicGameObject.SetActive(true);
+            Instantiate(matchLogicPrefab);
 
             OnMatchLogicSpawned.Invoke();
             matchLogicSpawned = true;
