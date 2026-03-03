@@ -32,6 +32,7 @@ namespace Resonance.Match
         [SerializeField] private float assistDamageThreshold = 20f;
 
         [Header("General Gameplay Settings")]
+        [SerializeField] public GameMode gameModeToSpawn = GameMode.Arena;
         [SerializeField] private float matchStartCountdownSeconds = 5f;
 
         [Header("Arena Settings")]
@@ -58,8 +59,8 @@ namespace Resonance.Match
         private void Awake()
         {
             InstanceHandler.RegisterInstance(this);
-
             DontDestroyOnLoad(this);
+            Configure(gameModeToSpawn);
         }
 
         private void OnDestroy()
@@ -69,7 +70,7 @@ namespace Resonance.Match
         #endregion
 
         #region Setup
-        public void Configure(GameMode gameMode)
+        private void Configure(GameMode gameMode)
         {
             var matchStatConfig = new MatchStatTracker.MatchStatTrackerConfig
             {
