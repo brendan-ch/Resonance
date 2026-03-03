@@ -2116,7 +2116,7 @@ MonoBehaviour:
   fovTransitionSpeed: 10
   _groundLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 257
 --- !u!114 &8323531065397955590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2335,6 +2335,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a2f7b50c8598b40b30e939fae75a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.OverdriveTrailEffect
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
   _meshesToCopy:
   - {fileID: 1961295532528376932}
   - {fileID: 5469293229860543344}
