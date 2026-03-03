@@ -1484,7 +1484,7 @@ BlendTree:
   m_Name: Run
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -203655887218126122, guid: 3a0738dc516522248ac4837e730a5b1a, type: 3}
+    m_Motion: {fileID: 7400000, guid: 2049573ec29ebca438f1a29d012dcc15, type: 2}
     m_Threshold: 0.125
     m_Position: {x: 0, y: -1}
     m_TimeScale: 1
