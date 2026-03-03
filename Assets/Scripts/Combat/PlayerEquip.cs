@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using Resonance.Combat.Weapons;
 using Resonance.Combat.Weapons.Enums;
 using Resonance.Helper;
 using Resonance.Inventory;
 using Resonance.Player;
 using Resonance.PlayerController;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 namespace Resonance.Combat
@@ -35,7 +37,7 @@ namespace Resonance.Combat
         {
             playerStats = GetComponent<PlayerStats>();
             playerSkinRenderer = GetComponent<PlayerSkinRenderer>();
-            playerSkinRenderer.OnNewSkinDataLoaded += UpdateEquipSlotBasedOnSkinData;
+            playerSkinRenderer.OnNewSkinSpawned += UpdateEquipSlotFromSkin;
         }
 
         void Start()
@@ -93,14 +95,18 @@ namespace Resonance.Combat
             }
         }
 
-        private void UpdateEquipSlotBasedOnSkinData(SkinData data)
+        private void UpdateEquipSlotFromSkin(GameObject skinInstance)
         {
-            var equipSlotVector = data.equipSlot;
+            var tagged = skinInstance.GetComponentsInChildren<Transform>()
+                .FirstOrDefault(t => t.CompareTag("Gun Equip"));
 
-            var equipSlotGameObject = new GameObject("Equip Slot");
-            equipSlot = equipSlotGameObject.transform;
-            equipSlot.SetParent(gameObject.transform, worldPositionStays: false);
-            equipSlot.position = equipSlotVector;
+            if (tagged == null)
+            {
+                Debug.LogError($"[{GetType()}] No 'Gun Equip' tagged object found on skin.", skinInstance);
+                return;
+            }
+
+            equipSlot = tagged;
             RefreshWeaponView(EquippedWeapon);
         }
 
@@ -200,7 +206,11 @@ namespace Resonance.Combat
             currentWeaponInstance = Instantiate(weapon.WeaponPrefab, equipSlot);
             currentWeaponInstance.transform.localPosition = Vector3.zero;
             currentWeaponInstance.transform.localRotation = Quaternion.identity;
-            currentWeaponInstance.transform.localScale = Vector3.one;
+
+            // Cancel out inherited parent scale so weapon renders at world scale (1,1,1)
+            Vector3 ls = equipSlot.lossyScale;
+            currentWeaponInstance.transform.localScale = new Vector3(1f / ls.x, 1f /
+            ls.y, 1f / ls.z);
 
             currentWeaponView = currentWeaponInstance.GetComponent<WeaponView>();
             if (currentWeaponView == null)
