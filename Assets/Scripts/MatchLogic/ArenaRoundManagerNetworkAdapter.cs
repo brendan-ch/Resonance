@@ -18,7 +18,7 @@ namespace Resonance.Match
     public class ArenaRoundManagerNetworkAdapter : NetworkModule
     {
         private MatchStatNetworkAdapter matchStatNetworkAdapter;
-        private ArenaRoundManager.ArenaRoundManagerConfig _config;
+        private ArenaRoundManager.ArenaRoundManagerConfig config;
         private ArenaRoundManager arenaRoundManager;
 
         #region Cached Client-Side State
@@ -47,7 +47,7 @@ namespace Resonance.Match
             ArenaRoundManager.ArenaRoundManagerConfig config)
         {
             matchStatNetworkAdapter = adapter;
-            _config = config;
+            this.config = config;
 
             // because ArenaRoundManager depends on MatchStatTracker, we must wait for
             // matchStatNetworkAdapter to create the relevant instance
@@ -110,7 +110,7 @@ namespace Resonance.Match
         private void CreateArenaRoundManagerWithMatchStatTracker(MatchStatTracker tracker)
         {
             Debug.Log("[ArenaRoundManagerNetworkAdapter] MatchStatTracker instance received, creating ArenaRoundManager and attaching subscribers");
-            arenaRoundManager = new ArenaRoundManager(tracker, _config);
+            arenaRoundManager = new ArenaRoundManager(tracker, config);
 
             arenaRoundManager.OnMatchStart += OnArenaMatchStart;
             arenaRoundManager.OnMatchEnd += OnArenaMatchEnd;
