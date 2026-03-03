@@ -1,3 +1,4 @@
+using Resonance.Combat.Augments;
 using Resonance.Combat.Weapons;
 using Resonance.Combat.Weapons.Enums;
 using Resonance.Helper;
@@ -10,8 +11,11 @@ namespace Resonance.Combat
 {
     public class PlayerEquip : MonoBehaviour
     {
-        public WeaponProperties EquippedWeapon { get; private set; }
-        
+        private GameObject currentWeaponInstance;
+        private PlayerStats playerStats;
+        private WeaponStatManager weaponStatManager;
+        private PlayerAugmentEquipper playerAugmentEquipper;
+     
         private ObservableValue<WeaponProperties> equippedWeaponObservable = new ObservableValue<WeaponProperties>();
         public ObservableValue<WeaponProperties> EquippedWeaponObservable => equippedWeaponObservable;
         
@@ -26,13 +30,13 @@ namespace Resonance.Combat
         [SerializeField] private WeaponView currentWeaponView;
         public WeaponView CurrentWeaponView => currentWeaponView;
         
-
-        private GameObject currentWeaponInstance;
-        private PlayerStats playerStats;
+        public WeaponProperties EquippedWeapon { get; private set; }
         
         void Start()
         {
             playerStats = GetComponent<PlayerStats>();
+            playerAugmentEquipper = GetComponent<PlayerAugmentEquipper>();
+            weaponStatManager = GetComponent<WeaponStatManager>();
             
             StartCoroutine(EquipStartingWeaponNextFrame());
         }
@@ -144,6 +148,11 @@ namespace Resonance.Combat
 
             EquippedWeapon = weapon;
 
+            if (weaponStatManager != null)
+            {
+                weaponStatManager.Initialize(weapon);
+            }
+
             if (equippedWeaponObservable != null)
             {
                 equippedWeaponObservable.Value = weapon;
@@ -190,6 +199,83 @@ namespace Resonance.Combat
             {
                 Debug.LogError("WeaponPrefab is missing WeaponView component.", currentWeaponInstance);
             }
+        }
+        
+        public void RemoveWeapon(WeaponSlot slot)
+        {
+            WeaponProperties existing = slot == WeaponSlot.Primary
+                ? playerInventory.weaponInventory[0]
+                : playerInventory.weaponInventory[1];
+
+            if (existing == null)
+            {
+                return;
+            }
+
+            if (EquippedWeapon == existing)
+            {
+                if (playerStats != null)
+                {
+                    playerStats.RemoveSpeedModifier(existing.Mobility);
+                }
+
+                if (weaponStatManager != null)
+                {
+                    weaponStatManager.Initialize(null);
+                }
+
+                EquippedWeapon = null;
+
+                if (equippedWeaponObservable != null)
+                {
+                    equippedWeaponObservable.Value = null;
+                }
+
+                if (currentWeaponInstance != null)
+                {
+                    Destroy(currentWeaponInstance);
+                    currentWeaponInstance = null;
+                    currentWeaponView = null;
+                }
+            }
+
+            playerInventory.RemoveWeapon(slot);
+        }
+
+        public void EquipAugment(AugmentProperties augment)
+        {
+            if (augment == null || playerAugmentEquipper == null)
+            {
+                return;
+            }
+
+            switch (augment.Slot)
+            {
+                case AugmentSlot.Upper:
+                    if (playerInventory.augmentInventory[0] != null)
+                    {
+                        RemoveAugment(playerInventory.augmentInventory[0]);
+                    }
+                    
+                    playerInventory.AddAugment(augment);
+                    playerAugmentEquipper.ApplyAugmentStats(augment);
+                    break;
+                case AugmentSlot.Lower:
+                    if (playerInventory.augmentInventory[1] != null)
+                    {
+                        RemoveAugment(playerInventory.augmentInventory[1]);
+                    }
+                    
+                    playerInventory.AddAugment(augment);
+                    playerAugmentEquipper.ApplyAugmentStats(augment);
+                    break;
+            }
+        }
+
+        public void RemoveAugment(AugmentProperties augment)
+        {
+                playerAugmentEquipper.RemoveAugmentStats(augment);
+                playerInventory.RemoveAugment(augment.Slot);
         }
     }
 }
