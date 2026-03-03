@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Polarity",
-        "PurrNet.Runtime"
+        "PurrNet.Runtime",
+        "MatchStat"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
