@@ -1,7 +1,18 @@
 Event	ID	Name			Wwise Object Path	Notes
+	1602358412	Play_Footstep			\Default Work Unit\Play_Footstep	
+	2323405115	Play_Landing			\Default Work Unit\Play_Landing	
 	3062989335	Play_Reactive_Feedback			\Default Work Unit\Play_Reactive_Feedback	
 	3211564518	Play_Test_Sound			\Default Work Unit\Play_Test_Sound	
 	3211783545	Stop_Reactive_Feedback			\Default Work Unit\Stop_Reactive_Feedback	
+
+Switch Group	ID	Name			Wwise Object Path	Notes
+	63790334	SurfaceType			\Default Work Unit\SurfaceType	
+
+Switch	ID	Name	Switch Group			Notes
+	841620460	Concrete	SurfaceType			
+	2058049674	Wood	SurfaceType			
+	2185786256	Gravel	SurfaceType			
+	2473969246	Metal	SurfaceType			
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	183903552	Occlusion			\Default Work Unit\Occlusion	
@@ -11,4 +22,26 @@ Game Parameter	ID	Name			Wwise Object Path	Notes
 Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
 	431755879	Sine	Wwise Sine		\Containers\Default Work Unit\Test_Sound\Sine	
 	750451834	Sine	Wwise Sine		\Containers\Default Work Unit\Reactive_Feedback\Sine	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	25129355	sfx_foley_footstep_gravel_walk_03	.cache\D1\{D13A928A-C352-3D82-E9E3-3CF239AC5DB9}.wem		\Containers\Default Work Unit\Footsteps\Gravel\sfx_foley_footstep_gravel_walk_03		103716
+	169568733	sfx_foley_footstep_concrete_walk_02	.cache\DF\{DF3316E0-BB2E-8C06-B19E-06141510C4D9}.wem		\Containers\Default Work Unit\Footsteps\Concrete\sfx_foley_footstep_concrete_walk_02		28896
+	238735003	sfx_foley_footstep_wood_walk_05	.cache\D1\{D1B9DCBA-E51C-9C22-6DC2-D704C4CA3150}.wem		\Containers\Default Work Unit\Footsteps\Wood\sfx_foley_footstep_wood_walk_05		72800
+	378042695	sfx_foley_footstep_concrete_walk_05	.cache\47\{4736E766-543C-B56C-FCA9-080B056030CD}.wem		\Containers\Default Work Unit\Footsteps\Concrete\sfx_foley_footstep_concrete_walk_05		34184
+	400157129	sfx_foley_footstep_concrete_walk_03	.cache\98\{98F2532F-B055-CF28-1183-6C9BCABBA283}.wem		\Containers\Default Work Unit\Footsteps\Concrete\sfx_foley_footstep_concrete_walk_03		17376
+	455834431	sfx_foley_footstep_wood_walk_01	.cache\CC\{CC3A5C7A-C392-BB17-AE0C-8DFE49355E27}.wem		\Containers\Default Work Unit\Footsteps\Wood\sfx_foley_footstep_wood_walk_01		88160
+	576470539	sfx_foley_footstep_concrete_walk_01	.cache\75\{75FDF752-AEDE-8F2B-B9C4-6473AEC72221}.wem		\Containers\Default Work Unit\Footsteps\Concrete\sfx_foley_footstep_concrete_walk_01		22240
+	581940715	sfx_foley_footstep_gravel_walk_02	.cache\40\{40F4E1A0-D706-FD7E-C306-FC81139587C0}.wem		\Containers\Default Work Unit\Footsteps\Gravel\sfx_foley_footstep_gravel_walk_02		97444
+	582696998	sfx_foley_footstep_gravel_walk_01	.cache\57\{571CCB57-FABC-92B1-C054-059AADC3E472}.wem		\Containers\Default Work Unit\Footsteps\Gravel\sfx_foley_footstep_gravel_walk_01		94412
+	616835172	sfx_foley_footstep_metal_walk_03	.cache\DB\{DBECB9C3-3F0E-8B96-CA9B-D80BD9593822}.wem		\Containers\Default Work Unit\Footsteps\Metal\sfx_foley_footstep_metal_walk_03		41168
+	623468735	sfx_foley_footstep_wood_walk_03	.cache\57\{572E1596-199B-8E0F-AEF3-F2DF1C721C08}.wem		\Containers\Default Work Unit\Footsteps\Wood\sfx_foley_footstep_wood_walk_03		50272
+	671307879	sfx_foley_footstep_metal_walk_05	.cache\0C\{0C94FC86-B66E-8A35-6EB1-4D3C7815A3F9}.wem		\Containers\Default Work Unit\Footsteps\Metal\sfx_foley_footstep_metal_walk_05		42976
+	762903553	sfx_foley_footstep_metal_walk_02	.cache\15\{1551D122-3636-9CA4-6AB8-C00FE834FCFD}.wem		\Containers\Default Work Unit\Footsteps\Metal\sfx_foley_footstep_metal_walk_02		47256
+	767766251	sfx_foley_footstep_gravel_walk_04	.cache\4B\{4BB3FEC5-5BDB-2630-717C-7E1D97D4544E}.wem		\Containers\Default Work Unit\Footsteps\Gravel\sfx_foley_footstep_gravel_walk_04		98536
+	776583239	sfx_foley_footstep_gravel_walk_05	.cache\04\{04916F3E-45D5-AC5A-3340-AEE8E562315C}.wem		\Containers\Default Work Unit\Footsteps\Gravel\sfx_foley_footstep_gravel_walk_05		88104
+	852259169	sfx_foley_footstep_wood_walk_04	.cache\32\{32FEA478-CE1F-E6D7-5568-EEE695C972DE}.wem		\Containers\Default Work Unit\Footsteps\Wood\sfx_foley_footstep_wood_walk_04		72800
+	881067484	sfx_foley_footstep_concrete_walk_04	.cache\35\{3539E74A-3BDD-3647-BAA0-6FB2CA542E1E}.wem		\Containers\Default Work Unit\Footsteps\Concrete\sfx_foley_footstep_concrete_walk_04		35040
+	1018841057	sfx_foley_footstep_wood_walk_02	.cache\79\{79DFF600-8AA0-76B8-842F-139A8A33758F}.wem		\Containers\Default Work Unit\Footsteps\Wood\sfx_foley_footstep_wood_walk_02		53344
+	1054868435	sfx_foley_footstep_metal_walk_04	.cache\0E\{0EAAA638-36B5-D4FA-DB82-E96785077B7A}.wem		\Containers\Default Work Unit\Footsteps\Metal\sfx_foley_footstep_metal_walk_04		60888
+	1060316413	sfx_foley_footstep_metal_walk_01	.cache\69\{69D45205-D5E6-A9C2-A626-33EEA8A1F54A}.wem		\Containers\Default Work Unit\Footsteps\Metal\sfx_foley_footstep_metal_walk_01		50312
 
