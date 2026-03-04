@@ -36,6 +36,7 @@ namespace Resonance.LobbySystem
             public string Id;
             public string LobbyId;
             public bool IsReady;
+            public int SkinIndex;
         }
 
         private List<Lobby> lobbies;

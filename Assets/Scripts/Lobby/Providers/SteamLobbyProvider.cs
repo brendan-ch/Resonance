@@ -445,12 +445,16 @@ namespace Resonance.LobbySystem.Providers
                 }
             }
 
+            var skinIndex = Steamworks.SteamMatchmaking.GetLobbyMemberData(lobbyId, steamId, "SkinIndex");
+            var parsedSkinIndex = int.TryParse(skinIndex, out int result) ? result : 0;
+
             return new LobbyUser
             {
                 Id = steamId.m_SteamID.ToString(),
                 DisplayName = displayName,
                 IsReady = isReady,
-                Avatar = avatar
+                Avatar = avatar,
+                SkinIndex = parsedSkinIndex,
             };
         }
 
