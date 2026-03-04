@@ -10,170 +10,170 @@
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{8D06C61D-48A8-024C-F1DF-C3AF7935237B}",
+    "Hash": "{3EA25559-7049-1CA1-5A90-2E7424F34E73}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
     "Media": [
      {
-      "Id": "25129355",
+      "Id": "152568559",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_gravel_walk_03.wav",
-      "CachePath": "D1/{D13A928A-C352-3D82-E9E3-3CF239AC5DB9}.wem"
+      "ShortName": "sfx_foley_footstep_gravel_run_02.wav",
+      "CachePath": "2D/{2D98AB83-F1DD-6D72-63EF-305AC133EA0E}.wem"
      },
      {
-      "Id": "169568733",
+      "Id": "178954702",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_concrete_walk_02.wav",
-      "CachePath": "DF/{DF3316E0-BB2E-8C06-B19E-06141510C4D9}.wem"
+      "ShortName": "sfx_foley_footstep_wood_run_04.wav",
+      "CachePath": "78/{7869FAF3-19FD-B709-F40F-8CED6B546424}.wem"
      },
      {
-      "Id": "238735003",
+      "Id": "211680909",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_wood_walk_05.wav",
-      "CachePath": "D1/{D1B9DCBA-E51C-9C22-6DC2-D704C4CA3150}.wem"
+      "ShortName": "sfx_foley_footstep_metal_run_02.wav",
+      "CachePath": "E9/{E997263F-1F3F-1175-8BD4-C6D646C2E6DD}.wem"
      },
      {
-      "Id": "378042695",
+      "Id": "251517408",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_concrete_walk_05.wav",
-      "CachePath": "47/{4736E766-543C-B56C-FCA9-080B056030CD}.wem"
+      "ShortName": "sfx_foley_footstep_wood_run_02.wav",
+      "CachePath": "CB/{CB9EF375-C645-22FA-D6EA-99071E83844C}.wem"
      },
      {
-      "Id": "400157129",
+      "Id": "350734022",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_concrete_walk_03.wav",
-      "CachePath": "98/{98F2532F-B055-CF28-1183-6C9BCABBA283}.wem"
+      "ShortName": "sfx_foley_footstep_metal_run_05.wav",
+      "CachePath": "17/{176714DE-5172-DB84-CD39-E7468B57F46E}.wem"
      },
      {
-      "Id": "455834431",
+      "Id": "394611772",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_wood_walk_01.wav",
-      "CachePath": "CC/{CC3A5C7A-C392-BB17-AE0C-8DFE49355E27}.wem"
+      "ShortName": "sfx_foley_footstep_concrete_run_02.wav",
+      "CachePath": "59/{59DFC9D1-6CA3-28F0-DFAB-4D5F620517CC}.wem"
      },
      {
-      "Id": "576470539",
+      "Id": "496429034",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_concrete_walk_01.wav",
-      "CachePath": "75/{75FDF752-AEDE-8F2B-B9C4-6473AEC72221}.wem"
+      "ShortName": "sfx_foley_footstep_concrete_run_01.wav",
+      "CachePath": "53/{536EC870-2348-9BED-3E33-55218C0CFEA1}.wem"
      },
      {
-      "Id": "581940715",
+      "Id": "498119391",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_gravel_walk_02.wav",
-      "CachePath": "40/{40F4E1A0-D706-FD7E-C306-FC81139587C0}.wem"
+      "ShortName": "sfx_foley_footstep_gravel_run_05.wav",
+      "CachePath": "81/{81BFFE35-2A1E-6D2F-1D5B-FCDF30A30CF3}.wem"
      },
      {
-      "Id": "582696998",
+      "Id": "566025932",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_gravel_walk_01.wav",
-      "CachePath": "57/{571CCB57-FABC-92B1-C054-059AADC3E472}.wem"
+      "ShortName": "sfx_foley_footstep_gravel_run_03.wav",
+      "CachePath": "33/{3385E922-2DE8-3025-948B-D52B34E8A500}.wem"
      },
      {
-      "Id": "616835172",
+      "Id": "608212495",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_metal_walk_03.wav",
-      "CachePath": "DB/{DBECB9C3-3F0E-8B96-CA9B-D80BD9593822}.wem"
+      "ShortName": "sfx_foley_footstep_concrete_run_03.wav",
+      "CachePath": "13/{135DE354-C9CA-4D4B-27F8-E5DA44EACB61}.wem"
      },
      {
-      "Id": "623468735",
+      "Id": "648897598",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_wood_walk_03.wav",
-      "CachePath": "57/{572E1596-199B-8E0F-AEF3-F2DF1C721C08}.wem"
+      "ShortName": "sfx_foley_footstep_metal_run_03.wav",
+      "CachePath": "9D/{9D6C8141-24D7-0C3F-BEA4-BD86003D129C}.wem"
      },
      {
-      "Id": "671307879",
+      "Id": "697658533",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_metal_walk_05.wav",
-      "CachePath": "0C/{0C94FC86-B66E-8A35-6EB1-4D3C7815A3F9}.wem"
+      "ShortName": "sfx_foley_footstep_wood_run_05.wav",
+      "CachePath": "D4/{D4648B31-944B-965E-DDE1-9DADF08C731E}.wem"
      },
      {
-      "Id": "762903553",
+      "Id": "698658536",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_metal_walk_02.wav",
-      "CachePath": "15/{1551D122-3636-9CA4-6AB8-C00FE834FCFD}.wem"
+      "ShortName": "sfx_foley_footstep_gravel_run_01.wav",
+      "CachePath": "D7/{D7654DA1-E972-E3C0-DBFB-321BE5879310}.wem"
      },
      {
-      "Id": "767766251",
+      "Id": "776817998",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_gravel_walk_04.wav",
-      "CachePath": "4B/{4BB3FEC5-5BDB-2630-717C-7E1D97D4544E}.wem"
+      "ShortName": "sfx_foley_footstep_gravel_run_04.wav",
+      "CachePath": "BA/{BA9DE769-F482-8E5A-9D81-D8725EAF1C1C}.wem"
      },
      {
-      "Id": "776583239",
+      "Id": "780243718",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_gravel_walk_05.wav",
-      "CachePath": "04/{04916F3E-45D5-AC5A-3340-AEE8E562315C}.wem"
+      "ShortName": "sfx_foley_footstep_wood_run_03.wav",
+      "CachePath": "3B/{3B442446-C6F7-6217-AF47-6082C0E18921}.wem"
      },
      {
-      "Id": "852259169",
+      "Id": "781293176",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_wood_walk_04.wav",
-      "CachePath": "32/{32FEA478-CE1F-E6D7-5568-EEE695C972DE}.wem"
+      "ShortName": "sfx_foley_footstep_wood_run_01.wav",
+      "CachePath": "3C/{3C5C3B69-6F07-1FB7-76B6-533F82D676C8}.wem"
      },
      {
-      "Id": "881067484",
+      "Id": "851657515",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_concrete_walk_04.wav",
-      "CachePath": "35/{3539E74A-3BDD-3647-BAA0-6FB2CA542E1E}.wem"
+      "ShortName": "sfx_foley_footstep_metal_run_04.wav",
+      "CachePath": "50/{50C05589-B75B-763A-899F-C8B59E72EBEC}.wem"
      },
      {
-      "Id": "1018841057",
+      "Id": "856630456",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_wood_walk_02.wav",
-      "CachePath": "79/{79DFF600-8AA0-76B8-842F-139A8A33758F}.wem"
+      "ShortName": "sfx_foley_footstep_concrete_run_04.wav",
+      "CachePath": "76/{76FF4DDE-08CB-E7A3-A24F-1080E5C9E361}.wem"
      },
      {
-      "Id": "1054868435",
+      "Id": "880115635",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_metal_walk_04.wav",
-      "CachePath": "0E/{0EAAA638-36B5-D4FA-DB82-E96785077B7A}.wem"
+      "ShortName": "sfx_foley_footstep_concrete_run_05.wav",
+      "CachePath": "76/{7660372E-464B-3F1B-D178-3C2A06FA5906}.wem"
      },
      {
-      "Id": "1060316413",
+      "Id": "909837310",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "sfx_foley_footstep_metal_walk_01.wav",
-      "CachePath": "69/{69D45205-D5E6-A9C2-A626-33EEA8A1F54A}.wem"
+      "ShortName": "sfx_foley_footstep_metal_run_01.wav",
+      "CachePath": "52/{52A1F936-1F9A-9F66-629C-32080999EE94}.wem"
      }
     ],
     "Plugins": {
@@ -203,8 +203,8 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Play_Footstep",
       "GUID": "{9682FA73-32CF-41B9-931F-A41CE6D92E60}",
       "DurationType": "OneShot",
-      "DurationMin": "0.09",
-      "DurationMax": "0.5396875",
+      "DurationMin": "0.108",
+      "DurationMax": "0.35408333",
       "SwitchContainers": [
        {
         "SwitchValue": {
@@ -215,19 +215,19 @@
         },
         "MediaRefs": [
          {
-          "Id": "25129355"
+          "Id": "152568559"
          },
          {
-          "Id": "581940715"
+          "Id": "498119391"
          },
          {
-          "Id": "582696998"
+          "Id": "566025932"
          },
          {
-          "Id": "767766251"
+          "Id": "698658536"
          },
          {
-          "Id": "776583239"
+          "Id": "776817998"
          }
         ]
        },
@@ -240,19 +240,19 @@
         },
         "MediaRefs": [
          {
-          "Id": "616835172"
+          "Id": "211680909"
          },
          {
-          "Id": "671307879"
+          "Id": "350734022"
          },
          {
-          "Id": "762903553"
+          "Id": "648897598"
          },
          {
-          "Id": "1054868435"
+          "Id": "851657515"
          },
          {
-          "Id": "1060316413"
+          "Id": "909837310"
          }
         ]
        },
@@ -265,19 +265,19 @@
         },
         "MediaRefs": [
          {
-          "Id": "238735003"
+          "Id": "178954702"
          },
          {
-          "Id": "455834431"
+          "Id": "251517408"
          },
          {
-          "Id": "623468735"
+          "Id": "697658533"
          },
          {
-          "Id": "852259169"
+          "Id": "780243718"
          },
          {
-          "Id": "1018841057"
+          "Id": "781293176"
          }
         ]
        },
@@ -291,19 +291,19 @@
         },
         "MediaRefs": [
          {
-          "Id": "169568733"
+          "Id": "394611772"
          },
          {
-          "Id": "378042695"
+          "Id": "496429034"
          },
          {
-          "Id": "400157129"
+          "Id": "608212495"
          },
          {
-          "Id": "576470539"
+          "Id": "856630456"
          },
          {
-          "Id": "881067484"
+          "Id": "880115635"
          }
         ]
        }
@@ -315,8 +315,8 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Play_Landing",
       "GUID": "{3F483C2B-4AA2-43B3-B2A7-A916FFF59C74}",
       "DurationType": "OneShot",
-      "DurationMin": "0.09",
-      "DurationMax": "0.5396875",
+      "DurationMin": "0.108",
+      "DurationMax": "0.35408333",
       "SwitchContainers": [
        {
         "SwitchValue": {
@@ -327,19 +327,19 @@
         },
         "MediaRefs": [
          {
-          "Id": "25129355"
+          "Id": "152568559"
          },
          {
-          "Id": "581940715"
+          "Id": "498119391"
          },
          {
-          "Id": "582696998"
+          "Id": "566025932"
          },
          {
-          "Id": "767766251"
+          "Id": "698658536"
          },
          {
-          "Id": "776583239"
+          "Id": "776817998"
          }
         ]
        },
@@ -352,19 +352,19 @@
         },
         "MediaRefs": [
          {
-          "Id": "616835172"
+          "Id": "211680909"
          },
          {
-          "Id": "671307879"
+          "Id": "350734022"
          },
          {
-          "Id": "762903553"
+          "Id": "648897598"
          },
          {
-          "Id": "1054868435"
+          "Id": "851657515"
          },
          {
-          "Id": "1060316413"
+          "Id": "909837310"
          }
         ]
        },
@@ -377,19 +377,19 @@
         },
         "MediaRefs": [
          {
-          "Id": "238735003"
+          "Id": "178954702"
          },
          {
-          "Id": "455834431"
+          "Id": "251517408"
          },
          {
-          "Id": "623468735"
+          "Id": "697658533"
          },
          {
-          "Id": "852259169"
+          "Id": "780243718"
          },
          {
-          "Id": "1018841057"
+          "Id": "781293176"
          }
         ]
        },
@@ -403,19 +403,19 @@
         },
         "MediaRefs": [
          {
-          "Id": "169568733"
+          "Id": "394611772"
          },
          {
-          "Id": "378042695"
+          "Id": "496429034"
          },
          {
-          "Id": "400157129"
+          "Id": "608212495"
          },
          {
-          "Id": "576470539"
+          "Id": "856630456"
          },
          {
-          "Id": "881067484"
+          "Id": "880115635"
          }
         ]
        }
@@ -527,6 +527,6 @@
     ]
    }
   ],
-  "FileHash": "{C6FA1BAC-B2AF-ABAC-06E1-93FB894E908B}"
+  "FileHash": "{45DE5B91-2761-E489-1C48-4D1B87201CFD}"
  }
 }

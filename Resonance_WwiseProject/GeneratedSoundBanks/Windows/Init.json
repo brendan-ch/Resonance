@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{D72402D9-FCFC-E0E3-3E41-213489EBB6C2}",
+    "Hash": "{DA551A76-B319-5E7C-79C5-5E1562B2AEAF}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -80,7 +80,15 @@
          "Id": "258589154"
         }
        ]
-      }
+      },
+      "AuxBusRefs": [
+       {
+        "Id": "2783051634",
+        "Name": "Reverb_Master",
+        "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Reverb_Master",
+        "GUID": "{C8A2C4AE-C9BE-484B-BE2E-F56C3E08FF4D}"
+       }
+      ]
      },
      {
       "Id": "393239870",
@@ -248,6 +256,6 @@
     ]
    }
   ],
-  "FileHash": "{0DA1A2B9-5ADB-9F09-8D76-0C178C773328}"
+  "FileHash": "{1F4A0AA0-0547-4C2F-7DAC-574989550F94}"
  }
 }
