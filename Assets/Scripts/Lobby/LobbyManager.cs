@@ -343,6 +343,16 @@ namespace Resonance.LobbySystem
         }
 
         /// <summary>
+        /// Gets the local user's ID from the current provider.
+        /// </summary>
+        /// <returns>The local user's ID, or null if unavailable.</returns>
+        public async Task<string> GetLocalUserId()
+        {
+            EnsureProviderSet();
+            return await _currentProvider.GetLocalUserIdAsync();
+        }
+
+        /// <summary>
         /// Update the name of the next scene to load into.
         /// </summary>
         /// <param name="name"></param>
