@@ -5,17 +5,23 @@
 			<ChildrenList>
 				<GameParameter Name="Meter_SFX_Intensity" ID="{52BB91AD-DDC9-4B62-8832-46C14C04E59C}">
 					<PropertyList>
-						<Property Name="InitialValue" Type="Real64" Value="0"/>
+						<Property Name="InitialValue" Type="Real64" Value="-48"/>
+						<Property Name="Max" Type="Real64" Value="0"/>
+						<Property Name="Min" Type="Real64" Value="-48"/>
 					</PropertyList>
 				</GameParameter>
 				<GameParameter Name="Meter_Foley_Intensity" ID="{DD8BD260-2D5B-4650-98EC-464F50A7CA9B}">
 					<PropertyList>
-						<Property Name="InitialValue" Type="Real64" Value="0"/>
+						<Property Name="InitialValue" Type="Real64" Value="-48"/>
+						<Property Name="Max" Type="Real64" Value="0"/>
+						<Property Name="Min" Type="Real64" Value="-48"/>
 					</PropertyList>
 				</GameParameter>
 				<GameParameter Name="Meter_Environment_Intensity" ID="{D6008D2F-0282-4AFD-A98E-A873A0BF9AC4}">
 					<PropertyList>
-						<Property Name="InitialValue" Type="Real64" Value="0"/>
+						<Property Name="InitialValue" Type="Real64" Value="-48"/>
+						<Property Name="Max" Type="Real64" Value="0"/>
+						<Property Name="Min" Type="Real64" Value="-48"/>
 					</PropertyList>
 				</GameParameter>
 				<GameParameter Name="ReactiveObject_Volume" ID="{7F62881C-DB90-4935-9D2C-04107D29BF53}">
