@@ -8,12 +8,13 @@ using UnityEngine;
 namespace Resonance.Combat
 {
     [RequireComponent(typeof(PlayerActionsInput))]
-    public class PlayerProjectileShooter : NetworkBehaviour
+    public class PlayerShooter : NetworkBehaviour
     {
         [Header("References")]
         [SerializeField] PlayerEquip playerEquip;
         [SerializeField] PlayerActionsInput playerActionsInput;
         [SerializeField] Camera playerCamera;
+        
 
         [Header("Debug")]
         [SerializeField] bool debugAimRays;
@@ -29,6 +30,7 @@ namespace Resonance.Combat
         [SerializeField] private LayerMask hitscanLayerMask;
         
         private PlayerViewModel viewModel;
+        private WeaponStatManager weaponStatManager;
         
         public int CurrentAmmo => currentAmmo;
         public bool IsReloading => isReloading;
@@ -73,7 +75,9 @@ namespace Resonance.Combat
 
         void Start()
         {
-            RefreshAmmoFromEquippedWeapon(force: true);
+            weaponStatManager = GetComponent<WeaponStatManager>();
+                
+            RefreshAmmoFromEquippedWeapon(true);    
             viewModel.InitializeAmmo(MagazineSize);
         }
 
@@ -84,7 +88,7 @@ namespace Resonance.Combat
                 return;
             }
 
-            RefreshAmmoFromEquippedWeapon(force: false);
+            RefreshAmmoFromEquippedWeapon(false);
             TickReload();
 
             if (playerActionsInput.ReloadPressed)
@@ -118,7 +122,7 @@ namespace Resonance.Combat
             if (view == null || view.Muzzle == null) return;
 
             // Fire rate gate
-            float fireRate = weapon.FireRate;
+            float fireRate = weaponStatManager.FireRate;
             if (fireRate > 0f)
             {
                 if (Time.time < nextFireTime) return;
@@ -126,7 +130,7 @@ namespace Resonance.Combat
             }
 
             // Ammo gate
-            if (weapon.MagazineSize > 0)
+            if (weaponStatManager.MagazineSize > 0)
             {
                 if (currentAmmo <= 0)
                 {
@@ -139,14 +143,14 @@ namespace Resonance.Combat
 
                 if (debugAmmoLogs)
                 {
-                    Debug.Log($"[Shooter] Fired. Ammo: {currentAmmo}/{weapon.MagazineSize}", this);
+                    Debug.Log($"[Shooter] Fired. Ammo: {currentAmmo}/{weaponStatManager.MagazineSize}", this);
                 }
             }
 
             // Universal: direction, spread, pellets, payload base
             Vector3 baseDirection = GetAimDirection(view.Muzzle);
 
-            int count = weapon.ProjectilesPerShot;
+            int count = weaponStatManager.ProjectilesPerShot;
             if (count < 1) count = 1;
 
             WeaponPayload payload = BuildBasePayload(weapon);
@@ -166,7 +170,7 @@ namespace Resonance.Combat
             Debug.Log($"[PlayerProjectileShooter] Constructing base payload with owner {gameObject.GetComponent<NetworkBehaviour>().owner}");
             WeaponPayload payload = new WeaponPayload();
             payload.Shooter = gameObject;
-            payload.Damage = weapon.Damage;
+            payload.Damage = weaponStatManager.Damage;
             return payload;
         }
 
@@ -175,7 +179,7 @@ namespace Resonance.Combat
             BulletProperties bullet = weapon.BulletProperties;
             if (bullet == null || bullet.BulletPrefab == null) return;
 
-            float speedMultiplier = weapon.MuzzleVelocity;
+            float speedMultiplier = weaponStatManager.MuzzleVelocity;
             float finalBulletSpeed = bullet.BulletBaseSpeed * speedMultiplier;
 
             payload.BulletSpeed = finalBulletSpeed;
@@ -186,7 +190,7 @@ namespace Resonance.Combat
 
             for (int i = 0; i < count; i++)
             {
-                Vector3 direction = ApplySpread(baseDirection, weapon.Spread);
+                Vector3 direction = ApplySpread(baseDirection, weaponStatManager.Spread);
                 SpawnProjectile(bullet.BulletPrefab, view.Muzzle, payload, direction);
             }
         }
@@ -196,11 +200,11 @@ namespace Resonance.Combat
             if (playerCamera == null) return;
 
             Vector3 rayOrigin = playerCamera.transform.position;
-            float hitscanMaxDistance = weapon.Range;
+            float hitscanMaxDistance = weaponStatManager.Range;
 
             for (int i = 0; i < count; i++)
             {
-                Vector3 dir = ApplySpread(baseDirection, weapon.Spread);
+                Vector3 dir = ApplySpread(baseDirection, weaponStatManager.Spread);
 
                 if (Physics.Raycast(rayOrigin, dir, out RaycastHit hit, hitscanMaxDistance, hitscanLayerMask, QueryTriggerInteraction.Ignore))
                 {
@@ -247,7 +251,7 @@ namespace Resonance.Combat
 
         private float ComputeDamageWithFalloff(float payloadDamage, float distance, WeaponProperties weapon)
         {
-            if (distance > (weapon.Range / 2))
+            if (distance > (weaponStatManager.Range / 2))
             {
                 return (payloadDamage / 2);
             }
@@ -261,7 +265,7 @@ namespace Resonance.Combat
             if (!isReloading)
                 return;
 
-            float reloadDuration = playerEquip.EquippedWeapon.ReloadTime;
+            float reloadDuration = weaponStatManager.ReloadTime;
             float timeRemaining = reloadEndTime - Time.time;
 
             if (reloadDuration > 0f)
@@ -294,20 +298,20 @@ namespace Resonance.Combat
                 return;
             }
 
-            if (weapon.MagazineSize <= 0)
+            if (weaponStatManager.MagazineSize <= 0)
             {
                 return;
             }
 
-            if (currentAmmo >= weapon.MagazineSize)
+            if (currentAmmo >= weaponStatManager.MagazineSize)
             {
                 return;
             }
 
-            float reloadTime = weapon.ReloadTime;
+            float reloadTime = weaponStatManager.ReloadTime;
             if (reloadTime <= 0f)
             {
-                currentAmmo = weapon.MagazineSize;
+                currentAmmo = weaponStatManager.MagazineSize;
 
                 viewModel.SetReloadState(false);
                 viewModel.SetReloadProgress(1f);
@@ -315,7 +319,7 @@ namespace Resonance.Combat
                 
                 if (debugAmmoLogs)
                 {
-                    Debug.Log($"[Shooter] Reload complete (instant). Ammo: {currentAmmo}/{weapon.MagazineSize}", this);
+                    Debug.Log($"[Shooter] Reload complete (instant). Ammo: {currentAmmo}/{weaponStatManager.MagazineSize}", this);
                 }
 
                 return;
@@ -348,7 +352,7 @@ namespace Resonance.Combat
                 return;
             }
 
-            currentAmmo = weapon.MagazineSize;
+            currentAmmo = weaponStatManager.MagazineSize;
 
             viewModel.SetReloadState(false);
             viewModel.SetReloadProgress(1f);
@@ -356,7 +360,7 @@ namespace Resonance.Combat
             
             if (debugAmmoLogs)
             {
-                Debug.Log($"[Shooter] Reload complete. Ammo: {currentAmmo}/{weapon.MagazineSize}", this);
+                Debug.Log($"[Shooter] Reload complete. Ammo: {currentAmmo}/{weaponStatManager.MagazineSize}", this);
             }
         }
 
@@ -384,9 +388,9 @@ namespace Resonance.Combat
             viewModel.SetReloadState(false);
             viewModel.SetReloadProgress(0f);
 
-            if (weapon.MagazineSize > 0)
+            if (weaponStatManager.MagazineSize > 0)
             {
-                currentAmmo = weapon.MagazineSize;
+                currentAmmo = weaponStatManager.MagazineSize;
             }
             else
             {
@@ -395,9 +399,9 @@ namespace Resonance.Combat
 
             viewModel.SetAmmo(currentAmmo, MagazineSize);
 
-            if (debugAmmoLogs && weapon.MagazineSize > 0)
+            if (debugAmmoLogs && weaponStatManager.MagazineSize > 0)
             {
-                Debug.Log($"[Shooter] Equipped {weapon.name}. Ammo: {currentAmmo}/{weapon.MagazineSize}", this);
+                Debug.Log($"[Shooter] Equipped {weapon.name}. Ammo: {currentAmmo}/{weaponStatManager.MagazineSize}", this);
             }
         }
 
@@ -450,7 +454,7 @@ namespace Resonance.Combat
             {
                 if (playerEquip == null) return 0;
                 if (playerEquip.EquippedWeapon == null) return 0;
-                return playerEquip.EquippedWeapon.MagazineSize;
+                return weaponStatManager.MagazineSize;
             }
         }
     
@@ -460,7 +464,7 @@ namespace Resonance.Combat
             {
                 if (!isReloading) return 0f;
 
-                float reloadDuration = playerEquip.EquippedWeapon.ReloadTime;
+                float reloadDuration = weaponStatManager.ReloadTime;
                 float timeRemaining = reloadEndTime - Time.time;
                 return Mathf.Clamp01(1f - (timeRemaining / reloadDuration));
             }
@@ -472,7 +476,7 @@ namespace Resonance.Combat
             {
                 if (playerEquip == null) return 0f;
                 if (playerEquip.EquippedWeapon == null) return 0f;
-                return playerEquip.EquippedWeapon.ReloadTime;
+                return weaponStatManager.ReloadTime;
             }
         }
     }

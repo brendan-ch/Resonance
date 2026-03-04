@@ -143,14 +143,14 @@ namespace Resonance.Combat
 
             if (EquippedWeapon != null && playerStats != null)
             {
-                playerStats.RemoveSpeedModifier(EquippedWeapon.Mobility);
+                playerStats.RemoveSpeedModifier(weaponStatManager.GetStat(WeaponStat.Mobility));
             }
 
             EquippedWeapon = weapon;
 
             if (weaponStatManager != null)
             {
-                weaponStatManager.Initialize(weapon);
+                weaponStatManager.ManageWeapon(weapon);
             }
 
             if (equippedWeaponObservable != null)
@@ -160,7 +160,7 @@ namespace Resonance.Combat
 
             if (playerStats != null)
             {
-                playerStats.AddSpeedModifier(weapon.Mobility);
+                playerStats.AddSpeedModifier(weaponStatManager.Mobility);
             }
             
             Debug.Log("About to call RefreshWeaponView");
@@ -221,7 +221,7 @@ namespace Resonance.Combat
 
                 if (weaponStatManager != null)
                 {
-                    weaponStatManager.Initialize(null);
+                    weaponStatManager.ManageWeapon(null);
                 }
 
                 EquippedWeapon = null;

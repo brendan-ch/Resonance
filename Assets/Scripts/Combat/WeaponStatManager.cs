@@ -12,7 +12,7 @@ namespace Resonance.Combat
         private WeaponProperties managedWeapon;
         private readonly List<WeaponModProperties> augmentMods = new List<WeaponModProperties>();
 
-        public void Initialize(WeaponProperties weaponToManage)
+        public void ManageWeapon(WeaponProperties weaponToManage)
         {
             managedWeapon = weaponToManage;
         }
