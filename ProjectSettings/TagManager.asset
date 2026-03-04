@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - Gun Equip
+  - Concrete
+  - Metal
+  - Wood
+  - Gravel
   layers:
   - Default
   - TransparentFX
