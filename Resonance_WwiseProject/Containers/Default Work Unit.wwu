@@ -432,7 +432,7 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="sfx_foley_footstep_concrete_walk_01" ID="{A2E5AE16-B7C7-476D-9FBD-4671D1C77B7F}" ShortID="438741536">
+								<Sound Name="sfx_foley_footstep_concrete_run_01" ID="{E229F770-6F0D-4BBA-8FA1-F28B4B638743}" ShortID="126816082">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -442,19 +442,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_concrete_walk_01" ID="{9AB027D0-D067-4380-A823-0BBEA38F0C2C}">
+										<AudioFileSource Name="sfx_foley_footstep_concrete_run_01" ID="{3B79D149-670D-4DD6-BBAE-E5240497F02D}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_concrete_walk_01.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_concrete_run_01.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="576470539"/>
+												<MediaID ID="496429034"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_concrete_walk_01" ID="{9AB027D0-D067-4380-A823-0BBEA38F0C2C}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_concrete_run_01" ID="{3B79D149-670D-4DD6-BBAE-E5240497F02D}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_concrete_walk_02" ID="{E7A8E1B8-F0E9-4759-AF97-355AB5570FC0}" ShortID="264041198">
+								<Sound Name="sfx_foley_footstep_concrete_run_02" ID="{83C66943-C3D1-464F-B33B-0E1D30A93B0B}" ShortID="161215435">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -464,19 +464,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_concrete_walk_02" ID="{494ADE1E-9CC5-4941-946F-C80223647D8D}">
+										<AudioFileSource Name="sfx_foley_footstep_concrete_run_02" ID="{2CB1BD18-6DEA-471E-B775-3847371C82E0}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_concrete_walk_02.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_concrete_run_02.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="169568733"/>
+												<MediaID ID="394611772"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_concrete_walk_02" ID="{494ADE1E-9CC5-4941-946F-C80223647D8D}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_concrete_run_02" ID="{2CB1BD18-6DEA-471E-B775-3847371C82E0}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_concrete_walk_03" ID="{BF4E3D91-BBF3-4562-8169-C5DDD813DD88}" ShortID="957256819">
+								<Sound Name="sfx_foley_footstep_concrete_run_03" ID="{6C468C99-C285-483E-968B-BF0A4037DE60}" ShortID="406615826">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -486,19 +486,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_concrete_walk_03" ID="{3550D738-0BA3-4289-83AD-FF157EB77782}">
+										<AudioFileSource Name="sfx_foley_footstep_concrete_run_03" ID="{63C1674E-9E17-423E-B72F-C67CDAEBEAD3}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_concrete_walk_03.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_concrete_run_03.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="400157129"/>
+												<MediaID ID="608212495"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_concrete_walk_03" ID="{3550D738-0BA3-4289-83AD-FF157EB77782}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_concrete_run_03" ID="{63C1674E-9E17-423E-B72F-C67CDAEBEAD3}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_concrete_walk_04" ID="{5ECA631C-3DA2-43F8-BE62-F004A1B6A60F}" ShortID="1016023492">
+								<Sound Name="sfx_foley_footstep_concrete_run_04" ID="{25A1EEEB-B1CA-4EBF-9DF8-7EBED0D6C1C0}" ShortID="670010036">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -508,19 +508,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_concrete_walk_04" ID="{9A96F94D-DD4F-4F01-AEAC-03AC5CC6023E}">
+										<AudioFileSource Name="sfx_foley_footstep_concrete_run_04" ID="{6051D14A-60DE-4B0B-B161-96EBB766151A}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_concrete_walk_04.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_concrete_run_04.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="881067484"/>
+												<MediaID ID="856630456"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_concrete_walk_04" ID="{9A96F94D-DD4F-4F01-AEAC-03AC5CC6023E}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_concrete_run_04" ID="{6051D14A-60DE-4B0B-B161-96EBB766151A}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_concrete_walk_05" ID="{D888489E-F010-4518-9E05-A9FFFC3D90D7}" ShortID="292748782">
+								<Sound Name="sfx_foley_footstep_concrete_run_05" ID="{F6D555EA-CC9E-4381-9335-0A7DB43AC946}" ShortID="549699427">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -530,16 +530,16 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_concrete_walk_05" ID="{3085031D-5212-41CF-9654-893F820D8332}">
+										<AudioFileSource Name="sfx_foley_footstep_concrete_run_05" ID="{045C57AE-7CA0-4178-8240-210F7BB51624}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_concrete_walk_05.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_concrete_run_05.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="378042695"/>
+												<MediaID ID="880115635"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_concrete_walk_05" ID="{3085031D-5212-41CF-9654-893F820D8332}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_concrete_run_05" ID="{045C57AE-7CA0-4178-8240-210F7BB51624}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -554,7 +554,7 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="sfx_foley_footstep_metal_walk_01" ID="{545BE354-05EA-4B6A-8ECA-19DE8AFF945C}" ShortID="1037059285">
+								<Sound Name="sfx_foley_footstep_metal_run_01" ID="{667546A8-E3FC-4735-B69D-C18132D502A0}" ShortID="51791421">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -564,19 +564,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_metal_walk_01" ID="{6B1C7FFD-8013-42E5-9836-AA71EEC65D5C}">
+										<AudioFileSource Name="sfx_foley_footstep_metal_run_01" ID="{BA6F1304-C5D8-4B33-8FEF-84397A5A6A3E}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_metal_walk_01.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_metal_run_01.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="1060316413"/>
+												<MediaID ID="909837310"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_metal_walk_01" ID="{6B1C7FFD-8013-42E5-9836-AA71EEC65D5C}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_metal_run_01" ID="{BA6F1304-C5D8-4B33-8FEF-84397A5A6A3E}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_metal_walk_02" ID="{D24EA63F-5A39-49FB-B616-CBF5D24AC842}" ShortID="688504751">
+								<Sound Name="sfx_foley_footstep_metal_run_02" ID="{A2142D28-668D-4CBD-B9BC-4C581B1165F3}" ShortID="1016206424">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -586,19 +586,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_metal_walk_02" ID="{EB6E3B20-0D8F-4A7E-A8DD-7EBAA2276424}">
+										<AudioFileSource Name="sfx_foley_footstep_metal_run_02" ID="{9E1C63C0-271A-4C7D-866C-D253BF81EFF5}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_metal_walk_02.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_metal_run_02.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="762903553"/>
+												<MediaID ID="211680909"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_metal_walk_02" ID="{EB6E3B20-0D8F-4A7E-A8DD-7EBAA2276424}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_metal_run_02" ID="{9E1C63C0-271A-4C7D-866C-D253BF81EFF5}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_metal_walk_03" ID="{4F1EE442-92D0-48AC-B33E-E743E991A6AE}" ShortID="207890951">
+								<Sound Name="sfx_foley_footstep_metal_run_03" ID="{F5952C9C-52F5-460C-985C-C793F2B7F3B9}" ShortID="927093480">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -608,19 +608,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_metal_walk_03" ID="{FCDF1745-B846-4AAB-912E-2F598FC5BDF9}">
+										<AudioFileSource Name="sfx_foley_footstep_metal_run_03" ID="{D108E603-6F76-47A7-B52F-3C21F842A34A}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_metal_walk_03.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_metal_run_03.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="616835172"/>
+												<MediaID ID="648897598"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_metal_walk_03" ID="{FCDF1745-B846-4AAB-912E-2F598FC5BDF9}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_metal_run_03" ID="{D108E603-6F76-47A7-B52F-3C21F842A34A}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_metal_walk_04" ID="{C6368871-5058-49BE-A7C8-954264C434BA}" ShortID="610945027">
+								<Sound Name="sfx_foley_footstep_metal_run_04" ID="{03656FC9-C8C7-4743-91A1-BADAB256CC77}" ShortID="310727901">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -630,19 +630,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_metal_walk_04" ID="{71181440-5797-40D1-8E5D-46BD09302874}">
+										<AudioFileSource Name="sfx_foley_footstep_metal_run_04" ID="{C2BF118A-5EEF-4AF8-8CDE-26C395191396}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_metal_walk_04.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_metal_run_04.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="1054868435"/>
+												<MediaID ID="851657515"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_metal_walk_04" ID="{71181440-5797-40D1-8E5D-46BD09302874}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_metal_run_04" ID="{C2BF118A-5EEF-4AF8-8CDE-26C395191396}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_metal_walk_05" ID="{9219E8B4-BF1C-4A2C-A629-143F8764FE27}" ShortID="396488587">
+								<Sound Name="sfx_foley_footstep_metal_run_05" ID="{61C214C1-14E0-465A-896D-399F696817B2}" ShortID="926195451">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -652,16 +652,16 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_metal_walk_05" ID="{958F02B8-8110-4396-B412-0CD5C5C85FAD}">
+										<AudioFileSource Name="sfx_foley_footstep_metal_run_05" ID="{7A846CFA-2D31-4B74-B45C-1CB5E53CCCDD}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_metal_walk_05.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_metal_run_05.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="671307879"/>
+												<MediaID ID="350734022"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_metal_walk_05" ID="{958F02B8-8110-4396-B412-0CD5C5C85FAD}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_metal_run_05" ID="{7A846CFA-2D31-4B74-B45C-1CB5E53CCCDD}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -676,7 +676,7 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="sfx_foley_footstep_wood_walk_01" ID="{0E139D33-BAA8-4C80-BF8D-82EC008872FE}" ShortID="673718058">
+								<Sound Name="sfx_foley_footstep_wood_run_01" ID="{B79B41D3-078D-47DF-9BE0-B1384827242C}" ShortID="53565619">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -686,19 +686,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_wood_walk_01" ID="{EAA4B472-B506-401E-AD69-976E5C51C664}">
+										<AudioFileSource Name="sfx_foley_footstep_wood_run_01" ID="{B5DDF31C-218C-4993-A577-579C7D0109B2}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_wood_walk_01.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_wood_run_01.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="455834431"/>
+												<MediaID ID="781293176"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_wood_walk_01" ID="{EAA4B472-B506-401E-AD69-976E5C51C664}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_wood_run_01" ID="{B5DDF31C-218C-4993-A577-579C7D0109B2}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_wood_walk_02" ID="{7FFBEEF9-08C8-4815-9783-25EBA7CB193E}" ShortID="100584689">
+								<Sound Name="sfx_foley_footstep_wood_run_02" ID="{D5EDC7BB-9E6B-4868-AF73-718BAC531940}" ShortID="429577496">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -708,19 +708,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_wood_walk_02" ID="{FD4EF98A-91A7-4811-AFBB-9FA25DCD84F9}">
+										<AudioFileSource Name="sfx_foley_footstep_wood_run_02" ID="{8C17C605-F79A-4A34-B57D-E01627D6CDEC}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_wood_walk_02.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_wood_run_02.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="1018841057"/>
+												<MediaID ID="251517408"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_wood_walk_02" ID="{FD4EF98A-91A7-4811-AFBB-9FA25DCD84F9}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_wood_run_02" ID="{8C17C605-F79A-4A34-B57D-E01627D6CDEC}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_wood_walk_03" ID="{346B5C16-18FC-4BCB-8CB3-9DEEE930E5BA}" ShortID="22210606">
+								<Sound Name="sfx_foley_footstep_wood_run_03" ID="{B2EFC7EB-6A14-4653-8BFB-752B0206100E}" ShortID="1058448752">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -730,19 +730,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_wood_walk_03" ID="{CF5D6642-F2CB-4FBD-A4FF-5765065F5C11}">
+										<AudioFileSource Name="sfx_foley_footstep_wood_run_03" ID="{181F752C-691B-4B6E-BA5E-360207D528FF}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_wood_walk_03.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_wood_run_03.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="623468735"/>
+												<MediaID ID="780243718"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_wood_walk_03" ID="{CF5D6642-F2CB-4FBD-A4FF-5765065F5C11}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_wood_run_03" ID="{181F752C-691B-4B6E-BA5E-360207D528FF}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_wood_walk_04" ID="{D0D16F09-0992-43E3-AD38-E4795028ED50}" ShortID="151989318">
+								<Sound Name="sfx_foley_footstep_wood_run_04" ID="{95C24650-7AA0-48EC-B0BD-ED2BB2C641C2}" ShortID="863467429">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -752,19 +752,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_wood_walk_04" ID="{82CA0973-C6BD-4AD8-8FB6-B06C8F06D60A}">
+										<AudioFileSource Name="sfx_foley_footstep_wood_run_04" ID="{D03D1CBA-40A9-4FAC-998A-8F5A8FC4A68E}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_wood_walk_04.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_wood_run_04.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="852259169"/>
+												<MediaID ID="178954702"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_wood_walk_04" ID="{82CA0973-C6BD-4AD8-8FB6-B06C8F06D60A}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_wood_run_04" ID="{D03D1CBA-40A9-4FAC-998A-8F5A8FC4A68E}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_wood_walk_05" ID="{4613037E-891B-44F7-8092-ABD39687863A}" ShortID="518564366">
+								<Sound Name="sfx_foley_footstep_wood_run_05" ID="{EA208550-5EC0-4831-A5F1-373A82B6624F}" ShortID="367267725">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -774,16 +774,16 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_wood_walk_05" ID="{649B1517-6DA3-4280-A42A-CDCE643E1078}">
+										<AudioFileSource Name="sfx_foley_footstep_wood_run_05" ID="{044C7FE8-C40C-453D-A238-16CDF2C08CC8}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_wood_walk_05.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_wood_run_05.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="238735003"/>
+												<MediaID ID="697658533"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_wood_walk_05" ID="{649B1517-6DA3-4280-A42A-CDCE643E1078}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_wood_run_05" ID="{044C7FE8-C40C-453D-A238-16CDF2C08CC8}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -798,7 +798,7 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="sfx_foley_footstep_gravel_walk_01" ID="{C95614B4-73DA-413F-8D45-4DBEF52E392E}" ShortID="974080187">
+								<Sound Name="sfx_foley_footstep_gravel_run_01" ID="{CC4FBB98-10FD-42D7-8DFF-728109F42108}" ShortID="838621430">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -808,19 +808,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_gravel_walk_01" ID="{F859ECD7-063B-4CD6-9EAA-F6CE7330E432}">
+										<AudioFileSource Name="sfx_foley_footstep_gravel_run_01" ID="{0B79375D-0E53-4470-B183-33DACE8006F0}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_gravel_walk_01.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_gravel_run_01.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="582696998"/>
+												<MediaID ID="698658536"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_gravel_walk_01" ID="{F859ECD7-063B-4CD6-9EAA-F6CE7330E432}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_gravel_run_01" ID="{0B79375D-0E53-4470-B183-33DACE8006F0}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_gravel_walk_02" ID="{9CEF08D3-2B02-4569-97F4-8D6D7EF281EA}" ShortID="73221973">
+								<Sound Name="sfx_foley_footstep_gravel_run_02" ID="{07E744F7-BC6A-4FE2-9DC9-46EA03D73353}" ShortID="910949736">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -830,19 +830,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_gravel_walk_02" ID="{773508E4-691C-46C4-9AEA-679DAEF91156}">
+										<AudioFileSource Name="sfx_foley_footstep_gravel_run_02" ID="{726DC55C-2712-4CDD-98A8-6F4706CBA903}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_gravel_walk_02.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_gravel_run_02.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="581940715"/>
+												<MediaID ID="152568559"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_gravel_walk_02" ID="{773508E4-691C-46C4-9AEA-679DAEF91156}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_gravel_run_02" ID="{726DC55C-2712-4CDD-98A8-6F4706CBA903}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_gravel_walk_03" ID="{EA0C7176-7758-4B6E-A9D7-25C3B138AB73}" ShortID="654721890">
+								<Sound Name="sfx_foley_footstep_gravel_run_03" ID="{8E7C7EB7-D411-4AFA-AE4F-5E4C136BA645}" ShortID="774090305">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -852,19 +852,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_gravel_walk_03" ID="{88FBBBFA-A5B4-40C5-AA66-58820926B0E4}">
+										<AudioFileSource Name="sfx_foley_footstep_gravel_run_03" ID="{FC3C53CE-719B-4EFB-A3D3-EAB9BE6862F2}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_gravel_walk_03.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_gravel_run_03.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="25129355"/>
+												<MediaID ID="566025932"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_gravel_walk_03" ID="{88FBBBFA-A5B4-40C5-AA66-58820926B0E4}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_gravel_run_03" ID="{FC3C53CE-719B-4EFB-A3D3-EAB9BE6862F2}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_gravel_walk_04" ID="{C972AE26-3C50-4F22-8C01-D1085D6E1C0C}" ShortID="197973140">
+								<Sound Name="sfx_foley_footstep_gravel_run_04" ID="{67055F11-EF99-4BD9-A373-A3581BADC981}" ShortID="847849157">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -874,19 +874,19 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_gravel_walk_04" ID="{5F18FFC6-C32C-420A-AD0F-AE26B3B1D3A6}">
+										<AudioFileSource Name="sfx_foley_footstep_gravel_run_04" ID="{CF0619D6-873E-4FF4-95B9-875D27634CCC}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_gravel_walk_04.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_gravel_run_04.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="767766251"/>
+												<MediaID ID="776817998"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_gravel_walk_04" ID="{5F18FFC6-C32C-420A-AD0F-AE26B3B1D3A6}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_gravel_run_04" ID="{CF0619D6-873E-4FF4-95B9-875D27634CCC}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
-								<Sound Name="sfx_foley_footstep_gravel_walk_05" ID="{BAC083D8-2E58-44DE-8A68-88098450F281}" ShortID="809551055">
+								<Sound Name="sfx_foley_footstep_gravel_run_05" ID="{D53C24BF-755F-49C8-B3F9-3B40BDFD1004}" ShortID="607126188">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
@@ -896,16 +896,16 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sfx_foley_footstep_gravel_walk_05" ID="{594934D0-FEA9-412A-94DC-8BCCC92A557D}">
+										<AudioFileSource Name="sfx_foley_footstep_gravel_run_05" ID="{65939F7F-ECEE-4067-A77C-BB2BC04D5A8E}">
 											<Language>SFX</Language>
-											<AudioFile>sfx_foley_footstep_gravel_walk_05.wav</AudioFile>
+											<AudioFile>sfx_foley_footstep_gravel_run_05.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="776583239"/>
+												<MediaID ID="498119391"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sfx_foley_footstep_gravel_walk_05" ID="{594934D0-FEA9-412A-94DC-8BCCC92A557D}" Platform="Linked"/>
+										<ActiveSource Name="sfx_foley_footstep_gravel_run_05" ID="{65939F7F-ECEE-4067-A77C-BB2BC04D5A8E}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
