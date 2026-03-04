@@ -1,11 +1,12 @@
 {
-    "name": "ArenaTests",
+    "name": "PolarityTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
+        "Polarity",
+        "PurrNet.Runtime",
         "MatchStat",
-        "Arena",
         "SharedGameLogic"
     ],
     "includePlatforms": [],

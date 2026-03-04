@@ -1,12 +1,11 @@
 {
-    "name": "ArenaTests",
+    "name": "SharedGameLogicTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "MatchStat",
-        "Arena",
-        "SharedGameLogic"
+        "SharedGameLogic",
+        "MatchStat"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

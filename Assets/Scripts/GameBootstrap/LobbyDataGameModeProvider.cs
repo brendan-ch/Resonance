@@ -1,16 +1,10 @@
 using Resonance.LobbySystem;
-using TMPro;
 using UnityEngine;
 
 namespace Resonance.GameBootstrap
 {
-    /// <summary>
-    /// Script which sets the selected game mode on the text object.
-    /// </summary>
-    public class GameBootstrapGameModeDisplay : MonoBehaviour
+    public class LobbyDataGameModeProvider : GameModeProvider
     {
-        [SerializeField] private TMP_Text text;
-
         private LobbyDataHolder lobbyDataHolder;
 
         private void Awake()
@@ -22,9 +16,8 @@ namespace Resonance.GameBootstrap
                 return;
             }
 
-            var gameMode = lobbyDataHolder.CurrentLobby.GameMode;
-            text.text = $"Selected game mode: {gameMode}";
+            gameMode = lobbyDataHolder.CurrentLobby.GameMode;
+            Debug.Log($"[{GetType()}] Game mode set to {gameMode} from lobby data");
         }
-
     }
 }
