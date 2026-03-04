@@ -429,6 +429,13 @@ namespace Resonance.LobbySystem
                     user.IsReady = Convert.ToBoolean(updateData["IsReady"]);
                     users[userIndex] = user;
                 }
+
+                if (updateData.ContainsKey("SkinIndex"))
+                {
+                    var user = users[userIndex];
+                    user.SkinIndex = Convert.ToInt32(updateData["SkinIndex"]);
+                    users[userIndex] = user;
+                }
                 
                 await WriteJsonResponse(response, users[userIndex]);
             }

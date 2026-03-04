@@ -345,6 +345,19 @@ namespace Resonance.LobbySystem.Providers
             return Task.FromResult(Task.CompletedTask);
         }
 
+        public Task SetSkinIndexAsync(string userId, int skinIndex)
+        {
+            // Can only set skin index for the local user
+            if (IsSteamClientAvailable && !string.IsNullOrEmpty(userId) && ulong.TryParse(userId, out var id)
+                && Steamworks.SteamUser.GetSteamID().m_SteamID == id)
+            {
+                Steamworks.SteamMatchmaking.SetLobbyMemberData(_currentLobby, "SkinIndex", skinIndex.ToString());
+                Steamworks.SteamMatchmaking.SetLobbyData(_currentLobby, "UpdateTrigger", DateTime.UtcNow.Ticks.ToString());
+            }
+
+            return Task.FromResult(Task.CompletedTask);
+        }
+
         public Task SetLobbyDataAsync(string key, string value)
         {
             if (IsSteamClientAvailable)
