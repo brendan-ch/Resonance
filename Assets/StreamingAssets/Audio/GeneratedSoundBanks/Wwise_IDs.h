@@ -46,7 +46,7 @@ namespace AK
         static const AkUniqueID METER_FOLEY_INTENSITY = 4188395422U;
         static const AkUniqueID METER_SFX_INTENSITY = 2553996342U;
         static const AkUniqueID OCCLUSION = 183903552U;
-        static const AkUniqueID REACTIVEOBJECT_VOLUME = 1585979646U;
+        static const AkUniqueID REACTIVE_FEEDBACK_VOLUME = 1471093987U;
         static const AkUniqueID REVERBSEND = 1572469619U;
         static const AkUniqueID ROOMSIZE = 105837875U;
     } // namespace GAME_PARAMETERS
@@ -64,6 +64,7 @@ namespace AK
         static const AkUniqueID MASTER_AUDIO_BUS = 3803692087U;
         static const AkUniqueID MUSIC = 3991942870U;
         static const AkUniqueID SFX = 393239870U;
+        static const AkUniqueID SFX_NONREACTIVE = 4123335503U;
         static const AkUniqueID UI = 1551306167U;
     } // namespace BUSSES
 
