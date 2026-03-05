@@ -16,10 +16,6 @@ namespace Resonance.Audio
         [Header("Audio Feedback")]
         [SerializeField] private bool enableAudioFeedback = true;
         
-        [Header("Detection")]
-        [Tooltip("Maximum distance from sound source to detect waves")]
-        [SerializeField] private float maxDistance = 30f;
-        
         [Header("Envelope (ADSR)")]
         [Tooltip("How fast it lights up when wave hits")]
         [SerializeField] private float attackSpeed = 30f;
@@ -60,10 +56,10 @@ namespace Resonance.Audio
                 return;
             }
 
-            // Find loudest sound wave nearby
+            // Find loudest sound wave nearby (uses tracker's base wave distance)
             AudioSourceData nearestSource = AudioSourceTracker.Instance.FindLoudestNearby(
                 transform.position,
-                maxDistance
+                AudioSourceTracker.Instance.BaseWaveDistance
             );
 
             // Calculate target intensity from wave
@@ -72,9 +68,11 @@ namespace Resonance.Audio
                 float distance = Vector3.Distance(transform.position, nearestSource.Position);
                 float sourceIntensity = nearestSource.GetCurrentIntensity();
                 
-                // Distance attenuation
-                float maxDist = maxDistance;
-                float distanceAttenuation = 1f - Mathf.Clamp01(distance / maxDist);
+                // Wave size scales with sound intensity
+                float waveMaxDistance = AudioSourceTracker.Instance.BaseWaveDistance * nearestSource.PeakIntensity;
+                
+                // Distance attenuation based on how far this sound's wave travels
+                float distanceAttenuation = 1f - Mathf.Clamp01(distance / waveMaxDistance);
                 
                 targetIntensity = sourceIntensity * distanceAttenuation;
             }

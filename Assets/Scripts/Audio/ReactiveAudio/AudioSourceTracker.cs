@@ -14,9 +14,12 @@ namespace Resonance.Audio
         [Header("Settings")]
         [SerializeField] private float defaultDuration = 3f; // Longer sustain
         [SerializeField] private float propagationSpeed = 50f; // meters per second
-        [SerializeField] private float maxPropagationDistance = 50f; // Max distance at full intensity
-
+        [SerializeField] private float baseWaveDistance = 150f; // Distance a full-volume sound travels
+        
         private List<AudioSourceData> activeSources = new List<AudioSourceData>();
+
+        // Public accessor
+        public float BaseWaveDistance => baseWaveDistance;
 
         void Awake()
         {
@@ -51,7 +54,7 @@ namespace Resonance.Audio
             activeSources.Add(new AudioSourceData(position, duration, intensity));
         }
         
-        public AudioSourceData FindLoudestNearby(Vector3 position, float maxDistance)
+        public AudioSourceData FindLoudestNearby(Vector3 position, float searchRadius)
         {
             AudioSourceData loudest = null;
             float maxWeightedIntensity = 0f;
@@ -60,8 +63,9 @@ namespace Resonance.Audio
             {
                 float distance = Vector3.Distance(position, source.Position);
                 
-                // Louder sounds propagate further
-                float effectiveMaxDistance = maxPropagationDistance * source.PeakIntensity;
+                // Wave size is directly based on sound intensity
+                // Louder sound (1.0) = 150m wave, quiet sound (0.3) = 45m wave
+                float waveMaxDistance = baseWaveDistance * source.PeakIntensity;
                 
                 // Wave propagation - sound wave travels at propagationSpeed
                 float soundAge = source.GetAge();
@@ -71,19 +75,19 @@ namespace Resonance.Audio
                 if (distance > waveRadius)
                     continue;
                     
-                // Sound has dissipated (traveled too far)
-                if (distance > effectiveMaxDistance)
+                // Sound wave has dissipated (traveled beyond its max range)
+                if (distance > waveMaxDistance)
                     continue;
                 
                 // Check if within detection range
-                if (distance > maxDistance)
+                if (distance > searchRadius)
                     continue;
 
                 // Get current intensity (decays over time)
                 float intensity = source.GetCurrentIntensity();
                 
                 // Distance attenuation - sound gets quieter as it travels
-                float distanceAttenuation = 1f - (distance / effectiveMaxDistance);
+                float distanceAttenuation = 1f - (distance / waveMaxDistance);
                 distanceAttenuation = Mathf.Clamp01(distanceAttenuation);
                 
                 float weightedIntensity = intensity * distanceAttenuation;
@@ -112,9 +116,9 @@ namespace Resonance.Audio
                 
                 // Draw propagating wave
                 float waveRadius = source.GetAge() * propagationSpeed;
-                float maxRadius = maxPropagationDistance * source.PeakIntensity;
+                float waveMaxDistance = baseWaveDistance * source.PeakIntensity;
                 
-                if (waveRadius < maxRadius)
+                if (waveRadius < waveMaxDistance)
                 {
                     Gizmos.color = new Color(1f, 1f, 0f, intensity * 0.3f);
                     Gizmos.DrawWireSphere(source.Position, waveRadius);
