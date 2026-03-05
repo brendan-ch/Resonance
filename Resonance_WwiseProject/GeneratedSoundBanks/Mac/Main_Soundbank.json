@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{AA72450E-E12C-88B0-FE31-5ADC629ADD3D}",
+    "Hash": "{1DE01834-2702-0B0C-AD29-79A27FE85D31}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
@@ -266,6 +266,7 @@
       "Name": "Play_Footstep",
       "ObjectPath": "\\Events\\Default Work Unit\\Play_Footstep",
       "GUID": "{9682FA73-32CF-41B9-931F-A41CE6D92E60}",
+      "MaxAttenuation": "100",
       "DurationType": "OneShot",
       "DurationMin": "0.108",
       "DurationMax": "0.35408333",
@@ -378,6 +379,7 @@
       "Name": "Play_Landing",
       "ObjectPath": "\\Events\\Default Work Unit\\Play_Landing",
       "GUID": "{3F483C2B-4AA2-43B3-B2A7-A916FFF59C74}",
+      "MaxAttenuation": "100",
       "DurationType": "OneShot",
       "DurationMin": "0.39466667",
       "DurationMax": "0.6513542",
@@ -556,6 +558,6 @@
     ]
    }
   ],
-  "FileHash": "{07A6C720-D9A3-AD66-B396-1DBA50ADCC79}"
+  "FileHash": "{52546449-1AAD-982A-3031-33A52398927C}"
  }
 }
