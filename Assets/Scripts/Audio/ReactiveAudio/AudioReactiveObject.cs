@@ -2,10 +2,6 @@ using UnityEngine;
 
 namespace Resonance.Audio
 {
-    /// <summary>
-    /// Reacts to audio waves with Attack-Sustain-Release envelope
-    /// Creates "alive" effect with fast attack, held intensity, then slow decay
-    /// </summary>
     public class AudioReactiveObject : MonoBehaviour
     {
         [Header("Material Settings")]
@@ -17,15 +13,11 @@ namespace Resonance.Audio
         [SerializeField] private bool enableAudioFeedback = true;
         
         [Header("Envelope (ADSR)")]
-        [Tooltip("How fast it lights up when wave hits")]
         [SerializeField] private float attackSpeed = 30f;
-        [Tooltip("How long to hold at max intensity (seconds)")]
         [SerializeField] private float sustainTime = 1f;
-        [Tooltip("How fast it fades after sustain (lower = longer tail)")]
         [SerializeField] private float releaseSpeed = 0.5f;
 
         [Header("Threshold")]
-        [Tooltip("Minimum intensity to start reacting (0-1)")]
         [SerializeField] private float threshold = 0.05f;
 
         [Header("Debug")]
@@ -42,8 +34,6 @@ namespace Resonance.Audio
         void Start()
         {
             SetupMaterial();
-            
-            // Start with no emission
             currentIntensity = 0f;
             ApplyEmission(0f);
         }
@@ -56,22 +46,16 @@ namespace Resonance.Audio
                 return;
             }
 
-            // Find loudest sound wave nearby (uses tracker's base wave distance)
             AudioSourceData nearestSource = AudioSourceTracker.Instance.FindLoudestNearby(
                 transform.position,
                 AudioSourceTracker.Instance.BaseWaveDistance
             );
 
-            // Calculate target intensity from wave
             if (nearestSource != null)
             {
                 float distance = Vector3.Distance(transform.position, nearestSource.Position);
                 float sourceIntensity = nearestSource.GetCurrentIntensity();
-                
-                // Wave size scales with sound intensity
                 float waveMaxDistance = AudioSourceTracker.Instance.BaseWaveDistance * nearestSource.PeakIntensity;
-                
-                // Distance attenuation based on how far this sound's wave travels
                 float distanceAttenuation = 1f - Mathf.Clamp01(distance / waveMaxDistance);
                 
                 targetIntensity = sourceIntensity * distanceAttenuation;
@@ -81,29 +65,25 @@ namespace Resonance.Audio
                 targetIntensity = 0f;
             }
 
-            // Apply threshold
             if (targetIntensity < threshold)
             {
                 targetIntensity = 0f;
             }
 
-            // ADSR Envelope Logic
+            // ADSR Envelope
             if (targetIntensity > currentIntensity)
             {
-                // ATTACK - fast rise
                 currentIntensity = Mathf.Lerp(currentIntensity, targetIntensity, Time.deltaTime * attackSpeed);
                 
-                // Track peak for sustain
                 if (currentIntensity > peakIntensity)
                 {
                     peakIntensity = currentIntensity;
-                    sustainTimer = sustainTime; // Reset sustain timer
+                    sustainTimer = sustainTime;
                     inSustain = true;
                 }
             }
             else if (inSustain && sustainTimer > 0f)
             {
-                // SUSTAIN - hold at peak
                 currentIntensity = peakIntensity;
                 sustainTimer -= Time.deltaTime;
                 
@@ -114,10 +94,8 @@ namespace Resonance.Audio
             }
             else
             {
-                // RELEASE - slow decay
                 currentIntensity = Mathf.Lerp(currentIntensity, targetIntensity, Time.deltaTime * releaseSpeed);
                 
-                // Reset peak when fully faded
                 if (currentIntensity < 0.01f)
                 {
                     peakIntensity = 0f;
@@ -129,13 +107,11 @@ namespace Resonance.Audio
                 Debug.Log($"[AudioReactiveObject] Target: {targetIntensity:F3}, Current: {currentIntensity:F3}, Sustain: {sustainTimer:F2}s");
             }
 
-            // Update audio feedback
             if (enableAudioFeedback)
             {
                 UpdateAudioFeedback(currentIntensity);
             }
 
-            // Apply to material
             ApplyEmission(currentIntensity);
         }
 
@@ -152,10 +128,8 @@ namespace Resonance.Audio
                 StopAudioFeedback();
             }
 
-            // Update volume based on intensity (hardcoded RTPC name)
             if (isFeedbackPlaying)
             {
-                // Scale intensity to 0-100 range for RTPC
                 float volumeValue = Mathf.Clamp01(intensity) * 100f;
                 AkSoundEngine.SetRTPCValue("Reactive_Feedback_Volume", volumeValue, gameObject);
             }
@@ -207,7 +181,6 @@ namespace Resonance.Audio
                 Destroy(materialInstance);
             }
 
-            // Stop any playing feedback
             if (isFeedbackPlaying)
             {
                 StopAudioFeedback();
