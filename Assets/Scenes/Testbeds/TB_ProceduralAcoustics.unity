@@ -132,6 +132,8 @@ GameObject:
   - component: {fileID: 20840759}
   - component: {fileID: 20840758}
   - component: {fileID: 20840762}
+  - component: {fileID: 20840764}
+  - component: {fileID: 20840763}
   m_Layer: 0
   m_Name: Cube_01
   m_TagString: Untagged
@@ -252,6 +254,82 @@ MonoBehaviour:
   releaseSpeed: 5
   threshold: 0.05
   debugLog: 0
+--- !u!114 &20840763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20840756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f898346e55a92449a1030d1390b9900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WwiseSmartOcclusion
+  occlusionParameter: Occlusion
+  diffractionParameter: Diffraction
+  coneRayCount: 6
+  coneAngle: 30
+  maxCheckDistance: 100
+  occlusionLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  enableDiffraction: 1
+  nearFieldThreshold: 1.5
+  diffractionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scanRate: 5
+  cullingDistance: 50
+  drawDebugRays: 0
+  clearColor: {r: 0, g: 1, b: 0, a: 1}
+  occludedColor: {r: 1, g: 0, b: 0, a: 1}
+  diffractionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+--- !u!114 &20840764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20840756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02372b49c7f35af4caecfab755da37c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AK.Wwise.Unity.MonoBehaviour::AkGameObj
+  m_listeners:
+    initialListenerList: []
+    useDefaultListeners: 1
+  isEnvironmentAware: 1
+  isStaticObject: 0
+  usePositionOffsetData: 0
+  m_positionOffsetData:
+    KeepMe: 0
+    positionOffset: {x: 0, y: 0, z: 0}
+  scalingFactor: 1
+  m_posOffsetData: {fileID: 0}
+  listenerMask: 1
 --- !u!1 &107206959
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,6 +1006,8 @@ GameObject:
   - component: {fileID: 268076341}
   - component: {fileID: 268076340}
   - component: {fileID: 268076339}
+  - component: {fileID: 268076345}
+  - component: {fileID: 268076344}
   m_Layer: 0
   m_Name: Cube_02
   m_TagString: Untagged
@@ -1048,6 +1128,82 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &268076344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 268076338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f898346e55a92449a1030d1390b9900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WwiseSmartOcclusion
+  occlusionParameter: Occlusion
+  diffractionParameter: Diffraction
+  coneRayCount: 6
+  coneAngle: 30
+  maxCheckDistance: 100
+  occlusionLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  enableDiffraction: 1
+  nearFieldThreshold: 1.5
+  diffractionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scanRate: 5
+  cullingDistance: 50
+  drawDebugRays: 0
+  clearColor: {r: 0, g: 1, b: 0, a: 1}
+  occludedColor: {r: 1, g: 0, b: 0, a: 1}
+  diffractionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+--- !u!114 &268076345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 268076338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02372b49c7f35af4caecfab755da37c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AK.Wwise.Unity.MonoBehaviour::AkGameObj
+  m_listeners:
+    initialListenerList: []
+    useDefaultListeners: 1
+  isEnvironmentAware: 1
+  isStaticObject: 0
+  usePositionOffsetData: 0
+  m_positionOffsetData:
+    KeepMe: 0
+    positionOffset: {x: 0, y: 0, z: 0}
+  scalingFactor: 1
+  m_posOffsetData: {fileID: 0}
+  listenerMask: 1
 --- !u!1 &414825829
 GameObject:
   m_ObjectHideFlags: 0
