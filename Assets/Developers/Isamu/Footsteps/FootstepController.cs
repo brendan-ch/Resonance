@@ -76,8 +76,6 @@ namespace Resonance.Audio
 
         public void PlayLanding()
         {
-            Debug.Log("[FootstepController] Landing detected!");
-            
             DetectSurface();
             SetSurfaceSwitch();
 
@@ -85,11 +83,19 @@ namespace Resonance.Audio
             {
                 landingEvent.Post(gameObject);
                 
+                // Wait a tiny bit for Wwise Meter to update, then register
                 if (AudioSourceTracker.Instance != null)
                 {
-                    Debug.Log($"[FootstepController] Registered landing at {transform.position}");
-                    AudioSourceTracker.Instance.RegisterSound(transform.position, 0.5f);
+                    Invoke(nameof(RegisterLanding), 0.05f); // 50ms delay
                 }
+            }
+        }
+
+        private void RegisterLanding()
+        {
+            if (AudioSourceTracker.Instance != null)
+            {
+                AudioSourceTracker.Instance.RegisterSound(transform.position, 0.5f);
             }
         }
 
