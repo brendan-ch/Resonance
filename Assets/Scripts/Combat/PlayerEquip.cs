@@ -32,7 +32,7 @@ namespace Resonance.Combat
         
         public WeaponProperties EquippedWeapon { get; private set; }
         
-        void Start()
+        private void Start()
         {
             playerStats = GetComponent<PlayerStats>();
             playerAugmentEquipper = GetComponent<PlayerAugmentEquipper>();
@@ -43,7 +43,7 @@ namespace Resonance.Combat
         
         private WeaponProperties previousWeapon;
 
-        System.Collections.IEnumerator EquipStartingWeaponNextFrame()
+        private System.Collections.IEnumerator EquipStartingWeaponNextFrame()
         {
             yield return null;
 
@@ -60,12 +60,12 @@ namespace Resonance.Combat
             WeaponProperties startWeapon = playerInventory.weaponInventory[1];
             if (startWeapon != null)
             {
-                Equip(startWeapon);
+                EquipWeapon(startWeapon);
             }
         }
 
         
-        void Update()
+        private void Update()
         {
             if (playerActionsInput == null || playerInventory == null)
             {
@@ -91,7 +91,7 @@ namespace Resonance.Combat
             }
         }
         
-        void SwapWeapon()
+        public void SwapWeapon()
         {
             if (EquippedWeapon == null)
             {
@@ -109,7 +109,7 @@ namespace Resonance.Combat
             }
         }
 
-        void EquipFromSlot(int slotIndex)
+        private void EquipFromSlot(int slotIndex)
         {
             if (slotIndex < 0 || slotIndex >= playerInventory.weaponInventory.Length)
             {
@@ -122,20 +122,16 @@ namespace Resonance.Combat
                 return;
             }
 
-            Equip(weapon);
+            EquipWeapon(weapon);
         }
 
-        void Equip(WeaponProperties weapon)
+        public void EquipWeapon(WeaponProperties weapon)
         {
-            Debug.Log($"Equip called with: {weapon?.name ?? "null"}");
-            
             if (weapon == null)
             {
                 return;
             }
-            
-            Debug.Log($"EquippedWeapon is currently: {EquippedWeapon?.name ?? "null"}");
-            
+
             if (EquippedWeapon == weapon)
             {
                 return;
@@ -162,12 +158,11 @@ namespace Resonance.Combat
             {
                 playerStats.AddSpeedModifier(weaponStatManager.Mobility);
             }
-            
-            Debug.Log("About to call RefreshWeaponView");
+
             RefreshWeaponView(weapon);
         }
         
-        void RefreshWeaponView(WeaponProperties weapon)
+        private void RefreshWeaponView(WeaponProperties weapon)
         {
             
             if (currentWeaponInstance != null)

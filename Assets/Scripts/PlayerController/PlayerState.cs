@@ -31,6 +31,11 @@ namespace Resonance.PlayerController
         {
             return CurrentPlayerMovementState == PlayerMovementState.Dead;
         }
+        
+        public bool IsInShop()
+        {
+            return CurrentPlayerMovementState == PlayerMovementState.InShop;
+        }
     }
     
     public enum PlayerMovementState
@@ -43,5 +48,6 @@ namespace Resonance.PlayerController
         Falling = 5,
         Sliding = 6,
         Dead = 7,
+        InShop = 8
     }
 }

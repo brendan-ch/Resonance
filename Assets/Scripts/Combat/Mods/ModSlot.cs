@@ -7,6 +7,7 @@ namespace Resonance.Combat.Mods
         Stock,
         Magazine,
         Optic,
-        Underbarrel
+        Special,
+        Augment
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Resonance.Combat.Weapons
@@ -16,13 +17,6 @@ namespace Resonance.Combat.Weapons
         public GameObject BulletPrefab => bulletPrefab;
         
         [Header("On Hit Effects")]
-        [SerializeField] private float damageOverTime;
-        public float DamageOverTime => damageOverTime;
-
-        [SerializeField] private float speedReduction;
-        public float SpeedReduction => speedReduction;
-        
-        [SerializeField] private float lifesteal;
-        public float Lifesteal => lifesteal;
+        [SerializeField] private List<IBulletEffect> bulletEffects;
     }
 }

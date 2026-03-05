@@ -2177,6 +2177,9 @@ GameObject:
   - component: {fileID: 8953151137814889512}
   - component: {fileID: 22982227885916328}
   - component: {fileID: -3400458708190070123}
+  - component: {fileID: -6562338477815478662}
+  - component: {fileID: -2009204506129055193}
+  - component: {fileID: 3679427490564648025}
   m_Layer: 6
   m_Name: FirstPersonController
   m_TagString: Player
@@ -2373,6 +2376,7 @@ MonoBehaviour:
   overdriveSpeedMultiplier: 1.5
   overdriveHealAmount: 50
   overdriveRegenAmount: 5
+  overdriveDamageReductionAmount: 0.25
 --- !u!114 &6396442435144648702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2610,6 +2614,8 @@ MonoBehaviour:
   playerEquip: {fileID: 3601999263526900247}
   playerActionsInput: {fileID: 3887967411063251530}
   playerCamera: {fileID: 0}
+  bulletTrailPrefab: {fileID: 5479048742665415825, guid: c3d977cf3df0a9e42ab7ef8cb60e1696, type: 3}
+  damageNumberPrefab: {fileID: 2474898762247100464, guid: 325d2b673ea625b4d984c4618506fb81, type: 3}
   debugAimRays: 1
   debugAmmoLogs: 1
   hitscanLayerMask:
@@ -2628,9 +2634,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Inventory.PlayerInventory
   weaponInventory:
-  - {fileID: 11400000, guid: 5b3c96565628d1d498ddc4376703e2f6, type: 2}
+  - {fileID: 0}
   - {fileID: 0}
   startingWeapon: {fileID: 11400000, guid: 28cadf78b26d3a1489c2a936a55f1575, type: 2}
+  augmentInventory:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &8505458450555133255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2781,6 +2790,42 @@ MonoBehaviour:
   drawRays: 0
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   missColor: {r: 0, g: 1, b: 0, a: 1}
+--- !u!114 &-6562338477815478662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e5b738d0ae3f5a4e971816bbc9221d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.WeaponStatManager
+--- !u!114 &-2009204506129055193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207bfba71cd18c142bf9699a76867ff5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.PlayerAugmentEquipper
+--- !u!114 &3679427490564648025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68a77fd7960d9e24c979f00677b85441, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.PlayerAugmentManager
 --- !u!1 &6886534224098021164
 GameObject:
   m_ObjectHideFlags: 0
