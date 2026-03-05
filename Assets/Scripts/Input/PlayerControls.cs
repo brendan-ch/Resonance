@@ -405,6 +405,15 @@ namespace Resonance.PlayerController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleShop"",
+                    ""type"": ""Button"",
+                    ""id"": ""f924d80a-fd6e-4d25-9ccc-36b239216c4d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -495,6 +504,17 @@ namespace Resonance.PlayerController
                     ""action"": ""ShowMatchStats"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6030c83c-c184-419f-93f2-8fe48e1698a3"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleShop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -518,6 +538,7 @@ namespace Resonance.PlayerController
             m_PlayerActionMap_SwapSlotTwo = m_PlayerActionMap.FindAction("SwapSlotTwo", throwIfNotFound: true);
             m_PlayerActionMap_SwapWeapon = m_PlayerActionMap.FindAction("SwapWeapon", throwIfNotFound: true);
             m_PlayerActionMap_ShowMatchStats = m_PlayerActionMap.FindAction("ShowMatchStats", throwIfNotFound: true);
+            m_PlayerActionMap_ToggleShop = m_PlayerActionMap.FindAction("ToggleShop", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -747,6 +768,7 @@ namespace Resonance.PlayerController
         private readonly InputAction m_PlayerActionMap_SwapSlotTwo;
         private readonly InputAction m_PlayerActionMap_SwapWeapon;
         private readonly InputAction m_PlayerActionMap_ShowMatchStats;
+        private readonly InputAction m_PlayerActionMap_ToggleShop;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerActionMap".
         /// </summary>
@@ -790,6 +812,10 @@ namespace Resonance.PlayerController
             /// Provides access to the underlying input action "PlayerActionMap/ShowMatchStats".
             /// </summary>
             public InputAction @ShowMatchStats => m_Wrapper.m_PlayerActionMap_ShowMatchStats;
+            /// <summary>
+            /// Provides access to the underlying input action "PlayerActionMap/ToggleShop".
+            /// </summary>
+            public InputAction @ToggleShop => m_Wrapper.m_PlayerActionMap_ToggleShop;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -840,6 +866,9 @@ namespace Resonance.PlayerController
                 @ShowMatchStats.started += instance.OnShowMatchStats;
                 @ShowMatchStats.performed += instance.OnShowMatchStats;
                 @ShowMatchStats.canceled += instance.OnShowMatchStats;
+                @ToggleShop.started += instance.OnToggleShop;
+                @ToggleShop.performed += instance.OnToggleShop;
+                @ToggleShop.canceled += instance.OnToggleShop;
             }
 
             /// <summary>
@@ -875,6 +904,9 @@ namespace Resonance.PlayerController
                 @ShowMatchStats.started -= instance.OnShowMatchStats;
                 @ShowMatchStats.performed -= instance.OnShowMatchStats;
                 @ShowMatchStats.canceled -= instance.OnShowMatchStats;
+                @ToggleShop.started -= instance.OnToggleShop;
+                @ToggleShop.performed -= instance.OnToggleShop;
+                @ToggleShop.canceled -= instance.OnToggleShop;
             }
 
             /// <summary>
@@ -1014,6 +1046,13 @@ namespace Resonance.PlayerController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnShowMatchStats(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ToggleShop" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToggleShop(InputAction.CallbackContext context);
         }
     }
 }
