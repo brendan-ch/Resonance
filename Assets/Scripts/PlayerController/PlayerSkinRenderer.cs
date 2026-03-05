@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 namespace Resonance.PlayerController
 {
-    [DefaultExecutionOrder(-1)]
+    [DefaultExecutionOrder(-2)]
     public class PlayerSkinRenderer : NetworkBehaviour
     {
         [SerializeField] private SkinCatalog skinCatalog;

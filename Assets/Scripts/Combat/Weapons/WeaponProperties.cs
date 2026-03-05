@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Resonance.Combat.Mods;
 using Resonance.Combat.Weapons.Enums;
 using UnityEngine;
 
@@ -7,7 +9,7 @@ namespace Resonance.Combat.Weapons
     
     public class WeaponProperties : ScriptableObject
     {
-        [Tooltip("Unique weapon identifier.")]
+        [Tooltip("Unique identifier.")]
         [SerializeField] private string key;
         public string Key => key;
      
@@ -78,6 +80,10 @@ namespace Resonance.Combat.Weapons
         
         [SerializeField] private BulletProperties bulletProperties;
         public BulletProperties BulletProperties => bulletProperties;
+        
+        [Header("Mod List")]
+        [SerializeField] private List<WeaponModProperties> modList;
+        public List<WeaponModProperties> ModList => modList;
 
         public WeaponProperties Clone()
         {
