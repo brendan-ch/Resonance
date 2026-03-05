@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{40464890-F427-6B8D-FD0C-04A01679F2E0}",
+    "Hash": "{EA8FB5EA-F2BC-5E7B-D83B-A24409014163}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -21,6 +21,14 @@
        "Name": "Meter (Custom)",
        "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Foley\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
        "GUID": "{A34A176F-5F08-403A-8349-001190F96737}",
+       "LibName": "Wwise Meter",
+       "LibId": "8454147"
+      },
+      {
+       "Id": "462317545",
+       "Name": "Meter (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\SFX_NonReactive\\[Effect Slot [0]: (Meter)]\\Meter (Custom)",
+       "GUID": "{6656604E-7FD2-4985-89E6-BF579E0F733D}",
        "LibName": "Wwise Meter",
        "LibId": "8454147"
       },
@@ -141,6 +149,27 @@
       "Name": "Music",
       "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Music",
       "GUID": "{26A4A81B-B389-46FE-B5B6-6B67F3D37ED1}"
+     },
+     {
+      "Id": "4123335503",
+      "Name": "SFX_NonReactive",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\SFX_NonReactive",
+      "GUID": "{861F9B84-3627-4559-B84F-737913CD1B35}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "462317545"
+        }
+       ]
+      },
+      "AuxBusRefs": [
+       {
+        "Id": "2783051634",
+        "Name": "Reverb_Master",
+        "ObjectPath": "\\Busses\\Default Work Unit\\Master Audio Bus\\Reverb_Master",
+        "GUID": "{C8A2C4AE-C9BE-484B-BE2E-F56C3E08FF4D}"
+       }
+      ]
      }
     ],
     "AuxBusses": [
@@ -184,6 +213,12 @@
       "GUID": "{3AD53E5D-776D-45D4-B11B-3D1F723DD2F1}"
      },
      {
+      "Id": "1471093987",
+      "Name": "Reactive_Feedback_Volume",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Reactive_Feedback_Volume",
+      "GUID": "{7F62881C-DB90-4935-9D2C-04107D29BF53}"
+     },
+     {
       "Id": "1541695584",
       "Name": "Meter_Environment_Intensity",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\Meter_Environment_Intensity",
@@ -194,12 +229,6 @@
       "Name": "ReverbSend",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\ReverbSend",
       "GUID": "{1FEE75FD-DAA1-4E06-9C5D-09CA4508A215}"
-     },
-     {
-      "Id": "1585979646",
-      "Name": "ReactiveObject_Volume",
-      "ObjectPath": "\\Game Parameters\\Default Work Unit\\ReactiveObject_Volume",
-      "GUID": "{7F62881C-DB90-4935-9D2C-04107D29BF53}"
      },
      {
       "Id": "2553996342",
@@ -256,6 +285,6 @@
     ]
    }
   ],
-  "FileHash": "{BE806FDA-B843-5754-B8ED-5B2624DA9C35}"
+  "FileHash": "{78D4D823-DDF2-7C10-B94F-5811E4A0FD2C}"
  }
 }

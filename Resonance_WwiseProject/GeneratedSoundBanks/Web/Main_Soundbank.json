@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{F0DE4E99-059A-ED9B-8ACC-CE7B1DB53AAA}",
+    "Hash": "{AA72450E-E12C-88B0-FE31-5ADC629ADD3D}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
@@ -243,18 +243,18 @@
     "Plugins": {
      "Custom": [
       {
-       "Id": "431755879",
+       "Id": "114934340",
        "Name": "Sine",
-       "ObjectPath": "\\Containers\\Default Work Unit\\Test_Sound\\Sine",
-       "GUID": "{CD3090AF-2AE9-427F-8059-38A6AEB7EB62}",
+       "ObjectPath": "\\Containers\\Default Work Unit\\Reactive_Feedback\\Sine",
+       "GUID": "{A85AC99A-6B7E-4BE3-9685-DBB0F4F39F91}",
        "LibName": "Wwise Sine",
        "LibId": "6553602"
       },
       {
-       "Id": "750451834",
+       "Id": "431755879",
        "Name": "Sine",
-       "ObjectPath": "\\Containers\\Default Work Unit\\Reactive_Feedback\\Sine",
-       "GUID": "{D756AAF5-D53A-444D-9106-A6844FB36D72}",
+       "ObjectPath": "\\Containers\\Default Work Unit\\Test_Sound\\Sine",
+       "GUID": "{CD3090AF-2AE9-427F-8059-38A6AEB7EB62}",
        "LibName": "Wwise Sine",
        "LibId": "6553602"
       }
@@ -454,11 +454,12 @@
       "Name": "Play_Reactive_Feedback",
       "ObjectPath": "\\Events\\Default Work Unit\\Play_Reactive_Feedback",
       "GUID": "{96722AA4-1038-4FBD-A751-61F7B5327803}",
+      "MaxAttenuation": "100",
       "DurationType": "Infinite",
       "PluginRefs": {
        "Custom": [
         {
-         "Id": "750451834"
+         "Id": "114934340"
         }
        ]
       }
@@ -513,9 +514,9 @@
       "GUID": "{3AD53E5D-776D-45D4-B11B-3D1F723DD2F1}"
      },
      {
-      "Id": "1585979646",
-      "Name": "ReactiveObject_Volume",
-      "ObjectPath": "\\Game Parameters\\Default Work Unit\\ReactiveObject_Volume",
+      "Id": "1471093987",
+      "Name": "Reactive_Feedback_Volume",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Reactive_Feedback_Volume",
       "GUID": "{7F62881C-DB90-4935-9D2C-04107D29BF53}"
      }
     ],
@@ -555,6 +556,6 @@
     ]
    }
   ],
-  "FileHash": "{88B2A1A8-346F-5C3C-4178-3D5A5D1E0EEC}"
+  "FileHash": "{08CA0FD4-C5DB-64B0-D4A8-98982B4F6B0E}"
  }
 }

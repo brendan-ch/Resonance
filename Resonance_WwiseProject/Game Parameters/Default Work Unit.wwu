@@ -24,7 +24,7 @@
 						<Property Name="Min" Type="Real64" Value="-48"/>
 					</PropertyList>
 				</GameParameter>
-				<GameParameter Name="ReactiveObject_Volume" ID="{7F62881C-DB90-4935-9D2C-04107D29BF53}">
+				<GameParameter Name="Reactive_Feedback_Volume" ID="{7F62881C-DB90-4935-9D2C-04107D29BF53}">
 					<PropertyList>
 						<Property Name="InitialValue" Type="Real64" Value="0"/>
 					</PropertyList>

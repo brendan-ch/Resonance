@@ -246,9 +246,15 @@ MonoBehaviour:
   targetRenderer: {fileID: 20840759}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
+  enableAudioFeedback: 1
+  minFeedbackThreshold: 0
+  feedbackVolumeRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   maxDistance: 50
-  useDistanceFalloff: 0
   attackSpeed: 20
+  sustainTime: 1
   releaseSpeed: 5
   threshold: 0.05
   debugLog: 0
@@ -563,6 +569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioSourceTracker
   defaultDuration: 1
   propagationSpeed: 50
+  maxPropagationDistance: 50
 --- !u!1 &140657092
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,9 +956,15 @@ MonoBehaviour:
   targetRenderer: {fileID: 268076341}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
+  enableAudioFeedback: 1
+  minFeedbackThreshold: 0
+  feedbackVolumeRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 004174a110224a149ad8b6cb5d816964, type: 2}
   maxDistance: 50
-  useDistanceFalloff: 0
   attackSpeed: 20
+  sustainTime: 1
   releaseSpeed: 5
   threshold: 0.05
   debugLog: 0
