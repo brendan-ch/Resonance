@@ -192,6 +192,7 @@ namespace Resonance.Combat
             if (weapon == null)
             {
                 currentWeaponView = null;
+                return;
             }
 
             if (equipSlot == null)

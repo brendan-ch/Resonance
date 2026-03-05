@@ -262,9 +262,9 @@ GameObject:
   - component: {fileID: -6562338477815478662}
   - component: {fileID: -2009204506129055193}
   - component: {fileID: 3679427490564648025}
-  - component: {fileID: 3495591213278052501}
   - component: {fileID: 1243582744159536647}
   - component: {fileID: 8627360394267033834}
+  - component: {fileID: 5575042648507424026}
   m_Layer: 6
   m_Name: FirstPersonController
   m_TagString: Player
@@ -319,7 +319,7 @@ MonoBehaviour:
   baseSprintAcceleration: 50
   baseSprintSpeed: 7
   baseInAirAcceleration: 25
-  drag: 20
+  baseDrag: 20
   gravity: 25
   terminalVelocity: 50
   jumpSpeed: 1
@@ -907,34 +907,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68a77fd7960d9e24c979f00677b85441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.PlayerAugmentManager
---- !u!1 &6886534224098021164
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6809321870534573542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19a917e9c7c544d59a5c1b09bc598baa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.PlayerSkinRenderer
-  _isSetup: 0
-  _prefabId: -2147483648
-  _componentIndex: -2147483648
-  _shouldBePooled: 0
-  _parent: {fileID: 0}
-  _invertedPathToNearestParent: 
-  _directChildren: []
-  _networkRules: {fileID: 0}
-  _visitiblityRules: {fileID: 0}
-  skinCatalog: {fileID: 11400000, guid: 8ae0f4c6a27d046fca8c89e7e0b26426, type: 2}
-  animator: {fileID: 186030322157751487}
-  skinIndex:
-    _value: 0
-    _ownerAuth: 0
-    _sendIntervalInSeconds: 0
-  testSkinIndexToRequest: 0
 --- !u!114 &1243582744159536647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -968,4 +940,32 @@ MonoBehaviour:
   _directChildren: []
   _networkRules: {fileID: 0}
   _visitiblityRules: {fileID: 0}
-  skinRenderer: {fileID: 3495591213278052501}
+  skinRenderer: {fileID: 5575042648507424026}
+--- !u!114 &5575042648507424026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809321870534573542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19a917e9c7c544d59a5c1b09bc598baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.PlayerController.PlayerSkinRenderer
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  skinCatalog: {fileID: 11400000, guid: 8ae0f4c6a27d046fca8c89e7e0b26426, type: 2}
+  animator: {fileID: 186030322157751487}
+  skinIndex:
+    _value: 0
+    _ownerAuth: 0
+    _sendIntervalInSeconds: 0
+  testSkinIndexToRequest: 0
