@@ -1,4 +1,5 @@
 using System.Linq;
+using PurrNet;
 using Resonance.Combat.Augments;
 using Resonance.Combat.Weapons;
 using Resonance.Combat.Weapons.Enums;
@@ -6,13 +7,12 @@ using Resonance.Helper;
 using Resonance.Inventory;
 using Resonance.Player;
 using Resonance.PlayerController;
-using UnityEditor.EditorTools;
 using UnityEngine;
 
 namespace Resonance.Combat
 {
     [DefaultExecutionOrder(-1)]
-    public class PlayerEquip : MonoBehaviour
+    public class PlayerEquip : NetworkBehaviour
     {
         private GameObject currentWeaponInstance;
         private PlayerStats playerStats;

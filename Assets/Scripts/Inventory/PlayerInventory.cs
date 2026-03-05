@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using PurrNet;
 using Resonance.Combat.Augments;
 using Resonance.Combat.Weapons;
 using Resonance.Combat.Weapons.Enums;
@@ -7,7 +8,7 @@ using UnityEngine;
 
 namespace Resonance.Inventory
 {
-    public class PlayerInventory : MonoBehaviour
+    public class PlayerInventory : NetworkBehaviour
     {
         public WeaponProperties[] weaponInventory = new WeaponProperties[2];
         [SerializeField] WeaponProperties startingWeapon;
