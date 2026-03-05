@@ -10,27 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981e9f714b3e12a4e8a7a5399e20ebcb, type: 3}
-  m_Name: StartingShotgun
+  m_Name: Machine Gun
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.Weapons.WeaponProperties
-  key: starting_shotgun
-  weaponName: Shotgun
-  description: If you can believe it this thing can shoot people but not as good
-    as other stuff.
+  key: machine_gun
+  weaponName: LMG
+  description: 
   slot: 0
-  weaponClass: 1
+  weaponClass: 3
   firingType: 1
   icon: {fileID: 0}
   weaponPrefab: {fileID: 1737148184329554707, guid: a9a8aed849c03db4e8722bf54fb9d010, type: 3}
-  damage: 5
-  fireRate: 3
-  projectilesPerShot: 10
-  range: 20
+  damage: 2
+  fireRate: 20
+  projectilesPerShot: 1
+  range: 30
   accuracy: 0
   control: 0
-  spread: 5
-  muzzleVelocity: 5
-  mobility: 1.5
+  muzzleVelocity: 0
+  spread: 0
+  spreadPerShot: 0.1
+  maxSpread: 5
+  spreadRecoveryRate: 1
+  mobility: 0.75
   handling: 0
-  magazineSize: 4
+  magazineSize: 120
   reloadTime: 3.3
   bulletProperties: {fileID: 11400000, guid: efa6dd70ff966ac409b9d07883c05ff2, type: 2}
+  modList: []

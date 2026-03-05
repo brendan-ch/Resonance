@@ -30,5 +30,9 @@ namespace Resonance.Combat.Mods
         [Header("Stat Modifiers")]
         [SerializeField] private List<StatModifier> modifiers = new();
         public IReadOnlyList<StatModifier> Modifiers => modifiers;
+        
+        [Header("Weapon Compatibility")]
+        [SerializeField] private List<WeaponClass> compatibleWeaponClasses;
+        public IReadOnlyList<WeaponClass> CompatibleWeaponClasses => compatibleWeaponClasses;
     }
 }

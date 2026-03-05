@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Resonance.Combat
 {
-        public class WeaponStatManager : MonoBehaviour 
+    public class WeaponStatManager : MonoBehaviour
     {
         private WeaponProperties managedWeapon;
         private readonly List<WeaponModProperties> augmentMods = new List<WeaponModProperties>();
@@ -23,7 +23,7 @@ namespace Resonance.Combat
             {
                 return;
             }
-            
+
             augmentMods.Add(mod);
         }
 
@@ -69,10 +69,10 @@ namespace Resonance.Combat
                     }
                 }
             }
-            
+
             return (baseStat + additiveSum) * multiplicativeProduct;
         }
-        
+
         private float GetBaseValue(WeaponStat stat) => stat switch
         {
             WeaponStat.Damage             => managedWeapon.Damage,
@@ -87,9 +87,12 @@ namespace Resonance.Combat
             WeaponStat.Handling           => managedWeapon.Handling,
             WeaponStat.MagazineSize       => managedWeapon.MagazineSize,
             WeaponStat.ReloadTime         => managedWeapon.ReloadTime,
+            WeaponStat.SpreadPerShot      => managedWeapon.SpreadPerShot,
+            WeaponStat.MaxSpread          => managedWeapon.MaxSpread,
+            WeaponStat.SpreadRecoveryRate => managedWeapon.SpreadRecoveryRate,
             _                             => 0f
         };
-        
+
         public float Damage             => GetStat(WeaponStat.Damage);
         public float FireRate           => GetStat(WeaponStat.FireRate);
         public int   ProjectilesPerShot => Mathf.RoundToInt(GetStat(WeaponStat.ProjectilesPerShot));
@@ -102,6 +105,9 @@ namespace Resonance.Combat
         public float Handling           => GetStat(WeaponStat.Handling);
         public int   MagazineSize       => Mathf.RoundToInt(GetStat(WeaponStat.MagazineSize));
         public float ReloadTime         => GetStat(WeaponStat.ReloadTime);
+        public float SpreadPerShot      => GetStat(WeaponStat.SpreadPerShot);
+        public float MaxSpread          => GetStat(WeaponStat.MaxSpread);
+        public float SpreadRecoveryRate => GetStat(WeaponStat.SpreadRecoveryRate);
 
         public WeaponProperties ManagedWeapon => managedWeapon;
     }

@@ -13,7 +13,10 @@ namespace Resonance.Combat.Weapons.Enums
         Mobility,
         Handling,
         MagazineSize,
-        ReloadTime
+        ReloadTime,
+        SpreadPerShot,
+        MaxSpread,
+        SpreadRecoveryRate,
     }
 
     public enum ModifierType

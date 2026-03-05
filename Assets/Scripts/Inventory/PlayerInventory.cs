@@ -13,9 +13,10 @@ namespace Resonance.Inventory
         [SerializeField] WeaponProperties startingWeapon;
         public AugmentProperties[] augmentInventory = new AugmentProperties[2];
 
-         private void Start()
+         private void Awake()
          {
-             AddWeapon(startingWeapon);
+             WeaponProperties weapon = startingWeapon.Clone();
+             AddWeapon(weapon);
          }
          
          public void AddWeapon(WeaponProperties weaponToAdd)

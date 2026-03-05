@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Resonance.Shop;
 
 namespace Resonance.PlayerController
 {
@@ -14,6 +15,8 @@ namespace Resonance.PlayerController
         public bool SwapWeaponPressed  { get; private set; }
         
         public bool ShowStatsHeld { get; private set; }
+        
+        public bool ToggleShopPressed  { get; private set; }
         
         private PlayerLocomotionInput _playerLocomotionInput;
         private OverdriveAbility _overdriveAbility;
@@ -92,7 +95,7 @@ namespace Resonance.PlayerController
         #region Input Callbacks
         public void OnAttack(InputAction.CallbackContext context)
         {
-            if (_playerState.IsDead())
+            if (_playerState.IsDead() || _playerState.IsInShop())
                 return;
 
             if (context.started)
@@ -111,10 +114,9 @@ namespace Resonance.PlayerController
             }
         }
 
-        
         public void OnReload(InputAction.CallbackContext context)
         {
-            if (!context.performed || _playerState.IsDead())
+            if (!context.performed || _playerState.IsDead() || _playerState.IsInShop())
                 return;
 
             ReloadPressed = true;
@@ -122,7 +124,7 @@ namespace Resonance.PlayerController
 
         public void OnOverdrive(InputAction.CallbackContext context)
         {
-            if (!context.performed || _playerState.IsDead())
+            if (!context.performed || _playerState.IsDead() || _playerState.IsInShop())
                 return;
 
             if (_overdriveAbility != null)
@@ -130,18 +132,18 @@ namespace Resonance.PlayerController
                 _overdriveAbility.TryActivateOverdrive();
             }
         }
-        
+
         public void OnSwapSlotOne(InputAction.CallbackContext context)
         {
-            if (!context.performed || _playerState.IsDead())
+            if (!context.performed || _playerState.IsDead() || _playerState.IsInShop())
                 return;
 
             SwapSlotOnePressed = true;
         }
-        
+
         public void OnSwapSlotTwo(InputAction.CallbackContext context)
         {
-            if (!context.performed || _playerState.IsDead())
+            if (!context.performed || _playerState.IsDead() || _playerState.IsInShop())
                 return;
 
             SwapSlotTwoPressed = true;
@@ -149,7 +151,7 @@ namespace Resonance.PlayerController
 
         public void OnSwapWeapon(InputAction.CallbackContext context)
         {
-            if (_playerState.IsDead())
+            if (_playerState.IsDead() || _playerState.IsInShop())
                 return;
 
             Vector2 scroll = context.ReadValue<Vector2>();
@@ -194,6 +196,21 @@ namespace Resonance.PlayerController
             {
                 MatchStatsViewModel.Instance.Hide();
             }
+        }
+
+        public void OnToggleShop(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+            {
+                return;
+            }
+
+            if (ShopManager.Instance == null)
+            {
+                return;
+            }
+
+            ShopManager.Instance.Toggle();
         }
         #endregion
         public void RequestReload()

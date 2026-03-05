@@ -19,6 +19,9 @@ namespace Resonance.Combat.Augments
         [SerializeField] private string description;
         public string Description => description;
         
+        [SerializeField] private Sprite icon;
+        public Sprite Icon => icon;
+        
         [Header("Enum Identifiers")]
         [SerializeField] private AugmentSlot slot;
         public AugmentSlot Slot => slot;
@@ -38,7 +41,7 @@ namespace Resonance.Combat.Augments
         public WeaponModProperties ModProperties => modProperties;
         
         [Header("Augment Ability")]
-        [SerializeField] private IAugmentAbility ability;
-        public IAugmentAbility Ability => ability;
+        [SerializeField] private string abilityKey;
+        public string AbilityKey => abilityKey;
     }
 }

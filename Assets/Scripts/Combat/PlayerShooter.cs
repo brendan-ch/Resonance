@@ -1,3 +1,4 @@
+using System.Collections;
 using PurrNet;
 using Resonance.Combat.Weapons;
 using Resonance.Combat.Weapons.Enums;
@@ -10,30 +11,39 @@ namespace Resonance.Combat
     [RequireComponent(typeof(PlayerActionsInput))]
     public class PlayerShooter : NetworkBehaviour
     {
+        #region Fields
+
         [Header("References")]
-        [SerializeField] PlayerEquip playerEquip;
-        [SerializeField] PlayerActionsInput playerActionsInput;
-        [SerializeField] Camera playerCamera;
+        [SerializeField] private PlayerEquip playerEquip;
+        [SerializeField] private PlayerActionsInput playerActionsInput;
+        [SerializeField] private Camera playerCamera;
         
+        [SerializeField] private TrailRenderer bulletTrailPrefab;
+        [SerializeField] private DamageNumber damageNumberPrefab;
 
         [Header("Debug")]
-        [SerializeField] bool debugAimRays;
-        [SerializeField] bool debugAmmoLogs;
+        [SerializeField] private bool debugAimRays;
+        [SerializeField] private bool debugAmmoLogs;
 
-        float nextFireTime;
-        int currentAmmo;
-        bool isReloading;
-        float reloadEndTime;
+        private float nextFireTime;
+        private int currentAmmo;
+        private bool isReloading;
+        private float reloadEndTime;
+        private float currentSpread;
 
-        WeaponProperties lastWeapon;
+        private WeaponProperties lastWeapon;
 
         [SerializeField] private LayerMask hitscanLayerMask;
-        
+
         private PlayerViewModel viewModel;
         private WeaponStatManager weaponStatManager;
-        
+
         public int CurrentAmmo => currentAmmo;
         public bool IsReloading => isReloading;
+
+        #endregion
+
+        #region Network
 
         protected override void OnSpawned()
         {
@@ -61,6 +71,10 @@ namespace Resonance.Combat
             }
         }
 
+        #endregion
+
+        #region Startup
+
         private void Awake()
         {
             viewModel = GetComponent<PlayerViewModel>();
@@ -73,15 +87,19 @@ namespace Resonance.Combat
             hitscanLayerMask = (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Environment"));
         }
 
-        void Start()
+        private void Start()
         {
             weaponStatManager = GetComponent<WeaponStatManager>();
-                
-            RefreshAmmoFromEquippedWeapon(true);    
+
+            RefreshAmmoFromEquippedWeapon(true);
             viewModel.InitializeAmmo(MagazineSize);
         }
 
-        void Update()
+        #endregion
+
+        #region Update
+
+        private void Update()
         {
             if (playerActionsInput == null)
             {
@@ -91,10 +109,19 @@ namespace Resonance.Combat
             RefreshAmmoFromEquippedWeapon(false);
             TickReload();
 
+            if (!playerActionsInput.AttackHeld && !playerActionsInput.AttackPressed)
+            {
+                currentSpread = Mathf.Max(
+                    weaponStatManager.Spread,
+                    currentSpread - weaponStatManager.SpreadRecoveryRate * Time.deltaTime
+                );
+            }
+
             if (playerActionsInput.ReloadPressed)
             {
                 TryStartReload();
                 playerActionsInput.SetReloadPressedFalse();
+                return;
             }
 
             if (playerActionsInput.AttackPressed)
@@ -107,10 +134,13 @@ namespace Resonance.Combat
             {
                 TryShoot();
             }
-
         }
 
-        void TryShoot()
+        #endregion
+
+        #region Shooting
+
+        private void TryShoot()
         {
             if (isReloading) return;
             if (playerEquip == null) return;
@@ -121,7 +151,6 @@ namespace Resonance.Combat
             WeaponView view = playerEquip.CurrentWeaponView;
             if (view == null || view.Muzzle == null) return;
 
-            // Fire rate gate
             float fireRate = weaponStatManager.FireRate;
             if (fireRate > 0f)
             {
@@ -129,7 +158,6 @@ namespace Resonance.Combat
                 nextFireTime = Time.time + (1f / fireRate);
             }
 
-            // Ammo gate
             if (weaponStatManager.MagazineSize > 0)
             {
                 if (currentAmmo <= 0)
@@ -141,14 +169,16 @@ namespace Resonance.Combat
                 currentAmmo -= 1;
                 viewModel.SetAmmo(currentAmmo, MagazineSize);
 
+                currentSpread += weaponStatManager.SpreadPerShot;
+                currentSpread = Mathf.Min(currentSpread, weaponStatManager.MaxSpread);
+
+                Debug.Log($"[Shooter] Current Spread: {currentSpread:0.000}");
+                
                 if (debugAmmoLogs)
                 {
                     Debug.Log($"[Shooter] Fired. Ammo: {currentAmmo}/{weaponStatManager.MagazineSize}", this);
                 }
             }
-
-            // Universal: direction, spread, pellets, payload base
-            Vector3 baseDirection = GetAimDirection(view.Muzzle);
 
             int count = weaponStatManager.ProjectilesPerShot;
             if (count < 1) count = 1;
@@ -157,17 +187,18 @@ namespace Resonance.Combat
 
             if (weapon.FiringType == WeaponFiringType.Hitscan)
             {
+                Vector3 baseDirection = GetAimDirection(view.Muzzle);
                 FireHitscan(weapon, view, payload, baseDirection, count);
             }
             else
             {
-                FireProjectile(weapon, view, payload, baseDirection, count);
+                Vector3 projectileDirection = GetProjectileAimDirection(view.Muzzle);
+                FireProjectile(weapon, view, payload, projectileDirection, count);
             }
         }
 
         private WeaponPayload BuildBasePayload(WeaponProperties weapon)
         {
-            Debug.Log($"[PlayerProjectileShooter] Constructing base payload with owner {gameObject.GetComponent<NetworkBehaviour>().owner}");
             WeaponPayload payload = new WeaponPayload();
             payload.Shooter = gameObject;
             payload.Damage = weaponStatManager.Damage;
@@ -184,18 +215,15 @@ namespace Resonance.Combat
 
             payload.BulletSpeed = finalBulletSpeed;
             payload.BulletGravity = bullet.BulletGravity;
-            payload.DamageOverTime = bullet.DamageOverTime;
-            payload.SpeedReduction = bullet.SpeedReduction;
-            payload.Lifesteal = bullet.Lifesteal;
 
             for (int i = 0; i < count; i++)
             {
-                Vector3 direction = ApplySpread(baseDirection, weaponStatManager.Spread);
+                Vector3 direction = ApplySpread(baseDirection, currentSpread);
                 SpawnProjectile(bullet.BulletPrefab, view.Muzzle, payload, direction);
             }
         }
 
-        void FireHitscan(WeaponProperties weapon, WeaponView view, WeaponPayload payload, Vector3 baseDirection, int count)
+        private void FireHitscan(WeaponProperties weapon, WeaponView view, WeaponPayload payload, Vector3 baseDirection, int count)
         {
             if (playerCamera == null) return;
 
@@ -204,25 +232,30 @@ namespace Resonance.Combat
 
             for (int i = 0; i < count; i++)
             {
-                Vector3 dir = ApplySpread(baseDirection, weaponStatManager.Spread);
+                Vector3 dir = ApplySpread(baseDirection, currentSpread);
+                Vector3 endPoint = rayOrigin + dir * hitscanMaxDistance;
 
                 if (Physics.Raycast(rayOrigin, dir, out RaycastHit hit, hitscanMaxDistance, hitscanLayerMask, QueryTriggerInteraction.Ignore))
                 {
                     float distance = hit.distance;
-
                     float finalDamage = ComputeDamageWithFalloff(payload.Damage, distance, weapon);
 
-                    if (hit.collider.TryGetComponent<IDamageable>(out var damageable) ||
-                        hit.collider.GetComponentInParent<IDamageable>() != null)
+                    IDamageable target = hit.collider.GetComponent<IDamageable>() ?? hit.collider.GetComponentInParent<IDamageable>();
+                    if (target != null && hit.collider.gameObject != gameObject && !hit.collider.transform.IsChildOf(transform))
                     {
-                        IDamageable target = hit.collider.GetComponent<IDamageable>() ?? hit.collider.GetComponentInParent<IDamageable>();
-
                         target.TakeDamage(finalDamage, payload.Shooter);
+                        if (damageNumberPrefab != null)
+                        {
+                            DamageNumber number = Instantiate(damageNumberPrefab, hit.point, Quaternion.identity);
+                            number.Initialize(finalDamage);
+                        }
                     }
                     else
                     {
                         SpawnImpactDecal(hit);
                     }
+
+                    endPoint = hit.point;
 
                     if (debugAimRays)
                     {
@@ -230,7 +263,29 @@ namespace Resonance.Combat
                         Debug.DrawRay(hit.point, hit.normal * 0.3f, Color.cyan, 0.5f);
                     }
                 }
+
+                if (bulletTrailPrefab != null && view.Muzzle != null)
+                {
+                    StartCoroutine(SpawnTrail(view.Muzzle.position, endPoint));
+                }
             }
+        }
+
+        private IEnumerator SpawnTrail(Vector3 start, Vector3 end)
+        {
+            TrailRenderer trail = Instantiate(bulletTrailPrefab, start, Quaternion.identity);
+            float duration = trail.time;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                trail.transform.position = Vector3.Lerp(start, end, elapsed / duration);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            trail.transform.position = end;
+            Destroy(trail.gameObject, trail.time);
         }
 
         private void SpawnImpactDecal(RaycastHit hitInfo)
@@ -238,32 +293,40 @@ namespace Resonance.Combat
             Debug.Log($"Spawn decal at {hitInfo.point}");
         }
 
-
-        void TryApplyDamage(Collider hitCollider, WeaponPayload payload)
-        {
-            if (hitCollider == null) return;
-
-            IDamageable damageable = hitCollider.GetComponentInParent<IDamageable>();
-            if (damageable == null) return;
-
-            damageable.TakeDamage(payload.Damage, payload.Shooter);
-        }
-
         private float ComputeDamageWithFalloff(float payloadDamage, float distance, WeaponProperties weapon)
         {
-            if (distance > (weaponStatManager.Range / 2))
+            if (distance > weaponStatManager.Range / 2)
             {
-                return (payloadDamage / 2);
+                return payloadDamage / 2;
             }
 
             return payloadDamage;
         }
 
+        private void SpawnProjectile(GameObject prefab, Transform muzzle, WeaponPayload payload, Vector3 direction)
+        {
+            GameObject go = Instantiate(prefab, muzzle.position, Quaternion.LookRotation(direction));
 
-        void TickReload()
+            WeaponProjectile projectile = go.GetComponent<WeaponProjectile>();
+            if (projectile == null)
+            {
+                Debug.LogError("BulletPrefab is missing WeaponProjectile component.", go);
+                return;
+            }
+
+            projectile.Initialize(payload, direction);
+        }
+
+        #endregion
+
+        #region Reload
+
+        private void TickReload()
         {
             if (!isReloading)
+            {
                 return;
+            }
 
             float reloadDuration = weaponStatManager.ReloadTime;
             float timeRemaining = reloadEndTime - Time.time;
@@ -280,7 +343,7 @@ namespace Resonance.Combat
             }
         }
 
-        void TryStartReload()
+        private void TryStartReload()
         {
             if (isReloading)
             {
@@ -316,7 +379,7 @@ namespace Resonance.Combat
                 viewModel.SetReloadState(false);
                 viewModel.SetReloadProgress(1f);
                 viewModel.SetAmmo(currentAmmo, MagazineSize);
-                
+
                 if (debugAmmoLogs)
                 {
                     Debug.Log($"[Shooter] Reload complete (instant). Ammo: {currentAmmo}/{weaponStatManager.MagazineSize}", this);
@@ -337,7 +400,7 @@ namespace Resonance.Combat
             }
         }
 
-        void FinishReload()
+        private void FinishReload()
         {
             isReloading = false;
 
@@ -357,14 +420,18 @@ namespace Resonance.Combat
             viewModel.SetReloadState(false);
             viewModel.SetReloadProgress(1f);
             viewModel.SetAmmo(currentAmmo, MagazineSize);
-            
+
             if (debugAmmoLogs)
             {
                 Debug.Log($"[Shooter] Reload complete. Ammo: {currentAmmo}/{weaponStatManager.MagazineSize}", this);
             }
         }
 
-        void RefreshAmmoFromEquippedWeapon(bool force)
+        #endregion
+
+        #region Weapon Refresh
+
+        private void RefreshAmmoFromEquippedWeapon(bool force)
         {
             if (playerEquip == null)
             {
@@ -385,6 +452,8 @@ namespace Resonance.Combat
             lastWeapon = weapon;
             isReloading = false;
 
+            currentSpread = weaponStatManager.Spread;
+
             viewModel.SetReloadState(false);
             viewModel.SetReloadProgress(0f);
 
@@ -404,8 +473,17 @@ namespace Resonance.Combat
                 Debug.Log($"[Shooter] Equipped {weapon.name}. Ammo: {currentAmmo}/{weaponStatManager.MagazineSize}", this);
             }
         }
+        
+        public void RefreshWeaponStats()
+        {
+            RefreshAmmoFromEquippedWeapon(true);
+        }
 
-        Vector3 GetAimDirection(Transform muzzle)
+        #endregion
+
+        #region Aim
+
+        private Vector3 GetAimDirection(Transform muzzle)
         {
             if (playerCamera == null)
             {
@@ -415,7 +493,30 @@ namespace Resonance.Combat
             return playerCamera.transform.forward.normalized;
         }
 
-        Vector3 ApplySpread(Vector3 dir, float spreadDegrees)
+        private Vector3 GetProjectileAimDirection(Transform muzzle)
+        {
+            if (playerCamera == null)
+            {
+                return muzzle.forward;
+            }
+
+            Vector3 cameraOrigin = playerCamera.transform.position;
+            Vector3 cameraForward = playerCamera.transform.forward;
+
+            Vector3 targetPoint;
+            if (Physics.Raycast(cameraOrigin, cameraForward, out RaycastHit hit, weaponStatManager.Range, hitscanLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                targetPoint = hit.point;
+            }
+            else
+            {
+                targetPoint = cameraOrigin + cameraForward * weaponStatManager.Range;
+            }
+
+            return (targetPoint - muzzle.position).normalized;
+        }
+
+        private Vector3 ApplySpread(Vector3 dir, float spreadDegrees)
         {
             if (spreadDegrees <= 0f)
             {
@@ -434,20 +535,10 @@ namespace Resonance.Combat
             return result.normalized;
         }
 
-        void SpawnProjectile(GameObject prefab, Transform muzzle, WeaponPayload payload, Vector3 direction)
-        {
-            GameObject go = Instantiate(prefab, muzzle.position, Quaternion.LookRotation(direction));
+        #endregion
 
-            WeaponProjectile projectile = go.GetComponent<WeaponProjectile>();
-            if (projectile == null)
-            {
-                Debug.LogError("BulletPrefab is missing WeaponProjectile component.", go);
-                return;
-            }
+        #region Properties
 
-            projectile.Initialize(payload, direction);
-        }
-        
         public int MagazineSize
         {
             get
@@ -457,7 +548,7 @@ namespace Resonance.Combat
                 return weaponStatManager.MagazineSize;
             }
         }
-    
+
         public float ReloadProgress01
         {
             get
@@ -469,7 +560,7 @@ namespace Resonance.Combat
                 return Mathf.Clamp01(1f - (timeRemaining / reloadDuration));
             }
         }
-        
+
         public float ReloadDuration
         {
             get
@@ -479,5 +570,7 @@ namespace Resonance.Combat
                 return weaponStatManager.ReloadTime;
             }
         }
+
+        #endregion
     }
 }

@@ -29,7 +29,7 @@ namespace Resonance.PlayerController
         public float baseSprintAcceleration = 50f;
         public float baseSprintSpeed = 7f;
         public float baseInAirAcceleration = 25f;
-        public float drag = 20f;
+        public float baseDrag = 20f;
         public float gravity = 25f;
         public float terminalVelocity = 50f;
         public float jumpSpeed = 1.0f;
@@ -78,6 +78,7 @@ namespace Resonance.PlayerController
         private float inAirAcceleration;
         private float slideSpeed;
         private float minSlideSpeed;
+        private float drag;
         
         private Vector2 _cameraRotation = Vector2.zero;
         private Vector2 _playerTargetRotation = Vector2.zero;
@@ -163,6 +164,9 @@ namespace Resonance.PlayerController
             if (_playerState.IsDead())
                 return;
             
+            if (_playerState.IsInShop())
+                return;
+            
             // Don't process movement if CharacterController is disabled
             if (!_characterController.enabled)
                 return;
@@ -187,6 +191,8 @@ namespace Resonance.PlayerController
             runAcceleration = baseRunAcceleration * speedMult;
             sprintAcceleration = baseSprintAcceleration * speedMult;
             inAirAcceleration = baseInAirAcceleration * speedMult;
+            
+            drag = baseDrag * speedMult;
             
             _antiBump = sprintSpeed * speedMult;
         }
@@ -424,6 +430,9 @@ namespace Resonance.PlayerController
             if (IsPlayerDead)
                 return;
                 
+            if (_playerState.IsInShop())
+                return;
+            
             UpdateCameraRotation();
             UpdateCameraFOV();
         }
