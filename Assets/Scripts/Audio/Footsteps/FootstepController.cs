@@ -66,6 +66,11 @@ namespace Resonance.Audio
             if (footstepEvent != null && footstepEvent.IsValid())
             {
                 footstepEvent.Post(gameObject);
+
+                if (AudioSourceTracker.Instance != null)
+                {
+                    AudioSourceTracker.Instance.RegisterSound(transform.position, 0.3f);
+                }
             }
         }
 
@@ -77,6 +82,20 @@ namespace Resonance.Audio
             if (landingEvent != null && landingEvent.IsValid())
             {
                 landingEvent.Post(gameObject);
+                
+                // Wait a tiny bit for Wwise Meter to update, then register
+                if (AudioSourceTracker.Instance != null)
+                {
+                    Invoke(nameof(RegisterLanding), 0.05f); // 50ms delay
+                }
+            }
+        }
+
+        private void RegisterLanding()
+        {
+            if (AudioSourceTracker.Instance != null)
+            {
+                AudioSourceTracker.Instance.RegisterSound(transform.position, 0.5f);
             }
         }
 
@@ -134,4 +153,3 @@ namespace Resonance.Audio
         }
     }
 }
-

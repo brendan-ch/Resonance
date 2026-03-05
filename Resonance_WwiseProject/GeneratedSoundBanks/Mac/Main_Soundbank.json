@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{F0DE4E99-059A-ED9B-8ACC-CE7B1DB53AAA}",
+    "Hash": "{1DE01834-2702-0B0C-AD29-79A27FE85D31}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
@@ -243,18 +243,18 @@
     "Plugins": {
      "Custom": [
       {
-       "Id": "431755879",
+       "Id": "114934340",
        "Name": "Sine",
-       "ObjectPath": "\\Containers\\Default Work Unit\\Test_Sound\\Sine",
-       "GUID": "{CD3090AF-2AE9-427F-8059-38A6AEB7EB62}",
+       "ObjectPath": "\\Containers\\Default Work Unit\\Reactive_Feedback\\Sine",
+       "GUID": "{A85AC99A-6B7E-4BE3-9685-DBB0F4F39F91}",
        "LibName": "Wwise Sine",
        "LibId": "6553602"
       },
       {
-       "Id": "750451834",
+       "Id": "431755879",
        "Name": "Sine",
-       "ObjectPath": "\\Containers\\Default Work Unit\\Reactive_Feedback\\Sine",
-       "GUID": "{D756AAF5-D53A-444D-9106-A6844FB36D72}",
+       "ObjectPath": "\\Containers\\Default Work Unit\\Test_Sound\\Sine",
+       "GUID": "{CD3090AF-2AE9-427F-8059-38A6AEB7EB62}",
        "LibName": "Wwise Sine",
        "LibId": "6553602"
       }
@@ -266,6 +266,7 @@
       "Name": "Play_Footstep",
       "ObjectPath": "\\Events\\Default Work Unit\\Play_Footstep",
       "GUID": "{9682FA73-32CF-41B9-931F-A41CE6D92E60}",
+      "MaxAttenuation": "100",
       "DurationType": "OneShot",
       "DurationMin": "0.108",
       "DurationMax": "0.35408333",
@@ -378,6 +379,7 @@
       "Name": "Play_Landing",
       "ObjectPath": "\\Events\\Default Work Unit\\Play_Landing",
       "GUID": "{3F483C2B-4AA2-43B3-B2A7-A916FFF59C74}",
+      "MaxAttenuation": "100",
       "DurationType": "OneShot",
       "DurationMin": "0.39466667",
       "DurationMax": "0.6513542",
@@ -454,11 +456,12 @@
       "Name": "Play_Reactive_Feedback",
       "ObjectPath": "\\Events\\Default Work Unit\\Play_Reactive_Feedback",
       "GUID": "{96722AA4-1038-4FBD-A751-61F7B5327803}",
+      "MaxAttenuation": "100",
       "DurationType": "Infinite",
       "PluginRefs": {
        "Custom": [
         {
-         "Id": "750451834"
+         "Id": "114934340"
         }
        ]
       }
@@ -513,9 +516,9 @@
       "GUID": "{3AD53E5D-776D-45D4-B11B-3D1F723DD2F1}"
      },
      {
-      "Id": "1585979646",
-      "Name": "ReactiveObject_Volume",
-      "ObjectPath": "\\Game Parameters\\Default Work Unit\\ReactiveObject_Volume",
+      "Id": "1471093987",
+      "Name": "Reactive_Feedback_Volume",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Reactive_Feedback_Volume",
       "GUID": "{7F62881C-DB90-4935-9D2C-04107D29BF53}"
      }
     ],
@@ -555,6 +558,6 @@
     ]
    }
   ],
-  "FileHash": "{258A99AD-B4D2-5064-AE18-4A0C9CBA060F}"
+  "FileHash": "{52546449-1AAD-982A-3031-33A52398927C}"
  }
 }
