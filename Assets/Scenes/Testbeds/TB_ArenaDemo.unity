@@ -2735,7 +2735,6 @@ GameObject:
   m_Component:
   - component: {fileID: 661005726}
   - component: {fileID: 661005725}
-  - component: {fileID: 661005727}
   m_Layer: 0
   m_Name: DebugMenuManager
   m_TagString: Untagged
@@ -2772,30 +2771,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &661005727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 661005724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60259f01e0da6464796ff8ad561a879e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioBusMonitor
-  foleyRTPC:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 11400000, guid: 2c78a34387f7f3d4f8424a4c99c7bfa6, type: 2}
-  sfxRTPC:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 11400000, guid: cf28aa9270f803d4aa9c81036fa03d99, type: 2}
-  environmentRTPC:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 11400000, guid: 366d413629cf5254785a853493ba40fe, type: 2}
 --- !u!1 &677287700
 GameObject:
   m_ObjectHideFlags: 0
@@ -6328,53 +6303,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1982033300}
   m_CullTransparentMesh: 1
---- !u!1 &1985560573
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1985560575}
-  - component: {fileID: 1985560574}
-  m_Layer: 0
-  m_Name: AudioSourceTracker
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1985560574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1985560573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 828e9ec775a6a384ab9577359857c36f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioSourceTracker
-  defaultDuration: 1
-  propagationSpeed: 50
-  baseWaveDistance: 150
---- !u!4 &1985560575
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1985560573}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.48767, y: 0, z: 2.60222}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2007493602
 GameObject:
   m_ObjectHideFlags: 0
@@ -7051,7 +6979,6 @@ SceneRoots:
   - {fileID: 1721008065}
   - {fileID: 1243948345}
   - {fileID: 661005726}
-  - {fileID: 1985560575}
   - {fileID: 1103156710}
   - {fileID: 421837962}
   - {fileID: 83836304}

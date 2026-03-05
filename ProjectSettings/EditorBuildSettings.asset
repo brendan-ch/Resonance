@@ -24,6 +24,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Transitions/GameBootstrapScene.unity
     guid: e6ba6bbd3072e63449ec09bda4a1b5e6
   - enabled: 1
+    path: Assets/Developers/Mari/leveldesign.unity
+    guid: 8532a1eabee45094fa47e8e7ede0e85b
+  - enabled: 1
     path: Assets/Scenes/Transitions/NetworkDespawnerScene.unity
     guid: 157b9ec0a6f97459496d6bfcaa643000
   m_configObjects:
