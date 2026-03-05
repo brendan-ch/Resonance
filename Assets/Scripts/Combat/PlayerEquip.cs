@@ -1,3 +1,4 @@
+using System.Linq;
 using Resonance.Combat.Augments;
 using Resonance.Combat.Weapons;
 using Resonance.Combat.Weapons.Enums;
@@ -10,13 +11,15 @@ using UnityEngine;
 
 namespace Resonance.Combat
 {
+    [DefaultExecutionOrder(-1)]
     public class PlayerEquip : MonoBehaviour
     {
         private GameObject currentWeaponInstance;
         private PlayerStats playerStats;
+        private PlayerSkinRenderer playerSkinRenderer;
         private WeaponStatManager weaponStatManager;
         private PlayerAugmentEquipper playerAugmentEquipper;
-     
+
         private ObservableValue<WeaponProperties> equippedWeaponObservable = new ObservableValue<WeaponProperties>();
         public ObservableValue<WeaponProperties> EquippedWeaponObservable => equippedWeaponObservable;
 
@@ -30,15 +33,21 @@ namespace Resonance.Combat
 
         [SerializeField] private WeaponView currentWeaponView;
         public WeaponView CurrentWeaponView => currentWeaponView;
-        
+
         public WeaponProperties EquippedWeapon { get; private set; }
-        
+
+        void Awake()
+        {
+            playerSkinRenderer = GetComponent<PlayerSkinRenderer>();
+            playerSkinRenderer.OnNewSkinSpawned += UpdateEquipSlotFromSkin;
+        }
+
         void Start()
         {
             playerStats = GetComponent<PlayerStats>();
             playerAugmentEquipper = GetComponent<PlayerAugmentEquipper>();
             weaponStatManager = GetComponent<WeaponStatManager>();
-            
+
             StartCoroutine(EquipStartingWeaponNextFrame());
         }
 
@@ -224,7 +233,7 @@ namespace Resonance.Combat
                 Debug.LogError("WeaponPrefab is missing WeaponView component.", currentWeaponInstance);
             }
         }
-        
+
         public void RemoveWeapon(WeaponSlot slot)
         {
             WeaponProperties existing = slot == WeaponSlot.Primary
@@ -280,7 +289,7 @@ namespace Resonance.Combat
                     {
                         RemoveAugment(playerInventory.augmentInventory[0]);
                     }
-                    
+
                     playerInventory.AddAugment(augment);
                     playerAugmentEquipper.ApplyAugmentStats(augment);
                     break;
@@ -289,7 +298,7 @@ namespace Resonance.Combat
                     {
                         RemoveAugment(playerInventory.augmentInventory[1]);
                     }
-                    
+
                     playerInventory.AddAugment(augment);
                     playerAugmentEquipper.ApplyAugmentStats(augment);
                     break;
@@ -298,8 +307,8 @@ namespace Resonance.Combat
 
         public void RemoveAugment(AugmentProperties augment)
         {
-                playerAugmentEquipper.RemoveAugmentStats(augment);
-                playerInventory.RemoveAugment(augment.Slot);
+            playerAugmentEquipper.RemoveAugmentStats(augment);
+            playerInventory.RemoveAugment(augment.Slot);
         }
     }
 }
