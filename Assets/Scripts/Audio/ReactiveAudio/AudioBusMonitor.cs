@@ -85,14 +85,9 @@ namespace Resonance.Audio
             // Get RTPC value using Wwise wrapper API
             float rtpcValue = _rtpcs[busType].GetGlobalValue();
 
-            // DEBUG: Log raw values
-            Debug.Log($"[AudioBusMonitor] {busType} - Raw RTPC value: {rtpcValue}");
-
             // Wwise Meter outputs in dB range: -48 (silence) to 0 (full scale)
             // Normalize to 0-1 range
             float normalizedValue = (rtpcValue + 48f) / 48f;
-            
-            Debug.Log($"[AudioBusMonitor] {busType} - Normalized: {normalizedValue}");
             
             return Mathf.Clamp01(normalizedValue);
         }

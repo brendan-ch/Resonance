@@ -66,17 +66,30 @@ namespace Resonance.Audio
             if (footstepEvent != null && footstepEvent.IsValid())
             {
                 footstepEvent.Post(gameObject);
+
+                if (AudioSourceTracker.Instance != null)
+                {
+                    AudioSourceTracker.Instance.RegisterSound(transform.position, 0.3f);
+                }
             }
         }
 
         public void PlayLanding()
         {
+            Debug.Log("[FootstepController] Landing detected!");
+            
             DetectSurface();
             SetSurfaceSwitch();
 
             if (landingEvent != null && landingEvent.IsValid())
             {
                 landingEvent.Post(gameObject);
+                
+                if (AudioSourceTracker.Instance != null)
+                {
+                    Debug.Log($"[FootstepController] Registered landing at {transform.position}");
+                    AudioSourceTracker.Instance.RegisterSound(transform.position, 0.5f);
+                }
             }
         }
 
@@ -134,4 +147,3 @@ namespace Resonance.Audio
         }
     }
 }
-

@@ -3,8 +3,8 @@ using UnityEngine;
 namespace Resonance.Audio
 {
     /// <summary>
-    /// Simplified audio-reactive object - reacts to Wwise bus levels in real-time
-    /// No manual sound registration needed!
+    /// Reacts to live Wwise bus levels with distance-based attenuation from listener
+    /// No manual registration needed - just reacts to real-time audio
     /// </summary>
     public class AudioReactiveObject : MonoBehaviour
     {
@@ -13,8 +13,19 @@ namespace Resonance.Audio
         [SerializeField] private Color emissionColor = Color.cyan;
         [SerializeField] private float emissionIntensity = 5f;
         
+        [Header("Audio Feedback")]
+        [SerializeField] private bool enableAudioFeedback = true;
+        [SerializeField] private float minFeedbackThreshold = 0.1f;
+        
+        [Header("Detection")]
+        [Tooltip("Maximum distance from sound source to detect waves")]
+        [SerializeField] private float maxDistance = 30f;
+        
         [Header("Smoothing")]
-        [SerializeField] private float smoothSpeed = 10f;
+        [Tooltip("How fast it reacts to sound (higher = faster)")]
+        [SerializeField] private float attackSpeed = 50f;
+        [Tooltip("How fast it fades after sound (lower = longer tail)")]
+        [SerializeField] private float releaseSpeed = 1f; // Very slow fade
 
         [Header("Threshold")]
         [Tooltip("Minimum intensity to start reacting (0-1)")]
@@ -25,6 +36,7 @@ namespace Resonance.Audio
 
         private Material materialInstance;
         private float currentIntensity = 0f;
+        private bool isFeedbackPlaying = false;
 
         void Start()
         {
@@ -37,18 +49,28 @@ namespace Resonance.Audio
 
         void Update()
         {
-            if (AudioBusMonitor.Instance == null)
+            if (AudioSourceTracker.Instance == null)
             {
-                Debug.LogWarning("[AudioReactiveObject] AudioBusMonitor not found in scene!");
+                Debug.LogWarning("[AudioReactiveObject] AudioSourceTracker not found in scene!");
                 return;
             }
 
-            // Always react to the loudest bus (Foley, SFX, or Environment)
-            float targetIntensity = AudioBusMonitor.Instance.GetMaxBusIntensity();
+            // Find loudest sound wave nearby (with propagation)
+            AudioSourceData nearestSource = AudioSourceTracker.Instance.FindLoudestNearby(
+                transform.position,
+                maxDistance
+            );
+
+            float targetIntensity = 0f;
+            
+            if (nearestSource != null)
+            {
+                targetIntensity = nearestSource.GetCurrentIntensity();
+            }
 
             if (debugLog)
             {
-                Debug.Log($"[AudioReactiveObject] Raw intensity: {targetIntensity:F3}, Current: {currentIntensity:F3}");
+                Debug.Log($"[AudioReactiveObject] Target: {targetIntensity:F3}, Current: {currentIntensity:F3}");
             }
 
             // Apply threshold
@@ -57,11 +79,44 @@ namespace Resonance.Audio
                 targetIntensity = 0f;
             }
 
-            // Smooth
-            currentIntensity = Mathf.Lerp(currentIntensity, targetIntensity, Time.deltaTime * smoothSpeed);
+            // Smooth with different attack/release speeds
+            float speed = targetIntensity > currentIntensity ? attackSpeed : releaseSpeed;
+            currentIntensity = Mathf.Lerp(currentIntensity, targetIntensity, Time.deltaTime * speed);
+
+            // Update audio feedback
+            if (enableAudioFeedback)
+            {
+                UpdateAudioFeedback(currentIntensity);
+            }
 
             // Apply to material
             ApplyEmission(currentIntensity);
+        }
+
+        void UpdateAudioFeedback(float intensity)
+        {
+            bool shouldPlay = intensity > minFeedbackThreshold;
+
+            if (shouldPlay && !isFeedbackPlaying)
+            {
+                StartAudioFeedback();
+            }
+            else if (!shouldPlay && isFeedbackPlaying)
+            {
+                StopAudioFeedback();
+            }
+        }
+
+        void StartAudioFeedback()
+        {
+            AkUnitySoundEngine.PostEvent("Play_Reactive_Feedback", gameObject);
+            isFeedbackPlaying = true;
+        }
+
+        void StopAudioFeedback()
+        {
+            AkUnitySoundEngine.PostEvent("Stop_Reactive_Feedback", gameObject);
+            isFeedbackPlaying = false;
         }
 
         void SetupMaterial()
@@ -96,6 +151,12 @@ namespace Resonance.Audio
             if (materialInstance != null)
             {
                 Destroy(materialInstance);
+            }
+
+            // Stop any playing feedback
+            if (isFeedbackPlaying)
+            {
+                StopAudioFeedback();
             }
         }
     }
