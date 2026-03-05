@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8533267129128344596}
   - component: {fileID: 339544178209965949}
   - component: {fileID: 4736762120235980275}
+  - component: {fileID: 8375709091427389756}
   m_Layer: 6
   m_Name: FootstepSource
   m_TagString: Untagged
@@ -105,6 +106,58 @@ MonoBehaviour:
     groupIdInternal: 0
     groupGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 34e918b5320f2394486160c7307a58ef, type: 2}
+--- !u!114 &8375709091427389756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544463606130549048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f898346e55a92449a1030d1390b9900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WwiseSmartOcclusion
+  occlusionParameter: Occlusion
+  diffractionParameter: Diffraction
+  coneRayCount: 6
+  coneAngle: 30
+  maxCheckDistance: 100
+  occlusionLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  enableDiffraction: 1
+  nearFieldThreshold: 1.5
+  diffractionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scanRate: 5
+  cullingDistance: 50
+  drawDebugRays: 0
+  clearColor: {r: 0, g: 1, b: 0, a: 1}
+  occludedColor: {r: 1, g: 0, b: 0, a: 1}
+  diffractionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &5642366538942606948
 GameObject:
   m_ObjectHideFlags: 0
