@@ -170,7 +170,7 @@ namespace Resonance.UI
                     playerController.enabled = false;
                 }
 
-                var projectileShooter = playerObject.GetComponent<Resonance.Combat.PlayerProjectileShooter>();
+                var projectileShooter = playerObject.GetComponent<Resonance.Combat.PlayerShooter>();
                 if (projectileShooter != null)
                 {
                     projectileShooter.enabled = false;
