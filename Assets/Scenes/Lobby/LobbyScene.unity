@@ -709,7 +709,7 @@ MonoBehaviour:
   OnSkinSelected:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1989453903}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Resonance.LobbySystem.LobbySkinIndexProvider, Assembly-CSharp
         m_MethodName: SetSkinIndex
         m_Mode: 0
@@ -1088,6 +1088,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 188598336}
   m_CullTransparentMesh: 1
+--- !u!1 &197424293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 197424294}
+  m_Layer: 0
+  m_Name: ------SKIN PREVIEW------
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &197424294
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197424293}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.84683, y: 0, z: -10.31035}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &215484438
 GameObject:
   m_ObjectHideFlags: 0
@@ -2518,7 +2549,7 @@ GameObject:
   m_Component:
   - component: {fileID: 461439340}
   m_Layer: 0
-  m_Name: ------LOBBY DATA PROVIDERS------
+  m_Name: ------DATA PROVIDERS------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7720,7 +7751,7 @@ GameObject:
   - component: {fileID: 1989453902}
   - component: {fileID: 1989453903}
   m_Layer: 0
-  m_Name: LobbySkinIndexProvider
+  m_Name: SkinIndexProviderSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7750,27 +7781,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1989453901}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b789c79642284b118fd14e162490e4e, type: 3}
+  m_Script: {fileID: 11500000, guid: e461fc9a96deb49d493cfcf4056bcead, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Resonance.LobbySystem.LobbySkinIndexProvider
-  lobbyManager: {fileID: 1097043115}
-  skinIndex: 0
-  OnSkinIndexChanged:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1103932198}
-        m_TargetAssemblyTypeName: Resonance.LobbySystem.TemporaryUI.SkinPreviewRenderer,
-          Assembly-CSharp
-        m_MethodName: SetSkinIndex
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_EditorClassIdentifier: Assembly-CSharp::Resonance.LobbySystem.SkinIndexProviderSpawner
 --- !u!1 &1994187300
 GameObject:
   m_ObjectHideFlags: 0
@@ -8266,7 +8279,8 @@ SceneRoots:
   - {fileID: 685434700}
   - {fileID: 1663544553}
   - {fileID: 461439340}
-  - {fileID: 29351275}
   - {fileID: 1989453902}
+  - {fileID: 29351275}
+  - {fileID: 197424294}
   - {fileID: 2136755044}
   - {fileID: 688981006}

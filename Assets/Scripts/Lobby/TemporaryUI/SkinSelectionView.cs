@@ -10,7 +10,6 @@ namespace Resonance.LobbySystem.TemporaryUI
         [SerializeField] private Transform content;
         [SerializeField] private SkinEntryButton entryButtonPrefab;
         [SerializeField] private SkinCatalog skinCatalog;
-        public UnityEvent<int> OnSkinSelected;
 
         public void Show()
         {
@@ -39,8 +38,18 @@ namespace Resonance.LobbySystem.TemporaryUI
                 var entry = Instantiate(entryButtonPrefab, content);
                 var index = i;
                 entry.Init(skinCatalog.Get(i).skinName, i,
-                    selected => OnSkinSelected?.Invoke(selected));
+                    selected => OnSkinSelected(selected));
             }
+        }
+
+        private void OnSkinSelected(int selected)
+        {
+            var skinIndexProvider = FindFirstObjectByType<SkinIndexProvider>();
+            if (!skinIndexProvider)
+            {
+                Debug.LogError($"[{GetType()}] No SkinIndexProvider object, cannot update skin index");
+            }
+            skinIndexProvider.SetSkinIndex(selected);
         }
     }
 }

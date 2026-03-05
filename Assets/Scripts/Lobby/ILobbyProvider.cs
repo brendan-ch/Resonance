@@ -29,7 +29,6 @@ namespace Resonance.LobbySystem {
 
         // User properties
         Task SetIsReadyAsync(string userId, bool isReady);
-        Task SetSkinIndexAsync(string userId, int skinIndex);
 
         // Events
         event UnityAction<string> OnLobbyJoinFailed;

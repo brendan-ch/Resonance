@@ -152,7 +152,6 @@ namespace Resonance.LobbySystem
                             Id = serverUser.Id,
                             DisplayName = serverUser.DisplayName,
                             IsReady = serverUser.IsReady,
-                            SkinIndex = serverUser.SkinIndex,
                         });
                     }
                 }
@@ -307,7 +306,6 @@ namespace Resonance.LobbySystem
                         Id = serverUser.Id,
                         DisplayName = serverUser.DisplayName,
                         IsReady = serverUser.IsReady,
-                        SkinIndex = serverUser.SkinIndex,
                     });
                 }
 
@@ -500,34 +498,6 @@ namespace Resonance.LobbySystem
             catch (Exception ex)
             {
                 OnError?.Invoke("Failed to set ready state: " + ex.Message);
-            }
-        }
-
-        public async Task SetSkinIndexAsync(string userId, int skinIndex)
-        {
-            if (string.IsNullOrEmpty(currentLobbyId))
-            {
-                OnError?.Invoke("No current lobby");
-                return;
-            }
-
-            try
-            {
-                var updateData = new { SkinIndex = skinIndex };
-                string jsonData = JsonConvert.SerializeObject(updateData);
-                var response = await client.PutAsync($"api/lobby/{currentLobbyId}/users/{userId}", new Content(jsonData));
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    OnError?.Invoke("Failed to set skin index: " + response.StatusCode);
-                    return;
-                }
-
-                await RefreshLobbyDataAndTriggerUpdate();
-            }
-            catch (Exception ex)
-            {
-                OnError?.Invoke("Failed to set skin index: " + ex.Message);
             }
         }
 

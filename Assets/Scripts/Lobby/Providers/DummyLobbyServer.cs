@@ -36,7 +36,6 @@ namespace Resonance.LobbySystem
             public string Id;
             public string LobbyId;
             public bool IsReady;
-            public int SkinIndex;
         }
 
         private List<Lobby> lobbies;
@@ -430,13 +429,6 @@ namespace Resonance.LobbySystem
                     users[userIndex] = user;
                 }
 
-                if (updateData.ContainsKey("SkinIndex"))
-                {
-                    var user = users[userIndex];
-                    user.SkinIndex = Convert.ToInt32(updateData["SkinIndex"]);
-                    users[userIndex] = user;
-                }
-                
                 await WriteJsonResponse(response, users[userIndex]);
             }
             catch (Exception ex)

@@ -12,6 +12,8 @@ namespace Resonance.LobbySystem.TemporaryUI
         [SerializeField] private SkinCatalog skinCatalog;
         [SerializeField] private Vector2Int renderSize = new(256, 256);
 
+        private SkinIndexProvider skinIndexProvider;
+
         private RenderTexture _rt;
         private GameObject _currentMesh;
 
@@ -20,6 +22,17 @@ namespace Resonance.LobbySystem.TemporaryUI
             _rt = new RenderTexture(renderSize.x, renderSize.y, 16);
             previewCamera.targetTexture = _rt;
             displayImage.texture = _rt;
+        }
+
+        private void Start()
+        {
+            skinIndexProvider = FindFirstObjectByType<SkinIndexProvider>();
+            if (!skinIndexProvider)
+            {
+                Debug.LogError($"[{GetType()}] No SkinIndexProvider object, cannot update render preview");
+            }
+            skinIndexProvider.OnSkinIndexChanged.AddListener(SetSkinIndex);
+            SetSkinIndex(skinIndexProvider.SkinIndex);
         }
 
         public void SetSkinIndex(int index)
@@ -42,6 +55,7 @@ namespace Resonance.LobbySystem.TemporaryUI
             {
                 _rt.Release();
             }
+            skinIndexProvider.OnSkinIndexChanged.RemoveListener(SetSkinIndex);
         }
     }
 }

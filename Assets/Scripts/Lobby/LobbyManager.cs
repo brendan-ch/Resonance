@@ -313,20 +313,6 @@ namespace Resonance.LobbySystem
         }
 
         /// <summary>
-        /// Set the skin index for the given user.
-        /// </summary>
-        /// <param name="userId">User ID of player</param>
-        /// <param name="skinIndex">Skin index to set</param>
-        public void SetSkinIndex(string userId, int skinIndex)
-        {
-            RunTask(async () =>
-            {
-                EnsureProviderSet();
-                await _currentProvider.SetSkinIndexAsync(userId, skinIndex);
-            });
-        }
-
-        /// <summary>
         /// Gets the local user's ID from the current provider.
         /// </summary>
         /// <returns>The local user's ID, or null if unavailable.</returns>
