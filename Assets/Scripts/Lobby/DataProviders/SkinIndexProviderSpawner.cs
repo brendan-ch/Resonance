@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Resonance.LobbySystem
 {
+    [DefaultExecutionOrder(-1)]
     public class SkinIndexProviderSpawner : MonoBehaviour
     {
         public void Start()
