@@ -1,0 +1,34 @@
+using System.Collections.Generic;
+using Resonance.Combat.Weapons.Enums;
+using UnityEngine;
+
+namespace Resonance.Combat.Mods
+{
+    [CreateAssetMenu(fileName = "New Weapon Mod", menuName = "Resonance/Weapons/Weapon Mod")]
+    public class WeaponModProperties : ScriptableObject
+    {
+        [Tooltip("Unique identifier.")]
+        [SerializeField] private string key;
+        public string Key => key;
+
+        [Header("Flavor Text")]
+        [SerializeField] private string modName;
+        public string ModName => modName;
+
+        [TextArea(1, 5)]
+        [SerializeField] private string description;
+        public string Description => description;
+
+        [Header("Identifiers")]
+        [SerializeField] private ModSlot slot;
+        public ModSlot Slot => slot;
+
+        [Header("Visuals")]
+        [SerializeField] private Sprite icon;
+        public Sprite Icon => icon;
+
+        [Header("Stat Modifiers")]
+        [SerializeField] private List<StatModifier> modifiers = new();
+        public IReadOnlyList<StatModifier> Modifiers => modifiers;
+    }
+}
