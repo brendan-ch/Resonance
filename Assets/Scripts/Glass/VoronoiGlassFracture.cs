@@ -165,6 +165,7 @@ namespace Resonance.Environment
 
             GameObject go   = new GameObject(parts[0]);
             go.transform.SetPositionAndRotation(worldPos, paneTransform.rotation);
+            go.layer = LayerMask.NameToLayer("GlassShard");
 
             go.AddComponent<MeshFilter>().mesh       = mesh;
             go.AddComponent<MeshRenderer>().material = material;

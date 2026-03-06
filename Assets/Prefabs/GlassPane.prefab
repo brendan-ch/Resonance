@@ -144,13 +144,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dcad929ea9da374181acfc13e64776a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Environment.GlassShatterEffect
-  paneSize: {x: 2, y: 2}
   shardThickness: 0.07
-  shardCount: 20
+  shardDensity: 5
   shardMaterial: {fileID: 2100000, guid: a9b5a47f9c0df7a479f7a697cbc9e640, type: 2}
   shardMass: 10
   baseExplosionForce: 4
-  directionalForceBias: 15
+  directionalForceBias: 17
   upwardBias: 0.1
   explosionRadius: 0.3
   torqueMin: 2
