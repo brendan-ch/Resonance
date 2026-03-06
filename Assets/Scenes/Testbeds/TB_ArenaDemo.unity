@@ -5826,6 +5826,7 @@ Transform:
   - {fileID: 1067128356}
   - {fileID: 1254070293}
   - {fileID: 508607487}
+  - {fileID: 1006629736}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &907858802
@@ -6602,6 +6603,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 998489100}
   m_CullTransparentMesh: 1
+--- !u!1001 &1006629735
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 872638920}
+    m_Modifications:
+    - target: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 25.09708
+      objectReference: {fileID: 0}
+    - target: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -7.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367859090133538177, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+      propertyPath: m_Name
+      value: GlassPane
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+--- !u!4 &1006629736 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 718553569716174618, guid: c25c0efbc74c3134db073a417f3c1d58, type: 3}
+  m_PrefabInstance: {fileID: 1006629735}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1006783541
 GameObject:
   m_ObjectHideFlags: 0
@@ -12673,6 +12736,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioSourceTracker
   defaultDuration: 1
+  propagationSpeed: 50
+  baseWaveDistance: 150
 --- !u!4 &1985560575
 Transform:
   m_ObjectHideFlags: 0

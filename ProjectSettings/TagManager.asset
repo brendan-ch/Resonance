@@ -9,6 +9,7 @@ TagManager:
   - Metal
   - Wood
   - Gravel
+  - Glass
   layers:
   - Default
   - TransparentFX
