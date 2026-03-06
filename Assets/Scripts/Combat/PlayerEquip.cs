@@ -195,6 +195,13 @@ namespace Resonance.Combat
                 return;
             }
 
+            if (currentWeaponInstance != null)
+            {
+                Destroy(currentWeaponInstance);
+                currentWeaponInstance = null;
+                currentWeaponView = null;
+            }
+
             if (equipSlot == null)
             {
                 Debug.LogError("PlayerEquip has no equipSlot assigned.", this);
