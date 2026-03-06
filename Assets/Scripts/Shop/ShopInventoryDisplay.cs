@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Resonance.Combat.Weapons;
 using Resonance.Inventory;
 using TMPro;
@@ -27,14 +28,17 @@ namespace Resonance.Shop
 
         private void Awake()
         {
-            playerInventory = FindObjectOfType<PlayerInventory>();
+            if (playerInventory == null || !playerInventory.isOwner)
+            {
+                playerInventory = FindObjectsOfType<PlayerInventory>().FirstOrDefault(p => p.isOwner);
+            }
         }
 
         public void Refresh()
         {
-            if (playerInventory == null)
+            if (playerInventory == null || !playerInventory.isOwner)
             {
-                playerInventory = FindObjectOfType<PlayerInventory>();
+                playerInventory = FindObjectsOfType<PlayerInventory>().FirstOrDefault(p => p.isOwner);
                 if (playerInventory == null)
                 {
                     return;

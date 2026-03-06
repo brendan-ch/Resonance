@@ -209,9 +209,9 @@ namespace Resonance.Shop
 
         private PlayerEquip GetPlayerEquip()
         {
-            if (playerEquip == null)
+            if (playerEquip == null || !playerEquip.isOwner)
             {
-                playerEquip = FindObjectOfType<PlayerEquip>();
+                playerEquip = FindObjectsOfType<PlayerEquip>().FirstOrDefault(p => p.isOwner);
             }
 
             return playerEquip;
@@ -219,9 +219,9 @@ namespace Resonance.Shop
 
         private PlayerInventory GetPlayerInventory()
         {
-            if (playerInventory == null)
+            if (playerInventory == null || !playerInventory.isOwner)
             {
-                playerInventory = FindObjectOfType<PlayerInventory>();
+                playerInventory = FindObjectsOfType<PlayerInventory>().FirstOrDefault(p => p.isOwner);
             }
 
             return playerInventory;
