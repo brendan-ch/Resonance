@@ -17,7 +17,7 @@ namespace Resonance.Combat
         [SerializeField] private PlayerEquip playerEquip;
         [SerializeField] private PlayerActionsInput playerActionsInput;
         [SerializeField] private Camera playerCamera;
-        
+
         [SerializeField] private TrailRenderer bulletTrailPrefab;
         [SerializeField] private DamageNumber damageNumberPrefab;
 
@@ -173,7 +173,7 @@ namespace Resonance.Combat
                 currentSpread = Mathf.Min(currentSpread, weaponStatManager.MaxSpread);
 
                 Debug.Log($"[Shooter] Current Spread: {currentSpread:0.000}");
-                
+
                 if (debugAmmoLogs)
                 {
                     Debug.Log($"[Shooter] Fired. Ammo: {currentAmmo}/{weaponStatManager.MagazineSize}", this);
@@ -266,9 +266,21 @@ namespace Resonance.Combat
 
                 if (bulletTrailPrefab != null && view.Muzzle != null)
                 {
-                    StartCoroutine(SpawnTrail(view.Muzzle.position, endPoint));
+                    var start = view.Muzzle.position;
+                    StartCoroutine(SpawnTrail(start, endPoint));
+                    SpawnTrailOnOtherClients(start, endPoint);
                 }
             }
+        }
+
+        [ObserversRpc]
+        private void SpawnTrailOnOtherClients(Vector3 start, Vector3 end)
+        {
+            if (isOwner)
+            {
+                return;
+            }
+            StartCoroutine(SpawnTrail(start, end));
         }
 
         private IEnumerator SpawnTrail(Vector3 start, Vector3 end)
@@ -473,7 +485,7 @@ namespace Resonance.Combat
                 Debug.Log($"[Shooter] Equipped {weapon.name}. Ammo: {currentAmmo}/{weaponStatManager.MagazineSize}", this);
             }
         }
-        
+
         public void RefreshWeaponStats()
         {
             RefreshAmmoFromEquippedWeapon(true);
