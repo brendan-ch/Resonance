@@ -23,27 +23,30 @@ namespace Resonance.Environment
         [SerializeField] [Range(0.05f, 0.1f)] private float shardThickness = 0.07f;
 
         [Tooltip("Number of Voronoi shards to generate. 14–20 recommended.")]
-        [SerializeField] [Range(8, 30)] private int shardCount = 16;
+        [SerializeField] [Range(8, 30)] private int shardCount = 20;
 
         [Tooltip("Material assigned to all generated shards. Must be URP Transparent / glass material.")]
         [SerializeField] private Material shardMaterial;
 
+        [Tooltip("Mass of each shard Rigidbody. Higher = less explosive reaction to forces.")]
+        [SerializeField] private float shardMass = 10f;
+
         [Header("Force Settings")]
         [Tooltip("Base outward force applied to all shards via physics explosion.")]
-        [SerializeField] private float baseExplosionForce = 180f;
+        [SerializeField] private float baseExplosionForce = 5f;
 
         [Tooltip("Additional impulse applied in the bullet travel direction to bias the shatter.")]
-        [SerializeField] private float directionalForceBias = 120f;
+        [SerializeField] private float directionalForceBias = 3f;
 
         [Tooltip("Upward force modifier passed to AddExplosionForce for a natural arc.")]
-        [SerializeField] [Range(0f, 1f)] private float upwardBias = 0.15f;
+        [SerializeField] [Range(0f, 1f)] private float upwardBias = 0.1f;
 
         [Tooltip("Radius of the explosion force sphere.")]
-        [SerializeField] private float explosionRadius = 1.2f;
+        [SerializeField] private float explosionRadius = 0.3f;
 
         [Tooltip("Random spin torque applied per shard (min/max).")]
-        [SerializeField] private float torqueMin = 50f;
-        [SerializeField] private float torqueMax = 250f;
+        [SerializeField] private float torqueMin = 2f;
+        [SerializeField] private float torqueMax = 4f;
 
         [Header("Lifetime Settings")]
         [Tooltip("Seconds after shatter before shards begin fading.")]
@@ -74,7 +77,8 @@ namespace Resonance.Environment
                 shardThickness,
                 shardCount,
                 hitLocal2D,
-                shardMaterial
+                shardMaterial,
+                shardMass
             );
 
             // Explosion origin slightly behind the hit surface.

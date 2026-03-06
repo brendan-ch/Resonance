@@ -30,7 +30,8 @@ namespace Resonance.Environment
             float thickness,
             int shardCount,
             Vector2 hitPointLocal,
-            Material material)
+            Material material,
+            float shardMass)
         {
             List<Vector2> seeds = GenerateSeeds(shardCount, paneSize, hitPointLocal);
             int[] cellMap       = BuildCellMap(seeds, paneSize);
@@ -41,7 +42,7 @@ namespace Resonance.Environment
                 Mesh mesh = BuildShardMesh(i, cellMap, seeds, paneSize, thickness);
                 if (mesh == null) continue;
 
-                GameObject go = SpawnShard(mesh, material, paneTransform);
+                GameObject go = SpawnShard(mesh, material, paneTransform, shardMass);
                 if (go != null)
                     shards.Add(go);
             }
@@ -238,7 +239,7 @@ namespace Resonance.Environment
         // Shard GameObject Spawning
         // ------------------------------------------------------------------
 
-        private static GameObject SpawnShard(Mesh mesh, Material material, Transform paneTransform)
+        private static GameObject SpawnShard(Mesh mesh, Material material, Transform paneTransform, float mass)
         {
             // Parse centroid from mesh name.
             string[] parts = mesh.name.Split('|');
@@ -266,7 +267,7 @@ namespace Resonance.Environment
             mc.convex        = true;
 
             Rigidbody rb     = go.AddComponent<Rigidbody>();
-            rb.mass          = 0.05f;
+            rb.mass          = mass;
             rb.useGravity    = true;
             rb.isKinematic   = false;
             rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
