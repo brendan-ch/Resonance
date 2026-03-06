@@ -244,7 +244,7 @@ namespace Resonance.Combat
                     if (target != null && hit.collider.gameObject != gameObject && !hit.collider.transform.IsChildOf(transform))
                     {
                         target.TakeDamage(finalDamage, payload.Shooter);
-                        if (damageNumberPrefab != null)
+                        if (damageNumberPrefab != null && hit.collider.GetComponent<IDamageNumberTarget>() != null)
                         {
                             DamageNumber number = Instantiate(damageNumberPrefab, hit.point, Quaternion.identity);
                             number.Initialize(finalDamage);

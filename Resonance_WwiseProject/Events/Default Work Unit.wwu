@@ -61,6 +61,28 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Play_GlassShatter" ID="{FF8D6C3A-E13D-4784-A0DD-F5D3850BBB9F}">
+					<ChildrenList>
+						<Action Name="" ID="{089976BC-AD7D-4EC1-8823-9C91A67BC5BC}" ShortID="646903695">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Glass_Shatter" ID="{99686DD9-1D6A-4AE9-AD0A-1438A263293C}" WorkUnitID="{A0953ED0-0717-4C8C-B006-DE01ACC1580F}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_GlassShardLand" ID="{6B6E1229-1882-41F9-882E-55BDA79ABE17}">
+					<ChildrenList>
+						<Action Name="" ID="{69E5B313-D04C-42BF-B7AA-8E839F0830E8}" ShortID="403994136">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="GlassShard_Land" ID="{80737A9B-D02B-455E-8ADA-CC51FB82526F}" WorkUnitID="{A0953ED0-0717-4C8C-B006-DE01ACC1580F}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>
