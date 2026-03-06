@@ -75,10 +75,25 @@ namespace Resonance.Environment
                 glassShardComponent.Initialize(fadeDelay, fadeDuration);
             }
 
-            // Register shatter with audio reactivity system
+            // Register shatter with audio reactivity system after delay
             if (Audio.AudioSourceTracker.Instance != null)
             {
-                Audio.AudioSourceTracker.Instance.RegisterSound(hitPoint, 1.5f);
+                StartCoroutine(RegisterShatterDelayed(hitPoint));
+            }
+        }
+
+        private System.Collections.IEnumerator RegisterShatterDelayed(Vector3 position)
+        {
+            yield return new WaitForSeconds(0.05f);
+            
+            if (Audio.AudioSourceTracker.Instance != null)
+            {
+                float intensity = Audio.AudioBusMonitor.Instance != null 
+                    ? Audio.AudioBusMonitor.Instance.GetMaxBusIntensity() 
+                    : 0f;
+                
+                Debug.Log($"[GlassShatter] Registering at {position}, Bus Intensity: {intensity:F3}");
+                Audio.AudioSourceTracker.Instance.RegisterSound(position, 1.5f);
             }
         }
     }
