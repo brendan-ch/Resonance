@@ -149,11 +149,11 @@ MonoBehaviour:
   shardCount: 20
   shardMaterial: {fileID: 2100000, guid: a9b5a47f9c0df7a479f7a697cbc9e640, type: 2}
   shardMass: 10
-  baseExplosionForce: 5
-  directionalForceBias: 3
+  baseExplosionForce: 4
+  directionalForceBias: 15
   upwardBias: 0.1
   explosionRadius: 0.3
   torqueMin: 2
   torqueMax: 4
-  fadeDelay: 6
-  fadeDuration: 1.5
+  fadeDelay: 4
+  fadeDuration: 3

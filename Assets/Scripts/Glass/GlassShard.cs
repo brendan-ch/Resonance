@@ -14,8 +14,7 @@ namespace Resonance.Environment
         public void Initialize(float fadeDelay, float fadeDuration)
         {
             _instancedMaterial = GetComponent<MeshRenderer>().material;
-            _useBaseColor = _instancedMaterial.HasProperty(BaseColorProperty);
-
+            _useBaseColor      = _instancedMaterial.HasProperty(BaseColorProperty);
             StartCoroutine(FadeAndDestroy(fadeDelay, fadeDuration));
         }
 
@@ -34,10 +33,8 @@ namespace Resonance.Environment
                 Color c = startColor;
                 c.a = Mathf.Lerp(startColor.a, 0f, elapsed / fadeDuration);
 
-                if (_useBaseColor)
-                    _instancedMaterial.SetColor(BaseColorProperty, c);
-                else
-                    _instancedMaterial.color = c;
+                if (_useBaseColor) _instancedMaterial.SetColor(BaseColorProperty, c);
+                else               _instancedMaterial.color = c;
 
                 yield return null;
             }
