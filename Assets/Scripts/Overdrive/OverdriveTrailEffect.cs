@@ -12,6 +12,7 @@ namespace Resonance.PlayerController
         [SerializeField] private float spawnInterval = 0.1f;
         [SerializeField] private float ghostLifetime = 0.5f;
         [SerializeField] private int maxGhosts = 10;
+        [SerializeField] private bool enableGhostLinger = false;
 
         [Header("Color Settings")]
         [SerializeField] private Gradient colorGradient;
@@ -120,7 +121,10 @@ namespace Resonance.PlayerController
                 // Return to pool when lifetime expires
                 if (ghost.lifetime >= ghostLifetime)
                 {
-                    // ReturnGhostToPool(ghost);
+                    if (!enableGhostLinger)
+                    {
+                        ReturnGhostToPool(ghost);
+                    }
                     _activeGhosts.RemoveAt(i);
                 }
             }
