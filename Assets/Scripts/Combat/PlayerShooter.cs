@@ -477,6 +477,7 @@ namespace Resonance.Combat
         public void RefreshWeaponStats()
         {
             RefreshAmmoFromEquippedWeapon(true);
+            viewModel.SetAmmo(currentAmmo, MagazineSize);
         }
 
         #endregion
