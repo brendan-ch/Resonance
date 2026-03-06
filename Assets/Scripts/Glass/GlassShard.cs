@@ -7,15 +7,40 @@ namespace Resonance.Environment
     public class GlassShard : MonoBehaviour
     {
         private static readonly int BaseColorProperty = Shader.PropertyToID("_BaseColor");
+        private const float ShardSpawnAlpha = 0.7f;
 
         private Material _instancedMaterial;
         private bool _useBaseColor;
+        private bool _hasImpacted;
 
-        public void Initialize(float fadeDelay, float fadeDuration)
+        private AK.Wwise.Event _impactEvent;
+        private float _minImpactSpeed;
+
+        public void Initialize(float fadeDelay, float fadeDuration, AK.Wwise.Event impactEvent, float minImpactSpeed)
         {
+            _impactEvent    = impactEvent;
+            _minImpactSpeed = minImpactSpeed;
+
             _instancedMaterial = GetComponent<MeshRenderer>().material;
             _useBaseColor      = _instancedMaterial.HasProperty(BaseColorProperty);
+
+            Color c = _useBaseColor
+                ? _instancedMaterial.GetColor(BaseColorProperty)
+                : _instancedMaterial.color;
+            c.a = ShardSpawnAlpha;
+            if (_useBaseColor) _instancedMaterial.SetColor(BaseColorProperty, c);
+            else               _instancedMaterial.color = c;
+
             StartCoroutine(FadeAndDestroy(fadeDelay, fadeDuration));
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (_hasImpacted) return;
+            if (collision.relativeVelocity.magnitude < _minImpactSpeed) return;
+
+            _hasImpacted = true;
+            _impactEvent.Post(gameObject);
         }
 
         private IEnumerator FadeAndDestroy(float fadeDelay, float fadeDuration)

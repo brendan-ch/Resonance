@@ -20,13 +20,16 @@ namespace Resonance.Environment
 
         [Header("Force Settings")]
         [SerializeField] private float baseExplosionForce = 4f;
-        [SerializeField] private float directionalForceBias = 15f;
+        [SerializeField] private float directionalForceBias = 17f;
         [SerializeField] [Range(0f, 1f)] private float upwardBias = 0.1f;
         [SerializeField] private float explosionRadius = 0.3f;
         [SerializeField] private float torqueMin = 2f;
         [SerializeField] private float torqueMax = 4f;
 
-        [Header("Lifetime Settings")]
+        [Header("Wwise")]
+        [SerializeField] private AK.Wwise.Event shardImpactEvent;
+        [Tooltip("Minimum collision speed (m/s) to trigger the shard impact sound.")]
+        [SerializeField] private float minImpactSpeed = 1f;
         [SerializeField] private float fadeDelay = 4f;
         [SerializeField] private float fadeDuration = 3f;
 
@@ -72,7 +75,7 @@ namespace Resonance.Environment
                 rb.AddTorque(Random.onUnitSphere * Random.Range(torqueMin, torqueMax), ForceMode.Impulse);
 
                 GlassShard glassShardComponent = shard.AddComponent<GlassShard>();
-                glassShardComponent.Initialize(fadeDelay, fadeDuration);
+                glassShardComponent.Initialize(fadeDelay, fadeDuration, shardImpactEvent, minImpactSpeed);
             }
         }
     }
