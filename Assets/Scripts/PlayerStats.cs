@@ -12,7 +12,7 @@ using UnityEngine.Serialization;
 
 namespace Resonance.Player
 {
-    public class PlayerStats : NetworkBehaviour, IDamageable
+    public class PlayerStats : NetworkBehaviour, IDamageable, IDamageNumberTarget
     {
         #region Inspector Fields
         [SerializeField] private float maxHealth = 100f;

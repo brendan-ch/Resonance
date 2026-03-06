@@ -9,6 +9,7 @@ TagManager:
   - Metal
   - Wood
   - Gravel
+  - Glass
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Player
   - Projectile
   - Environment
-  - 
+  - GlassShard
   - 
   - 
   - 

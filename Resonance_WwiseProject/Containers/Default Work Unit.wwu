@@ -66,35 +66,6 @@
 						<ActiveSource Name="gunshot_sound_effect_single_shot" ID="{335D104E-F932-4117-93AC-66AF19C6152C}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
-				<Sound Name="Test_FOLEY_Sound" ID="{F6DA14E9-0137-42A6-AC9F-DE0AAB0D5B2F}" ShortID="838305059">
-					<ReferenceList>
-						<Reference Name="Conversion">
-							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
-						</Reference>
-						<Reference Name="OutputBus">
-							<ObjectRef Name="Foley" ID="{24ADE9C4-BC2E-4743-98CF-EE06AF5D5543}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
-						</Reference>
-					</ReferenceList>
-					<ChildrenList>
-						<AudioFileSource Name="footsteps-on-wood-397989" ID="{A5B417F7-CC59-462C-9E3C-CE134038D5F2}">
-							<PropertyList>
-								<Property Name="FadeInDuration" Type="Real64" Value="0.0334752053376332"/>
-								<Property Name="FadeOutDuration" Type="Real64" Value="0.0257501579520255"/>
-								<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-								<Property Name="TrimBegin" Type="Real64" Value="0.556203411763751"/>
-								<Property Name="TrimEnd" Type="Real64" Value="1.10725672342825"/>
-							</PropertyList>
-							<Language>SFX</Language>
-							<AudioFile>footsteps-on-wood-397989.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="473436292"/>
-							</MediaIDList>
-						</AudioFileSource>
-					</ChildrenList>
-					<ActiveSourceList>
-						<ActiveSource Name="footsteps-on-wood-397989" ID="{A5B417F7-CC59-462C-9E3C-CE134038D5F2}" Platform="Linked"/>
-					</ActiveSourceList>
-				</Sound>
 				<Sound Name="Test_Sound" ID="{E5578E04-26E1-43DB-9A34-F1B4B81BE03D}" ShortID="534919767">
 					<PropertyList>
 						<Property Name="3DSpatialization" Type="int16" Value="1"/>
@@ -1538,6 +1509,474 @@
 						<ActiveSource Name="Sine" ID="{A85AC99A-6B7E-4BE3-9685-DBB0F4F39F91}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
+				<RandomSequenceContainer Name="Glass_Shatter" ID="{99686DD9-1D6A-4AE9-AD0A-1438A263293C}" ShortID="181551662">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="1"/>
+						<Property Name="AttenuationDistanceScaling" Type="Real32" Value="0.5"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<Custom>
+								<Attenuation Name="Attenuation (Custom)" ID="{40C21B35-8FB7-4882-B79A-B163AEEDB5E5}" ShortID="346638871">
+									<CurveUsageInfoList>
+										<VolumeDryUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+												<Curve Name="VolumeDry" ID="{7C2A2320-2AC2-4103-81F8-582A424D9AF8}">
+													<PropertyList>
+														<Property Name="Flags" Type="int32" Value="3"/>
+													</PropertyList>
+													<PointList>
+														<Point>
+															<XPos>0</XPos>
+															<YPos>0</YPos>
+															<Flags>5</Flags>
+														</Point>
+														<Point>
+															<XPos>100</XPos>
+															<YPos>-200</YPos>
+															<Flags>37</Flags>
+														</Point>
+													</PointList>
+												</Curve>
+											</CurveUsageInfo>
+										</VolumeDryUsage>
+										<VolumeWetGameUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+										</VolumeWetGameUsage>
+										<VolumeWetUserUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+										</VolumeWetUserUsage>
+										<LowPassFilterUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+										</LowPassFilterUsage>
+										<HighPassFilterUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+										</HighPassFilterUsage>
+										<DualShelfUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+										</DualShelfUsage>
+										<SpreadUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+										</SpreadUsage>
+										<FocusUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+										</FocusUsage>
+										<ObstructionVolumeUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</ObstructionVolumeUsage>
+										<ObstructionLPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</ObstructionLPFUsage>
+										<ObstructionHPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</ObstructionHPFUsage>
+										<ObstructionDSFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</ObstructionDSFUsage>
+										<OcclusionVolumeUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</OcclusionVolumeUsage>
+										<OcclusionLPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</OcclusionLPFUsage>
+										<OcclusionHPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</OcclusionHPFUsage>
+										<OcclusionDSFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</OcclusionDSFUsage>
+										<DiffractionVolumeUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</DiffractionVolumeUsage>
+										<DiffractionLPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</DiffractionLPFUsage>
+										<DiffractionHPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</DiffractionHPFUsage>
+										<DiffractionDSFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</DiffractionDSFUsage>
+										<TransmissionVolumeUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</TransmissionVolumeUsage>
+										<TransmissionLPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</TransmissionLPFUsage>
+										<TransmissionHPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</TransmissionHPFUsage>
+										<TransmissionDSFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</TransmissionDSFUsage>
+									</CurveUsageInfoList>
+								</Attenuation>
+							</Custom>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="SFX" ID="{C22677A5-D637-423D-8AED-F11F0D85B4DE}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="sfx_props_glass_shatter_01" ID="{0F14F8C0-7279-41CE-907F-5346AF696EEE}" ShortID="5229344">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-13</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sfx_props_glass_shatter_01" ID="{96E5A19B-3934-4B97-A7C7-D14E65A4DA2F}">
+									<PropertyList>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.0368061823104693"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>sfx_props_glass_shatter_01.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="749473954"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sfx_props_glass_shatter_01" ID="{96E5A19B-3934-4B97-A7C7-D14E65A4DA2F}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="sfx_props_glass_shatter_02" ID="{06667C4F-6235-4843-9F9E-7891A6EBF472}" ShortID="213306000">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-10</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sfx_props_glass_shatter_02" ID="{074E3EB6-7BBF-4385-BA32-6E6692403D1A}">
+									<PropertyList>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.0392599277978339"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>sfx_props_glass_shatter_02.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="394509402"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sfx_props_glass_shatter_02" ID="{074E3EB6-7BBF-4385-BA32-6E6692403D1A}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="sfx_props_glass_shatter_03" ID="{EC47687B-A4F0-4013-B358-04A83E360B3C}" ShortID="206226440">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-10</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sfx_props_glass_shatter_03" ID="{2213359B-B5DF-402D-949D-1AACE60D2947}">
+									<Language>SFX</Language>
+									<AudioFile>sfx_props_glass_shatter_03.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="151765522"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sfx_props_glass_shatter_03" ID="{2213359B-B5DF-402D-949D-1AACE60D2947}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
+				<RandomSequenceContainer Name="GlassShard_Land" ID="{80737A9B-D02B-455E-8ADA-CC51FB82526F}" ShortID="1073308769">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="1"/>
+						<Property Name="AttenuationDistanceScaling" Type="Real32" Value="0.5"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Attenuation">
+							<Custom>
+								<Attenuation Name="Attenuation (Custom)" ID="{25AA465E-684C-4309-86FC-4EF203DFCCA2}" ShortID="591545581">
+									<CurveUsageInfoList>
+										<VolumeDryUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+												<Curve Name="VolumeDry" ID="{D091C495-BC2B-4CB4-902B-B75224E8D24F}">
+													<PropertyList>
+														<Property Name="Flags" Type="int32" Value="3"/>
+													</PropertyList>
+													<PointList>
+														<Point>
+															<XPos>0</XPos>
+															<YPos>0</YPos>
+															<Flags>5</Flags>
+														</Point>
+														<Point>
+															<XPos>100</XPos>
+															<YPos>-200</YPos>
+															<Flags>37</Flags>
+														</Point>
+													</PointList>
+												</Curve>
+											</CurveUsageInfo>
+										</VolumeDryUsage>
+										<VolumeWetGameUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+										</VolumeWetGameUsage>
+										<VolumeWetUserUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+										</VolumeWetUserUsage>
+										<LowPassFilterUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+										</LowPassFilterUsage>
+										<HighPassFilterUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+										</HighPassFilterUsage>
+										<DualShelfUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+										</DualShelfUsage>
+										<SpreadUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+										</SpreadUsage>
+										<FocusUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+										</FocusUsage>
+										<ObstructionVolumeUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</ObstructionVolumeUsage>
+										<ObstructionLPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</ObstructionLPFUsage>
+										<ObstructionHPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</ObstructionHPFUsage>
+										<ObstructionDSFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</ObstructionDSFUsage>
+										<OcclusionVolumeUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</OcclusionVolumeUsage>
+										<OcclusionLPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</OcclusionLPFUsage>
+										<OcclusionHPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</OcclusionHPFUsage>
+										<OcclusionDSFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</OcclusionDSFUsage>
+										<DiffractionVolumeUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</DiffractionVolumeUsage>
+										<DiffractionLPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</DiffractionLPFUsage>
+										<DiffractionHPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</DiffractionHPFUsage>
+										<DiffractionDSFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</DiffractionDSFUsage>
+										<TransmissionVolumeUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</TransmissionVolumeUsage>
+										<TransmissionLPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</TransmissionLPFUsage>
+										<TransmissionHPFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</TransmissionHPFUsage>
+										<TransmissionDSFUsage>
+											<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+										</TransmissionDSFUsage>
+									</CurveUsageInfoList>
+								</Attenuation>
+							</Custom>
+						</Reference>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="SFX" ID="{C22677A5-D637-423D-8AED-F11F0D85B4DE}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="sfx_props_glass_land_01" ID="{A3B8CB53-1136-45D9-B8E0-F7227ED5D475}" ShortID="344599979">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-30</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sfx_props_glass_land_01" ID="{B3B7F4E9-3EB0-4052-AFEA-1ACFD08589BF}">
+									<Language>SFX</Language>
+									<AudioFile>sfx_props_glass_land_01.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="901815095"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sfx_props_glass_land_01" ID="{B3B7F4E9-3EB0-4052-AFEA-1ACFD08589BF}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="sfx_props_glass_land_02" ID="{DA3626DD-1DD6-4DE5-8131-1D2369837F1C}" ShortID="893422777">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-30</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sfx_props_glass_land_02" ID="{E6C66AB6-49C2-4A21-93E8-94018E5977B6}">
+									<Language>SFX</Language>
+									<AudioFile>sfx_props_glass_land_02.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="748536120"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sfx_props_glass_land_02" ID="{E6C66AB6-49C2-4A21-93E8-94018E5977B6}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="sfx_props_glass_land_03" ID="{3A31280B-4F40-479A-9607-55D240AF120A}" ShortID="449846635">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-30</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sfx_props_glass_land_03" ID="{B6FEFEBB-D401-4F52-9006-43E373DD2310}">
+									<Language>SFX</Language>
+									<AudioFile>sfx_props_glass_land_03.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="311624981"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sfx_props_glass_land_03" ID="{B6FEFEBB-D401-4F52-9006-43E373DD2310}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="sfx_props_glass_land_04" ID="{57AAE582-F9FC-46EF-9F91-BF2F9780FF15}" ShortID="799214216">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-30</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sfx_props_glass_land_04" ID="{71F3456F-C8C2-4815-B152-48335B7E9B7B}">
+									<Language>SFX</Language>
+									<AudioFile>sfx_props_glass_land_04.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="695342955"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sfx_props_glass_land_04" ID="{71F3456F-C8C2-4815-B152-48335B7E9B7B}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="sfx_props_glass_land_05" ID="{AAD4B907-C1F0-4AF0-81FB-81D347CC50EE}" ShortID="593312795">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-30</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{3FA30067-E09E-4D0A-8A49-BFEFA48E7471}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{8E92042C-463A-45D0-84F5-C286F09FBBA8}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sfx_props_glass_land_05" ID="{D6778F94-0FDB-42A1-B7B6-5902F1613519}">
+									<Language>SFX</Language>
+									<AudioFile>sfx_props_glass_land_05.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="644863526"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sfx_props_glass_land_05" ID="{D6778F94-0FDB-42A1-B7B6-5902F1613519}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</RandomSequenceContainer>
 			</ChildrenList>
 		</WorkUnit>
 	</Containers>
