@@ -20,6 +20,7 @@ namespace Resonance.Shop
 
         private PlayerInventory playerInventory;
         private PlayerEquip playerEquip;
+        private PlayerShooter playerShooter;
 
         [Header("Main Tab Panels")]
         [SerializeField] private GameObject weaponBuyTab;
@@ -224,6 +225,16 @@ namespace Resonance.Shop
             }
 
             return playerInventory;
+        }
+
+        private PlayerShooter GetPlayerShooter()
+        {
+            if (playerShooter == null)
+            {
+                playerShooter = FindObjectOfType<PlayerShooter>();
+            }
+
+            return playerShooter;
         }
 
         #endregion
@@ -494,7 +505,7 @@ namespace Resonance.Shop
 
             targetWeapon.ModList.Add(mod);
 
-            FindObjectOfType<PlayerShooter>()?.RefreshWeaponStats();
+            GetPlayerShooter()?.RefreshWeaponStats();
             inventoryDisplay.Refresh();
         }
 
