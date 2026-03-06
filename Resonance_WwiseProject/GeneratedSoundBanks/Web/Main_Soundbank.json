@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{1DE01834-2702-0B0C-AD29-79A27FE85D31}",
+    "Hash": "{13D3C5F1-99FF-3C83-BAB2-0D1C6305F4F7}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
@@ -30,6 +30,14 @@
       "Location": "Memory",
       "ShortName": "sfx_foley_footstep_gravel_land_02.wav",
       "CachePath": "7B/{7BABE657-3E4A-FAC8-B847-4AF673B33234}.wem"
+     },
+     {
+      "Id": "151765522",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "sfx_props_glass_shatter_03.wav",
+      "CachePath": "82/{82392F02-F3B7-2D82-04CD-01134489CF25}.wem"
      },
      {
       "Id": "152568559",
@@ -64,12 +72,28 @@
       "CachePath": "CB/{CB9EF375-C645-22FA-D6EA-99071E83844C}.wem"
      },
      {
+      "Id": "311624981",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "sfx_props_glass_land_03.wav",
+      "CachePath": "E4/{E4A78C98-054B-C357-44FF-136019D1D519}.wem"
+     },
+     {
       "Id": "350734022",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "sfx_foley_footstep_metal_run_05.wav",
       "CachePath": "17/{176714DE-5172-DB84-CD39-E7468B57F46E}.wem"
+     },
+     {
+      "Id": "394509402",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "sfx_props_glass_shatter_02.wav",
+      "CachePath": "E4/{E488D2A7-3E70-6356-1F16-6363113FB47F}.wem"
      },
      {
       "Id": "394611772",
@@ -136,12 +160,28 @@
       "CachePath": "8B/{8B44CA97-AF29-2FEA-839D-4370602D876E}.wem"
      },
      {
+      "Id": "644863526",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "sfx_props_glass_land_05.wav",
+      "CachePath": "E3/{E36AE422-6376-38B3-79F2-B99A5C5768B6}.wem"
+     },
+     {
       "Id": "648897598",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "sfx_foley_footstep_metal_run_03.wav",
       "CachePath": "9D/{9D6C8141-24D7-0C3F-BEA4-BD86003D129C}.wem"
+     },
+     {
+      "Id": "695342955",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "sfx_props_glass_land_04.wav",
+      "CachePath": "4F/{4F63AB35-73B8-CCC8-086C-FFE66447BCA7}.wem"
      },
      {
       "Id": "697658533",
@@ -158,6 +198,22 @@
       "Location": "Memory",
       "ShortName": "sfx_foley_footstep_gravel_run_01.wav",
       "CachePath": "D7/{D7654DA1-E972-E3C0-DBFB-321BE5879310}.wem"
+     },
+     {
+      "Id": "748536120",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "sfx_props_glass_land_02.wav",
+      "CachePath": "FA/{FAEFFF3B-E9EB-0748-713A-3AF40D293470}.wem"
+     },
+     {
+      "Id": "749473954",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "sfx_props_glass_shatter_01.wav",
+      "CachePath": "2E/{2E011CA4-B74D-00E1-F9A5-966440396945}.wem"
      },
      {
       "Id": "776817998",
@@ -222,6 +278,14 @@
       "Location": "Memory",
       "ShortName": "sfx_foley_footstep_concrete_run_05.wav",
       "CachePath": "76/{7660372E-464B-3F1B-D178-3C2A06FA5906}.wem"
+     },
+     {
+      "Id": "901815095",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "sfx_props_glass_land_01.wav",
+      "CachePath": "30/{301B831C-3A91-E1F0-AAAB-28F743CB28E3}.wem"
      },
      {
       "Id": "909837310",
@@ -371,6 +435,54 @@
           "Id": "880115635"
          }
         ]
+       }
+      ]
+     },
+     {
+      "Id": "278146749",
+      "Name": "Play_GlassShardLand",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_GlassShardLand",
+      "GUID": "{6B6E1229-1882-41F9-882E-55BDA79ABE17}",
+      "MaxAttenuation": "50",
+      "DurationType": "OneShot",
+      "DurationMin": "0.203125",
+      "DurationMax": "0.375",
+      "MediaRefs": [
+       {
+        "Id": "311624981"
+       },
+       {
+        "Id": "644863526"
+       },
+       {
+        "Id": "695342955"
+       },
+       {
+        "Id": "748536120"
+       },
+       {
+        "Id": "901815095"
+       }
+      ]
+     },
+     {
+      "Id": "2387432645",
+      "Name": "Play_GlassShatter",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_GlassShatter",
+      "GUID": "{FF8D6C3A-E13D-4784-A0DD-F5D3850BBB9F}",
+      "MaxAttenuation": "50",
+      "DurationType": "OneShot",
+      "DurationMin": "0.7107401",
+      "DurationMax": "0.97670835",
+      "MediaRefs": [
+       {
+        "Id": "151765522"
+       },
+       {
+        "Id": "394509402"
+       },
+       {
+        "Id": "749473954"
        }
       ]
      },
@@ -558,6 +670,6 @@
     ]
    }
   ],
-  "FileHash": "{98202EBF-F3C2-FCB5-654A-9C8D5A134D5A}"
+  "FileHash": "{A0AD525A-BC60-B4C2-C7F7-A0B3197F33D0}"
  }
 }

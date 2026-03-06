@@ -128,10 +128,6 @@ MonoBehaviour:
   shatterEffect: {fileID: 4459781071948739692}
   health: 1
   destroyPaneOnShatter: 1
-  shatterEvent:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 0}
 --- !u!114 &4459781071948739692
 MonoBehaviour:
   m_ObjectHideFlags: 0

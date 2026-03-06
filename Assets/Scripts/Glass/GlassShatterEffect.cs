@@ -26,10 +26,7 @@ namespace Resonance.Environment
         [SerializeField] private float torqueMin = 2f;
         [SerializeField] private float torqueMax = 4f;
 
-        [Header("Wwise")]
-        [SerializeField] private AK.Wwise.Event shardImpactEvent;
-        [Tooltip("Minimum collision speed (m/s) to trigger the shard impact sound.")]
-        [SerializeField] private float minImpactSpeed = 1f;
+        [Header("Lifetime Settings")]
         [SerializeField] private float fadeDelay = 4f;
         [SerializeField] private float fadeDuration = 3f;
 
@@ -51,9 +48,9 @@ namespace Resonance.Environment
                 return;
             }
 
-            Vector2 paneSize  = new Vector2(transform.localScale.x, transform.localScale.y);
-            float area        = paneSize.x * paneSize.y;
-            int shardCount    = Mathf.Clamp(Mathf.RoundToInt(area * shardDensity), 8, 64);
+            Vector2 paneSize = new Vector2(transform.localScale.x, transform.localScale.y);
+            float area       = paneSize.x * paneSize.y;
+            int shardCount   = Mathf.Clamp(Mathf.RoundToInt(area * shardDensity), 8, 64);
 
             Vector3 hitLocal   = transform.InverseTransformPoint(hitPoint);
             Vector2 hitLocal2D = new Vector2(hitLocal.x, hitLocal.y);
@@ -75,7 +72,13 @@ namespace Resonance.Environment
                 rb.AddTorque(Random.onUnitSphere * Random.Range(torqueMin, torqueMax), ForceMode.Impulse);
 
                 GlassShard glassShardComponent = shard.AddComponent<GlassShard>();
-                glassShardComponent.Initialize(fadeDelay, fadeDuration, shardImpactEvent, minImpactSpeed);
+                glassShardComponent.Initialize(fadeDelay, fadeDuration);
+            }
+
+            // Register shatter with audio reactivity system
+            if (Audio.AudioSourceTracker.Instance != null)
+            {
+                Audio.AudioSourceTracker.Instance.RegisterSound(hitPoint, 1.5f);
             }
         }
     }

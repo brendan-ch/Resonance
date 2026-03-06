@@ -8,19 +8,14 @@ namespace Resonance.Environment
     {
         private static readonly int BaseColorProperty = Shader.PropertyToID("_BaseColor");
         private const float ShardSpawnAlpha = 0.7f;
+        private const float MinImpactSpeed  = 1f;
 
         private Material _instancedMaterial;
         private bool _useBaseColor;
         private bool _hasImpacted;
 
-        private AK.Wwise.Event _impactEvent;
-        private float _minImpactSpeed;
-
-        public void Initialize(float fadeDelay, float fadeDuration, AK.Wwise.Event impactEvent, float minImpactSpeed)
+        public void Initialize(float fadeDelay, float fadeDuration)
         {
-            _impactEvent    = impactEvent;
-            _minImpactSpeed = minImpactSpeed;
-
             _instancedMaterial = GetComponent<MeshRenderer>().material;
             _useBaseColor      = _instancedMaterial.HasProperty(BaseColorProperty);
 
@@ -37,10 +32,10 @@ namespace Resonance.Environment
         private void OnCollisionEnter(Collision collision)
         {
             if (_hasImpacted) return;
-            if (collision.relativeVelocity.magnitude < _minImpactSpeed) return;
+            if (collision.relativeVelocity.magnitude < MinImpactSpeed) return;
 
             _hasImpacted = true;
-            _impactEvent.Post(gameObject);
+            AkSoundEngine.PostEvent("Play_GlassShardLand", gameObject);
         }
 
         private IEnumerator FadeAndDestroy(float fadeDelay, float fadeDuration)

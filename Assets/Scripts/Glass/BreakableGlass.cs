@@ -12,9 +12,6 @@ namespace Resonance.Environment
         [SerializeField] private float health = 1f;
         [SerializeField] private bool destroyPaneOnShatter = true;
 
-        [Header("Wwise")]
-        [SerializeField] private AK.Wwise.Event shatterEvent;
-
         private bool _broken;
         private Vector3 _pendingHitPoint;
         private Vector3 _pendingHitNormal;
@@ -58,7 +55,7 @@ namespace Resonance.Environment
         {
             _broken = true;
 
-            shatterEvent.Post(gameObject);
+            AkSoundEngine.PostEvent("Play_GlassShatter", gameObject);
 
             if (shatterEffect != null)
                 shatterEffect.Shatter(hitPoint, hitNormal, hitDirection);
