@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Gun Equip
+  - Concrete
+  - Metal
+  - Wood
+  - Gravel
+  - Glass
   layers:
   - Default
   - TransparentFX
@@ -14,7 +20,7 @@ TagManager:
   - Player
   - Projectile
   - Environment
-  - 
+  - GlassShard
   - 
   - 
   - 

@@ -12,7 +12,7 @@ using UnityEngine.Serialization;
 
 namespace Resonance.Player
 {
-    public class PlayerStats : NetworkBehaviour, IDamageable
+    public class PlayerStats : NetworkBehaviour, IDamageable, IDamageNumberTarget
     {
         #region Inspector Fields
         [SerializeField] private float maxHealth = 100f;
@@ -33,7 +33,9 @@ namespace Resonance.Player
         public SyncVar<float> CurrentHealth = new SyncVar<float>();
         public float MaxHealth => maxHealth;
 
-        public float BaseHealthRegen { get => baseHealthRegen; set => baseHealthRegen = value; }
+        public float BaseHealthRegen { get => baseHealthRegen; set => baseHealthRegen = value; } 
+        public float CurrentHealthRegen => currentHealthRegen;
+        
         //Damage Reduction
         public float DamageReduction { get => currentDamageReduction; }
         public float BaseDamageReduction { get => baseDamageReduction; set => baseDamageReduction = Mathf.Clamp(value, 0f, maxDamageReduction); }
@@ -42,6 +44,11 @@ namespace Resonance.Player
         public float PlayerSpeed => (currentSpeed);
         public float BaseSpeed { get => playerBaseSpeed; set => playerBaseSpeed = value; }
         public bool IsDead { get; private set; }
+        
+        public IReadOnlyList<float> DamageReductionModifiers => damageReductionModifiers;
+        public IReadOnlyList<float> SpeedModifiers => speedModifiers;
+        public IReadOnlyList<float> RegenModifiers => regenModifiers;
+        
 
         #endregion
 
@@ -185,11 +192,19 @@ namespace Resonance.Player
                 Die(attacker);
         }
 
+        [ServerRpc(requireOwnership: false)]
         public void Heal(float amount)
         {
             if (IsDead) return;
             CurrentHealth.value = Mathf.Min(CurrentHealth.value + amount, maxHealth);
-            
+
+            PropagateHealthToLocal();
+        }
+
+        [ObserversRpc]
+        private void PropagateHealthToLocal()
+        {
+
             if (playerViewModel != null)
             {
                 playerViewModel.Health.Value = CurrentHealth.value;
@@ -398,6 +413,7 @@ namespace Resonance.Player
 
         public void AddDamageReductionModifier(float modifier)
         {
+            Debug.Log($"[PlayerStats] AddDamageReductionModifier called with: {modifier}");
             damageReductionModifiers.Add(modifier);
             CalculateDamageReduction();
         }
@@ -410,8 +426,8 @@ namespace Resonance.Player
 
         private void CalculateDamageReduction()
         {
-            float damageTaken = damageReductionModifiers.Aggregate(1f - baseDamageReduction, (combined, next) => combined * next);
-            currentDamageReduction = Mathf.Clamp(1f - damageTaken, 0f, maxDamageReduction);
+            float damageReduction = damageReductionModifiers.Aggregate(baseDamageReduction, (combined, next) => combined + next);
+            currentDamageReduction = Mathf.Clamp(damageReduction, 0f, maxDamageReduction);
         }
 
         #endregion

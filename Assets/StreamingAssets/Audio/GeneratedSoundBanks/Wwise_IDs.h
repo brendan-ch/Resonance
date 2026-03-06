@@ -13,10 +13,31 @@ namespace AK
 {
     namespace EVENTS
     {
+        static const AkUniqueID PLAY_FOOTSTEP = 1602358412U;
+        static const AkUniqueID PLAY_GLASSSHARDLAND = 278146749U;
+        static const AkUniqueID PLAY_GLASSSHATTER = 2387432645U;
+        static const AkUniqueID PLAY_LANDING = 2323405115U;
         static const AkUniqueID PLAY_REACTIVE_FEEDBACK = 3062989335U;
         static const AkUniqueID PLAY_TEST_SOUND = 3211564518U;
         static const AkUniqueID STOP_REACTIVE_FEEDBACK = 3211783545U;
     } // namespace EVENTS
+
+    namespace SWITCHES
+    {
+        namespace SURFACETYPE
+        {
+            static const AkUniqueID GROUP = 63790334U;
+
+            namespace SWITCH
+            {
+                static const AkUniqueID CONCRETE = 841620460U;
+                static const AkUniqueID GRAVEL = 2185786256U;
+                static const AkUniqueID METAL = 2473969246U;
+                static const AkUniqueID WOOD = 2058049674U;
+            } // namespace SWITCH
+        } // namespace SURFACETYPE
+
+    } // namespace SWITCHES
 
     namespace GAME_PARAMETERS
     {
@@ -27,7 +48,7 @@ namespace AK
         static const AkUniqueID METER_FOLEY_INTENSITY = 4188395422U;
         static const AkUniqueID METER_SFX_INTENSITY = 2553996342U;
         static const AkUniqueID OCCLUSION = 183903552U;
-        static const AkUniqueID REACTIVEOBJECT_VOLUME = 1585979646U;
+        static const AkUniqueID REACTIVE_FEEDBACK_VOLUME = 1471093987U;
         static const AkUniqueID REVERBSEND = 1572469619U;
         static const AkUniqueID ROOMSIZE = 105837875U;
     } // namespace GAME_PARAMETERS
@@ -45,6 +66,7 @@ namespace AK
         static const AkUniqueID MASTER_AUDIO_BUS = 3803692087U;
         static const AkUniqueID MUSIC = 3991942870U;
         static const AkUniqueID SFX = 393239870U;
+        static const AkUniqueID SFX_NONREACTIVE = 4123335503U;
         static const AkUniqueID UI = 1551306167U;
     } // namespace BUSSES
 
