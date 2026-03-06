@@ -54,10 +54,6 @@ namespace Resonance.PlayerController
 
             _playerSkinRenderer = GetComponent<PlayerSkinRenderer>();
             _playerSkinRenderer.OnNewSkinSpawned += UpdateMeshesToRender;
-            // if (_playerSkinRenderer.CurrentMeshInstance != null)
-            // {
-            //     UpdateMeshesToRender(_playerSkinRenderer.CurrentMeshInstance);
-            // }
         }
 
         private void Start()
@@ -189,6 +185,10 @@ namespace Resonance.PlayerController
             {
                 GameObject meshObj = new GameObject($"Mesh_{i}");
                 meshObj.transform.SetParent(ghostObj.transform);
+
+                // Each SkinMeshRenderer has its own local rotation which must correspond to this object
+                meshObj.transform.localPosition = Vector3.zero;
+                meshObj.transform.localRotation = _meshesToCopy[i].transform.localRotation;
 
                 MeshFilter mf = meshObj.AddComponent<MeshFilter>();
                 MeshRenderer mr = meshObj.AddComponent<MeshRenderer>();
