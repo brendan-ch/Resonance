@@ -555,6 +555,7 @@ MonoBehaviour:
   spawnInterval: 0.1
   ghostLifetime: 1
   maxGhosts: 10
+  enableGhostLinger: 0
   colorGradient:
     serializedVersion: 2
     key0: {r: 0.3160377, g: 1, b: 0.7887946, a: 1}
@@ -720,6 +721,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9f65672025fa5d4abac8993a47b6afd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Combat.PlayerEquip
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
   playerInventory: {fileID: 7304100629892152196}
   equipSlot: {fileID: 0}
   playerActionsInput: {fileID: 3887967411063251530}
@@ -767,6 +777,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2551c363f8a16b948b7ff20b467041d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Inventory.PlayerInventory
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
   weaponInventory:
   - {fileID: 0}
   - {fileID: 0}
