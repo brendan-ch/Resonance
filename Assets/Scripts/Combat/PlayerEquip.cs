@@ -36,10 +36,14 @@ namespace Resonance.Combat
 
         public WeaponProperties EquippedWeapon { get; private set; }
 
+        private WeaponProperties[] weapons;
+
         private void Awake()
         {
             playerSkinRenderer = GetComponent<PlayerSkinRenderer>();
             playerSkinRenderer.OnNewSkinSpawned += UpdateEquipSlotFromSkin;
+
+            weapons = Resources.LoadAll<WeaponProperties>("Content/Weapons");
         }
 
         private void Start()
@@ -74,7 +78,7 @@ namespace Resonance.Combat
             }
         }
 
-        
+
         private void Update()
         {
             if (playerActionsInput == null || playerInventory == null)
@@ -186,20 +190,13 @@ namespace Resonance.Combat
 
             RefreshWeaponView(weapon);
         }
-        
+
         private void RefreshWeaponView(WeaponProperties weapon)
         {
             if (weapon == null)
             {
                 currentWeaponView = null;
                 return;
-            }
-
-            if (currentWeaponInstance != null)
-            {
-                Destroy(currentWeaponInstance);
-                currentWeaponInstance = null;
-                currentWeaponView = null;
             }
 
             if (equipSlot == null)
@@ -212,6 +209,30 @@ namespace Resonance.Combat
             {
                 Debug.LogError("WeaponProperties has no WeaponPrefab assigned.", weapon);
                 return;
+            }
+
+            InstantiateCurrentWeaponInstance(weapon);
+            InstantiateCurrentWeaponInstanceForOtherClients(weapon.Key);
+        }
+
+        [ObserversRpc]
+        private void InstantiateCurrentWeaponInstanceForOtherClients(string weaponKey)
+        {
+            if (isOwner)
+            {
+                return;
+            }
+            WeaponProperties weapon = System.Array.Find(weapons, w => w.Key == weaponKey);
+            InstantiateCurrentWeaponInstance(weapon);
+        }
+
+        private void InstantiateCurrentWeaponInstance(WeaponProperties weapon)
+        {
+            if (currentWeaponInstance != null)
+            {
+                Destroy(currentWeaponInstance);
+                currentWeaponInstance = null;
+                currentWeaponView = null;
             }
 
             currentWeaponInstance = Instantiate(weapon.WeaponPrefab, equipSlot);
