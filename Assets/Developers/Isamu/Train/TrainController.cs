@@ -30,6 +30,7 @@ namespace Resonance.Train
         public float CurrentSpeed { get; private set; } = 0f;
         public float NormalizedSpeed => _maxSpeed > 0f ? CurrentSpeed / _maxSpeed : 0f;
         public Vector3 Velocity { get; private set; } = Vector3.zero;
+        public Vector3 MoveDirection { get; private set; } = Vector3.zero;
         public string NextStationDisplayName => IsValidIndex(NextStationIndex)
             ? _stations[NextStationIndex].DisplayName
             : string.Empty;
@@ -75,7 +76,7 @@ namespace Resonance.Train
         private void TickStopped()
         {
             CurrentSpeed = 0f;
-            Velocity = Vector3.zero;
+            MoveDirection = Vector3.zero;
 
             _stopTimer -= Time.fixedDeltaTime;
             if (_stopTimer <= 0f)
@@ -90,6 +91,7 @@ namespace Resonance.Train
             Vector3 toTarget = targetPos - transform.position;
             float distance = toTarget.magnitude;
             Vector3 moveDirection = toTarget.normalized;
+            MoveDirection = moveDirection;
 
             float brakeDist = (CurrentSpeed * CurrentSpeed) / (2f * Deceleration);
 

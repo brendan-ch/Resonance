@@ -16,11 +16,11 @@ namespace Resonance.Train
         [SerializeField] private float _minimumSpeedThreshold = 1f;
 
         [Header("Knockback")]
-        [SerializeField] private float _knockbackForce = 25f;
-        [SerializeField] private float _knockbackUpward = 8f;
+        [SerializeField] private float _knockbackForce = 40f;
+        [SerializeField] private float _knockbackUpward = 25f;
 
         [Header("Cooldown")]
-        [SerializeField] private float _damageCooldown = 0.3f;
+        [SerializeField] private float _damageCooldown = 1f;
 
         private readonly System.Collections.Generic.Dictionary<Collider, float> _cooldowns
             = new System.Collections.Generic.Dictionary<Collider, float>();
@@ -68,11 +68,18 @@ namespace Resonance.Train
             TrainPassengerPhysics passengerPhysics = other.GetComponentInParent<TrainPassengerPhysics>();
             if (passengerPhysics == null) return;
 
-            Vector3 hitDirection = other.transform.position - transform.position;
-            hitDirection.y = 0f;
-            hitDirection.Normalize();
+            Vector3 trainTravel = _trainController.MoveDirection;
+            trainTravel.y = 0f;
+            trainTravel.Normalize();
 
-            Vector3 knockbackDirection = hitDirection + Vector3.up * _knockbackUpward;
+            Vector3 toPlayer = other.transform.position - transform.position;
+            toPlayer.y = 0f;
+
+            Vector3 trackPerp = Vector3.Cross(trainTravel, Vector3.up);
+            float side = Mathf.Sign(Vector3.Dot(toPlayer, trackPerp));
+            Vector3 pushDirection = trackPerp * side;
+
+            Vector3 knockbackDirection = pushDirection + Vector3.up * _knockbackUpward;
             passengerPhysics.ApplyKnockback(knockbackDirection.normalized * _knockbackForce);
         }
     }
