@@ -15,6 +15,10 @@ namespace Resonance.Train
         [SerializeField] private float _speedForMaxDamage = 12f;
         [SerializeField] private float _minimumSpeedThreshold = 1f;
 
+        [Header("Knockback")]
+        [SerializeField] private float _knockbackForce = 25f;
+        [SerializeField] private float _knockbackUpward = 8f;
+
         [Header("Cooldown")]
         [SerializeField] private float _damageCooldown = 1f;
 
@@ -48,6 +52,7 @@ namespace Resonance.Train
 
             _cooldowns[other] = now;
             ApplyDamage(target);
+            ApplyKnockback(other);
         }
 
         private void ApplyDamage(IDamageable target)
@@ -55,6 +60,19 @@ namespace Resonance.Train
             float normalizedSpeed = Mathf.Clamp01(_trainController.CurrentSpeed / _speedForMaxDamage);
             float damage = Mathf.Lerp(_minDamage, _maxDamage, normalizedSpeed);
             target.TakeDamage(damage, gameObject);
+        }
+
+        private void ApplyKnockback(Collider other)
+        {
+            TrainPassengerPhysics passengerPhysics = other.GetComponentInParent<TrainPassengerPhysics>();
+            if (passengerPhysics == null) return;
+
+            Vector3 hitDirection = other.transform.position - transform.position;
+            hitDirection.y = 0f;
+            hitDirection.Normalize();
+
+            Vector3 knockbackDirection = hitDirection + Vector3.up * _knockbackUpward;
+            passengerPhysics.ApplyKnockback(knockbackDirection.normalized * _knockbackForce);
         }
     }
 }

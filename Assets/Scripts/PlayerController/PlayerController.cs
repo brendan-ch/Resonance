@@ -346,9 +346,12 @@ namespace Resonance.PlayerController
             newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0f, newVelocity.z), clampLateralMagnitude);
             newVelocity.y = _verticalVelocity;
             newVelocity = !isGrounded ? HandleSteepWalls(newVelocity) : newVelocity;
-            
+
             // Move character (Unity suggests only calling this once per tick)
             Vector3 trainOffset = _trainPassengerPhysics != null ? _trainPassengerPhysics.GetFrameVelocityOffset() : Vector3.zero;
+            if (_trainPassengerPhysics != null)
+                _verticalVelocity += _trainPassengerPhysics.GetKnockbackVertical();
+            newVelocity.y = _verticalVelocity;
             _characterController.Move((newVelocity + trainOffset) * Time.deltaTime);
         }
 

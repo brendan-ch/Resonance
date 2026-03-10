@@ -23,12 +23,30 @@ namespace Resonance.Train
         {
             _inertiaVelocity = Vector3.zero;
             _frameOffset = Vector3.zero;
+            _isKnockedBack = false;
+        }
+
+        public void ApplyKnockback(Vector3 force)
+        {
+            _knockbackVelocity = new Vector3(force.x, 0f, force.z);
+            _knockbackVertical = force.y;
+            _isKnockedBack = true;
         }
 
         private CharacterController _characterController;
         private Vector3 _frameOffset = Vector3.zero;
         private Vector3 _inertiaVelocity = Vector3.zero;
+        private Vector3 _knockbackVelocity = Vector3.zero;
+        private float _knockbackVertical = 0f;
         private bool _wasOnTrainLastFrame = false;
+        private bool _isKnockedBack = false;
+
+        public float GetKnockbackVertical()
+        {
+            float value = _knockbackVertical;
+            _knockbackVertical = 0f;
+            return value;
+        }
 
         private void Awake()
         {
@@ -74,7 +92,15 @@ namespace Resonance.Train
         {
             _frameOffset = Vector3.zero;
 
-            if (IsOnTrain && _trainController != null)
+            if (_isKnockedBack)
+            {
+                _frameOffset = _knockbackVelocity;
+                _knockbackVelocity = Vector3.MoveTowards(_knockbackVelocity, Vector3.zero, _inertiaDecay * Time.fixedDeltaTime);
+
+                if (_knockbackVelocity.sqrMagnitude <= 0.001f)
+                    _isKnockedBack = false;
+            }
+            else if (IsOnTrain && _trainController != null)
             {
                 Vector3 trainVelocity = _trainController.Velocity;
                 trainVelocity.y = 0f;
