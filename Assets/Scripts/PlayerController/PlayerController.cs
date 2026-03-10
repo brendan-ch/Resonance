@@ -338,7 +338,9 @@ namespace Resonance.PlayerController
             Vector3 movementDirection = cameraRightXZ * _playerLocomotionInput.MovementInput.x + cameraForwardXZ * _playerLocomotionInput.MovementInput.y;
             
             Vector3 movementDelta = movementDirection * lateralAcceleration * Time.deltaTime;
-            Vector3 newVelocity = _characterController.velocity + movementDelta;
+            Vector3 trainOffset = _trainPassengerPhysics != null ? _trainPassengerPhysics.GetFrameVelocityOffset() : Vector3.zero;
+            Vector3 localVelocity = _characterController.velocity - trainOffset;
+            Vector3 newVelocity = localVelocity + movementDelta;
             
             // Add drag to player
             Vector3 currentDrag = newVelocity.normalized * drag * Time.deltaTime;
@@ -348,7 +350,6 @@ namespace Resonance.PlayerController
             newVelocity = !isGrounded ? HandleSteepWalls(newVelocity) : newVelocity;
 
             // Move character (Unity suggests only calling this once per tick)
-            Vector3 trainOffset = _trainPassengerPhysics != null ? _trainPassengerPhysics.GetFrameVelocityOffset() : Vector3.zero;
             if (_trainPassengerPhysics != null)
                 _verticalVelocity += _trainPassengerPhysics.GetKnockbackVertical();
             newVelocity.y = _verticalVelocity;
