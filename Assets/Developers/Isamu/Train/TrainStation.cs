@@ -5,14 +5,14 @@ namespace Resonance.Train
     public class TrainStation : MonoBehaviour
     {
         [Header("Station Info")]
-        [SerializeField] private string _stationId   = "station";
+        [SerializeField] private string _stationId = "station";
         [SerializeField] private string _displayName = "Station";
 
         [Header("Stop Point")]
         [SerializeField] private Transform _stopPoint;
 
-        public string  StationId    => _stationId;
-        public string  DisplayName  => _displayName;
+        public string StationId => _stationId;
+        public string DisplayName => _displayName;
         public Vector3 StopPosition => _stopPoint != null ? _stopPoint.position : transform.position;
 
         private void OnDrawGizmos()

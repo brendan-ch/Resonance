@@ -2,15 +2,15 @@ namespace Resonance.Train
 {
     public enum TrainState
     {
-        StoppedAtStation = 0,
-        Accelerating = 1,
-        Cruising = 2,
-        Braking = 3
+        StoppedAtStation,
+        Accelerating,
+        Cruising,
+        Braking
     }
-    
+
     public enum TrainDirection
     {
-        Forward = 1,   // Traveling toward higher station indices
-        Backward = -1   // Traveling toward lower station indices
+        Forward = 1,
+        Backward = -1
     }
 }

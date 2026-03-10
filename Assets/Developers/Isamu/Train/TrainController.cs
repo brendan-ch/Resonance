@@ -92,7 +92,6 @@ namespace Resonance.Train
             float distance = toTarget.magnitude;
             Vector3 moveDirection = toTarget.normalized;
 
-            // Distance needed to brake from current speed to zero
             float brakeDist = (CurrentSpeed * CurrentSpeed) / (2f * Deceleration);
 
             if (distance <= _arrivalTolerance)
