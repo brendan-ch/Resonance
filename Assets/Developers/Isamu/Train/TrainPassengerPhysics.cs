@@ -106,7 +106,6 @@ namespace Resonance.Train
             }
             else if (IsOnTrain && _trainController != null)
             {
-                // Use position delta rather than velocity to stay perfectly in sync
                 Vector3 trainDelta = _trainController.transform.position - _lastTrainPosition;
                 trainDelta.y = 0f;
                 _frameOffset = trainDelta / Time.fixedDeltaTime;
