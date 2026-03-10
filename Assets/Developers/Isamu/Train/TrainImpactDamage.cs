@@ -20,7 +20,7 @@ namespace Resonance.Train
         [SerializeField] private float _knockbackUpward = 8f;
 
         [Header("Cooldown")]
-        [SerializeField] private float _damageCooldown = 1f;
+        [SerializeField] private float _damageCooldown = 0.3f;
 
         private readonly System.Collections.Generic.Dictionary<Collider, float> _cooldowns
             = new System.Collections.Generic.Dictionary<Collider, float>();
@@ -43,6 +43,8 @@ namespace Resonance.Train
             if (_trainController == null) return;
             if (_trainController.CurrentSpeed < _minimumSpeedThreshold) return;
 
+            ApplyKnockback(other);
+
             float now = Time.time;
             if (_cooldowns.TryGetValue(other, out float lastHit) && now - lastHit < _damageCooldown)
                 return;
@@ -52,7 +54,6 @@ namespace Resonance.Train
 
             _cooldowns[other] = now;
             ApplyDamage(target);
-            ApplyKnockback(other);
         }
 
         private void ApplyDamage(IDamageable target)
