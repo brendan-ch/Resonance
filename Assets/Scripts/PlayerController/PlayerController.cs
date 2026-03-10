@@ -1,6 +1,7 @@
 using System;
 using PurrNet;
 using Resonance.Player;
+using Resonance.Train;
 using UnityEngine;
 using Unity.Cinemachine;
 
@@ -64,6 +65,7 @@ namespace Resonance.PlayerController
         private PlayerLocomotionInput _playerLocomotionInput;
         private PlayerState _playerState;
         private OverdriveAbility _overdriveAbility;
+        private TrainPassengerPhysics _trainPassengerPhysics;
         
         // Death flag to immediately block all movement
         public bool IsPlayerDead { get; set; } = false;
@@ -125,6 +127,7 @@ namespace Resonance.PlayerController
             _playerState = GetComponent<PlayerState>();
             _overdriveAbility = GetComponent<OverdriveAbility>();
             _playerStats = GetComponent<PlayerStats>();
+            _trainPassengerPhysics = GetComponent<TrainPassengerPhysics>();
 
             _antiBump = sprintSpeed;
             _stepOffset = _characterController.stepOffset;
@@ -150,6 +153,8 @@ namespace Resonance.PlayerController
             {
                 _characterController.stepOffset = _stepOffset;
             }
+
+            _trainPassengerPhysics?.ClearInertia();
         }
         #endregion
 
@@ -343,7 +348,8 @@ namespace Resonance.PlayerController
             newVelocity = !isGrounded ? HandleSteepWalls(newVelocity) : newVelocity;
             
             // Move character (Unity suggests only calling this once per tick)
-            _characterController.Move(newVelocity * Time.deltaTime);
+            Vector3 trainOffset = _trainPassengerPhysics != null ? _trainPassengerPhysics.GetFrameVelocityOffset() : Vector3.zero;
+            _characterController.Move((newVelocity + trainOffset) * Time.deltaTime);
         }
 
         private void HandleSlideMovement()
@@ -407,7 +413,8 @@ namespace Resonance.PlayerController
             Vector3 slideVelocity = _slideDirection * currentSlideSpeed;
             slideVelocity.y = _verticalVelocity;
     
-            _characterController.Move(slideVelocity * Time.deltaTime);
+            Vector3 trainOffset = _trainPassengerPhysics != null ? _trainPassengerPhysics.GetFrameVelocityOffset() : Vector3.zero;
+            _characterController.Move((slideVelocity + trainOffset) * Time.deltaTime);
         }
 
         private Vector3 HandleSteepWalls(Vector3 velocity)
