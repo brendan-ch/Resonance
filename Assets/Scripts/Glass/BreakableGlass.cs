@@ -61,7 +61,7 @@ namespace Resonance.Environment
         [ObserversRpc]
         private void BreakNowForOtherClients(Vector3 hitPoint, Vector3 hitNormal, Vector3 hitDirection)
         {
-            if (!isOwner)
+            if (isOwner)
             {
                 return;
             }
