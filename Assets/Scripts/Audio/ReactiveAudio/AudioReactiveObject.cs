@@ -1,17 +1,20 @@
+using NUnit.Framework;
+using PurrNet;
+using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 
 namespace Resonance.Audio
 {
-    public class AudioReactiveObject : MonoBehaviour
+    public class AudioReactiveObject : NetworkBehaviour
     {
         [Header("Material Settings")]
         [SerializeField] private Renderer targetRenderer;
         [SerializeField] private Color emissionColor = Color.cyan;
         [SerializeField] private float emissionIntensity = 5f;
-        
+
         [Header("Audio Feedback")]
         [SerializeField] private bool enableAudioFeedback = true;
-        
+
         [Header("Envelope (ADSR)")]
         [SerializeField] private float attackSpeed = 30f;
         [SerializeField] private float sustainTime = 1f;
@@ -31,33 +34,72 @@ namespace Resonance.Audio
         private bool inSustain = false;
         private bool isFeedbackPlaying = false;
 
+        private AudioSourceData clientReportedSource;
+        private int numFramesBetweenServerCalculation = 10;
+        private int currentNumFramesFromLastServerCalculation = 0;
+
         void Start()
         {
             SetupMaterial();
-            currentIntensity = 0f;
-            ApplyEmission(0f);
+        }
+
+        protected override void OnSpawned(bool asServer)
+        {
+            base.OnSpawned(asServer);
+
+            if (asServer)
+            {
+                currentIntensity = 0f;
+                ApplyEmission(0f);
+            }
         }
 
         void Update()
         {
-            if (AudioSourceTracker.Instance == null)
+            if (isServer && currentNumFramesFromLastServerCalculation >= numFramesBetweenServerCalculation)
             {
-                Debug.LogWarning("[AudioReactiveObject] AudioSourceTracker not found in scene!");
-                return;
+                CalculateAudioState();
+                currentNumFramesFromLastServerCalculation = 0;
+            }
+            else if (currentNumFramesFromLastServerCalculation < numFramesBetweenServerCalculation)
+            {
+                currentNumFramesFromLastServerCalculation++;
             }
 
-            AudioSourceData nearestSource = AudioSourceTracker.Instance.FindLoudestNearby(
-                transform.position,
-                AudioSourceTracker.Instance.BaseWaveDistance
-            );
-
-            if (nearestSource != null)
+            if (isClient)
             {
-                float distance = Vector3.Distance(transform.position, nearestSource.Position);
-                float sourceIntensity = nearestSource.GetCurrentIntensity();
-                float waveMaxDistance = AudioSourceTracker.Instance.BaseWaveDistance * nearestSource.PeakIntensity;
+                if (AudioSourceTracker.Instance == null)
+                {
+                    Debug.LogWarning("[AudioReactiveObject] AudioSourceTracker not found in scene!");
+                    return;
+                }
+
+                AudioSourceData nearestSource = AudioSourceTracker.Instance.FindLoudestNearby(
+                    transform.position,
+                    AudioSourceTracker.Instance.BaseWaveDistance
+                );
+
+                // TODO: rate limit this
+                SetNearestAudioSourceOnServer(nearestSource);
+            }
+        }
+
+        [ServerRpc(PurrNet.Transports.Channel.ReliableOrdered, requireOwnership: false)]
+        public void SetNearestAudioSourceOnServer(AudioSourceData source)
+        {
+            clientReportedSource = source;
+        }
+
+        [ServerRpc(PurrNet.Transports.Channel.ReliableOrdered, requireOwnership: false)]
+        private void CalculateAudioState()
+        {
+            if (clientReportedSource != null)
+            {
+                float distance = Vector3.Distance(transform.position, clientReportedSource.Position);
+                float sourceIntensity = clientReportedSource.GetCurrentIntensity();
+                float waveMaxDistance = AudioSourceTracker.Instance.BaseWaveDistance * clientReportedSource.PeakIntensity;
                 float distanceAttenuation = 1f - Mathf.Clamp01(distance / waveMaxDistance);
-                
+
                 targetIntensity = sourceIntensity * distanceAttenuation;
             }
             else
@@ -74,7 +116,7 @@ namespace Resonance.Audio
             if (targetIntensity > currentIntensity)
             {
                 currentIntensity = Mathf.Lerp(currentIntensity, targetIntensity, Time.deltaTime * attackSpeed);
-                
+
                 if (currentIntensity > peakIntensity)
                 {
                     peakIntensity = currentIntensity;
@@ -86,7 +128,7 @@ namespace Resonance.Audio
             {
                 currentIntensity = peakIntensity;
                 sustainTimer -= Time.deltaTime;
-                
+
                 if (sustainTimer <= 0f)
                 {
                     inSustain = false;
@@ -95,7 +137,7 @@ namespace Resonance.Audio
             else
             {
                 currentIntensity = Mathf.Lerp(currentIntensity, targetIntensity, Time.deltaTime * releaseSpeed);
-                
+
                 if (currentIntensity < 0.01f)
                 {
                     peakIntensity = 0f;
@@ -115,6 +157,13 @@ namespace Resonance.Audio
             ApplyEmission(currentIntensity);
         }
 
+        [ServerRpc(PurrNet.Transports.Channel.ReliableOrdered, requireOwnership: false)]
+        private void ResetTargetIntensity()
+        {
+            targetIntensity = 0f;
+        }
+
+        [ObserversRpc(PurrNet.Transports.Channel.ReliableOrdered)]
         void UpdateAudioFeedback(float intensity)
         {
             bool shouldPlay = intensity > 0f;
@@ -166,6 +215,7 @@ namespace Resonance.Audio
             }
         }
 
+        [ObserversRpc(PurrNet.Transports.Channel.ReliableOrdered)]
         void ApplyEmission(float intensity)
         {
             if (materialInstance == null) return;
