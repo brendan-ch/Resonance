@@ -204,6 +204,7 @@ namespace Resonance.Player
             PropagateHealthToObservers();
         }
 
+        [ServerRpc(requireOwnership: true)]
         public void Heal(float amount)
         {
             if (IsDead) return;
