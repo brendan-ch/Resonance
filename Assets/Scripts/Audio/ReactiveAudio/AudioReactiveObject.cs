@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using PurrNet;
 using UnityEngine;
@@ -183,6 +184,12 @@ namespace Resonance.Audio
                 {
                     peakIntensity = 0f;
                 }
+            }
+
+            // as a fallback for zero-division results
+            if (float.IsNaN(currentIntensity))
+            {
+                currentIntensity = 0f;
             }
 
             if (debugLog)
