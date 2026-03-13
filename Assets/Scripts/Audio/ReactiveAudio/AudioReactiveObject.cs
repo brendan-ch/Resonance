@@ -35,8 +35,8 @@ namespace Resonance.Audio
         private bool isFeedbackPlaying = false;
 
         private AudioSourceData clientReportedSource;
-        private int numFramesBetweenServerCalculation = 10;
-        private int currentNumFramesFromLastServerCalculation = 0;
+        private int numFramesBetweenServerToClientPropagation = 10;
+        private int currentNumFramesFromLastServerToClientPropagation = 0;
 
         void Start()
         {
@@ -50,20 +50,22 @@ namespace Resonance.Audio
             if (asServer)
             {
                 currentIntensity = 0f;
-                ApplyEmission(0f);
+                ApplyEmissionForAllClients(0f);
             }
         }
 
         void Update()
         {
-            if (isServer && currentNumFramesFromLastServerCalculation >= numFramesBetweenServerCalculation)
+            if (isServer && currentNumFramesFromLastServerToClientPropagation >= numFramesBetweenServerToClientPropagation)
             {
                 CalculateAudioState();
-                currentNumFramesFromLastServerCalculation = 0;
+                ApplyEmissionForAllClients(currentIntensity);
+                currentNumFramesFromLastServerToClientPropagation = 0;
             }
-            else if (currentNumFramesFromLastServerCalculation < numFramesBetweenServerCalculation)
+            else if (currentNumFramesFromLastServerToClientPropagation < numFramesBetweenServerToClientPropagation)
             {
-                currentNumFramesFromLastServerCalculation++;
+                CalculateAudioState();
+                currentNumFramesFromLastServerToClientPropagation++;
             }
 
             if (isClient)
@@ -154,7 +156,6 @@ namespace Resonance.Audio
                 UpdateAudioFeedback(currentIntensity);
             }
 
-            ApplyEmission(currentIntensity);
         }
 
         [ServerRpc(PurrNet.Transports.Channel.ReliableOrdered, requireOwnership: false)]
@@ -216,7 +217,7 @@ namespace Resonance.Audio
         }
 
         [ObserversRpc(PurrNet.Transports.Channel.ReliableOrdered)]
-        void ApplyEmission(float intensity)
+        void ApplyEmissionForAllClients(float intensity)
         {
             if (materialInstance == null) return;
 
