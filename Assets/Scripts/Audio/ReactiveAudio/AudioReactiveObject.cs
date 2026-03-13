@@ -1,6 +1,5 @@
-using NUnit.Framework;
+using System.Collections;
 using PurrNet;
-using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 
 namespace Resonance.Audio
@@ -34,9 +33,11 @@ namespace Resonance.Audio
         private bool inSustain = false;
         private bool isFeedbackPlaying = false;
 
+        [Header("Network Update Intervals")]
+        [SerializeField] private float serverToClientInterval = 0.2f;
+        [SerializeField] private float clientToServerInterval = 1f;
+
         private AudioSourceData clientReportedSource;
-        private int numFramesBetweenServerToClientPropagation = 10;
-        private int currentNumFramesFromLastServerToClientPropagation = 0;
 
         void Start()
         {
@@ -50,38 +51,55 @@ namespace Resonance.Audio
             if (asServer)
             {
                 currentIntensity = 0f;
-                ApplyEmissionForAllClients(0f);
-            }
-        }
-
-        void Update()
-        {
-            if (isServer && currentNumFramesFromLastServerToClientPropagation >= numFramesBetweenServerToClientPropagation)
-            {
-                CalculateAudioState();
-                ApplyEmissionForAllClients(currentIntensity);
-                currentNumFramesFromLastServerToClientPropagation = 0;
-            }
-            else if (currentNumFramesFromLastServerToClientPropagation < numFramesBetweenServerToClientPropagation)
-            {
-                CalculateAudioState();
-                currentNumFramesFromLastServerToClientPropagation++;
+                ApplyEmissionAndAudioFeedbackForAllClients(0f);
+                StartCoroutine(ServerPropagationLoop());
             }
 
             if (isClient)
             {
+                StartCoroutine(ClientReportingLoop());
+            }
+        }
+
+        protected override void OnDespawned(bool asServer)
+        {
+            base.OnDespawned(asServer);
+            StopAllCoroutines();
+        }
+
+        void Update()
+        {
+            if (isServer)
+            {
+                CalculateAudioState();
+            }
+        }
+
+        private IEnumerator ServerPropagationLoop()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(serverToClientInterval);
+                ApplyEmissionAndAudioFeedbackForAllClients(currentIntensity);
+            }
+        }
+
+        private IEnumerator ClientReportingLoop()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(clientToServerInterval);
+
                 if (AudioSourceTracker.Instance == null)
                 {
                     Debug.LogWarning("[AudioReactiveObject] AudioSourceTracker not found in scene!");
-                    return;
+                    continue;
                 }
 
                 AudioSourceData nearestSource = AudioSourceTracker.Instance.FindLoudestNearby(
                     transform.position,
                     AudioSourceTracker.Instance.BaseWaveDistance
                 );
-
-                // TODO: rate limit this
                 SetNearestAudioSourceOnServer(nearestSource);
             }
         }
@@ -150,12 +168,6 @@ namespace Resonance.Audio
             {
                 Debug.Log($"[AudioReactiveObject] Target: {targetIntensity:F3}, Current: {currentIntensity:F3}, Sustain: {sustainTimer:F2}s");
             }
-
-            if (enableAudioFeedback)
-            {
-                UpdateAudioFeedback(currentIntensity);
-            }
-
         }
 
         [ServerRpc(PurrNet.Transports.Channel.ReliableOrdered, requireOwnership: false)]
@@ -164,8 +176,7 @@ namespace Resonance.Audio
             targetIntensity = 0f;
         }
 
-        [ObserversRpc(PurrNet.Transports.Channel.ReliableOrdered)]
-        void UpdateAudioFeedback(float intensity)
+        private void UpdateAudioFeedback(float intensity)
         {
             bool shouldPlay = intensity > 0f;
 
@@ -185,19 +196,19 @@ namespace Resonance.Audio
             }
         }
 
-        void StartAudioFeedback()
+        private void StartAudioFeedback()
         {
             AkUnitySoundEngine.PostEvent("Play_Reactive_Feedback", gameObject);
             isFeedbackPlaying = true;
         }
 
-        void StopAudioFeedback()
+        private void StopAudioFeedback()
         {
             AkUnitySoundEngine.PostEvent("Stop_Reactive_Feedback", gameObject);
             isFeedbackPlaying = false;
         }
 
-        void SetupMaterial()
+        private void SetupMaterial()
         {
             if (targetRenderer == null)
             {
@@ -217,12 +228,17 @@ namespace Resonance.Audio
         }
 
         [ObserversRpc(PurrNet.Transports.Channel.ReliableOrdered)]
-        void ApplyEmissionForAllClients(float intensity)
+        private void ApplyEmissionAndAudioFeedbackForAllClients(float intensity)
         {
             if (materialInstance == null) return;
 
             Color finalEmission = emissionColor * (intensity * emissionIntensity);
             materialInstance.SetColor("_EmissionColor", finalEmission);
+
+            if (enableAudioFeedback)
+            {
+                UpdateAudioFeedback(currentIntensity);
+            }
         }
 
         void OnDestroy()
