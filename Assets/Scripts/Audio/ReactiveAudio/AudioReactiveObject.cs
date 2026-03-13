@@ -34,8 +34,15 @@ namespace Resonance.Audio
         private bool isFeedbackPlaying = false;
 
         [Header("Network Update Intervals")]
-        [SerializeField] private float serverToClientInterval = 0.2f;
-        [SerializeField] private float clientToServerInterval = 1f;
+        [SerializeField] private float serverToClientPropagationIntervalSeconds = 0.2f;
+
+        /// <summary>
+        /// A base control for how often clients emit updates to the server.
+        /// If there is a detected sound from the client, that will get reported
+        /// immediately outside of this coroutine loop.
+        /// Otherwise, `null` sound events are propagated from a loop with this wait time.
+        /// </summary>
+        [SerializeField] private float clientToServerBaseReportingIntervalSeconds = 1f;
 
         private AudioSourceData clientReportedSource;
 
@@ -88,7 +95,7 @@ namespace Resonance.Audio
         {
             while (true)
             {
-                yield return new WaitForSeconds(serverToClientInterval);
+                yield return new WaitForSeconds(serverToClientPropagationIntervalSeconds);
                 ApplyEmissionAndAudioFeedbackForAllClients(currentIntensity);
             }
         }
@@ -97,7 +104,7 @@ namespace Resonance.Audio
         {
             while (true)
             {
-                yield return new WaitForSeconds(clientToServerInterval);
+                yield return new WaitForSeconds(clientToServerBaseReportingIntervalSeconds);
 
                 if (AudioSourceTracker.Instance == null)
                 {
