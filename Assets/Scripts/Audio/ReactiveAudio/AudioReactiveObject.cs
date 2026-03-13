@@ -42,7 +42,7 @@ namespace Resonance.Audio
         /// immediately outside of this coroutine loop.
         /// Otherwise, `null` sound events are propagated from a loop with this wait time.
         /// </summary>
-        [SerializeField] private float clientToServerBaseReportingIntervalSeconds = 1f;
+        [SerializeField] private float clientToServerNullSourceReportingIntervalSeconds = 1f;
 
         private AudioSourceData clientReportedSource;
 
@@ -104,7 +104,7 @@ namespace Resonance.Audio
         {
             while (true)
             {
-                yield return new WaitForSeconds(clientToServerBaseReportingIntervalSeconds);
+                yield return new WaitForSeconds(clientToServerNullSourceReportingIntervalSeconds);
 
                 if (AudioSourceTracker.Instance == null)
                 {
