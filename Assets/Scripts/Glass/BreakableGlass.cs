@@ -52,24 +52,8 @@ namespace Resonance.Environment
             _hasPendingHitData = true;
         }
 
+        [ObserversRpc(runLocally: true)]
         private void BreakNow(Vector3 hitPoint, Vector3 hitNormal, Vector3 hitDirection)
-        {
-            BreakNowLocally(hitPoint, hitNormal, hitDirection);
-            BreakNowForOtherClients(hitPoint, hitNormal, hitDirection);
-        }
-
-        [ObserversRpc]
-        private void BreakNowForOtherClients(Vector3 hitPoint, Vector3 hitNormal, Vector3 hitDirection)
-        {
-            if (isOwner)
-            {
-                return;
-            }
-
-            BreakNowLocally(hitPoint, hitNormal, hitDirection);
-        }
-
-        private void BreakNowLocally(Vector3 hitPoint, Vector3 hitNormal, Vector3 hitDirection)
         {
             _broken = true;
 
