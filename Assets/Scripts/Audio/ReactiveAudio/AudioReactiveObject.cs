@@ -73,6 +73,15 @@ namespace Resonance.Audio
             {
                 CalculateAudioState();
             }
+
+            if (isClient)
+            {
+                AudioSourceData nearestSource = FindNearestSource();
+                if (nearestSource != null)
+                {
+                    SetNearestAudioSourceOnServer(nearestSource);
+                }
+            }
         }
 
         private IEnumerator ServerPropagationLoop()
@@ -96,12 +105,17 @@ namespace Resonance.Audio
                     continue;
                 }
 
-                AudioSourceData nearestSource = AudioSourceTracker.Instance.FindLoudestNearby(
-                    transform.position,
-                    AudioSourceTracker.Instance.BaseWaveDistance
-                );
+                AudioSourceData nearestSource = FindNearestSource();
                 SetNearestAudioSourceOnServer(nearestSource);
             }
+        }
+
+        private AudioSourceData FindNearestSource()
+        {
+            return AudioSourceTracker.Instance.FindLoudestNearby(
+                transform.position,
+                AudioSourceTracker.Instance.BaseWaveDistance
+            );
         }
 
         [ServerRpc(PurrNet.Transports.Channel.ReliableOrdered, requireOwnership: false)]
