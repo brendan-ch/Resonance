@@ -258,7 +258,7 @@ namespace Resonance.Audio
 
             if (enableAudioFeedback)
             {
-                UpdateAudioFeedback(currentIntensity);
+                UpdateAudioFeedback(intensity);
             }
         }
 
