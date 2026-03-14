@@ -188,6 +188,9 @@ namespace Resonance.Player
                 playerViewModel.Health.Value = CurrentHealth.value;
             }
             
+            if (attacker != null && owner.HasValue)
+                ShowDamageIndicatorRpc(owner.Value, attacker.transform.position);
+
             if (CurrentHealth.value <= 0)
                 Die(attacker);
         }
@@ -206,6 +209,12 @@ namespace Resonance.Player
         {
             if (playerViewModel != null)
                 playerViewModel.Health.Value = CurrentHealth.value;
+        }
+
+        [TargetRpc]
+        private void ShowDamageIndicatorRpc(PlayerID target, Vector3 attackerPosition)
+        {
+            Resonance.UI.DamageIndicatorUI.Instance?.ShowIndicator(attackerPosition);
         }
 
         public void AddRegenModifier(float modifier)
