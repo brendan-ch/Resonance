@@ -32,16 +32,7 @@ namespace Resonance.PlayerController
         [Header("Overdrive — Transition")]
         public float overdriveTransitionSpeed = 6f;
 
-        [Header("Damage Flash — Vignette")]
-        public Color damageVignetteColor = new Color(0.6f, 0f, 0f, 1f);
-        public float damageVignetteIntensity = 0.55f;
 
-        [Header("Damage Flash — Chromatic Aberration")]
-        public float damageChromaticAberrationSpike = 1.0f;
-
-        [Header("Damage Flash — Transition")]
-        public float damageFlashInSpeed = 20f;
-        public float damageFlashOutSpeed = 4f;
 
         #endregion
 
@@ -53,11 +44,9 @@ namespace Resonance.PlayerController
         private Bloom _bloom;
         private ChromaticAberration _chromaticAberration;
         private LensDistortion _lensDistortion;
-        private Vignette _vignette;
         private ColorAdjustments _colorAdjustments;
 
         private float _currentTintWeight = 0f;
-        private float _damageFlashWeight = 0f;
         private bool _isDead = false;
 
         #endregion
@@ -109,7 +98,6 @@ namespace Resonance.PlayerController
             _playerVolume.profile.TryGet(out _bloom);
             _playerVolume.profile.TryGet(out _chromaticAberration);
             _playerVolume.profile.TryGet(out _lensDistortion);
-            _playerVolume.profile.TryGet(out _vignette);
             _playerVolume.profile.TryGet(out _colorAdjustments);
         }
 
@@ -123,12 +111,6 @@ namespace Resonance.PlayerController
 
             if (_lensDistortion != null)
                 _lensDistortion.intensity.overrideState = true;
-
-            if (_vignette != null)
-            {
-                _vignette.color.overrideState = true;
-                _vignette.intensity.overrideState = true;
-            }
 
             if (_colorAdjustments != null)
                 _colorAdjustments.colorFilter.overrideState = true;
@@ -144,12 +126,6 @@ namespace Resonance.PlayerController
 
             if (_lensDistortion != null)
                 _lensDistortion.intensity.value = baseLensDistortionIntensity;
-
-            if (_vignette != null)
-            {
-                _vignette.color.value = damageVignetteColor;
-                _vignette.intensity.value = 0f;
-            }
 
             if (_colorAdjustments != null)
                 _colorAdjustments.colorFilter.value = Color.white;
@@ -169,7 +145,6 @@ namespace Resonance.PlayerController
             UpdateChromaticAberration(isOverdriveActive);
             UpdateLensDistortion(isOverdriveActive);
             UpdateScreenTint(isOverdriveActive);
-            UpdateDamageVignette();
         }
 
         private void UpdateBloom(bool isOverdriveActive)
@@ -184,9 +159,7 @@ namespace Resonance.PlayerController
         {
             if (_chromaticAberration == null) return;
 
-            float overdriveTarget = isOverdriveActive ? overdriveChromaticAberrationIntensity : baseChromaticAberrationIntensity;
-            float target = Mathf.Max(overdriveTarget, _damageFlashWeight * damageChromaticAberrationSpike);
-
+            float target = isOverdriveActive ? overdriveChromaticAberrationIntensity : baseChromaticAberrationIntensity;
             _chromaticAberration.intensity.value = Mathf.Lerp(
                 _chromaticAberration.intensity.value,
                 target,
@@ -212,31 +185,6 @@ namespace Resonance.PlayerController
             _colorAdjustments.colorFilter.value = Color.Lerp(Color.white, overdriveTintColor, _currentTintWeight);
         }
 
-        private void UpdateDamageVignette()
-        {
-            if (_vignette == null) return;
-
-            _damageFlashWeight = Mathf.MoveTowards(_damageFlashWeight, 0f, damageFlashOutSpeed * Time.deltaTime);
-
-            float decaySpeed = _damageFlashWeight > _vignette.intensity.value ? damageFlashInSpeed : damageFlashOutSpeed;
-
-            _vignette.color.value = damageVignetteColor;
-            _vignette.intensity.value = Mathf.Lerp(
-                _vignette.intensity.value,
-                _damageFlashWeight * damageVignetteIntensity,
-                decaySpeed * Time.deltaTime
-            );
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        public void TriggerDamageFlash()
-        {
-            _damageFlashWeight = 1f;
-        }
-
         #endregion
 
         #region Event Handlers
@@ -244,7 +192,6 @@ namespace Resonance.PlayerController
         private void HandlePlayerDeath()
         {
             _isDead = true;
-            _damageFlashWeight = 0f;
             _currentTintWeight = 0f;
             SetBaseValues();
         }
@@ -252,7 +199,6 @@ namespace Resonance.PlayerController
         private void HandlePlayerRespawn()
         {
             _isDead = false;
-            _damageFlashWeight = 0f;
             _currentTintWeight = 0f;
             SetBaseValues();
         }

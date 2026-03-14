@@ -1049,11 +1049,11 @@ MonoBehaviour:
   overdriveTintColor: {r: 0, g: 1, b: 0.5, a: 1}
   overdriveTintIntensity: 0.3
   overdriveTransitionSpeed: 6
-  damageVignetteColor: {r: 0.6, g: 0, b: 0, a: 1}
-  damageVignetteIntensity: 0.55
-  damageChromaticAberrationSpike: 1
-  damageFlashInSpeed: 20
-  damageFlashOutSpeed: 4
+  damageVignetteColor: {r: 0, g: 0.8, b: 1, a: 1}
+  damageVignetteIntensity: 0.5
+  damageChromaticAberrationSpike: 0.9
+  damageFlashInSpeed: 35
+  damageFlashOutSpeed: 2
 --- !u!114 &1311654643413597327
 MonoBehaviour:
   m_ObjectHideFlags: 0

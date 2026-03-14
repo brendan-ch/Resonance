@@ -61,7 +61,6 @@ namespace Resonance.Player
         private PlayerState _playerState;
         private CharacterController _characterController;
         private PlayerController.PlayerController _playerController;
-        private PlayerPostProcessing _playerPostProcessing;
         private Animator _animator;
         #endregion
 
@@ -119,7 +118,6 @@ namespace Resonance.Player
             _playerState = GetComponent<PlayerState>();
             _characterController = GetComponent<CharacterController>();
             _playerController = GetComponent<PlayerController.PlayerController>();
-            _playerPostProcessing = GetComponent<PlayerPostProcessing>();
             GiveOwnership(_playerController.owner);
 
             _animator = GetComponent<Animator>();
@@ -186,10 +184,10 @@ namespace Resonance.Player
             CurrentHealth.value = Mathf.Max(0, CurrentHealth.value - finalAmount);
 
             if (playerViewModel != null)
+            {
                 playerViewModel.Health.Value = CurrentHealth.value;
-
-            PropagateHealthToLocal();
-
+            }
+            
             if (CurrentHealth.value <= 0)
                 Die(attacker);
         }
@@ -208,9 +206,6 @@ namespace Resonance.Player
         {
             if (playerViewModel != null)
                 playerViewModel.Health.Value = CurrentHealth.value;
-
-            if (isOwner)
-                _playerPostProcessing?.TriggerDamageFlash();
         }
 
         public void AddRegenModifier(float modifier)
