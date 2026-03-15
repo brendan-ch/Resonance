@@ -6,17 +6,20 @@ public class SceneConfigurator : MonoBehaviour
     public static AppConfig Current { get; private set; }
 
     [SerializeField] AppConfig config;
-    [SerializeField] GameObject steamLobbyObject;
     [SerializeField] LobbyManager lobbyManager;
-    [SerializeField] MonoBehaviour steamProvider;
-    [SerializeField] MonoBehaviour dummyProvider;
+    [SerializeField] GameObject steamProvider;
+    [SerializeField] GameObject dummyProvider;
 
     void Awake()
     {
         Current = config;
-        if (steamLobbyObject != null)
+        if (steamProvider != null)
         {
-            steamLobbyObject.SetActive(config.enableSteamLobby);
+            steamProvider.SetActive(config.enableSteamLobby);
+            if (dummyProvider != null)
+            {
+                dummyProvider.SetActive(!config.enableSteamLobby);
+            }
         }
     }
 
@@ -28,8 +31,8 @@ public class SceneConfigurator : MonoBehaviour
         }
 
         var provider = config.enableSteamLobby
-            ? steamProvider as ILobbyProvider
-            : dummyProvider as ILobbyProvider;
+            ? steamProvider.GetComponent<ILobbyProvider>()
+            : dummyProvider.GetComponent<ILobbyProvider>();
         lobbyManager.SetProvider(provider);
     }
 }
