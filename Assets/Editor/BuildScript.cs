@@ -50,8 +50,8 @@ public static class BuildScript
         BuildTarget target = targetName switch
         {
             "Windows64" => BuildTarget.StandaloneWindows64,
-            "OSX"       => BuildTarget.StandaloneOSX,
-            _           => throw new System.Exception($"Unknown -buildTarget '{targetName}'. Supported: Windows64, OSX"),
+            "OSX" => BuildTarget.StandaloneOSX,
+            _ => throw new System.Exception($"Unknown -buildTarget '{targetName}'. Supported: Windows64, OSX"),
         };
 
         Build(LoadConfig(configName), target);
@@ -80,10 +80,10 @@ public static class BuildScript
 
         var options = new BuildPlayerOptions
         {
-            scenes           = Scenes,
+            scenes = Scenes,
             locationPathName = $"Builds/{config.name}/{targetFolder}/Resonance{ext}",
-            target           = target,
-            options          = isDev ? BuildOptions.Development : BuildOptions.None,
+            target = target,
+            options = isDev ? BuildOptions.Development : BuildOptions.None,
         };
 
         var report = BuildPipeline.BuildPlayer(options);
@@ -95,16 +95,38 @@ public static class BuildScript
 
     static void InjectConfig(AppConfig config)
     {
+        const string lobbyScenePath = "Assets/Scenes/Lobby/LobbyScene.unity";
+
+        bool wasAlreadyLoaded = false;
+        for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+        {
+            if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).path == lobbyScenePath)
+            {
+                wasAlreadyLoaded = true;
+                break;
+            }
+        }
+
+        var scene = wasAlreadyLoaded
+            ? EditorSceneManager.GetSceneByPath(lobbyScenePath)
+            : EditorSceneManager.OpenScene(lobbyScenePath, OpenSceneMode.Additive);
+
         var configurator = Object.FindFirstObjectByType<SceneConfigurator>();
         if (configurator == null)
         {
+            Debug.LogWarning($"[BuildScript] SceneConfigurator not found in {lobbyScenePath}. Config not injected.");
+            if (!wasAlreadyLoaded)
+                EditorSceneManager.CloseScene(scene, true);
             return;
         }
 
         var so = new SerializedObject(configurator);
         so.FindProperty("config").objectReferenceValue = config;
         so.ApplyModifiedPropertiesWithoutUndo();
-        EditorSceneManager.SaveOpenScenes();
+        EditorSceneManager.SaveScene(scene);
+
+        if (!wasAlreadyLoaded)
+            EditorSceneManager.CloseScene(scene, true);
     }
 
     static string ReadArg(string flag)
