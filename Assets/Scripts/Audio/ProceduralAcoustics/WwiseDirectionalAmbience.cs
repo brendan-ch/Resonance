@@ -1,54 +1,33 @@
 using UnityEngine;
 
-/// <summary>
-/// Directional Ambience System - Battlefield-style approach
-/// Places outdoor ambience emitters in open directions for binaural spatial blending
-/// </summary>
 public class WwiseDirectionalAmbience : MonoBehaviour
 {
     [Header("Wwise Events")]
-    [Tooltip("Outdoor ambience (played from directional emitters)")]
     public AK.Wwise.Event outdoorAmbienceEvent;
-    
-    [Tooltip("Indoor ambience (played at listener, non-directional)")]
     public AK.Wwise.Event indoorAmbienceEvent;
 
     [Header("Scanner Reference")]
-    [Tooltip("WwiseSmartReverb component for enclosure data")]
     public WwiseSmartReverb scannerSource;
 
     [Header("Directional Detection")]
-    [Tooltip("Number of directional rays (4 = cardinal, 8 = cardinal + diagonal)")]
     public int directionCount = 4;
-    
-    [Tooltip("Ray distance for openness detection")]
     public float rayDistance = 30f;
-    
-    [Tooltip("Environment layer mask")]
     public LayerMask environmentLayer;
 
     [Header("Emitter Settings")]
-    [Tooltip("Distance to place outdoor emitters from listener")]
     public float emitterDistance = 15f;
-    
-    [Tooltip("Minimum openness to activate emitter (0-1)")]
-    [Range(0f, 1f)]
-    public float activationThreshold = 0.3f;
+    [Range(0f, 1f)] public float activationThreshold = 0.3f;
 
     [Header("Update Rate")]
-    [Tooltip("Scans per second")]
-    [Range(1f, 10f)]
-    public float scanRate = 2f;
+    [Range(1f, 10f)] public float scanRate = 5f;
 
     [Header("Settings")]
-    [Tooltip("Auto-start on scene load")]
     public bool autoStart = true;
 
     [Header("Debug")]
     public bool drawDebugRays = false;
     public bool debugLog = false;
 
-    // Internal
     private GameObject[] outdoorEmitters;
     private uint[] outdoorPlayingIDs;
     private uint indoorPlayingID;
@@ -86,7 +65,6 @@ public class WwiseDirectionalAmbience : MonoBehaviour
 
         globalEnclosure = scannerSource != null ? scannerSource.EnclosureFactor : 0f;
 
-        // Time-sliced scanning
         if (Time.time - lastScanTime >= 1f / scanRate)
         {
             UpdateDirectionalEmitters();
@@ -132,14 +110,11 @@ public class WwiseDirectionalAmbience : MonoBehaviour
             Vector3 worldDir = directions[i];
             float openness = CalculateOpenness(listenerPos, worldDir);
 
-            // Position emitter in this direction
             Vector3 emitterPos = listenerPos + worldDir * emitterDistance;
             outdoorEmitters[i].transform.position = emitterPos;
 
-            // Activate/deactivate based on openness
             if (openness > activationThreshold)
             {
-                // Start if not playing
                 if (outdoorPlayingIDs[i] == AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
                 {
                     if (outdoorAmbienceEvent != null && outdoorAmbienceEvent.IsValid())
@@ -148,13 +123,11 @@ public class WwiseDirectionalAmbience : MonoBehaviour
                     }
                 }
 
-                // Set volume based on openness
                 float volume = Mathf.Lerp(-96f, 0f, openness);
-                AkUnitySoundEngine.SetRTPCValue("DirectionalAmbienceVolume", volume, outdoorEmitters[i]);
+                AkSoundEngine.SetRTPCValue("DirectionalAmbienceVolume", volume, outdoorEmitters[i]);
             }
             else
             {
-                // Stop if playing
                 if (outdoorPlayingIDs[i] != AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
                 {
                     AkUnitySoundEngine.ExecuteActionOnPlayingID(
@@ -188,10 +161,9 @@ public class WwiseDirectionalAmbience : MonoBehaviour
 
         if (!didHit)
         {
-            return 1f; // Fully open
+            return 1f;
         }
 
-        // Openness based on distance (far hit = more open)
         float normalizedDist = hit.distance / rayDistance;
         return normalizedDist;
     }
@@ -199,21 +171,38 @@ public class WwiseDirectionalAmbience : MonoBehaviour
     void UpdateIndoorVolume()
     {
         if (indoorPlayingID == AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
+        {
+            if (debugLog)
+            {
+                Debug.LogWarning("[DirectionalAmbience] Indoor ambience not playing!");
+            }
             return;
+        }
 
-        // Indoor volume based on global enclosure
         float indoorVolume = Mathf.Lerp(-96f, 0f, globalEnclosure);
-        AkUnitySoundEngine.SetRTPCValue("IndoorAmbienceVolume", indoorVolume, gameObject);
+        AkSoundEngine.SetRTPCValue("IndoorAmbienceVolume", indoorVolume, gameObject);
+
+        if (debugLog)
+        {
+            Debug.Log($"[DirectionalAmbience] Indoor volume RTPC: {indoorVolume:F1} (enclosure: {globalEnclosure:F2})");
+        }
     }
 
     public void StartAmbience()
     {
         if (isPlaying) return;
 
-        // Start indoor ambience at listener (non-directional)
         if (indoorAmbienceEvent != null && indoorAmbienceEvent.IsValid())
         {
             indoorPlayingID = indoorAmbienceEvent.Post(gameObject);
+            if (debugLog)
+            {
+                Debug.Log($"[DirectionalAmbience] Started indoor ambience, playingID: {indoorPlayingID}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[DirectionalAmbience] Indoor ambience event not assigned or invalid!");
         }
 
         isPlaying = true;
@@ -223,7 +212,6 @@ public class WwiseDirectionalAmbience : MonoBehaviour
     {
         if (!isPlaying) return;
 
-        // Stop all outdoor emitters
         for (int i = 0; i < outdoorPlayingIDs.Length; i++)
         {
             if (outdoorPlayingIDs[i] != AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
@@ -238,7 +226,6 @@ public class WwiseDirectionalAmbience : MonoBehaviour
             }
         }
 
-        // Stop indoor
         if (indoorPlayingID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
         {
             AkUnitySoundEngine.ExecuteActionOnPlayingID(
@@ -263,7 +250,6 @@ public class WwiseDirectionalAmbience : MonoBehaviour
 
     void OnDestroy()
     {
-        // Clean up emitters
         if (outdoorEmitters != null)
         {
             foreach (var emitter in outdoorEmitters)

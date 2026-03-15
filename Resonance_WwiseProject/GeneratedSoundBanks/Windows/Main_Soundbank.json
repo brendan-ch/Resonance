@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{63C4107F-FD15-3408-D15E-E433A923F9AC}",
+    "Hash": "{BDECB04E-5F6F-25D3-262D-07A09807031D}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
@@ -576,6 +576,7 @@
       "Name": "Play_OutdoorAmbience",
       "ObjectPath": "\\Events\\Default Work Unit\\Play_OutdoorAmbience",
       "GUID": "{87B2053E-F857-4EB2-B914-927C0FF52814}",
+      "MaxAttenuation": "30.000002",
       "DurationType": "Infinite",
       "MediaRefs": [
        {
@@ -642,6 +643,12 @@
       "GUID": "{DAAB43F5-A1A7-46AA-9E41-1AB0ABCD0152}"
      },
      {
+      "Id": "369910861",
+      "Name": "DirectionalAmbienceVolume",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\DirectionalAmbienceVolume",
+      "GUID": "{4FBCDE3D-AEF4-4BA6-99D6-E2BBAF0F0AC3}"
+     },
+     {
       "Id": "499096576",
       "Name": "Diffraction",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\Diffraction",
@@ -690,6 +697,6 @@
     ]
    }
   ],
-  "FileHash": "{B957CFA3-7416-CAB8-0818-441809A0D1CC}"
+  "FileHash": "{3A31A642-F57A-EA6A-F671-2D427650C10D}"
  }
 }

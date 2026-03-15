@@ -42,9 +42,10 @@ namespace AK
 
     namespace GAME_PARAMETERS
     {
-        static const AkUniqueID AMBIENCEMIX = 142454441U;
         static const AkUniqueID DIFFRACTION = 499096576U;
+        static const AkUniqueID DIRECTIONALAMBIENCEVOLUME = 369910861U;
         static const AkUniqueID ENCLOSURE = 4004954295U;
+        static const AkUniqueID INDOORAMBIENCEVOLUME = 2371184266U;
         static const AkUniqueID METER_ENVIRONMENT_INTENSITY = 1541695584U;
         static const AkUniqueID METER_FOLEY_INTENSITY = 4188395422U;
         static const AkUniqueID METER_SFX_INTENSITY = 2553996342U;

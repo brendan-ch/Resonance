@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{9351C158-0AD6-5F03-DD23-7ED7DD9C5033}",
+    "Hash": "{83FC89EB-C972-9A27-8947-23CBABEFF51C}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -195,16 +195,16 @@
       "GUID": "{8FE22EA3-E5DD-48C4-8390-D5F8B4C1B5B6}"
      },
      {
-      "Id": "142454441",
-      "Name": "AmbienceMix",
-      "ObjectPath": "\\Game Parameters\\Default Work Unit\\AmbienceMix",
-      "GUID": "{0FF9B36C-12DC-4B98-8374-150CECB1370E}"
-     },
-     {
       "Id": "183903552",
       "Name": "Occlusion",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\Occlusion",
       "GUID": "{DAAB43F5-A1A7-46AA-9E41-1AB0ABCD0152}"
+     },
+     {
+      "Id": "369910861",
+      "Name": "DirectionalAmbienceVolume",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\DirectionalAmbienceVolume",
+      "GUID": "{4FBCDE3D-AEF4-4BA6-99D6-E2BBAF0F0AC3}"
      },
      {
       "Id": "499096576",
@@ -229,6 +229,12 @@
       "Name": "ReverbSend",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\ReverbSend",
       "GUID": "{1FEE75FD-DAA1-4E06-9C5D-09CA4508A215}"
+     },
+     {
+      "Id": "2371184266",
+      "Name": "IndoorAmbienceVolume",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\IndoorAmbienceVolume",
+      "GUID": "{1ADA932F-E8A0-4FC1-B3DA-720CF4577470}"
      },
      {
       "Id": "2553996342",
@@ -285,6 +291,6 @@
     ]
    }
   ],
-  "FileHash": "{C7C533D2-BDB1-5F51-9E17-8E62E68A5DD9}"
+  "FileHash": "{06242C17-7986-0170-85CD-319DC38C8BEE}"
  }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c19384f92fab9bd4ab1f02a2a0acf790, type: 3}
   m_Name: 87B2053E-F857-4EB2-B914-927C0FF52814
   m_EditorClassIdentifier: AK.Wwise.Unity.API.WwiseTypes::WwiseEventReference
-  objectName: Play_Ambience
-  id: 278617630
+  objectName: Play_OutdoorAmbience
+  id: 3267244670
   guid: 87B2053E-F857-4EB2-B914-927C0FF52814
   IsInUserDefinedSoundBank: 1

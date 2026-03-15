@@ -19,6 +19,7 @@ Switch	ID	Name	Switch Group			Notes
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	183903552	Occlusion			\Default Work Unit\Occlusion	
+	369910861	DirectionalAmbienceVolume			\Default Work Unit\DirectionalAmbienceVolume	
 	499096576	Diffraction			\Default Work Unit\Diffraction	
 	1471093987	Reactive_Feedback_Volume			\Default Work Unit\Reactive_Feedback_Volume	
 
