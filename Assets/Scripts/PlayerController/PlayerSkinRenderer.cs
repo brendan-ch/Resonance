@@ -46,7 +46,7 @@ namespace Resonance.PlayerController
             }
 
             var skinData = skinCatalog.Get(index);
-            if (skinData == null || skinData.meshPrefab == null)
+            if (skinData == null || skinData.bodyMeshPrefab == null)
             {
                 return;
             }
@@ -56,15 +56,15 @@ namespace Resonance.PlayerController
                 Destroy(CurrentMeshInstance);
             }
 
-            CurrentMeshInstance = Instantiate(skinData.meshPrefab, transform);
+            CurrentMeshInstance = Instantiate(skinData.bodyMeshPrefab, transform);
             CurrentlyLoadedSkinData = skinData;
 
             var innerAnimator = CurrentMeshInstance.GetComponent<Animator>();
             Destroy(innerAnimator);
 
-            if (skinData.avatar != null)
+            if (skinData.bodyAvatar != null)
             {
-                animator.avatar = skinData.avatar;
+                animator.avatar = skinData.bodyAvatar;
             }
 
             animator.Rebind();
