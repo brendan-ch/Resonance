@@ -13,9 +13,6 @@ public class WwiseSmartOcclusion : MonoBehaviour
     
     [Tooltip("RTPC name for diffraction")]
     public string diffractionParameter = "Diffraction";
-    
-    [Tooltip("RTPC name for wall thickness (meters)")]
-    public string thicknessParameter = "WallThickness";
 
     [Header("Volumetric Cone")]
     [Tooltip("Number of rays in cone")]
@@ -62,19 +59,29 @@ public class WwiseSmartOcclusion : MonoBehaviour
     private float lastScanTime;
     private float currentOcclusion;
     private float currentDiffraction;
-    private float currentThickness;
     private float targetOcclusion;
     private float targetDiffraction;
-    private float targetThickness;
     private const float smoothingSpeed = 5f;
 
     // Public accessors
     public float Occlusion => currentOcclusion;
     public float Diffraction => currentDiffraction;
-    public float Thickness => currentThickness;
 
     void Start()
     {
+        if (occlusionLayer == 0)
+        {
+            int environmentLayer = LayerMask.NameToLayer("Environment");
+            if (environmentLayer != -1)
+            {
+                occlusionLayer = 1 << environmentLayer;
+            }
+            else
+            {
+                Debug.LogWarning("[WwiseSmartOcclusion] 'Environment' layer not found! Please set occlusion layer manually or create an 'Environment' layer.");
+            }
+        }
+
         FindListener();
         GenerateConeDirections();
         lastScanTime = -1f;
@@ -161,22 +168,13 @@ public class WwiseSmartOcclusion : MonoBehaviour
         int blockedCount = 0;
         bool centerIsBlocked = false;
         float minDiffractionDist = float.MaxValue;
-        float measuredThickness = 0f;
 
+        // Center ray
         RaycastHit centerHit;
         if (Physics.Raycast(origin, dirToListener, out centerHit, distanceToListener, occlusionLayer))
         {
             centerIsBlocked = true;
             blockedCount++;
-
-            RaycastHit backwardHit;
-            if (Physics.Raycast(listener.position, -dirToListener, out backwardHit, distanceToListener, occlusionLayer))
-            {
-                float forwardDist = centerHit.distance;
-                float backwardDist = backwardHit.distance;
-                float combinedDist = forwardDist + backwardDist;
-                measuredThickness = Mathf.Max(0f, distanceToListener - combinedDist);
-            }
 
             if (drawDebugRays)
                 Debug.DrawLine(origin, centerHit.point, occludedColor, 1f / scanRate);
@@ -186,6 +184,7 @@ public class WwiseSmartOcclusion : MonoBehaviour
             Debug.DrawLine(origin, listener.position, clearColor, 1f / scanRate);
         }
 
+        // Surrounding rays
         for (int i = 1; i < coneRayCount; i++)
         {
             Vector3 localDir = coneDirections[i];
@@ -195,6 +194,7 @@ public class WwiseSmartOcclusion : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(origin, worldDir, out hit, distanceToListener, occlusionLayer))
             {
+                // Near-field logic: prevent false occlusion when next to walls
                 float distFromHitToListener = distanceToListener - hit.distance;
                 bool isNearField = (distFromHitToListener < nearFieldThreshold) && (!centerIsBlocked);
 
@@ -217,10 +217,11 @@ public class WwiseSmartOcclusion : MonoBehaviour
             }
         }
 
+        // Calculate occlusion
         float blockRatio = (float)blockedCount / coneRayCount;
         targetOcclusion = Mathf.Clamp01(blockRatio);
-        targetThickness = measuredThickness;
 
+        // Calculate diffraction
         if (enableDiffraction && centerIsBlocked && minDiffractionDist < float.MaxValue)
         {
             targetDiffraction = diffractionCurve.Evaluate(minDiffractionDist);
@@ -235,7 +236,6 @@ public class WwiseSmartOcclusion : MonoBehaviour
     {
         currentOcclusion = Mathf.Lerp(currentOcclusion, targetOcclusion, Time.deltaTime * smoothingSpeed);
         currentDiffraction = Mathf.Lerp(currentDiffraction, targetDiffraction, Time.deltaTime * smoothingSpeed);
-        currentThickness = Mathf.Lerp(currentThickness, targetThickness, Time.deltaTime * smoothingSpeed);
 
         UpdateWwiseParameters();
     }
@@ -243,7 +243,6 @@ public class WwiseSmartOcclusion : MonoBehaviour
     void UpdateWwiseParameters()
     {
         AkUnitySoundEngine.SetRTPCValue(occlusionParameter, currentOcclusion, gameObject);
-        AkUnitySoundEngine.SetRTPCValue(thicknessParameter, currentThickness, gameObject);
         
         if (enableDiffraction)
         {

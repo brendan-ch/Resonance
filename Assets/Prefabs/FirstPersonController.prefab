@@ -120,6 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WwiseSmartOcclusion
   occlusionParameter: Occlusion
   diffractionParameter: Diffraction
+  thicknessParameter: WallThickness
   coneRayCount: 6
   coneAngle: 30
   maxCheckDistance: 100
@@ -976,8 +977,8 @@ MonoBehaviour:
   activationThreshold: 0.3
   scanRate: 2
   autoStart: 1
-  drawDebugRays: 1
-  debugLog: 1
+  drawDebugRays: 0
+  debugLog: 0
 --- !u!114 &-6562338477815478662
 MonoBehaviour:
   m_ObjectHideFlags: 0
