@@ -1,8 +1,6 @@
 name: Build
 
 on:
-  push:
-    branches: [main, staging]
   workflow_dispatch:
     inputs:
       config:
@@ -20,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build
+      - name: Build (Unity)
         run: |
           $UNITY_PATH -batchmode -quit \
             -projectPath . \
@@ -30,3 +28,27 @@ jobs:
             -logFile /dev/stdout
         env:
           UNITY_PATH: /Applications/Unity/Hub/Editor/6000.2.7f2/Unity.app/Contents/MacOS/Unity
+          SIGNING_IDENTITY: ${{ secrets.SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Zip
+        run: |
+          CONFIG=${{ github.event.inputs.config || 'AppConfig_Dev' }}
+          if [ "${{ github.event.inputs.target || 'Windows64' }}" = "OSX" ]; then
+            ditto -c -k --keepParent "Builds/$CONFIG/Mac/Resonance.app" "Resonance_mac.zip"
+            echo "ARTIFACT=Resonance_mac.zip" >> $GITHUB_ENV
+          else
+            cd "Builds/$CONFIG/Windows" && zip -r "../../../Resonance_win.zip" .
+            echo "ARTIFACT=Resonance_win.zip" >> $GITHUB_ENV
+          fi
+
+      - name: Upload to GitHub Releases
+        run: |
+          TAG="build-$(date +%Y%m%d-%H%M%S)"
+          gh release create "$TAG" "$ARTIFACT" \
+            --title "Build $TAG (${{ github.event.inputs.config || 'AppConfig_Dev' }} / ${{ github.event.inputs.target || 'Windows64' }})" \
+            --notes "Automated build via GitHub Actions"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
