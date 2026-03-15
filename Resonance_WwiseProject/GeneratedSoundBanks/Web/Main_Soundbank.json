@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{EA28A4F9-4565-4260-12DD-D26C18AA816F}",
+    "Hash": "{63C4107F-FD15-3408-D15E-E433A923F9AC}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
@@ -134,14 +134,6 @@
       "Location": "Memory",
       "ShortName": "sfx_foley_footstep_concrete_land_02.wav",
       "CachePath": "AC/{AC546118-D92E-A071-DA48-38846D638CEA}.wem"
-     },
-     {
-      "Id": "522615953",
-      "Language": "SFX",
-      "Streaming": "false",
-      "Location": "Memory",
-      "ShortName": "amb_indoor_loop.wav",
-      "CachePath": "7D/{7D3B5EBB-1E5C-8081-CBAD-0FE4BD5295C1}.wem"
      },
      {
       "Id": "566025932",
@@ -341,21 +333,6 @@
      ]
     },
     "Events": [
-     {
-      "Id": "278617630",
-      "Name": "Play_Ambience",
-      "ObjectPath": "\\Events\\Default Work Unit\\Play_Ambience",
-      "GUID": "{87B2053E-F857-4EB2-B914-927C0FF52814}",
-      "DurationType": "Infinite",
-      "MediaRefs": [
-       {
-        "Id": "404163806"
-       },
-       {
-        "Id": "522615953"
-       }
-      ]
-     },
      {
       "Id": "1602358412",
       "Name": "Play_Footstep",
@@ -595,6 +572,18 @@
       ]
      },
      {
+      "Id": "3267244670",
+      "Name": "Play_OutdoorAmbience",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_OutdoorAmbience",
+      "GUID": "{87B2053E-F857-4EB2-B914-927C0FF52814}",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "404163806"
+       }
+      ]
+     },
+     {
       "Id": "3062989335",
       "Name": "Play_Reactive_Feedback",
       "ObjectPath": "\\Events\\Default Work Unit\\Play_Reactive_Feedback",
@@ -646,12 +635,6 @@
      }
     ],
     "GameParameters": [
-     {
-      "Id": "142454441",
-      "Name": "AmbienceMix",
-      "ObjectPath": "\\Game Parameters\\Default Work Unit\\AmbienceMix",
-      "GUID": "{0FF9B36C-12DC-4B98-8374-150CECB1370E}"
-     },
      {
       "Id": "183903552",
       "Name": "Occlusion",
@@ -707,6 +690,6 @@
     ]
    }
   ],
-  "FileHash": "{388FF4C6-4094-6721-52B9-821D8DA21A8A}"
+  "FileHash": "{26303072-60F2-7158-3855-4B4A0C91EFF6}"
  }
 }

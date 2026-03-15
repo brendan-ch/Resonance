@@ -942,7 +942,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  drawRays: 1
+  drawRays: 0
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   missColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &-3222689995555833044
@@ -957,40 +957,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eadec4af733d5445870b0d861fb4b09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WwiseAmbienceManager
-  ambienceEvent:
+  outdoorAmbienceEvent:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: 9d77646d52ac5d74db7eaf97c80a0f75, type: 2}
+  indoorAmbienceEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: f2e933a297e714e43b6d52e46b8a0e59, type: 2}
   scannerSource: {fileID: -3400458708190070123}
-  mixParameterName: AmbienceMix
-  outdoorThreshold: 0.2
-  indoorThreshold: 0.8
-  mixCurve:
+  directionCount: 4
+  rayDistance: 30
+  environmentLayer:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 100
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 100
-      inSlope: 100
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  transitionSpeed: 1
+    m_Bits: 256
+  emitterDistance: 15
+  activationThreshold: 0.3
+  scanRate: 2
   autoStart: 1
+  drawDebugRays: 1
   debugLog: 1
 --- !u!114 &-6562338477815478662
 MonoBehaviour:
