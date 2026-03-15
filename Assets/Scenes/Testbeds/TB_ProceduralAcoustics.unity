@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &20840758
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -245,6 +245,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f20aab51ccec04b804a28d35ff4c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioReactiveObject
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
   targetRenderer: {fileID: 20840759}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
@@ -254,6 +263,8 @@ MonoBehaviour:
   releaseSpeed: 5
   threshold: 0.05
   debugLog: 0
+  serverToClientPropagationIntervalSeconds: 0.2
+  clientToServerNullSourceReportingIntervalSeconds: 1
 --- !u!114 &20840763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,6 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WwiseSmartOcclusion
   occlusionParameter: Occlusion
   diffractionParameter: Diffraction
+  thicknessParameter: WallThickness
   coneRayCount: 6
   coneAngle: 30
   maxCheckDistance: 100
@@ -1014,7 +1026,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &268076339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1027,6 +1039,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f20aab51ccec04b804a28d35ff4c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Resonance.Audio.AudioReactiveObject
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
   targetRenderer: {fileID: 268076341}
   emissionColor: {r: 0, g: 1, b: 1, a: 1}
   emissionIntensity: 5
@@ -1036,6 +1057,8 @@ MonoBehaviour:
   releaseSpeed: 5
   threshold: 0.05
   debugLog: 0
+  serverToClientPropagationIntervalSeconds: 0.2
+  clientToServerNullSourceReportingIntervalSeconds: 1
 --- !u!65 &268076340
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1142,6 +1165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WwiseSmartOcclusion
   occlusionParameter: Occlusion
   diffractionParameter: Diffraction
+  thicknessParameter: WallThickness
   coneRayCount: 6
   coneAngle: 30
   maxCheckDistance: 100
@@ -4292,6 +4316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WwiseSmartOcclusion
   occlusionParameter: Occlusion
   diffractionParameter: Diffraction
+  thicknessParameter: WallThickness
   coneRayCount: 6
   coneAngle: 30
   maxCheckDistance: 50
@@ -4326,7 +4351,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   scanRate: 5
   cullingDistance: 50
-  drawDebugRays: 1
+  drawDebugRays: 0
   clearColor: {r: 0, g: 1, b: 0, a: 1}
   occludedColor: {r: 1, g: 0, b: 0, a: 1}
   diffractionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

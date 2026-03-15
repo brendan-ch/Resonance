@@ -54,6 +54,7 @@ namespace AK
         static const AkUniqueID REACTIVE_FEEDBACK_VOLUME = 1471093987U;
         static const AkUniqueID REVERBSEND = 1572469619U;
         static const AkUniqueID ROOMSIZE = 105837875U;
+        static const AkUniqueID WALLTHICKNESS = 3602790513U;
     } // namespace GAME_PARAMETERS
 
     namespace BANKS

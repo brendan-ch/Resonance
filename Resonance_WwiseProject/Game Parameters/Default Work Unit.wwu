@@ -71,6 +71,12 @@
 						<Property Name="Min" Type="Real64" Value="-96"/>
 					</PropertyList>
 				</GameParameter>
+				<GameParameter Name="WallThickness" ID="{6C5C6DB0-5FC8-4BFA-9EB7-623CF2A85D93}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="0"/>
+						<Property Name="Max" Type="Real64" Value="10"/>
+					</PropertyList>
+				</GameParameter>
 			</ChildrenList>
 		</WorkUnit>
 	</GameParameters>

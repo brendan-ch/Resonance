@@ -24,6 +24,7 @@ Game Parameter	ID	Name			Wwise Object Path	Notes
 	499096576	Diffraction			\Default Work Unit\Diffraction	
 	1471093987	Reactive_Feedback_Volume			\Default Work Unit\Reactive_Feedback_Volume	
 	2371184266	IndoorAmbienceVolume			\Default Work Unit\IndoorAmbienceVolume	
+	3602790513	WallThickness			\Default Work Unit\WallThickness	
 
 Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
 	114934340	Sine	Wwise Sine		\Containers\Default Work Unit\Reactive_Feedback\Sine	

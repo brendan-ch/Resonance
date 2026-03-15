@@ -2015,6 +2015,11 @@
 				<Sound Name="amb_indoor_loop" ID="{920982B7-A1C6-46A5-9179-E692B11369C2}" ShortID="365041257">
 					<PropertyList>
 						<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-5</Value>
+							</ValueList>
+						</Property>
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
@@ -2077,6 +2082,11 @@
 						<Property Name="3DSpatialization" Type="int16" Value="1"/>
 						<Property Name="AttenuationDistanceScaling" Type="Real32" Value="0.3"/>
 						<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-6</Value>
+							</ValueList>
+						</Property>
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Attenuation">

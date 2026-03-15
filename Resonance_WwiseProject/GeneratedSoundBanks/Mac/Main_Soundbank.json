@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{9724C6C9-DB7C-3F6C-BB26-1ADB7BDDA802}",
+    "Hash": "{235916C6-0D77-E5B1-ADFE-6428FB2DD172}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
@@ -685,6 +685,12 @@
       "Name": "IndoorAmbienceVolume",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\IndoorAmbienceVolume",
       "GUID": "{1ADA932F-E8A0-4FC1-B3DA-720CF4577470}"
+     },
+     {
+      "Id": "3602790513",
+      "Name": "WallThickness",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\WallThickness",
+      "GUID": "{6C5C6DB0-5FC8-4BFA-9EB7-623CF2A85D93}"
      }
     ],
     "SwitchGroups": [
@@ -723,6 +729,6 @@
     ]
    }
   ],
-  "FileHash": "{CED6D063-3CB3-249E-540C-9F9BE0E438E2}"
+  "FileHash": "{09548F07-6C83-6DE3-2C04-BDC875D06145}"
  }
 }

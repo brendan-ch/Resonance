@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{0DC6F37F-D953-16EE-EB3F-CBCE40A7A1AA}",
+    "Hash": "{81D1ED13-6A8A-6917-61EA-0F888BFB90DC}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -243,6 +243,12 @@
       "GUID": "{52BB91AD-DDC9-4B62-8832-46C14C04E59C}"
      },
      {
+      "Id": "3602790513",
+      "Name": "WallThickness",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\WallThickness",
+      "GUID": "{6C5C6DB0-5FC8-4BFA-9EB7-623CF2A85D93}"
+     },
+     {
       "Id": "4004954295",
       "Name": "Enclosure",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\Enclosure",
@@ -291,6 +297,6 @@
     ]
    }
   ],
-  "FileHash": "{20721147-C72B-6EC5-4EF3-6E7355806EE1}"
+  "FileHash": "{5877DE58-3EE9-3F36-4F72-089C9A3FE20F}"
  }
 }
