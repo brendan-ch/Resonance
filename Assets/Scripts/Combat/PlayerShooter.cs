@@ -267,19 +267,14 @@ namespace Resonance.Combat
                 if (bulletTrailPrefab != null && view.Muzzle != null)
                 {
                     var start = view.Muzzle.position;
-                    StartCoroutine(SpawnTrail(start, endPoint));
-                    SpawnTrailOnOtherClients(start, endPoint);
+                    SpawnTrailOnAllClients(start, endPoint);
                 }
             }
         }
 
-        [ObserversRpc]
-        private void SpawnTrailOnOtherClients(Vector3 start, Vector3 end)
+        [ObserversRpc(runLocally: true)]
+        private void SpawnTrailOnAllClients(Vector3 start, Vector3 end)
         {
-            if (isOwner)
-            {
-                return;
-            }
             StartCoroutine(SpawnTrail(start, end));
         }
 
