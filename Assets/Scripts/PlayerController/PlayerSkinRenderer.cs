@@ -56,36 +56,32 @@ namespace Resonance.PlayerController
                 Destroy(CurrentMeshInstance);
             }
 
-            CurrentMeshInstance = Instantiate(skinData.bodyMeshPrefab, transform);
             CurrentlyLoadedSkinData = skinData;
 
-            var innerAnimator = CurrentMeshInstance.GetComponent<Animator>();
-            Destroy(innerAnimator);
-
-            if (skinData.bodyAvatar != null)
+            if (!isOwner)
             {
-                animator.avatar = skinData.bodyAvatar;
+                ApplyMeshPrefabAndAvatar(skinData.bodyMeshPrefab, skinData.bodyAvatar);
+            }
+            else
+            {
+                ApplyMeshPrefabAndAvatar(skinData.armsMeshPrefab, skinData.armsAvatar);
             }
 
             animator.Rebind();
 
-            ShowShadowsOnlyIfOwner();
             OnNewSkinSpawned.Invoke(CurrentMeshInstance);
         }
 
-        private void ShowShadowsOnlyIfOwner()
+        private void ApplyMeshPrefabAndAvatar(GameObject meshPrefab, Avatar avatar)
         {
-            if (!isOwner)
-            {
-                return;
-            }
+            CurrentMeshInstance = Instantiate(meshPrefab, transform);
 
-            foreach (var renderer in CurrentMeshInstance.GetComponentsInChildren<Renderer>())
+            var innerAnimator = CurrentMeshInstance.GetComponent<Animator>();
+            Destroy(innerAnimator);
+
+            if (avatar != null)
             {
-                if (!renderer.CompareTag("Gun Equip"))
-                {
-                    renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-                }
+                animator.avatar = avatar;
             }
         }
 
