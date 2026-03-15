@@ -10,7 +10,7 @@ public class WwiseDirectionalAmbience : MonoBehaviour
     public WwiseSmartReverb scannerSource;
 
     [Header("Directional Detection")]
-    public int directionCount = 8;
+    public int directionCount = 4;
     public float rayDistance = 30f;
     public float headHeight = 1.6f;
     public LayerMask environmentLayer;
@@ -107,10 +107,27 @@ public class WwiseDirectionalAmbience : MonoBehaviour
         Vector3 listenerPos = transform.position;
         Vector3 headPos = listenerPos + Vector3.up * headHeight;
 
+        int activeCount = 0;
+        float[] opennessValues = new float[directionCount];
+
         for (int i = 0; i < directionCount; i++)
         {
             Vector3 worldDir = directions[i];
             float openness = CalculateOpenness(headPos, worldDir);
+            opennessValues[i] = openness;
+
+            if (openness > activationThreshold)
+            {
+                activeCount++;
+            }
+        }
+
+        float volumeCompensation = activeCount > 0 ? -6f * Mathf.Log10(activeCount) : 0f;
+
+        for (int i = 0; i < directionCount; i++)
+        {
+            Vector3 worldDir = directions[i];
+            float openness = opennessValues[i];
 
             Vector3 emitterPos = listenerPos + worldDir * emitterDistance;
             outdoorEmitters[i].transform.position = emitterPos;
@@ -125,8 +142,9 @@ public class WwiseDirectionalAmbience : MonoBehaviour
                     }
                 }
 
-                float volume = Mathf.Lerp(-96f, 0f, openness);
-                AkSoundEngine.SetRTPCValue("DirectionalAmbienceVolume", volume, outdoorEmitters[i]);
+                float baseVolume = Mathf.Lerp(-96f, 0f, openness);
+                float compensatedVolume = baseVolume + volumeCompensation;
+                AkSoundEngine.SetRTPCValue("DirectionalAmbienceVolume", compensatedVolume, outdoorEmitters[i]);
             }
             else
             {
