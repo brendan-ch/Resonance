@@ -10,8 +10,9 @@ public class WwiseDirectionalAmbience : MonoBehaviour
     public WwiseSmartReverb scannerSource;
 
     [Header("Directional Detection")]
-    public int directionCount = 4;
+    public int directionCount = 8;
     public float rayDistance = 30f;
+    public float headHeight = 1.6f;
     public LayerMask environmentLayer;
 
     [Header("Emitter Settings")]
@@ -104,11 +105,12 @@ public class WwiseDirectionalAmbience : MonoBehaviour
     void UpdateDirectionalEmitters()
     {
         Vector3 listenerPos = transform.position;
+        Vector3 headPos = listenerPos + Vector3.up * headHeight;
 
         for (int i = 0; i < directionCount; i++)
         {
             Vector3 worldDir = directions[i];
-            float openness = CalculateOpenness(listenerPos, worldDir);
+            float openness = CalculateOpenness(headPos, worldDir);
 
             Vector3 emitterPos = listenerPos + worldDir * emitterDistance;
             outdoorEmitters[i].transform.position = emitterPos;

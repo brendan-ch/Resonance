@@ -966,8 +966,9 @@ MonoBehaviour:
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: f2e933a297e714e43b6d52e46b8a0e59, type: 2}
   scannerSource: {fileID: -3400458708190070123}
-  directionCount: 4
+  directionCount: 16
   rayDistance: 30
+  headHeight: 1.6
   environmentLayer:
     serializedVersion: 2
     m_Bits: 256
