@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  push:
+    branches: [main, staging]
+  workflow_dispatch:
+    inputs:
+      config:
+        description: AppConfig asset name
+        required: true
+        default: AppConfig_Dev
+      target:
+        description: Build target (Windows64 or OSX)
+        required: true
+        default: Windows64
+
+jobs:
+  build:
+    runs-on: macos-latest   # macOS runner required for OSX builds; can cross-compile Windows
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          $UNITY_PATH -batchmode -quit \
+            -projectPath . \
+            -executeMethod BuildScript.BuildCLI \
+            -buildConfig ${{ github.event.inputs.config || 'AppConfig_Dev' }} \
+            -buildTarget ${{ github.event.inputs.target || 'Windows64' }} \
+            -logFile /dev/stdout
+        env:
+          UNITY_PATH: /Applications/Unity/Hub/Editor/6000.2.7f2/Unity.app/Contents/MacOS/Unity
