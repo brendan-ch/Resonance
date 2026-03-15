@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AppConfig
   enableSteamLobby: 1
   useProductionRelay: 1
+  isProduction: 1

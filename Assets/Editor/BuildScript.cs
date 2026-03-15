@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -91,7 +92,111 @@ public static class BuildScript
         {
             throw new System.Exception($"Build failed for config '{config.name}' target '{target}'");
         }
+
+        if (config.isProduction)
+        {
+            PostBuild(report.summary.outputPath, target);
+        }
     }
+
+    static void PostBuild(string outputPath, BuildTarget target)
+    {
+        CopySteamAppId(outputPath, target);
+
+        if (target == BuildTarget.StandaloneOSX)
+        {
+            CodeSignAndNotarizeMac(outputPath);
+        }
+    }
+
+    static void CopySteamAppId(string outputPath, BuildTarget target)
+    {
+        string src = Path.GetFullPath(Path.Combine(Application.dataPath, "../steam_appid.txt"));
+        if (!File.Exists(src))
+        {
+            Debug.LogWarning("[BuildScript] steam_appid.txt not found at project root — skipping.");
+            return;
+        }
+
+        string dst = target == BuildTarget.StandaloneWindows64
+            ? Path.Combine(Path.GetDirectoryName(outputPath), "steam_appid.txt")
+            : Path.Combine(outputPath, "Contents/MacOS/steam_appid.txt");
+
+        File.Copy(src, dst, overwrite: true);
+        Debug.Log($"[BuildScript] Copied steam_appid.txt → {dst}");
+    }
+
+    static void CodeSignAndNotarizeMac(string appPath)
+    {
+#if UNITY_EDITOR_OSX
+        string identity = System.Environment.GetEnvironmentVariable("SIGNING_IDENTITY") ?? "-";
+        string appleId = System.Environment.GetEnvironmentVariable("APPLE_ID");
+        string appPassword = System.Environment.GetEnvironmentVariable("APPLE_APP_PASSWORD");
+        string teamId = System.Environment.GetEnvironmentVariable("APPLE_TEAM_ID");
+        string entitlements = Path.GetFullPath(
+            Path.Combine(Application.dataPath, "../Mac.entitlements"));
+
+        Debug.Log("[BuildScript] Codesigning...");
+        RunShell($"codesign --deep --force --sign \"{identity}\" " +
+                 $"--entitlements \"{entitlements}\" \"{appPath}\"");
+
+        bool canNotarize = identity != "-"
+            && !string.IsNullOrEmpty(appleId)
+            && !string.IsNullOrEmpty(appPassword)
+            && !string.IsNullOrEmpty(teamId);
+
+        if (!canNotarize)
+        {
+            Debug.LogWarning("[BuildScript] Apple credentials not set — skipping notarization.");
+            return;
+        }
+
+        string zipPath = appPath + "_notarize.zip";
+        RunShell($"ditto -c -k --keepParent \"{appPath}\" \"{zipPath}\"");
+
+        Debug.Log("[BuildScript] Submitting for notarization (may take a few minutes)...");
+        int result = RunShell(
+            $"xcrun notarytool submit \"{zipPath}\" " +
+            $"--apple-id \"{appleId}\" --password \"{appPassword}\" " +
+            $"--team-id \"{teamId}\" --wait");
+
+        File.Delete(zipPath);
+
+        if (result != 0)
+        {
+            throw new System.Exception($"notarytool failed (exit {result})");
+        }
+
+        Debug.Log("[BuildScript] Stapling notarization ticket...");
+        RunShell($"xcrun stapler staple \"{appPath}\"");
+        Debug.Log("[BuildScript] Notarization complete.");
+#else
+        Debug.LogWarning("[BuildScript] Mac signing requires a macOS editor/CI — skipped.");
+#endif
+    }
+
+#if UNITY_EDITOR_OSX
+    static int RunShell(string command)
+    {
+        using var proc = new System.Diagnostics.Process();
+        proc.StartInfo = new System.Diagnostics.ProcessStartInfo
+        {
+            FileName = "/bin/sh",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+        };
+        proc.StartInfo.ArgumentList.Add("-c");
+        proc.StartInfo.ArgumentList.Add(command);
+        proc.Start();
+        string stdout = proc.StandardOutput.ReadToEnd();
+        string stderr = proc.StandardError.ReadToEnd();
+        proc.WaitForExit();
+        if (!string.IsNullOrWhiteSpace(stdout)) { Debug.Log(stdout); }
+        if (!string.IsNullOrWhiteSpace(stderr)) { Debug.LogWarning(stderr); }
+        return proc.ExitCode;
+    }
+#endif
 
     static void InjectConfig(AppConfig config)
     {
