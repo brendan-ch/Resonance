@@ -20,32 +20,18 @@ public class WwiseAmbienceManager : MonoBehaviour
     [Tooltip("RTPC name for ambience mix (0 = outdoor, 100 = indoor)")]
     public string mixParameterName = "AmbienceMix";
 
-    [Header("Thresholds")]
-    [Tooltip("Enclosure value for outdoor")]
-    [Range(0f, 1f)]
-    public float outdoorThreshold = 0.1f;
-    
-    [Tooltip("Enclosure value for indoor")]
-    [Range(0f, 1f)]
-    public float indoorThreshold = 0.7f;
-
-    [Header("Blend Curve")]
-    [Tooltip("Maps enclosure to mix value")]
-    public AnimationCurve mixCurve = AnimationCurve.Linear(0f, 0f, 1f, 100f);
-
     [Header("Settings")]
-    [Tooltip("Transition speed")]
-    [Range(0.1f, 5f)]
-    public float transitionSpeed = 1f;
     
     [Tooltip("Auto-start on scene load")]
     public bool autoStart = true;
 
+    [Header("Debug")]
+    [Tooltip("Enable debug logging")]
+    public bool debugLog = false;
+
     // Internal
     private uint playingID;
     private bool isPlaying;
-    private float currentMix;
-    private float targetMix;
 
     void Start()
     {
@@ -68,21 +54,25 @@ public class WwiseAmbienceManager : MonoBehaviour
 
     void Update()
     {
+        if (debugLog && !isPlaying)
+        {
+            Debug.LogWarning("[Ambience] Not playing! Check if event stopped.");
+        }
+
         if (!isPlaying || scannerSource == null)
             return;
 
-        // Get enclosure from scanner
+        // Get enclosure from scanner (0-1) and scale to 0-100
         float enclosure = scannerSource.EnclosureFactor;
+        float mix = enclosure * 100f;
 
-        // Map to mix value
-        float normalizedEnclosure = Mathf.InverseLerp(outdoorThreshold, indoorThreshold, enclosure);
-        targetMix = mixCurve.Evaluate(normalizedEnclosure);
+        // Update Wwise immediately (no smoothing)
+        AkUnitySoundEngine.SetRTPCValue(mixParameterName, mix, gameObject);
 
-        // Smooth transition
-        currentMix = Mathf.Lerp(currentMix, targetMix, Time.deltaTime * transitionSpeed);
-
-        // Update Wwise
-        AkUnitySoundEngine.SetRTPCValue(mixParameterName, currentMix, gameObject);
+        if (debugLog)
+        {
+            Debug.Log($"[Ambience] Enclosure: {enclosure:F2} | AmbienceMix RTPC: {mix:F1}");
+        }
     }
 
     public void StartAmbience()

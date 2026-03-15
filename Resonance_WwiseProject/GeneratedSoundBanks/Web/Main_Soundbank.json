@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{95F38882-910E-47AF-A1A2-7B0E207EEBA0}",
     "Language": "SFX",
-    "Hash": "{13D3C5F1-99FF-3C83-BAB2-0D1C6305F4F7}",
+    "Hash": "{EA28A4F9-4565-4260-12DD-D26C18AA816F}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main_Soundbank",
     "ShortName": "Main_Soundbank",
     "Path": "Main_Soundbank.bnk",
@@ -93,7 +93,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "sfx_props_glass_shatter_02.wav",
-      "CachePath": "E4/{E488D2A7-3E70-6356-1F16-6363113FB47F}.wem"
+      "CachePath": "70/{706C9C35-2EEE-27EE-0C2A-C18ACE30D4BE}.wem"
      },
      {
       "Id": "394611772",
@@ -102,6 +102,14 @@
       "Location": "Memory",
       "ShortName": "sfx_foley_footstep_concrete_run_02.wav",
       "CachePath": "59/{59DFC9D1-6CA3-28F0-DFAB-4D5F620517CC}.wem"
+     },
+     {
+      "Id": "404163806",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "amb_outdoor_loop.wav",
+      "CachePath": "AC/{ACC48198-36C3-09FA-78F1-B0E4F36C2100}.wem"
      },
      {
       "Id": "496429034",
@@ -126,6 +134,14 @@
       "Location": "Memory",
       "ShortName": "sfx_foley_footstep_concrete_land_02.wav",
       "CachePath": "AC/{AC546118-D92E-A071-DA48-38846D638CEA}.wem"
+     },
+     {
+      "Id": "522615953",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "amb_indoor_loop.wav",
+      "CachePath": "7D/{7D3B5EBB-1E5C-8081-CBAD-0FE4BD5295C1}.wem"
      },
      {
       "Id": "566025932",
@@ -213,7 +229,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "sfx_props_glass_shatter_01.wav",
-      "CachePath": "2E/{2E011CA4-B74D-00E1-F9A5-966440396945}.wem"
+      "CachePath": "F7/{F7367A4B-14BE-2DF5-F87E-8DC9F8966AF6}.wem"
      },
      {
       "Id": "776817998",
@@ -325,6 +341,21 @@
      ]
     },
     "Events": [
+     {
+      "Id": "278617630",
+      "Name": "Play_Ambience",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_Ambience",
+      "GUID": "{87B2053E-F857-4EB2-B914-927C0FF52814}",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "404163806"
+       },
+       {
+        "Id": "522615953"
+       }
+      ]
+     },
      {
       "Id": "1602358412",
       "Name": "Play_Footstep",
@@ -616,6 +647,12 @@
     ],
     "GameParameters": [
      {
+      "Id": "142454441",
+      "Name": "AmbienceMix",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\AmbienceMix",
+      "GUID": "{0FF9B36C-12DC-4B98-8374-150CECB1370E}"
+     },
+     {
       "Id": "183903552",
       "Name": "Occlusion",
       "ObjectPath": "\\Game Parameters\\Default Work Unit\\Occlusion",
@@ -670,6 +707,6 @@
     ]
    }
   ],
-  "FileHash": "{A0AD525A-BC60-B4C2-C7F7-A0B3197F33D0}"
+  "FileHash": "{388FF4C6-4094-6721-52B9-821D8DA21A8A}"
  }
 }
