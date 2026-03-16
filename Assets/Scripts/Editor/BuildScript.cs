@@ -75,7 +75,10 @@ namespace Resonance.BuildTools
 
         static void Build(BuildConfig config, BuildTarget target)
         {
-            InjectConfigIntoLobbyConfigurator(config);
+            InjectConfigIntoScene<LobbySceneConfigurator>(
+                "Assets/Scenes/Lobby/LobbyScene.unity", config);
+            InjectConfigIntoScene<PurrTransportConfigurator>(
+                "Assets/Scenes/Transitions/GameBootstrapScene.unity", config);
 
             bool isDev = !config.enableSteamLobby && !config.useProductionRelay;
             string ext = target == BuildTarget.StandaloneWindows64 ? ".exe" : ".app";
@@ -200,14 +203,12 @@ namespace Resonance.BuildTools
         }
 #endif
 
-        static void InjectConfigIntoLobbyConfigurator(BuildConfig config)
+        static void InjectConfigIntoScene<T>(string scenePath, BuildConfig config) where T : MonoBehaviour
         {
-            const string lobbyScenePath = "Assets/Scenes/Lobby/LobbyScene.unity";
-
             bool wasAlreadyLoaded = false;
             for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
             {
-                if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).path == lobbyScenePath)
+                if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).path == scenePath)
                 {
                     wasAlreadyLoaded = true;
                     break;
@@ -215,13 +216,13 @@ namespace Resonance.BuildTools
             }
 
             var scene = wasAlreadyLoaded
-                ? EditorSceneManager.GetSceneByPath(lobbyScenePath)
-                : EditorSceneManager.OpenScene(lobbyScenePath, OpenSceneMode.Additive);
+                ? EditorSceneManager.GetSceneByPath(scenePath)
+                : EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
 
-            var configurator = Object.FindFirstObjectByType<LobbySceneConfigurator>();
+            var configurator = Object.FindFirstObjectByType<T>();
             if (configurator == null)
             {
-                Debug.LogWarning($"[BuildScript] SceneConfigurator not found in {lobbyScenePath}. Config not injected.");
+                Debug.LogWarning($"[BuildScript] {typeof(T).Name} not found in {scenePath}. Config not injected.");
                 if (!wasAlreadyLoaded)
                     EditorSceneManager.CloseScene(scene, true);
                 return;
