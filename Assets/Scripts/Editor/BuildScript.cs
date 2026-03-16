@@ -75,7 +75,7 @@ namespace Resonance.BuildTools
 
         static void Build(BuildConfig config, BuildTarget target)
         {
-            InjectConfig(config);
+            InjectConfigIntoLobbyConfigurator(config);
 
             bool isDev = !config.enableSteamLobby && !config.useProductionRelay;
             string ext = target == BuildTarget.StandaloneWindows64 ? ".exe" : ".app";
@@ -200,7 +200,7 @@ namespace Resonance.BuildTools
         }
 #endif
 
-        static void InjectConfig(BuildConfig config)
+        static void InjectConfigIntoLobbyConfigurator(BuildConfig config)
         {
             const string lobbyScenePath = "Assets/Scenes/Lobby/LobbyScene.unity";
 
