@@ -5125,7 +5125,7 @@ GameObject:
   - component: {fileID: 1163111806}
   - component: {fileID: 1163111807}
   m_Layer: 0
-  m_Name: SceneConfigurator
+  m_Name: LobbySceneConfigurator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
