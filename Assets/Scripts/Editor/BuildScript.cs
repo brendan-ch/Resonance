@@ -8,13 +8,6 @@ namespace Resonance.BuildTools
 {
     public static class BuildScript
     {
-        static readonly string[] Scenes =
-        {
-            "Assets/Scenes/Lobby/LobbyScene.unity",
-            "Assets/Scenes/Transitions/GameBootstrapScene.unity",
-            "Assets/Scenes/Transitions/NetworkDespawnerScene.unity",
-            "Assets/Scenes/Testbeds/TB_ArenaDemo.unity",
-        };
 
         #region Editor menu items
 
@@ -86,7 +79,7 @@ namespace Resonance.BuildTools
 
             var options = new BuildPlayerOptions
             {
-                scenes = Scenes,
+                scenes = System.Array.ConvertAll(EditorBuildSettings.scenes, s => s.path),
                 locationPathName = $"Builds/{config.name}/{targetFolder}/Resonance{ext}",
                 target = target,
                 options = isDev ? BuildOptions.Development : BuildOptions.None,
